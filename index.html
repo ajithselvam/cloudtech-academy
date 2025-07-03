@@ -222,10 +222,13 @@
      will-change: transform;
      user-select: none;
      outline-offset: 2px;
+     border: 1px solid transparent;
+     transition-property: box-shadow, transform, border-color;
    }
    .clickable-card:hover,
    .clickable-card:focus-visible {
      @apply shadow-xl scale-[1.03] ring-4 ring-indigo-300 dark:ring-indigo-500;
+     border-color: #6366f1;
      z-index: 10;
    }
    .clickable-card:active {
@@ -239,6 +242,122 @@
    /* For links inside cards to fill entire card */
    .card-link {
      @apply block w-full h-full;
+   }
+
+   /* Card design for Our Focus Areas */
+   .focus-card {
+     max-width: 320px;
+     margin: 0 auto;
+     border-radius: 1rem;
+     box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4), 0 4px 6px -2px rgba(99, 102, 241, 0.1);
+     background: white;
+     color: #4f46e5;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+   }
+   .focus-card:hover,
+   .focus-card:focus-visible {
+     transform: translateY(-8px);
+     box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.6), 0 10px 10px -5px rgba(99, 102, 241, 0.2);
+     outline: none;
+   }
+   .focus-card:active {
+     transform: translateY(-2px);
+     box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4), 0 4px 6px -2px rgba(99, 102, 241, 0.1);
+     transition-duration: 100ms;
+   }
+   .focus-card img {
+     border-top-left-radius: 1rem;
+     border-top-right-radius: 1rem;
+   }
+   .focus-card-content {
+     padding: 1.5rem;
+     text-align: center;
+   }
+   .focus-card-title {
+     font-weight: 700;
+     font-size: 1.25rem;
+     margin-bottom: 0.5rem;
+     color: #4338ca;
+   }
+   .focus-card-desc {
+     color: #6b7280;
+   }
+   .dark .focus-card {
+     background: #1e293b;
+     color: #818cf8;
+     box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -2px rgba(99, 102, 241, 0.05);
+   }
+   .dark .focus-card:hover,
+   .dark .focus-card:focus-visible {
+     box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.5), 0 10px 10px -5px rgba(99, 102, 241, 0.15);
+   }
+   .dark .focus-card-desc {
+     color: #a5b4fc;
+   }
+
+   /* Card design for Featured Courses */
+   .course-card {
+     border-radius: 1rem;
+     overflow: hidden;
+     box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4), 0 4px 6px -2px rgba(99, 102, 241, 0.1);
+     background: white;
+     color: #4338ca;
+     display: flex;
+     flex-direction: column;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+     cursor: pointer;
+     user-select: none;
+     border: 1px solid transparent;
+   }
+   .course-card:hover,
+   .course-card:focus-visible {
+     transform: translateY(-8px);
+     box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.6), 0 10px 10px -5px rgba(99, 102, 241, 0.2);
+     border-color: #6366f1;
+     outline: none;
+     z-index: 10;
+   }
+   .course-card:active {
+     transform: translateY(-2px);
+     box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4), 0 4px 6px -2px rgba(99, 102, 241, 0.1);
+     transition-duration: 100ms;
+   }
+   .course-card img {
+     border-top-left-radius: 1rem;
+     border-top-right-radius: 1rem;
+     object-fit: cover;
+     height: 12rem;
+     width: 100%;
+   }
+   .course-card-content {
+     padding: 1.5rem;
+     flex-grow: 1;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+   }
+   .course-card-title {
+     font-weight: 700;
+     font-size: 1.25rem;
+     margin-bottom: 0.5rem;
+     color: #4338ca;
+   }
+   .course-card-desc {
+     color: #6b7280;
+     flex-grow: 1;
+     margin-bottom: 1rem;
+   }
+   .dark .course-card {
+     background: #1e293b;
+     color: #818cf8;
+     box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3), 0 4px 6px -2px rgba(99, 102, 241, 0.05);
+   }
+   .dark .course-card:hover,
+   .dark .course-card:focus-visible {
+     box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.5), 0 10px 10px -5px rgba(99, 102, 241, 0.15);
+   }
+   .dark .course-card-desc {
+     color: #a5b4fc;
    }
   </style>
  </head>
@@ -363,87 +482,95 @@
    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
     <a
      href="#"
-     class="clickable-card group"
+     class="focus-card group"
      aria-label="Cloud Computing"
      tabindex="0"
      role="link"
     >
      <img
       alt="Icon representing cloud computing with cloud and network nodes"
-      class="mb-6 group-hover:scale-110 transition-transform duration-300"
-      height="120"
+      class="w-full h-40 object-contain p-6"
+      height="160"
       src="https://storage.googleapis.com/a1aa/image/e8fb2dc2-81d3-46c3-af12-8252da4435ba.jpg"
-      width="120"
+      width="160"
      />
-     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
-      Cloud Computing
-     </h3>
-     <p class="text-gray-600 dark:text-gray-300">
-      Learn AWS, Azure, and Google Cloud fundamentals, architecture, and deployment strategies.
-     </p>
+     <div class="focus-card-content">
+      <h3 class="focus-card-title group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+       Cloud Computing
+      </h3>
+      <p class="focus-card-desc">
+       Learn AWS, Azure, and Google Cloud fundamentals, architecture, and deployment strategies.
+      </p>
+     </div>
     </a>
     <a
      href="#"
-     class="clickable-card group"
+     class="focus-card group"
      aria-label="DevOps"
      tabindex="0"
      role="link"
     >
      <img
       alt="Icon representing DevOps with gears and continuous integration pipeline"
-      class="mb-6 group-hover:scale-110 transition-transform duration-300"
-      height="120"
+      class="w-full h-40 object-contain p-6"
+      height="160"
       src="https://storage.googleapis.com/a1aa/image/5dcd04b2-3347-4efb-f1b5-646c3d8cf7bb.jpg"
-      width="120"
+      width="160"
      />
-     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
-      DevOps
-     </h3>
-     <p class="text-gray-600 dark:text-gray-300">
-      Master CI/CD pipelines, containerization, Kubernetes, and infrastructure as code.
-     </p>
+     <div class="focus-card-content">
+      <h3 class="focus-card-title group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+       DevOps
+      </h3>
+      <p class="focus-card-desc">
+       Master CI/CD pipelines, containerization, Kubernetes, and infrastructure as code.
+      </p>
+     </div>
     </a>
     <a
      href="#"
-     class="clickable-card group"
+     class="focus-card group"
      aria-label="Cybersecurity"
      tabindex="0"
      role="link"
     >
      <img
       alt="Icon representing cybersecurity with shield and lock"
-      class="mb-6 group-hover:scale-110 transition-transform duration-300"
-      height="120"
+      class="w-full h-40 object-contain p-6"
+      height="160"
       src="https://storage.googleapis.com/a1aa/image/dbceecf2-661d-443d-488e-871eb0182923.jpg"
-      width="120"
+      width="160"
      />
-     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
-      Cybersecurity
-     </h3>
-     <p class="text-gray-600 dark:text-gray-300">
-      Understand threat analysis, penetration testing, network security, and compliance.
-     </p>
+     <div class="focus-card-content">
+      <h3 class="focus-card-title group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+       Cybersecurity
+      </h3>
+      <p class="focus-card-desc">
+       Understand threat analysis, penetration testing, network security, and compliance.
+      </p>
+     </div>
     </a>
     <a
      href="#"
-     class="clickable-card group"
+     class="focus-card group"
      aria-label="Automation and Scripting"
      tabindex="0"
      role="link"
     >
      <img
       alt="Icon representing automation with robotic arm and gears"
-      class="mb-6 group-hover:scale-110 transition-transform duration-300"
-      height="120"
+      class="w-full h-40 object-contain p-6"
+      height="160"
       src="https://storage.googleapis.com/a1aa/image/046be659-539d-4adf-78dd-15b4e06dad76.jpg"
-      width="120"
+      width="160"
      />
-     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
-      Automation &amp; Scripting
-     </h3>
-     <p class="text-gray-600 dark:text-gray-300">
-      Automate workflows with shell scripting, Python, and configuration management tools.
-     </p>
+     <div class="focus-card-content">
+      <h3 class="focus-card-title group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+       Automation &amp; Scripting
+      </h3>
+      <p class="focus-card-desc">
+       Automate workflows with shell scripting, Python, and configuration management tools.
+      </p>
+     </div>
     </a>
    </div>
   </section>
@@ -455,69 +582,69 @@
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
      <a
       href="#"
-      class="clickable-card group"
+      class="course-card group"
       aria-label="AWS Cloud Architect course"
       tabindex="0"
       role="link"
      >
       <img
        alt="Course cover image showing AWS cloud architecture diagram with cloud icons and servers"
-       class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-       height="350"
+       class="group-hover:scale-105 transition-transform duration-300"
+       height="192"
        src="https://storage.googleapis.com/a1aa/image/030119b6-5bfc-4dec-1c48-32203ca5ad4c.jpg"
        width="600"
       />
-      <div class="p-6">
-       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
+      <div class="course-card-content">
+       <h3 class="course-card-title group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
         AWS Cloud Architect
        </h3>
-       <p class="text-gray-700 dark:text-gray-300 mb-4">
+       <p class="course-card-desc">
         Become an expert in designing and deploying scalable AWS cloud solutions.
        </p>
       </div>
      </a>
      <a
       href="#"
-      class="clickable-card group"
+      class="course-card group"
       aria-label="DevOps Engineer Bootcamp course"
       tabindex="0"
       role="link"
      >
       <img
        alt="Course cover image showing DevOps pipeline with gears, code, and cloud icons"
-       class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-       height="350"
+       class="group-hover:scale-105 transition-transform duration-300"
+       height="192"
        src="https://storage.googleapis.com/a1aa/image/138ecc7a-b064-4e5c-3db1-50a142d58e69.jpg"
        width="600"
       />
-      <div class="p-6">
-       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
+      <div class="course-card-content">
+       <h3 class="course-card-title group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
         DevOps Engineer Bootcamp
        </h3>
-       <p class="text-gray-700 dark:text-gray-300 mb-4">
+       <p class="course-card-desc">
         Learn CI/CD, Docker, Kubernetes, and automation to streamline software delivery.
        </p>
       </div>
      </a>
      <a
       href="#"
-      class="clickable-card group"
+      class="course-card group"
       aria-label="Cybersecurity Fundamentals course"
       tabindex="0"
       role="link"
      >
       <img
        alt="Course cover image showing cybersecurity shield, lock, and network security icons"
-       class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-       height="350"
+       class="group-hover:scale-105 transition-transform duration-300"
+       height="192"
        src="https://storage.googleapis.com/a1aa/image/9dcf6ae2-7c1e-404b-27ea-be9aa210e04b.jpg"
        width="600"
       />
-      <div class="p-6">
-       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
+      <div class="course-card-content">
+       <h3 class="course-card-title group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
         Cybersecurity Fundamentals
        </h3>
-       <p class="text-gray-700 dark:text-gray-300 mb-4">
+       <p class="course-card-desc">
         Protect systems and networks by learning threat detection and mitigation techniques.
        </p>
       </div>
