@@ -925,6 +925,9 @@
    const menuBtn = document.getElementById("menu-btn");
    const mobileMenu = document.getElementById("mobile-menu");
 
+   // Initially hide mobile menu
+   mobileMenu.classList.add("hidden");
+
    menuBtn.addEventListener("click", () => {
      mobileMenu.classList.toggle("hidden");
    });
