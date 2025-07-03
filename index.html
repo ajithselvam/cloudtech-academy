@@ -215,6 +215,31 @@
    .toggle-circle.dark {
      transform: translateX(1.5rem);
    }
+
+   /* Clickable card base styles */
+   .clickable-card {
+     @apply cursor-pointer rounded-xl shadow-md p-8 flex flex-col items-center text-center bg-white dark:bg-gray-800 transition-transform duration-150 ease-in-out;
+     will-change: transform;
+     user-select: none;
+     outline-offset: 2px;
+   }
+   .clickable-card:hover,
+   .clickable-card:focus-visible {
+     @apply shadow-xl scale-[1.03] ring-4 ring-indigo-300 dark:ring-indigo-500;
+     z-index: 10;
+   }
+   .clickable-card:active {
+     @apply scale-[0.97] ring-2 ring-indigo-400 dark:ring-indigo-600;
+     transition-duration: 100ms;
+   }
+   .clickable-card:focus-visible {
+     outline: none;
+   }
+
+   /* For links inside cards to fill entire card */
+   .card-link {
+     @apply block w-full h-full;
+   }
   </style>
  </head>
  <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-500">
@@ -336,66 +361,90 @@
   <section class="max-w-7xl mx-auto px-6 py-20" id="technologies">
    <h2 class="text-3xl font-bold text-center mb-12 text-indigo-700 dark:text-indigo-400">Our Focus Areas</h2>
    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-    <div
-     class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 flex flex-col items-center text-center hover:shadow-xl transition"
+    <a
+     href="#"
+     class="clickable-card group"
+     aria-label="Cloud Computing"
+     tabindex="0"
+     role="link"
     >
      <img
       alt="Icon representing cloud computing with cloud and network nodes"
-      class="mb-6"
+      class="mb-6 group-hover:scale-110 transition-transform duration-300"
       height="120"
       src="https://storage.googleapis.com/a1aa/image/e8fb2dc2-81d3-46c3-af12-8252da4435ba.jpg"
       width="120"
      />
-     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Cloud Computing</h3>
+     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+      Cloud Computing
+     </h3>
      <p class="text-gray-600 dark:text-gray-300">
       Learn AWS, Azure, and Google Cloud fundamentals, architecture, and deployment strategies.
      </p>
-    </div>
-    <div
-     class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 flex flex-col items-center text-center hover:shadow-xl transition"
+    </a>
+    <a
+     href="#"
+     class="clickable-card group"
+     aria-label="DevOps"
+     tabindex="0"
+     role="link"
     >
      <img
       alt="Icon representing DevOps with gears and continuous integration pipeline"
-      class="mb-6"
+      class="mb-6 group-hover:scale-110 transition-transform duration-300"
       height="120"
       src="https://storage.googleapis.com/a1aa/image/5dcd04b2-3347-4efb-f1b5-646c3d8cf7bb.jpg"
       width="120"
      />
-     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">DevOps</h3>
+     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+      DevOps
+     </h3>
      <p class="text-gray-600 dark:text-gray-300">
       Master CI/CD pipelines, containerization, Kubernetes, and infrastructure as code.
      </p>
-    </div>
-    <div
-     class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 flex flex-col items-center text-center hover:shadow-xl transition"
+    </a>
+    <a
+     href="#"
+     class="clickable-card group"
+     aria-label="Cybersecurity"
+     tabindex="0"
+     role="link"
     >
      <img
       alt="Icon representing cybersecurity with shield and lock"
-      class="mb-6"
+      class="mb-6 group-hover:scale-110 transition-transform duration-300"
       height="120"
       src="https://storage.googleapis.com/a1aa/image/dbceecf2-661d-443d-488e-871eb0182923.jpg"
       width="120"
      />
-     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Cybersecurity</h3>
+     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+      Cybersecurity
+     </h3>
      <p class="text-gray-600 dark:text-gray-300">
       Understand threat analysis, penetration testing, network security, and compliance.
      </p>
-    </div>
-    <div
-     class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-8 flex flex-col items-center text-center hover:shadow-xl transition"
+    </a>
+    <a
+     href="#"
+     class="clickable-card group"
+     aria-label="Automation and Scripting"
+     tabindex="0"
+     role="link"
     >
      <img
       alt="Icon representing automation with robotic arm and gears"
-      class="mb-6"
+      class="mb-6 group-hover:scale-110 transition-transform duration-300"
       height="120"
       src="https://storage.googleapis.com/a1aa/image/046be659-539d-4adf-78dd-15b4e06dad76.jpg"
       width="120"
      />
-     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400">Automation &amp; Scripting</h3>
+     <h3 class="text-xl font-semibold mb-2 text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
+      Automation &amp; Scripting
+     </h3>
      <p class="text-gray-600 dark:text-gray-300">
       Automate workflows with shell scripting, Python, and configuration management tools.
      </p>
-    </div>
+    </a>
    </div>
   </section>
 
@@ -404,60 +453,75 @@
    <div class="max-w-7xl mx-auto px-6">
     <h2 class="text-3xl font-bold text-indigo-700 dark:text-indigo-400 mb-12 text-center">Featured Courses</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-     <article
-      class="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition"
+     <a
+      href="#"
+      class="clickable-card group"
+      aria-label="AWS Cloud Architect course"
+      tabindex="0"
+      role="link"
      >
       <img
        alt="Course cover image showing AWS cloud architecture diagram with cloud icons and servers"
-       class="w-full h-48 object-cover"
+       class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
        height="350"
        src="https://storage.googleapis.com/a1aa/image/030119b6-5bfc-4dec-1c48-32203ca5ad4c.jpg"
        width="600"
       />
       <div class="p-6">
-       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400">AWS Cloud Architect</h3>
+       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
+        AWS Cloud Architect
+       </h3>
        <p class="text-gray-700 dark:text-gray-300 mb-4">
         Become an expert in designing and deploying scalable AWS cloud solutions.
        </p>
-       <a class="inline-block text-indigo-600 dark:text-indigo-400 font-semibold hover:underline" href="#">Learn More →</a>
       </div>
-     </article>
-     <article
-      class="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition"
+     </a>
+     <a
+      href="#"
+      class="clickable-card group"
+      aria-label="DevOps Engineer Bootcamp course"
+      tabindex="0"
+      role="link"
      >
       <img
        alt="Course cover image showing DevOps pipeline with gears, code, and cloud icons"
-       class="w-full h-48 object-cover"
+       class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
        height="350"
        src="https://storage.googleapis.com/a1aa/image/138ecc7a-b064-4e5c-3db1-50a142d58e69.jpg"
        width="600"
       />
       <div class="p-6">
-       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400">DevOps Engineer Bootcamp</h3>
+       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
+        DevOps Engineer Bootcamp
+       </h3>
        <p class="text-gray-700 dark:text-gray-300 mb-4">
         Learn CI/CD, Docker, Kubernetes, and automation to streamline software delivery.
        </p>
-       <a class="inline-block text-indigo-600 dark:text-indigo-400 font-semibold hover:underline" href="#">Learn More →</a>
       </div>
-     </article>
-     <article
-      class="bg-white dark:bg-gray-900 rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition"
+     </a>
+     <a
+      href="#"
+      class="clickable-card group"
+      aria-label="Cybersecurity Fundamentals course"
+      tabindex="0"
+      role="link"
      >
       <img
        alt="Course cover image showing cybersecurity shield, lock, and network security icons"
-       class="w-full h-48 object-cover"
+       class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
        height="350"
        src="https://storage.googleapis.com/a1aa/image/9dcf6ae2-7c1e-404b-27ea-be9aa210e04b.jpg"
        width="600"
       />
       <div class="p-6">
-       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400">Cybersecurity Fundamentals</h3>
+       <h3 class="text-xl font-semibold mb-2 text-indigo-700 dark:text-indigo-400 group-hover:text-indigo-800 dark:group-hover:text-indigo-300 transition-colors duration-300">
+        Cybersecurity Fundamentals
+       </h3>
        <p class="text-gray-700 dark:text-gray-300 mb-4">
         Protect systems and networks by learning threat detection and mitigation techniques.
        </p>
-       <a class="inline-block text-indigo-600 dark:text-indigo-400 font-semibold hover:underline" href="#">Learn More →</a>
       </div>
-     </article>
+     </a>
     </div>
    </div>
   </section>
