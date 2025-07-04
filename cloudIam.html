@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud IAM Management Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .cloud-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .cloud-tab {
+            flex: 1;
+            padding: 20px;
+            text-align: center;
+            background: #e9ecef;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .cloud-tab:hover {
+            background: #dee2e6;
+        }
+
+        .cloud-tab.active {
+            background: white;
+            color: #007bff;
+            border-bottom: 3px solid #007bff;
+        }
+
+        .cloud-tab.aws.active {
+            color: #ff9900;
+            border-bottom-color: #ff9900;
+        }
+
+        .cloud-tab.gcp.active {
+            color: #4285f4;
+            border-bottom-color: #4285f4;
+        }
+
+        .cloud-tab.azure.active {
+            color: #0078d4;
+            border-bottom-color: #0078d4;
+        }
+
+        .cloud-content {
+            display: none;
+            padding: 30px;
+            min-height: 600px;
+        }
+
+        .cloud-content.active {
+            display: block;
+        }
+
+        .iam-interface {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+            height: 100%;
+        }
+
+        .sidebar {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 1.1em;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+
+        .sidebar li:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .sidebar li.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .aws .sidebar li.active {
+            background: #ff9900;
+        }
+
+        .gcp .sidebar li.active {
+            background: #4285f4;
+        }
+
+        .azure .sidebar li.active {
+            background: #0078d4;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            border: 1px solid #dee2e6;
+        }
+
+        .content-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f8f9fa;
+        }
+
+        .content-header h2 {
+            color: #495057;
+            font-size: 1.8em;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .aws .btn-primary {
+            background: #ff9900;
+        }
+
+        .aws .btn-primary:hover {
+            background: #e68900;
+        }
+
+        .gcp .btn-primary {
+            background: #4285f4;
+        }
+
+        .gcp .btn-primary:hover {
+            background: #3367d6;
+        }
+
+        .azure .btn-primary {
+            background: #0078d4;
+        }
+
+        .azure .btn-primary:hover {
+            background: #106ebe;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s ease;
+        }
+
+        .btn-edit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #218838;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .policy-editor {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .policy-editor h4 {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        .policy-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .brand-logo {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .aws-orange { color: #ff9900; }
+        .gcp-blue { color: #4285f4; }
+        .azure-blue { color: #0078d4; }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .metric-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .aws .metric-number { color: #ff9900; }
+        .gcp .metric-number { color: #4285f4; }
+        .azure .metric-number { color: #0078d4; }
+
+        .metric-label {
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .permission-matrix {
+            display: grid;
+            grid-template-columns: 200px repeat(4, 1fr);
+            gap: 1px;
+            background: #dee2e6;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .matrix-header {
+            background: #495057;
+            color: white;
+            padding: 10px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .matrix-cell {
+            background: white;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .matrix-cell:hover {
+            background: #e9ecef;
+        }
+
+        .matrix-cell.granted {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .matrix-cell.denied {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .activity-log {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+
+        .activity-item:hover {
+            background: white;
+            border-radius: 5px;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+
+        .activity-details {
+            flex: 1;
+        }
+
+        .activity-time {
+            color: #6c757d;
+            font-size: 0.85em;
+        }
+
+        .risk-indicator {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .risk-low {
+            color: #28a745;
+        }
+
+        .risk-medium {
+            color: #ffc107;
+        }
+
+        .risk-high {
+            color: #dc3545;
+        }
+
+        .compliance-badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 5px;
+        }
+
+        .compliance-compliant {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .compliance-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .compliance-violation {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .multi-factor-auth {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .mfa-enabled {
+            color: #28a745;
+        }
+
+        .mfa-disabled {
+            color: #dc3545;
+        }
+
+        .privilege-escalation {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+
+        .privilege-escalation h5 {
+            color: #856404;
+            margin-bottom: 5px;
+        }
+
+        .network-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .network-rule {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .network-rule.allow {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .network-rule.deny {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .advanced-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-dropdown {
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .notification-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            max-width: 300px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification-panel.show {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        @media (max-width: 280px) {
+            .iam-interface {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+
+            .permission-matrix {
+                grid-template-columns: 150px repeat(2, 1fr);
+                font-size: 0.85em;
+            }
+
+            .advanced-filters {
+                flex-direction: column;
+            }
+
+            .notification-panel {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Cloud IAM Management Console</h1>
+            <p>Centralized Identity and Access Management for AWS, GCP, and Azure</p>
+        </div>
+
+        <div class="cloud-tabs">
+            <button class="cloud-tab aws active" onclick="switchCloud('aws')">
+                <span class="brand-logo aws-orange">AWS</span> Identity & Access Management
+            </button>
+            <button class="cloud-tab gcp" onclick="switchCloud('gcp')">
+                <span class="brand-logo gcp-blue">GCP</span> Identity & Access Management
+            </button>
+            <button class="cloud-tab azure" onclick="switchCloud('azure')">
+                <span class="brand-logo azure-blue">Azure</span> Active Directory
+            </button>
+        </div>
+
+        <!-- AWS Content -->
+        <div id="aws-content" class="cloud-content aws active">
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">24</div>
+                    <div class="metric-label">Active Users</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">8</div>
+                    <div class="metric-label">Groups</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">156</div>
+                    <div class="metric-label">Policies</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">12</div>
+                    <div class="metric-label">Roles</div>
+                </div>
+            </div>
+
+            <div class="iam-interface">
+                <div class="sidebar">
+                    <h3>AWS IAM</h3>
+                    <ul>
+                        <li class="active" onclick="switchContent('aws-users')">👥 Users</li>
+                        <li onclick="switchContent('aws-groups')">🏢 Groups</li>
+                        <li onclick="switchContent('aws-policies')">📋 Policies</li>
+                        <li onclick="switchContent('aws-roles')">🎭 Roles</li>
+                        <li onclick="switchContent('aws-access-keys')">🗝️ Access Keys</li>
+                        <li onclick="switchContent('aws-mfa')">🔐 MFA Devices</li>
+                    </ul>
+                </div>
+
+                <div class="main-content">
+                    <div class="content-header">
+                        <h2>Users</h2>
+                        <button class="btn-primary">Create User</button>
+                    </div>
+
+                    <input type="text" class="search-bar" placeholder="Search users...">
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th>User ID</th>
+                                    <th>Creation Date</th>
+                                    <th>Last Activity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>john.doe</td>
+                                    <td>AIDACKCEVSQ6C2EXAMPLE</td>
+                                    <td>2024-01-15</td>
+                                    <td>2024-07-03</td>
+                                    <td>
+                                        <span class="status-badge status-active">Active</span>
+                                        <span class="compliance-badge compliance-compliant">SOC2</span>
+                                        <div class="multi-factor-auth">
+                                            <span class="mfa-enabled">🔐 MFA Enabled</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>jane.smith</td>
+                                    <td>AIDACKCEVSQ6C2EXAMPLE2</td>
+                                    <td>2024-02-20</td>
+                                    <td>2024-07-02</td>
+                                    <td>
+                                        <span class="status-badge status-active">Active</span>
+                                        <span class="compliance-badge compliance-warning">PCI-DSS</span>
+                                        <div class="multi-factor-auth">
+                                            <span class="mfa-enabled">🔐 MFA Enabled</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>mike.johnson</td>
+                                    <td>AIDACKCEVSQ6C2EXAMPLE3</td>
+                                    <td>2024-03-10</td>
+                                    <td>2024-06-28</td>
+                                    <td>
+                                        <span class="status-badge status-inactive">Inactive</span>
+                                        <span class="compliance-badge compliance-violation">HIPAA</span>
+                                        <div class="multi-factor-auth">
+                                            <span class="mfa-disabled">🔓 MFA Disabled</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="advanced-filters">
+                        <select class="filter-dropdown">
+                            <option>All Users</option>
+                            <option>Active Users</option>
+                            <option>Inactive Users</option>
+                            <option>Admin Users</option>
+                        </select>
+                        <select class="filter-dropdown">
+                            <option>All Regions</option>
+                            <option>us-east-1</option>
+                            <option>us-west-2</option>
+                            <option>eu-west-1</option>
+                        </select>
+                        <select class="filter-dropdown">
+                            <option>Last 30 Days</option>
+                            <option>Last 7 Days</option>
+                            <option>Last 24 Hours</option>
+                            <option>Custom Range</option>
+                        </select>
+                    </div>
+
+                    <div class="permission-matrix">
+                        <div class="matrix-header">User / Resource</div>
+                        <div class="matrix-header">S3 Buckets</div>
+                        <div class="matrix-header">EC2 Instances</div>
+                        <div class="matrix-header">RDS Databases</div>
+                        <div class="matrix-header">Lambda Functions</div>
+                        
+                        <div class="matrix-cell">john.doe</div>
+                        <div class="matrix-cell granted">✓ Read/Write</div>
+                        <div class="matrix-cell granted">✓ Start/Stop</div>
+                        <div class="matrix-cell denied">✗ No Access</div>
+                        <div class="matrix-cell granted">✓ Execute</div>
+                        
+                        <div class="matrix-cell">jane.smith</div>
+                        <div class="matrix-cell granted">✓ Read Only</div>
+                        <div class="matrix-cell granted">✓ Full Access</div>
+                        <div class="matrix-cell granted">✓ Read Only</div>
+                        <div class="matrix-cell denied">✗ No Access</div>
+                        
+                        <div class="matrix-cell">mike.johnson</div>
+                        <div class="matrix-cell denied">✗ No Access</div>
+                        <div class="matrix-cell denied">✗ No Access</div>
+                        <div class="matrix-cell denied">✗ No Access</div>
+                        <div class="matrix-cell denied">✗ No Access</div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h4>Access Patterns Over Time</h4>
+                        <div class="chart-placeholder">📊 Interactive Chart Would Display Here</div>
+                    </div>
+
+                    <div class="activity-log">
+                        <h4>Recent Activity</h4>
+                        <div class="activity-item">
+                            <div class="activity-icon">🔐</div>
+                            <div class="activity-details">
+                                <div>User login: john.doe</div>
+                                <div class="activity-time">2 minutes ago</div>
+                            </div>
+                            <div class="risk-indicator risk-low">🟢 Low Risk</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">⚠️</div>
+                            <div class="activity-details">
+                                <div>Failed login attempt: unknown-user</div>
+                                <div class="activity-time">15 minutes ago</div>
+                            </div>
+                            <div class="risk-indicator risk-high">🔴 High Risk</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">🔑</div>
+                            <div class="activity-details">
+                                <div>Access key created: jane.smith</div>
+                                <div class="activity-time">1 hour ago</div>
+                            </div>
+                            <div class="risk-indicator risk-medium">🟡 Medium Risk</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon">👥</div>
+                            <div class="activity-details">
+                                <div>User added to group: DevOps</div>
+                                <div class="activity-time">3 hours ago</div>
+                            </div>
+                            <div class="risk-indicator risk-low">🟢 Low Risk</div>
+                        </div>
+                    </div>
+
+                    <div class="policy-editor">
+                        <h4>Sample IAM Policy with Conditions</h4>
+                        <div class="policy-code">{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Resource": "arn:aws:s3:::my-bucket/*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": "203.0.113.0/24"
+        },
+        "DateGreaterThan": {
+          "aws:CurrentTime": "2024-01-01T00:00:00Z"
+        }
+      }
+    }
+  ]
+}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GCP Content -->
+        <div id="gcp-content" class="cloud-content gcp">
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">18</div>
+                    <div class="metric-label">Service Accounts</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">32</div>
+                    <div class="metric-label">IAM Bindings</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">89</div>
+                    <div class="metric-label">Custom Roles</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">156</div>
+                    <div class="metric-label">Predefined Roles</div>
+                </div>
+            </div>
+
+            <div class="iam-interface">
+                <div class="sidebar">
+                    <h3>GCP IAM</h3>
+                    <ul>
+                        <li class="active" onclick="switchContent('gcp-members')">👥 Members</li>
+                        <li onclick="switchContent('gcp-service-accounts')">🤖 Service Accounts</li>
+                        <li onclick="switchContent('gcp-roles')">🎭 Roles</li>
+                        <li onclick="switchContent('gcp-bindings')">🔗 IAM Bindings</li>
+                        <li onclick="switchContent('gcp-conditions')">⚙️ Conditions</li>
+                        <li onclick="switchContent('gcp-audit')">📊 Audit Logs</li>
+                    </ul>
+                </div>
+
+                <div class="main-content">
+                    <div class="content-header">
+                        <h2>Service Accounts</h2>
+                        <button class="btn-primary">Create Service Account</button>
+                    </div>
+
+                    <input type="text" class="search-bar" placeholder="Search service accounts...">
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Display Name</th>
+                                    <th>Email</th>
+                                    <th>Project</th>
+                                    <th>Creation Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>App Engine Service</td>
+                                    <td>myapp@myproject.iam.gserviceaccount.com</td>
+                                    <td>my-project-123</td>
+                                    <td>2024-01-15</td>
+                                    <td>
+                                        <span class="status-badge status-active">Active</span>
+                                        <div class="network-access">
+                                            <div class="network-rule allow">VPC: Allow</div>
+                                            <div class="network-rule deny">External: Deny</div>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Compute Engine Service</td>
+                                    <td>compute@myproject.iam.gserviceaccount.com</td>
+                                    <td>my-project-123</td>
+                                    <td>2024-02-20</td>
+                                    <td>
+                                        <span class="status-badge status-active">Active</span>
+                                        <div class="network-access">
+                                            <div class="network-rule allow">VPC: Allow</div>
+                                            <div class="network-rule allow">External: Allow</div>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Cloud Storage Service</td>
+                                    <td>storage@myproject.iam.gserviceaccount.com</td>
+                                    <td>my-project-123</td>
+                                    <td>2024-03-10</td>
+                                    <td>
+                                        <span class="status-badge status-inactive">Disabled</span>
+                                        <div class="privilege-escalation">
+                                            <h5>⚠️ Privilege Escalation Risk</h5>
+                                            <p>This service account has broader permissions than necessary</p>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="policy-editor">
+                        <h4>Sample GCP IAM Policy</h4>
+                        <div class="policy-code">{
+  "bindings": [
+    {
+      "role": "roles/storage.objectViewer",
+      "members": [
+        "serviceAccount:my-service@my-project.iam.gserviceaccount.com"
+      ],
+      "condition": {
+        "title": "Time-based access",
+        "description": "Access only during business hours",
+        "expression": "request.time.getHours() >= 9 && request.time.getHours() <= 17"
+      }
+    }
+  ]
+}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Azure Content -->
+        <div id="azure-content" class="cloud-content azure">
+            <div class="metrics">
+                <div class="metric-card">
+                    <div class="metric-number">42</div>
+                    <div class="metric-label">Active Users</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">15</div>
+                    <div class="metric-label">Groups</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">28</div>
+                    <div class="metric-label">Applications</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-number">67</div>
+                    <div class="metric-label">Role Assignments</div>
+                </div>
+            </div>
+
+            <div class="iam-interface">
+                <div class="sidebar">
+                    <h3>Azure AD</h3>
+                    <ul>
+                        <li class="active" onclick="switchContent('azure-users')">👥 Users</li>
+                        <li onclick="switchContent('azure-groups')">🏢 Groups</li>
+                        <li onclick="switchContent('azure-apps')">📱 Applications</li>
+                        <li onclick="switchContent('azure-roles')">🎭 Roles</li>
+                        <li onclick="switchContent('azure-assignments')">🔗 Role Assignments</li>
+                        <li onclick="switchContent('azure-policies')">📋 Policies</li>
+                    </ul>
+                </div>
+
+                <div class="main-content">
+                    <div class="content-header">
+                        <h2>Users</h2>
+                        <button class="btn-primary">New User</button>
+                    </div>
+
+                    <input type="text" class="search-bar" placeholder="Search users...">
+
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Display Name</th>
+                                    <th>User Principal Name</th>
+                                    <th>Object ID</th>
+                                    <th>Creation Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td>john.doe@mycompany.onmicrosoft.com</td>
+                                    <td>a1b2c3d4-e5f6-7890-abcd-ef1234567890</td>
+                                    <td>2024-01-15</td>
+                                    <td>
+                                        <span class="status-badge status-active">Active</span>
+                                        <span class="compliance-badge compliance-compliant">GDPR</span>
+                                        <div class="multi-factor-auth">
+                                            <span class="mfa-enabled">🔐 Azure MFA</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Smith</td>
+                                    <td>jane.smith@mycompany.onmicrosoft.com</td>
+                                    <td>b2c3d4e5-f6g7-8901-bcde-f23456789012</td>
+                                    <td>2024-02-20</td>
+                                    <td>
+                                        <span class="status-badge status-active">Active</span>
+                                        <span class="compliance-badge compliance-warning">ISO27001</span>
+                                        <div class="multi-factor-auth">
+                                            <span class="mfa-enabled">📱 SMS MFA</span>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Mike Johnson</td>
+                                    <td>mike.johnson@mycompany.onmicrosoft.com</td>
+                                    <td>c3d4e5f6-g7h8-9012-cdef-345678901234</td>
+                                    <td>2024-03-10</td>
+                                    <td>
+                                        <span class="status-badge status-inactive">Blocked</span>
+                                        <span class="compliance-badge compliance-violation">SOX</span>
+                                        <div class="multi-factor-auth">
+                                            <span class="mfa-disabled">🔓 No MFA</span>
+                                        </div>
+                                        <div class="privilege-escalation">
+                                            <h5>🚨 Security Alert</h5>
+                                            <p>Account locked due to suspicious activity</p>
+                                        </div>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn-small btn-edit">Edit</button>
+                                        <button class="btn-small btn-delete">Delete</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="policy-editor">
+                        <h4>Sample Azure Policy Definition</h4>
+                        <div class="policy-code">{
+  "properties": {
+    "displayName": "Require storage encryption",
+    "description": "This policy ensures that storage accounts use encryption",
+    "policyType": "Custom",
+    "mode": "All",
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Storage/storageAccounts"
+          },
+          {
+            "field": "Microsoft.Storage/storageAccounts/encryption.services.blob.enabled",
+            "notEquals": true
+          }
+        ]
+      },
+      "then": {
+        "effect": "deny"
+      }
+    }
+  }
+}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchCloud(cloudProvider) {
+            // Remove active class from all tabs and contents
+            document.querySelectorAll('.cloud-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.cloud-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to selected tab and content
+            document.querySelector(`.cloud-tab.${cloudProvider}`).classList.add('active');
+            document.querySelector(`#${cloudProvider}-content`).classList.add('active');
+        }
+
+        function switchContent(contentType) {
+            // This would handle switching between different sections within each cloud provider
+            // For now, we'll just update the active sidebar item
+            const activeCloud = document.querySelector('.cloud-content.active');
+            activeCloud.querySelectorAll('.sidebar li').forEach(item => item.classList.remove('active'));
+            
+            // Find and activate the clicked sidebar item
+            const clickedItem = event.target;
+            clickedItem.classList.add('active');
+            
+            // Update main content based on selection
+            const mainContent = activeCloud.querySelector('.main-content');
+            const contentHeader = mainContent.querySelector('.content-header h2');
+            
+            switch(contentType) {
+                case 'aws-users':
+                    contentHeader.textContent = 'Users';
+                    break;
+                case 'aws-groups':
+                    contentHeader.textContent = 'Groups';
+                    break;
+                case 'aws-policies':
+                    contentHeader.textContent = 'Policies';
+                    break;
+                case 'aws-roles':
+                    contentHeader.textContent = 'Roles';
+                    break;
+                case 'gcp-members':
+                    contentHeader.textContent = 'Members';
+                    break;
+                case 'gcp-service-accounts':
+                    contentHeader.textContent = 'Service Accounts';
+                    break;
+                case 'azure-users':
+                    contentHeader.textContent = 'Users';
+                    break;
+                case 'azure-groups':
+                    contentHeader.textContent = 'Groups';
+                    break;
+                default:
+                    contentHeader.textContent = 'Dashboard';
+            }
+        }
+
+        // Add some interactive behaviors
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to table rows
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateX(5px)';
+                    this.style.transition = 'transform 0.3s ease';
+                });
+                
+                row.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateX(0)';
+                });
+            });
+
+            // Add click handlers for buttons
+            document.querySelectorAll('.btn-primary').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('This would open a creation dialog in a real implementation');
+                });
+            });
+
+            document.querySelectorAll('.btn-edit').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    alert('This would open an edit dialog in a real implementation');
+                });
+            });
+
+            document.querySelectorAll('.btn-delete').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this item?')) {
+                        alert('Item would be deleted in a real implementation');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
