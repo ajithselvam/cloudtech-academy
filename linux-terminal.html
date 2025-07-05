@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Linux Terminal Learning Lab</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #1e1e1e;
+      color: #33ff33;
+      font-family: 'Courier New', Courier, monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 1rem;
+    }
+
+    .terminal {
+      background-color: #000;
+      border-radius: 10px;
+      width: 100%;
+      max-width: 900px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      background-color: #2b2b2b;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-right: auto;
+    }
+
+    .btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .btn.red { background-color: #ff5f56; }
+    .btn.yellow { background-color: #ffbd2e; }
+    .btn.green { background-color: #27c93f; }
+
+    .terminal-body {
+      padding: 1rem;
+      height: 500px;
+      overflow-y: auto;
+    }
+
+    .line {
+      line-height: 1.6;
+    }
+
+    .prompt::before {
+      content: "user@linux:~$ ";
+      color: #33ff33;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      height: 1.2em;
+      background: #33ff33;
+      animation: blink 1s infinite;
+      margin-left: 5px;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      50.01%, 100% { opacity: 0; }
+    }
+
+    /* Responsive enhancements */
+    @media (max-width: 600px) {
+      .terminal-body {
+        font-size: 14px;
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <div class="terminal-header">
+      <div class="buttons">
+        <div class="btn red"></div>
+        <div class="btn yellow"></div>
+        <div class="btn green"></div>
+      </div>
+      <span style="color:#ccc; font-size: 0.9rem;">Linux Terminal Learning Lab</span>
+    </div>
+    <div class="terminal-body">
+      <div class="line">Welcome to <span style="color:#00ffff;">Linux Terminal Learning</span> 🐧</div>
+      <div class="line">Type <code style="color:#ffa500;">help</code> to get started.</div>
+      <br>
+      <div class="line prompt">help</div>
+      <div class="line">Available commands:</div>
+      <div class="line"> - <span style="color:#ffa500;">ls</span> : list files</div>
+      <div class="line"> - <span style="color:#ffa500;">cd</span> : change directory</div>
+      <div class="line"> - <span style="color:#ffa500;">pwd</span> : show current directory</div>
+      <div class="line"> - <span style="color:#ffa500;">man</span> : show manual</div>
+      <div class="line"> - <span style="color:#ffa500;">clear</span> : clear the screen</div>
+      <br>
+      <div class="line prompt"><span class="cursor"></span></div>
+    </div>
+  </div>
+</body>
+</html>
