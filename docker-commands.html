@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker Commands Reference - KodeKloud Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      line-height: 1.6;
+      background-color: #f9fafc;
+      color: #222;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #1e3a8a;
+    }
+    .section {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+    pre {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+      font-size: 0.95rem;
+    }
+    .icon {
+      font-size: 1.2rem;
+      margin-right: 6px;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      background: #e0f2fe;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .nav a {
+      margin-right: 15px;
+      color: #1e40af;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚢 Complete Docker Commands Reference for KodeKloud Labs</h1>
+
+  <div class="nav">
+    <a href="#basic">Basic</a>
+    <a href="#advanced">Advanced</a>
+    <a href="#labs">Labs</a>
+    <a href="#dockerfile">Dockerfile</a>
+    <a href="#troubleshooting">Troubleshooting</a>
+    <a href="#registry">Registry</a>
+    <a href="#security">Security</a>
+    <a href="#monitoring">Monitoring</a>
+  </div>
+
+  <div id="basic" class="section">
+    <h2>📦 Basic Docker Commands</h2>
+    <h3>▶️ Container Management</h3>
+    <pre><code>docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+docker run -it ubuntu:latest /bin/bash
+docker run -d nginx:latest
+docker run -p 8080:80 nginx:latest
+docker run --name my-container nginx:latest
+docker run -v /host/path:/container/path nginx:latest
+
+docker ps
+docker ps -a
+docker container ls
+docker container ls -a
+
+docker start CONTAINER_ID
+docker stop CONTAINER_ID
+docker restart CONTAINER_ID
+docker pause CONTAINER_ID
+docker unpause CONTAINER_ID
+
+docker rm CONTAINER_ID
+docker rm -f CONTAINER_ID
+docker container prune</code></pre>
+
+    <h3>🖼️ Image Management</h3>
+    <pre><code>docker images
+docker image ls
+
+docker pull IMAGE_NAME:TAG
+docker pull ubuntu:20.04
+docker pull nginx:latest
+
+docker build -t IMAGE_NAME:TAG .
+docker build -t my-app:v1.0 .
+docker build -f Dockerfile.prod -t my-app:prod .
+
+docker rmi IMAGE_ID
+docker rmi IMAGE_NAME:TAG
+docker image prune
+docker image prune -a
+
+docker tag SOURCE_IMAGE:TAG TARGET_IMAGE:TAG
+docker tag my-app:latest my-app:v1.0</code></pre>
+
+    <h3>🔧 Container Interaction</h3>
+    <pre><code>docker exec -it CONTAINER_ID /bin/bash
+docker exec -it CONTAINER_NAME sh
+docker exec CONTAINER_ID ls -la
+
+docker logs CONTAINER_ID
+docker logs -f CONTAINER_ID
+docker logs --tail 50 CONTAINER_ID
+
+docker cp CONTAINER_ID:/path/to/file /host/path
+docker cp /host/path CONTAINER_ID:/path/to/destination
+
+docker inspect CONTAINER_ID
+docker inspect IMAGE_ID</code></pre>
+  </div>
+
+  <div id="advanced" class="section">
+    <h2>⚙️ Advanced Docker Commands</h2>
+    <h3>🗂️ Volume Management</h3>
+    <pre><code>docker volume create VOLUME_NAME
+docker volume ls
+docker volume inspect VOLUME_NAME
+docker volume rm VOLUME_NAME
+docker volume prune
+
+docker run -v VOLUME_NAME:/container/path IMAGE
+docker run -v /host/path:/container/path IMAGE
+docker run --mount source=VOLUME_NAME,target=/container/path IMAGE</code></pre>
+
+    <h3>🌐 Network Management</h3>
+    <pre><code>docker network ls
+docker network create NETWORK_NAME
+docker network create --driver bridge my-network
+docker network create --driver overlay my-overlay
+docker network connect NETWORK_NAME CONTAINER_ID
+docker network disconnect NETWORK_NAME CONTAINER_ID
+docker network inspect NETWORK_NAME
+docker network rm NETWORK_NAME
+docker network prune</code></pre>
+
+    <h3>🧩 Docker Compose</h3>
+    <pre><code>docker-compose up
+docker-compose up -d
+docker-compose up --build
+
+docker-compose down
+docker-compose down -v
+docker-compose stop
+
+docker-compose logs
+docker-compose logs SERVICE_NAME
+
+docker-compose up --scale SERVICE_NAME=3
+
+docker-compose build
+docker-compose build SERVICE_NAME</code></pre>
+  </div>
+
+  <div id="labs" class="section">
+    <h2>🧪 Common KodeKloud Lab Solutions</h2>
+    <pre><code># Lab 1
+ docker run -it ubuntu:latest
+ docker run --name my-ubuntu -it ubuntu:latest
+ docker run -d --name web-server nginx:latest
+ docker ps
+ docker stop web-server
+ docker rm web-server
+
+# Lab 2
+ docker run -d -p 8080:80 nginx:latest
+ docker run -d -p 8080:80 -p 8443:443 nginx:latest
+ docker run -d -p 127.0.0.1:8080:80 nginx:latest
+
+# Lab 3
+ docker volume create my-data
+ docker run -d -v my-data:/var/lib/mysql mysql:latest
+ docker run -d -v /host/data:/var/lib/mysql mysql:latest
+ docker run -d -v /host/data:/var/lib/mysql:ro mysql:latest
+
+# Lab 4
+ docker run -e MYSQL_ROOT_PASSWORD=secret mysql:latest
+ docker run -e NODE_ENV=production -e PORT=3000 node:latest
+ docker run --env-file .env mysql:latest
+
+# Lab 5
+ docker network create --driver bridge my-network
+ docker run -d --name web --network my-network nginx:latest
+ docker run -d --name db --network my-network mysql:latest
+ docker network connect my-network existing-container</code></pre>
+  </div>
+
+  <div id="dockerfile" class="section">
+    <h2>📄 Dockerfile Best Practices</h2>
+    <pre><code># Common Dockerfile
+FROM ubuntu:20.04
+WORKDIR /app
+COPY . .
+ADD archive.tar.gz /app/
+RUN apt-get update && apt-get install -y \
+    package1 \
+    package2 \
+    && rm -rf /var/lib/apt/lists/*
+ENV NODE_ENV=production
+ENV PORT=3000
+EXPOSE 3000
+RUN useradd -m appuser
+USER appuser
+ENTRYPOINT ["./entrypoint.sh"]
+CMD ["npm", "start"]
+
+# Multi-stage build
+FROM node:16 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+FROM node:16-alpine
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY . .
+USER node
+CMD ["npm", "start"]</code></pre>
+  </div>
+
+  <div id="troubleshooting" class="section">
+    <h2>🧯 Troubleshooting Commands</h2>
+    <pre><code>docker info
+docker version
+docker system df
+docker system events
+docker system prune
+docker system prune -a
+
+docker top CONTAINER_ID
+docker stats
+docker stats CONTAINER_ID
+docker exec CONTAINER_ID ps aux
+docker exec CONTAINER_ID df -h
+docker exec CONTAINER_ID free -m
+
+docker run --privileged IMAGE
+docker run --dns=8.8.8.8 IMAGE
+docker run -m 512m IMAGE
+docker run --cpus="1.5" IMAGE
+docker rm -f $(docker ps -aq)
+docker rmi -f $(docker images -q)</code></pre>
+  </div>
+
+  <div id="registry" class="section">
+    <h2>📦 Docker Registry Operations</h2>
+    <pre><code>docker login
+docker login registry.example.com
+docker push IMAGE_NAME:TAG
+docker push registry.example.com/my-app:latest
+docker pull registry.example.com/private-app:latest
+docker tag my-app:latest registry.example.com/my-app:latest</code></pre>
+  </div>
+
+  <div id="security" class="section">
+    <h2>🔐 Security Commands</h2>
+    <pre><code>docker run --security-opt no-new-privileges IMAGE
+docker run --cap-drop ALL --cap-add NET_ADMIN IMAGE
+docker run --read-only IMAGE
+docker scan IMAGE_NAME
+docker run -u 1000:1000 IMAGE</code></pre>
+  </div>
+
+  <div id="monitoring" class="section">
+    <h2>📊 Performance and Monitoring</h2>
+    <pre><code>docker stats --no-stream
+docker top CONTAINER_ID
+docker events --filter container=CONTAINER_NAME
+docker export CONTAINER_ID > container.tar
+docker import container.tar NEW_IMAGE_NAME</code></pre>
+  </div>
+
+  <p><strong>✅ This complete reference includes all essential and advanced Docker commands with enhanced visuals. Use it for KodeKloud labs or real-world projects!</strong></p>
+</body>
+</html>
