@@ -1017,7 +1017,7 @@
    </div>
   </section>
   <!-- Contact Section -->
-  <section class="bg-indigo-600 dark:bg-indigo-900 text-white py-20" id="contact">
+  <section class="bg-indigo-600 dark:bg-indigo-900 text-white py-20" id="messageForm">
    <div class="max-w-7xl mx-auto px-6">
     <h2 class="text-3xl font-bold mb-8 text-center">
      Get in Touch
@@ -1053,7 +1053,10 @@
   <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 py-8">
    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-gray-600 dark:text-gray-400 text-sm">
     <p>
-     © 2024 CloudTech Academy. All rights reserved.
+     © 2025 CloudTech Academy. All rights reserved.
+    </p>
+    <p>
+     Content Owner: AjithSelvam | Email: <a class="text-green-400 hover:underline" href="mailto:assassin.ajith.2020@gmail.com">assassin.ajith.2020@gmail.com</a>
     </p>
     <div class="flex space-x-6 mt-4 md:mt-0">
      <a aria-label="Facebook" class="hover:text-indigo-600 dark:hover:text-indigo-400" href="#">
@@ -1075,6 +1078,25 @@
     </div>
    </div>
   </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   <script>
    // Mobile menu toggle
    const menuBtn = document.getElementById("menu-btn");
@@ -1131,5 +1153,221 @@
      setDarkMode(!isDark);
    });
   </script>
+
+
+
+
+
+
+
+
+
+
+<!-- This is the start of the form -->
+ <!-- contact us script this needs to send ajith gmail and other two -->
+
+ <script>
+    document.getElementById("messageForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const message = document.getElementById("message").value;
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+
+      fetch("https://script.google.com/macros/s/AKfycbzKBCZpmv9xr0efFlE6GUeFs_KO2E0w2xULM9bwLpjDhx_YD_h12BEmkabhoR3czIYf/exec", {  // 🔁 Replace with your Web App URL
+        method: "POST",
+        body: new URLSearchParams({ 
+          message,
+          name,
+          email
+
+
+         })
+        
+      })
+      .then(response => response.text())
+      .then(data => {
+        alert("Message sent! WE WILL REACH YOU SOON");
+      })
+      .catch(error => {
+        alert("Error sending message.");
+        console.error(error);
+      });
+    });
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
  </body>
 </html>
