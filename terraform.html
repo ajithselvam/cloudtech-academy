@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terraform Commands Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #0f766e;
+    }
+    .section {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+    pre {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, Monaco, 'Andale Mono', monospace;
+      font-size: 0.95rem;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      background: #ccfbf1;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .nav a {
+      margin-right: 15px;
+      color: #0f766e;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌍 Terraform Complete Commands Reference</h1>
+
+  <div class="nav">
+    <a href="#init">Init & Setup</a>
+    <a href="#plan">Planning</a>
+    <a href="#apply">Apply</a>
+    <a href="#destroy">Destroy</a>
+    <a href="#state">State Mgmt</a>
+    <a href="#workspace">Workspaces</a>
+    <a href="#modules">Modules</a>
+    <a href="#fmt">Format & Validate</a>
+    <a href="#providers">Providers</a>
+    <a href="#labs">KodeKloud Labs</a>
+  </div>
+
+  <div id="init" class="section">
+    <h2>🚀 Initialize & Setup</h2>
+    <pre><code>terraform init                      # Initialize directory with Terraform config
+terraform init -upgrade            # Upgrade modules/plugins
+terraform init -backend-config=dev.hcl</code></pre>
+  </div>
+
+  <div id="plan" class="section">
+    <h2>🧠 Planning Infrastructure</h2>
+    <pre><code>terraform plan                     # Show execution plan
+terraform plan -out=tfplan        # Save plan to file
+terraform show tfplan             # View saved plan
+terraform graph | dot -Tsvg > plan.svg</code></pre>
+  </div>
+
+  <div id="apply" class="section">
+    <h2>🛠️ Apply Infrastructure</h2>
+    <pre><code>terraform apply                   # Apply changes
+terraform apply tfplan           # Apply saved plan
+terraform apply -auto-approve    # Skip interactive approval</code></pre>
+  </div>
+
+  <div id="destroy" class="section">
+    <h2>💣 Destroy Infrastructure</h2>
+    <pre><code>terraform destroy                # Destroy everything
+terraform destroy -auto-approve</code></pre>
+  </div>
+
+  <div id="state" class="section">
+    <h2>📦 State Management</h2>
+    <pre><code>terraform state list                         # List resources
+terraform state show aws_instance.example   # Show details
+terraform state mv old.name new.name        # Rename resource
+terraform state rm aws_s3_bucket.mybucket   # Remove from state</code></pre>
+  </div>
+
+  <div id="workspace" class="section">
+    <h2>🗂️ Workspaces</h2>
+    <pre><code>terraform workspace list
+terraform workspace new dev
+terraform workspace select dev
+terraform workspace delete dev</code></pre>
+  </div>
+
+  <div id="modules" class="section">
+    <h2>📁 Modules</h2>
+    <pre><code># Structure your Terraform configs
+module "vpc" {
+  source = "./modules/vpc"
+  cidr_block = "10.0.0.0/16"
+}</code></pre>
+  </div>
+
+  <div id="fmt" class="section">
+    <h2>🧹 Format, Validate, and Output</h2>
+    <pre><code>terraform fmt                     # Format code
+terraform validate               # Validate configuration
+terraform output                 # Show outputs
+terraform output variable_name</code></pre>
+  </div>
+
+  <div id="providers" class="section">
+    <h2>🌐 Providers</h2>
+    <pre><code># Define provider in main.tf
+provider "aws" {
+  region = "us-east-1"
+}</code></pre>
+  </div>
+
+  <div id="labs" class="section">
+    <h2>🧪 KodeKloud Labs Examples</h2>
+    <pre><code># Sample tasks from Terraform labs
+terraform init
+terraform plan
+terraform apply
+
+# Variables
+terraform apply -var="instance_type=t2.micro"
+
+# Use .tfvars
+terraform apply -var-file="dev.tfvars"</code></pre>
+  </div>
+
+  <p><strong>✅ This complete Terraform reference includes all essential commands and KodeKloud lab-style usage. Master these to manage cloud infrastructure efficiently.</strong></p>
+</body>
+</html>
