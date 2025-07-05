@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git Commands Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #2563eb;
+    }
+    .section {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+    pre {
+      background-color: #111827;
+      color: #f3f4f6;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, Monaco, 'Andale Mono', monospace;
+      font-size: 0.95rem;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      background: #dbeafe;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .nav a {
+      margin-right: 15px;
+      color: #1d4ed8;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔧 Git Commands Reference</h1>
+
+  <div class="nav">
+    <a href="#init">Init & Clone</a>
+    <a href="#stage">Stage & Commit</a>
+    <a href="#branch">Branches</a>
+    <a href="#remote">Remote</a>
+    <a href="#stash">Stash</a>
+    <a href="#revert">Undo & Reset</a>
+    <a href="#log">Logs & Diff</a>
+    <a href="#tag">Tags</a>
+    <a href="#config">Config</a>
+  </div>
+
+  <div id="init" class="section">
+    <h2>🚀 Init & Clone</h2>
+    <pre><code>git init                        # Initialize new repo
+git clone &lt;url&gt;                # Clone remote repo
+git clone -b branch &lt;url&gt;      # Clone specific branch</code></pre>
+  </div>
+
+  <div id="stage" class="section">
+    <h2>📦 Stage & Commit</h2>
+    <pre><code>git status                     # Check status
+git add file.txt              # Stage file
+git add .                     # Stage all changes
+git commit -m "message"       # Commit changes
+git commit -am "msg"          # Add and commit tracked files</code></pre>
+  </div>
+
+  <div id="branch" class="section">
+    <h2>🌿 Branching</h2>
+    <pre><code>git branch                     # List branches
+git branch new-feature        # Create branch
+git checkout new-feature      # Switch branch
+git checkout -b new-feature   # Create and switch
+git merge main                # Merge into current
+
+# Delete branches
+git branch -d feature         # Delete local
+git push origin --delete feature  # Delete remote</code></pre>
+  </div>
+
+  <div id="remote" class="section">
+    <h2>🌍 Remote</h2>
+    <pre><code>git remote -v                 # View remotes
+git remote add origin &lt;url&gt;  # Add remote
+git push -u origin main      # Push to origin
+
+git pull                     # Pull latest changes
+git fetch                    # Fetch from remote
+git push origin feature      # Push branch</code></pre>
+  </div>
+
+  <div id="stash" class="section">
+    <h2>🧳 Stash</h2>
+    <pre><code>git stash                     # Stash changes
+git stash pop                 # Apply and drop stash
+git stash list                # List stashes
+git stash apply stash@{0}     # Apply specific</code></pre>
+  </div>
+
+  <div id="revert" class="section">
+    <h2>⏪ Undo, Reset, Revert</h2>
+    <pre><code>git checkout -- file          # Discard changes
+git reset HEAD file           # Unstage file
+git reset --soft HEAD~1       # Keep changes
+git reset --hard HEAD~1       # Remove commit
+
+git revert COMMIT             # Undo with commit</code></pre>
+  </div>
+
+  <div id="log" class="section">
+    <h2>📜 Log, Diff & Blame</h2>
+    <pre><code>git log                       # Show commit logs
+git log --oneline             # One-line logs
+git diff                      # Show unstaged diff
+git diff --staged             # Staged diff
+git blame file.txt            # Who changed each line</code></pre>
+  </div>
+
+  <div id="tag" class="section">
+    <h2>🏷️ Tags</h2>
+    <pre><code>git tag                       # List tags
+git tag v1.0                  # Create tag
+git push origin v1.0          # Push tag
+git tag -d v1.0               # Delete local tag
+git push --delete origin v1.0 # Delete remote tag</code></pre>
+  </div>
+
+  <div id="config" class="section">
+    <h2>⚙️ Configuration</h2>
+    <pre><code>git config --global user.name "Ajith"
+git config --global user.email "you@example.com"
+git config --list
+</code></pre>
+  </div>
+
+  <p><strong>✅ This Git reference covers all essential commands for real-world development, version control, and collaboration. Practice them regularly to master Git!</strong></p>
+</body>
+</html>
