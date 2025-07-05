@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux All Commands Reference</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f0f4f8;
+      color: #1e293b;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #1d4ed8;
+    }
+    .section {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+    pre {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, Monaco, 'Andale Mono', monospace;
+      font-size: 0.95rem;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      background: #dbeafe;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .nav a {
+      margin-right: 15px;
+      color: #1e40af;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>🐧 Complete Linux Commands with Examples</h1>
+
+  <div class="nav">
+    <a href="#filesystem">Filesystem</a>
+    <a href="#process">Processes</a>
+    <a href="#networking">Networking</a>
+    <a href="#users">Users & Groups</a>
+    <a href="#permissions">Permissions</a>
+    <a href="#packages">Packages</a>
+    <a href="#disk">Disk & Storage</a>
+    <a href="#services">System Services</a>
+    <a href="#scripting">Scripting</a>
+    <a href="#monitoring">Monitoring</a>
+    <a href="#admin">Administration</a>
+    <a href="#others">Others</a>
+  </div>
+
+  <div id="filesystem" class="section">
+    <h2>📁 Filesystem Commands</h2>
+    <pre><code>ls -al          # List all files with permissions
+cd /path        # Change directory
+pwd             # Print working directory
+mkdir dir       # Make directory
+rm file         # Remove file
+rm -rf dir      # Remove directory recursively
+cp file1 file2  # Copy file
+mv file1 file2  # Move/rename file
+find / -name "file.txt"     # Find file by name
+locate file.txt              # Faster file location using database
+stat file.txt               # Show file status
+tree                       # Show directory tree
+file filename              # Determine file type</code></pre>
+  </div>
+
+  <div id="process" class="section">
+    <h2>⚙️ Process Management</h2>
+    <pre><code>ps aux                      # Show all running processes
+top                        # Dynamic real-time process viewer
+htop                       # Interactive process viewer
+kill -9 PID                # Force kill a process
+pkill firefox              # Kill by process name
+nice -n 10 process         # Start process with priority
+renice -n -5 -p PID        # Change priority of running process
+jobs                       # Show background jobs
+fg %1                      # Bring job to foreground
+bg %1                      # Resume job in background
+nohup command &            # Run command immune to hangups</code></pre>
+  </div>
+
+  <div id="networking" class="section">
+    <h2>🌐 Networking</h2>
+    <pre><code>ip a                        # Show interfaces
+ping 8.8.8.8               # Send ICMP packets
+traceroute google.com      # Trace path
+netstat -tulnp             # List listening ports
+ss -tulwn                  # Faster netstat
+curl http://example.com    # Transfer data with URL syntax
+wget http://example.com    # Download from web
+nmap -sS 192.168.1.1       # Network scan
+host google.com            # DNS lookup
+dig google.com             # Detailed DNS info
+nmcli device status        # NetworkManager status</code></pre>
+  </div>
+
+  <div id="users" class="section">
+    <h2>👥 User & Group Management</h2>
+    <pre><code>whoami                     # Current user
+id                         # UID, GID
+useradd user               # Add user
+passwd user                # Set password
+usermod -aG group user     # Add user to group
+deluser user               # Delete user
+groupadd devs              # Create group
+groupdel devs              # Delete group
+su - user                  # Switch user
+sudo command               # Run as superuser</code></pre>
+  </div>
+
+  <div id="permissions" class="section">
+    <h2>🔐 File Permissions</h2>
+    <pre><code>chmod 755 file             # Set execute permission
+chmod +x script.sh        # Make executable
+chown user:group file     # Change ownership
+umask                     # Default permission mask
+ls -l                     # View permissions
+getfacl file              # View ACLs
+setfacl -m u:john:rw file # Set ACL</code></pre>
+  </div>
+
+  <div id="packages" class="section">
+    <h2>📦 Package Management</h2>
+    <pre><code># Debian/Ubuntu
+apt update
+apt upgrade -y
+apt install nginx
+apt remove nginx
+apt search apache
+
+# RHEL/CentOS
+yum install httpd
+dnf install git
+rpm -qa | grep nginx
+
+# Snap
+snap find vlc
+snap install vlc</code></pre>
+  </div>
+
+  <div id="disk" class="section">
+    <h2>💽 Disk & Storage</h2>
+    <pre><code>df -h                     # Disk space
+lsblk                    # Block devices
+du -sh *                 # Directory sizes
+mount /dev/sdX /mnt      # Mount device
+umount /mnt              # Unmount
+mkfs.ext4 /dev/sdX       # Format disk
+fsck /dev/sdX            # Check disk errors
+tune2fs -l /dev/sdX      # Filesystem info
+parted /dev/sdX          # Partition tool</code></pre>
+  </div>
+
+  <div id="services" class="section">
+    <h2>🔧 System Services (systemd)</h2>
+    <pre><code>systemctl start nginx     # Start service
+systemctl stop nginx      # Stop
+systemctl restart nginx   # Restart
+systemctl status nginx    # Status
+systemctl enable nginx    # Enable on boot
+systemctl disable nginx   # Disable
+journalctl -u nginx       # View logs
+systemctl list-units --type=service</code></pre>
+  </div>
+
+  <div id="scripting" class="section">
+    <h2>📜 Shell Scripting</h2>
+    <pre><code>#!/bin/bash
+# hello.sh
+echo "Hello, World!"
+
+# If-Else
+if [ $USER == root ]; then
+  echo "Root user"
+else
+  echo "Not root"
+fi
+
+# For loop
+for i in {1..5}; do echo $i; done
+
+# Read input
+read -p "Enter name: " name
+echo "Hi $name"</code></pre>
+  </div>
+
+  <div id="monitoring" class="section">
+    <h2>📊 Monitoring & Performance</h2>
+    <pre><code>uptime                     # System uptime
+free -h                   # Memory usage
+vmstat                    # Virtual memory
+sar -u 1 3                # CPU usage (sysstat)
+watch -n 1 df -h          # Periodic disk check
+top / htop                # Processes
+pidstat -p PID            # Per-process stats
+iostat                    # I/O stats
+lsof                      # List open files</code></pre>
+  </div>
+
+  <div id="admin" class="section">
+    <h2>🛠️ System Administration</h2>
+    <pre><code>crontab -e                 # Edit user cron jobs
+at now + 1 min            # Schedule one-time job
+hostnamectl               # Change hostname
+timedatectl set-timezone Asia/Kolkata
+reboot                    # Reboot
+shutdown now              # Power off
+alias l='ls -la'          # Create alias
+</code></pre>
+  </div>
+
+  <div id="others" class="section">
+    <h2>📚 Others & Utilities</h2>
+    <pre><code>echo "text" > file         # Write to file
+echo $HOME                # Show environment var
+export VAR=value          # Set variable
+tar -czf archive.tar.gz dir
+unzip file.zip
+xargs rm < files.txt
+history                   # Show command history
+man ls                    # Manual page
+which bash                # Show path to binary
+whereis bash              # Binary + source + man
+</code></pre>
+  </div>
+
+  <p><strong>✅ This complete Linux command reference covers most commands used in daily, professional, and advanced use cases with examples. Ideal for interviews, scripting, automation, and certification labs.</strong></p>
+</body>
+</html>
