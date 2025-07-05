@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kubernetes Commands Reference - KodeKloud Labs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #1d4ed8;
+    }
+    .section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+    }
+    pre {
+      background-color: #0f172a;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+    }
+    code {
+      font-family: Consolas, Monaco, 'Andale Mono', monospace;
+      font-size: 0.95rem;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      background: #e0f2fe;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .nav a {
+      margin-right: 15px;
+      color: #1e40af;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .nav a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>☸️ Kubernetes Commands Reference - KodeKloud Labs</h1>
+
+  <div class="nav">
+    <a href="#basics">Basics</a>
+    <a href="#pods">Pods</a>
+    <a href="#deployments">Deployments</a>
+    <a href="#services">Services</a>
+    <a href="#namespaces">Namespaces</a>
+    <a href="#configmaps">ConfigMaps</a>
+    <a href="#secrets">Secrets</a>
+    <a href="#volumes">Volumes</a>
+    <a href="#labs">Labs</a>
+  </div>
+
+  <div id="basics" class="section">
+    <h2>🔧 Basic Commands</h2>
+    <pre><code># Cluster info
+kubectl cluster-info
+kubectl version
+kubectl config view
+
+# Get resources
+kubectl get nodes
+kubectl get pods
+kubectl get services
+kubectl get all
+
+# Describe resources
+kubectl describe node NODE_NAME
+kubectl describe pod POD_NAME
+
+# Logs and events
+kubectl logs POD_NAME
+kubectl logs POD_NAME -c CONTAINER_NAME
+kubectl get events</code></pre>
+  </div>
+
+  <div id="pods" class="section">
+    <h2>📦 Pods</h2>
+    <pre><code># Create pod
+kubectl run nginx --image=nginx
+
+# Delete pod
+kubectl delete pod nginx
+
+# YAML generation
+kubectl run nginx --image=nginx --dry-run=client -o yaml > pod.yaml
+kubectl create -f pod.yaml
+
+# Exec into pod
+kubectl exec -it POD_NAME -- /bin/sh
+
+# Port-forward
+kubectl port-forward POD_NAME 8080:80</code></pre>
+  </div>
+
+  <div id="deployments" class="section">
+    <h2>🚀 Deployments</h2>
+    <pre><code># Create deployment
+kubectl create deployment my-deploy --image=nginx
+
+# Update deployment
+kubectl set image deployment/my-deploy nginx=nginx:1.19
+
+# Scale deployment
+kubectl scale deployment my-deploy --replicas=3
+
+# Rollout
+kubectl rollout status deployment/my-deploy
+kubectl rollout undo deployment/my-deploy</code></pre>
+  </div>
+
+  <div id="services" class="section">
+    <h2>🌐 Services</h2>
+    <pre><code># Expose pod/deployment
+kubectl expose pod nginx --port=80 --target-port=80 --type=NodePort
+kubectl expose deployment my-deploy --port=80 --type=ClusterIP
+
+# View services
+kubectl get svc
+
+# Describe service
+kubectl describe svc my-deploy</code></pre>
+  </div>
+
+  <div id="namespaces" class="section">
+    <h2>🏷️ Namespaces</h2>
+    <pre><code># List namespaces
+kubectl get ns
+
+# Create namespace
+kubectl create ns my-namespace
+
+# Use namespace
+kubectl config set-context --current --namespace=my-namespace</code></pre>
+  </div>
+
+  <div id="configmaps" class="section">
+    <h2>📝 ConfigMaps</h2>
+    <pre><code># Create ConfigMap
+kubectl create configmap my-config --from-literal=key1=value1
+kubectl create configmap app-config --from-file=config.txt
+
+# View and describe
+kubectl get configmaps
+kubectl describe configmap my-config</code></pre>
+  </div>
+
+  <div id="secrets" class="section">
+    <h2>🔐 Secrets</h2>
+    <pre><code># Create secret
+kubectl create secret generic my-secret --from-literal=password=12345
+
+# View and describe
+kubectl get secrets
+kubectl describe secret my-secret</code></pre>
+  </div>
+
+  <div id="volumes" class="section">
+    <h2>📂 Volumes</h2>
+    <pre><code># Example YAML with volume
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-pod
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["sleep", "3600"]
+    volumeMounts:
+    - mountPath: "/data"
+      name: my-volume
+  volumes:
+  - name: my-volume
+    emptyDir: {}</code></pre>
+  </div>
+
+  <div id="labs" class="section">
+    <h2>🧪 KodeKloud Labs Quick Reference</h2>
+    <pre><code># Imperative command
+kubectl create deployment nginx --image=nginx
+kubectl expose deployment nginx --port=80 --type=NodePort
+
+# YAML creation
+kubectl run nginx --image=nginx --dry-run=client -o yaml > pod.yaml
+kubectl create -f pod.yaml
+
+# Labels and selectors
+kubectl label pod nginx app=web
+kubectl get pods --selector app=web
+
+# Node selector in pod spec
+spec:
+  nodeSelector:
+    disktype: ssd</code></pre>
+  </div>
+
+  <p><strong>✅ This complete Kubernetes reference includes essential commands and patterns used in KodeKloud labs. Practice them to become confident in real-world K8s operations!</strong></p>
+</body>
+</html>
