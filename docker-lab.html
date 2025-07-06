@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docker Lab Emulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #33ff33;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .docker-terminal {
+      background-color: #000;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 1200px;
+      height: 95vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      background-color: #2b2b2b;
+      padding: 10px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 6px;
+      margin-right: auto;
+    }
+
+    .btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .btn.red { background-color: #ff5f56; }
+    .btn.yellow { background-color: #ffbd2e; }
+    .btn.green { background-color: #27c93f; }
+
+    .label {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+
+    .terminal-body {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .line {
+      white-space: pre-line;
+      margin-bottom: 6px;
+    }
+
+    .prompt::before {
+      content: "docker@lab:~$ ";
+      color: #33ff33;
+    }
+
+    .input-line {
+      display: flex;
+    }
+
+    .input-line input {
+      background: none;
+      border: none;
+      color: #33ff33;
+      font: inherit;
+      outline: none;
+      width: 100%;
+    }
+
+    #editor {
+      background-color: #111;
+      color: #fff;
+      font-family: monospace;
+      padding: 10px;
+      margin: 10px;
+      height: 200px;
+      overflow: auto;
+      border: 1px solid #444;
+    }
+  </style>
+</head>
+<body>
+<div class="docker-terminal">
+  <div class="terminal-header">
+    <div class="buttons">
+      <div class="btn red"></div>
+      <div class="btn yellow"></div>
+      <div class="btn green"></div>
+    </div>
+    <div class="label">Docker Emulator Lab (Sandbox)</div>
+  </div>
+  <div class="terminal-body" id="terminalBody">
+    <div class="line">Welcome to the Docker Emulator 🐳</div>
+    <div class="line">Type <code>help</code> to see available Docker commands</div>
+  </div>
+  <div class="input-line">
+    <span class="prompt"></span>
+    <input type="text" id="commandInput" autocomplete="off" autofocus />
+  </div>
+  <div id="editor" contenteditable="true">
+    # Dockerfile Editor (type here...)
+    FROM ubuntu:latest
+    RUN apt-get update && apt-get install -y curl
+    CMD ["/bin/bash"]
+  </div>
+</div>
+<script>
+  const terminalBody = document.getElementById('terminalBody');
+  const commandInput = document.getElementById('commandInput');
+
+  const containers = [];
+  const images = [
+    { name: "ubuntu", tag: "latest", id: "abc123", size: "29MB" },
+    { name: "nginx", tag: "stable", id: "def456", size: "133MB" }
+  ];
+
+  function runCommand(command) {
+    const promptLine = document.createElement("div");
+    promptLine.className = "line prompt";
+    promptLine.textContent = command;
+    terminalBody.appendChild(promptLine);
+
+    const outputLine = document.createElement("div");
+    outputLine.className = "line";
+    let output = "";
+
+    const parts = command.trim().split(" ");
+    const cmd = parts[0];
+
+    if (cmd === "help") {
+      output = `Available Docker commands:
+- docker ps
+- docker ps -a
+- docker images
+- docker run <image>
+- docker start <id>
+- docker stop <id>
+- docker restart <id>
+- docker rm <id>
+- docker rmi <image>
+- docker logs <id>
+- docker build <path>
+- docker pull <image>
+- docker push <image>
+- docker exec -it <id> <command>
+- clear`;
+    } else if (cmd === "clear") {
+      terminalBody.innerHTML = "";
+      return;
+    } else if (parts[0] === "docker") {
+      const sub = parts[1];
+      switch (sub) {
+        case "ps":
+          if (parts.includes("-a")) {
+            output = containers.map(c => `${c.id}  ${c.image}  ${c.status}`).join("\n") || "No containers.";
+          } else {
+            output = containers.filter(c => c.status.startsWith("Up"))
+              .map(c => `${c.id}  ${c.image}  ${c.status}`).join("\n") || "No running containers.";
+          }
+          break;
+        case "images":
+          output = images.map(img => `${img.name}:${img.tag}  ${img.id}  ${img.size}`).join("\n") || "No images found.";
+          break;
+        case "run":
+          if (parts[2]) {
+            const id = Math.random().toString(36).substr(2, 6);
+            containers.push({ id, image: parts[2], status: "Up 5 seconds" });
+            output = `Started container ${id} from image ${parts[2]}`;
+          } else {
+            output = "Usage: docker run <image>";
+          }
+          break;
+        case "stop":
+        case "start":
+        case "restart":
+          const id = parts[2];
+          const container = containers.find(c => c.id === id);
+          if (!container) output = `Container ${id} not found.`;
+          else {
+            container.status = sub === "stop" ? "Exited (0) just now" : "Up 1 second";
+            output = `${sub === "restart" ? "Restarted" : sub.charAt(0).toUpperCase() + sub.slice(1)} container ${id}`;
+          }
+          break;
+        case "rm":
+          const index = containers.findIndex(c => c.id === parts[2]);
+          if (index !== -1) {
+            containers.splice(index, 1);
+            output = `Container ${parts[2]} removed.`;
+          } else output = "Container not found.";
+          break;
+        case "rmi":
+          const imgIndex = images.findIndex(i => i.name === parts[2]);
+          if (imgIndex !== -1) {
+            images.splice(imgIndex, 1);
+            output = `Image ${parts[2]} removed.`;
+          } else output = "Image not found.";
+          break;
+        case "logs":
+          output = `Simulated logs for container ${parts[2]}...`;
+          break;
+        case "build":
+          output = "Simulated docker build (Dockerfile contents parsed).";
+          break;
+        case "pull":
+          if (parts[2]) {
+            images.push({ name: parts[2], tag: "latest", id: Math.random().toString(36).substr(2, 6), size: "100MB" });
+            output = `Image ${parts[2]} pulled.`;
+          } else {
+            output = "Usage: docker pull <image>";
+          }
+          break;
+        case "push":
+          output = `Simulated push of image ${parts[2]}`;
+          break;
+        case "exec":
+          output = `Executed '${parts.slice(4).join(" ")}' inside ${parts[2]} (simulated)`;
+          break;
+        default:
+          output = "Unknown docker command.";
+      }
+    } else {
+      output = "Command not recognized. Type 'help' for list.";
+    }
+
+    outputLine.textContent = output;
+    terminalBody.appendChild(outputLine);
+    terminalBody.scrollTop = terminalBody.scrollHeight;
+  }
+
+  commandInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      const cmd = commandInput.value.trim();
+      if (cmd) runCommand(cmd);
+      commandInput.value = "";
+    }
+  });
+</script>
+</body>
+</html>
