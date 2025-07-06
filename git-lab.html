@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Git & GitHub Lab Emulator</title>
+  <style>
+    body {
+      background: #1e1e1e;
+      color: #c5f0f0;
+      font-family: monospace;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .terminal, .file-explorer, .toolbar, .editor, .commit-graph {
+      width: 95%;
+      max-width: 1200px;
+      margin-top: 10px;
+    }
+    .terminal {
+      height: 50vh;
+      background: #000;
+      border-radius: 8px;
+      overflow-y: auto;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    .terminal-body {
+      padding: 20px;
+    }
+    .line {
+      white-space: pre;
+      margin-bottom: 8px;
+    }
+    .prompt::before {
+      content: "git@lab:~$ ";
+      color: #00f0ff;
+    }
+    .input-line {
+      display: flex;
+    }
+    .input-line input {
+      background: none;
+      border: none;
+      color: #c5f0f0;
+      font: inherit;
+      width: 100%;
+      outline: none;
+    }
+    .file-explorer, .editor {
+      background: #111;
+      color: #fff;
+      padding: 10px;
+      border: 1px solid #333;
+    }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+    }
+    .toolbar button {
+      background: #00ffcc;
+      border: none;
+      padding: 6px 12px;
+      font-family: monospace;
+      cursor: pointer;
+    }
+    .editor textarea {
+      width: 100%;
+      height: 150px;
+      background: #000;
+      color: #0f0;
+      border: none;
+      font-family: monospace;
+      padding: 10px;
+      resize: vertical;
+    }
+    .commit-graph {
+      background: #111;
+      color: #0ff;
+      padding: 10px;
+      border: 1px solid #333;
+      font-size: 0.9em;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="terminal">
+    <div class="terminal-body" id="terminalBody">
+      <div class="line">Welcome to the Git & GitHub Emulator 🚀</div>
+      <div class="line">Type <code>help</code> to list supported git/github commands</div>
+    </div>
+    <div class="input-line">
+      <span class="prompt"></span>
+      <input type="text" id="commandInput" autocomplete="off" autofocus>
+    </div>
+  </div>
+
+  <div class="file-explorer" id="fileExplorer">
+    <strong>Project Files:</strong>
+    <div id="fileList">main.py, README.md</div>
+  </div>
+
+  <div class="editor">
+    <strong>File Editor:</strong>
+    <textarea id="fileContent"># Edit your file content here</textarea>
+  </div>
+
+  <div class="commit-graph" id="commitGraph">
+    <strong>Commit Graph:</strong>
+    <div>No commits yet.</div>
+  </div>
+
+  <div class="file-explorer" id="githubBoard">
+    <strong>GitHub Board:</strong>
+    <div><strong>Issues:</strong> <span id="issuesList">No issues</span></div>
+    <div><strong>Pull Requests:</strong> <span id="prsList">No pull requests</span></div>
+  </div>
+
+  <div class="toolbar">
+    <button onclick="exportState()">Export State</button>
+    <button onclick="importState()">Import State</button>
+    <input type="file" id="stateFile" style="display:none" />
+  </div>
+
+<script>
+const terminalBody = document.getElementById('terminalBody');
+const commandInput = document.getElementById('commandInput');
+const fileList = document.getElementById('fileList');
+const issuesList = document.getElementById('issuesList');
+const prsList = document.getElementById('prsList');
+const commitGraph = document.getElementById('commitGraph');
+
+let repoInitialized = false;
+let stagedFiles = ['main.py'];
+let commits = [];
+let remoteSet = false;
+let branches = ['main'];
+let currentBranch = 'main';
+let issues = [];
+let prs = [];
+
+function updateUI() {
+  fileList.textContent = ['main.py', 'README.md'].join(', ');
+  issuesList.textContent = issues.length ? issues.join(', ') : 'No issues';
+  prsList.textContent = prs.length ? prs.join(', ') : 'No pull requests';
+  commitGraph.innerHTML = '<strong>Commit Graph:</strong><br>' + (commits.length ?
+    commits.map((c, i) => `* commit ${i + 1} (${c.branch})\n  |-- ${c.message}`).reverse().join('<br>') : 'No commits yet.');
+}
+
+function runCommand(command) {
+  const line = document.createElement('div');
+  line.className = 'line prompt';
+  line.textContent = command;
+  terminalBody.appendChild(line);
+
+  const output = document.createElement('div');
+  output.className = 'line';
+
+  const args = command.trim().split(' ');
+  const cmd = args[0];
+
+  switch (cmd) {
+    case 'help':
+      output.textContent = `Supported commands:\n- git init, status, add <file>, commit -m \"msg\", log\n- git remote add origin <url>, push\n- git branch, checkout <branch>, merge <branch>\n- github issue <title>, github pr <branch>\n- clear`;
+      break;
+    case 'git':
+      if (args[1] === 'init') {
+        repoInitialized = true;
+        output.textContent = "Initialized empty Git repository.";
+      } else if (args[1] === 'add') {
+        if (!repoInitialized) output.textContent = "Repository not initialized.";
+        else {
+          stagedFiles.push(args[2]);
+          output.textContent = `Added ${args[2]} to staging.`;
+        }
+      } else if (args[1] === 'status') {
+        if (!repoInitialized) output.textContent = "Repository not initialized.";
+        else output.textContent = stagedFiles.length ? `Changes to be committed:\n${stagedFiles.join('\n')}` : "Nothing to commit.";
+      } else if (args[1] === 'commit' && args[2] === '-m') {
+        if (stagedFiles.length === 0) output.textContent = "Nothing to commit.";
+        else {
+          const msg = command.split('-m')[1].trim();
+          commits.push({ message: msg, files: [...stagedFiles], branch: currentBranch });
+          stagedFiles = [];
+          output.textContent = `Committed with message: ${msg}`;
+        }
+      } else if (args[1] === 'log') {
+        const log = commits.filter(c => c.branch === currentBranch);
+        output.textContent = log.length ? log.map((c, i) => `commit ${i + 1}\n    ${c.message}`).reverse().join('\n\n') : "No commits yet.";
+      } else if (args[1] === 'remote' && args[2] === 'add' && args[3] === 'origin') {
+        remoteSet = true;
+        output.textContent = `Remote origin set to ${args[4]}`;
+      } else if (args[1] === 'push') {
+        if (!remoteSet) output.textContent = "Remote not set.";
+        else output.textContent = "Pushed to origin (simulated).";
+      } else if (args[1] === 'branch') {
+        output.textContent = branches.map(b => (b === currentBranch ? `* ${b}` : `  ${b}`)).join('\n');
+      } else if (args[1] === 'checkout') {
+        if (branches.includes(args[2])) {
+          currentBranch = args[2];
+          output.textContent = `Switched to branch '${currentBranch}'`;
+        } else {
+          branches.push(args[2]);
+          currentBranch = args[2];
+          output.textContent = `Created and switched to new branch '${currentBranch}'`;
+        }
+      } else if (args[1] === 'merge') {
+        if (branches.includes(args[2])) {
+          output.textContent = `Merged branch '${args[2]}' into '${currentBranch}'`;
+        } else {
+          output.textContent = `Branch '${args[2]}' not found.`;
+        }
+      } else {
+        output.textContent = "Unknown git command.";
+      }
+      break;
+    case 'github':
+      if (args[1] === 'issue') {
+        issues.push(args.slice(2).join(' '));
+        output.textContent = `Issue created: ${args.slice(2).join(' ')}`;
+      } else if (args[1] === 'pr') {
+        if (branches.includes(args[2])) {
+          prs.push(`PR from ${args[2]} to ${currentBranch}`);
+          output.textContent = `Pull request opened from ${args[2]} to ${currentBranch}`;
+        } else {
+          output.textContent = "Branch not found for PR.";
+        }
+      } else {
+        output.textContent = "Unknown GitHub command.";
+      }
+      break;
+    case 'clear':
+      terminalBody.innerHTML = '';
+      return;
+    default:
+      output.textContent = "Unknown command. Type 'help' for available commands.";
+  }
+
+  terminalBody.appendChild(output);
+  terminalBody.scrollTop = terminalBody.scrollHeight;
+  updateUI();
+}
+
+function exportState() {
+  const state = { repoInitialized, stagedFiles, commits, remoteSet, branches, currentBranch, issues, prs };
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'git-github-lab-state.json';
+  link.click();
+}
+
+function importState() {
+  document.getElementById('stateFile').click();
+  document.getElementById('stateFile').onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const state = JSON.parse(e.target.result);
+        repoInitialized = state.repoInitialized;
+        stagedFiles = state.stagedFiles;
+        commits = state.commits;
+        remoteSet = state.remoteSet;
+        branches = state.branches;
+        currentBranch = state.currentBranch;
+        issues = state.issues;
+        prs = state.prs;
+        updateUI();
+        alert('State imported successfully.');
+      } catch {
+        alert('Failed to import state.');
+      }
+    };
+    reader.readAsText(file);
+  };
+}
+
+commandInput.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') {
+    const cmd = commandInput.value.trim();
+    if (cmd) runCommand(cmd);
+    commandInput.value = '';
+  }
+});
+
+updateUI();
+</script>
+</body>
+</html>
+
