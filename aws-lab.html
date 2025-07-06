@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AWS Lab Emulator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f4f6;
+      color: #111;
+    }
+    header {
+      background: #232f3e;
+      color: #fff;
+      padding: 12px 24px;
+      font-size: 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header input, header button {
+      margin-left: 12px;
+    }
+    .console {
+      display: flex;
+      height: calc(100vh - 54px);
+    }
+    nav {
+      width: 220px;
+      background: #374151;
+      color: white;
+      padding: 20px;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    nav li {
+      padding: 10px;
+      margin-bottom: 5px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    nav li:hover {
+      background: #4b5563;
+    }
+    main {
+      flex: 1;
+      background: white;
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background: #f9fafb;
+    }
+    #architectureCanvas {
+      background: #ffffff;
+      width: 100%;
+      height: 400px;
+      margin-top: 20px;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    AWS Lab Emulator (Simulated)
+    <div>
+      <input type="file" accept="application/json" id="importJson" />
+      <button id="exportButton">Export</button>
+    </div>
+  </header>
+  <div class="console">
+    <nav>
+      <ul>
+        <li data-service="ec2">EC2</li>
+        <li data-service="s3">S3</li>
+        <li data-service="iam">IAM</li>
+        <li data-service="lambda">Lambda</li>
+        <li data-service="rds">RDS</li>
+        <li data-service="arch">Architecture View</li>
+      </ul>
+    </nav>
+    <main>
+      <div class="section-title" id="serviceTitle">Select a service to begin...</div>
+      <div id="servicePanel"></div>
+    </main>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const serviceTitle = document.getElementById('serviceTitle');
+      const panel = document.getElementById('servicePanel');
+      let ec2Instances = JSON.parse(localStorage.getItem('ec2Instances') || '[]');
+
+      function saveState() {
+        localStorage.setItem('ec2Instances', JSON.stringify(ec2Instances));
+      }
+
+      function exportState() {
+        const allState = { ec2Instances };
+        const blob = new Blob([JSON.stringify(allState, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'aws-lab-state.json';
+        link.click();
+      }
+
+      function importState(event) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = JSON.parse(e.target.result);
+          ec2Instances = data.ec2Instances || [];
+          saveState();
+          alert('Lab state imported!');
+        };
+        reader.readAsText(event.target.files[0]);
+      }
+
+      function selectService(service) {
+        serviceTitle.textContent = `Service: ${service.toUpperCase()}`;
+        if (service === 'ec2') renderEC2();
+      }
+
+      function renderEC2() {
+        panel.innerHTML = `
+          <h3>Launch EC2 Instance</h3>
+          <input id="name" placeholder="Instance Name">
+          <select id="os">
+            <option>Amazon Linux 2023</option>
+            <option>Ubuntu 22.04 LTS</option>
+            <option>Red Hat Enterprise Linux 9</option>
+            <option>Windows Server 2022</option>
+          </select>
+          <select id="type">
+            <option>t2.micro</option>
+            <option>t3.medium</option>
+            <option>m5.large</option>
+          </select>
+          <input id="key" placeholder="Key Pair">
+          <input id="sg" placeholder="Security Group">
+          <button onclick="launchEC2()">Launch</button>
+          <h4>Instances</h4>
+          <table><thead><tr><th>Name</th><th>OS</th><th>Type</th><th>Key</th><th>SG</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="ec2List"></tbody></table>
+        `;
+        renderEC2List();
+      }
+
+      function renderEC2List() {
+        const tbody = document.getElementById('ec2List');
+        tbody.innerHTML = ec2Instances.map((inst, i) => `
+          <tr>
+            <td>${inst.name}</td>
+            <td>${inst.os}</td>
+            <td>${inst.type}</td>
+            <td>${inst.key}</td>
+            <td>${inst.sg}</td>
+            <td>${inst.status}</td>
+            <td>
+              <button onclick="rebootEC2(${i})">Reboot</button>
+              <button onclick="terminateEC2(${i})">Terminate</button>
+              <button onclick="consoleLog(${i})">Console</button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      window.launchEC2 = function () {
+        const name = document.getElementById('name').value;
+        const os = document.getElementById('os').value;
+        const type = document.getElementById('type').value;
+        const key = document.getElementById('key').value;
+        const sg = document.getElementById('sg').value;
+        if (!name || !key || !sg) return alert('All fields are required');
+        ec2Instances.push({ name, os, type, key, sg, status: 'running', logs: [`${name} booted.`] });
+        saveState();
+        renderEC2List();
+      }
+
+      window.rebootEC2 = function (i) {
+        ec2Instances[i].status = 'rebooting';
+        ec2Instances[i].logs.push('Rebooting...');
+        setTimeout(() => {
+          ec2Instances[i].status = 'running';
+          ec2Instances[i].logs.push('Reboot complete.');
+          saveState();
+          renderEC2List();
+        }, 1000);
+        renderEC2List();
+      }
+
+      window.terminateEC2 = function (i) {
+        ec2Instances[i].status = 'terminated';
+        ec2Instances[i].logs.push('Terminated.');
+        saveState();
+        renderEC2List();
+      }
+
+      window.consoleLog = function (i) {
+        alert(`Console for ${ec2Instances[i].name}:\n\n${ec2Instances[i].logs.join('\n')}`);
+      }
+
+      // attach event listeners
+      document.getElementById('importJson').addEventListener('change', importState);
+      document.getElementById('exportButton').addEventListener('click', exportState);
+      document.querySelectorAll('nav li').forEach(li => li.addEventListener('click', () => selectService(li.dataset.service)));
+    });
+  </script>
+</body>
+</html>
+
