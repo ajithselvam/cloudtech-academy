@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Kubernetes Lab Emulator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #00ffcc;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+    }
+    .terminal {
+      background-color: #000;
+      border-radius: 10px;
+      width: 95%;
+      max-width: 1200px;
+      height: 70vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      overflow: hidden;
+      margin-top: 1rem;
+    }
+    .terminal-header {
+      display: flex;
+      align-items: center;
+      background-color: #2b2b2b;
+      padding: 10px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    .buttons {
+      display: flex;
+      gap: 6px;
+      margin-right: auto;
+    }
+    .btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .btn.red { background-color: #ff5f56; }
+    .btn.yellow { background-color: #ffbd2e; }
+    .btn.green { background-color: #27c93f; }
+    .label {
+      color: #ccc;
+      font-size: 0.9rem;
+    }
+    .terminal-body {
+      flex-grow: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+    .line {
+      white-space: pre-line;
+      margin-bottom: 6px;
+    }
+    .prompt::before {
+      content: "kube@lab:~$ ";
+      color: #00ffcc;
+    }
+    .input-line {
+      display: flex;
+    }
+    .input-line input {
+      background: none;
+      border: none;
+      color: #00ffcc;
+      font: inherit;
+      outline: none;
+      width: 100%;
+    }
+    #yamlEditor {
+      width: 95%;
+      max-width: 1200px;
+      height: 20vh;
+      background-color: #111;
+      color: #fff;
+      font-family: monospace;
+      padding: 10px;
+      border: 1px solid #444;
+      overflow: auto;
+    }
+    #statusBoard {
+      width: 95%;
+      max-width: 1200px;
+      background: #222;
+      color: #0f0;
+      font-family: monospace;
+      padding: 10px;
+      margin-top: 10px;
+      border: 1px solid #555;
+    }
+    .toolbar {
+      margin-top: 5px;
+      display: flex;
+      gap: 10px;
+    }
+    .toolbar button {
+      background: #00ffcc;
+      border: none;
+      padding: 6px 12px;
+      font-family: monospace;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="statusBoard">
+    <strong>Live Cluster Status:</strong>
+    <div id="livePods"></div>
+    <div id="liveDeployments"></div>
+    <div id="liveServices"></div>
+  </div>
+
+  <div class="terminal">
+    <div class="terminal-header">
+      <div class="buttons">
+        <div class="btn red"></div>
+        <div class="btn yellow"></div>
+        <div class="btn green"></div>
+      </div>
+      <div class="label">Kubernetes Emulator Lab (Sandbox)</div>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+      <div class="line">Welcome to the Kubernetes Emulator 🚀</div>
+      <div class="line">Type <code>help</code> to see available kubectl commands</div>
+    </div>
+    <div class="input-line">
+      <span class="prompt"></span>
+      <input type="text" id="commandInput" autocomplete="off" autofocus />
+    </div>
+  </div>
+
+  <div id="yamlEditor" contenteditable="true">
+# Paste or type your YAML manifest here
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+    - name: myapp-container
+      image: nginx
+  </div>
+
+  <div class="toolbar">
+    <button onclick="exportState()">Export State</button>
+    <button onclick="importState()">Import State</button>
+    <input type="file" id="stateFile" style="display:none" />
+  </div>
+
+<script>
+const terminalBody = document.getElementById('terminalBody');
+const commandInput = document.getElementById('commandInput');
+const livePods = document.getElementById('livePods');
+const liveDeployments = document.getElementById('liveDeployments');
+const liveServices = document.getElementById('liveServices');
+const yamlEditor = document.getElementById('yamlEditor');
+
+let pods = [
+  { name: "nginx-pod", status: "Running", age: "5m" },
+  { name: "redis-pod", status: "Pending", age: "2m" }
+];
+
+let deployments = [
+  { name: "nginx-deploy", ready: "1/1", upToDate: 1, available: 1, age: "10m" }
+];
+
+let services = [
+  { name: "nginx-service", type: "ClusterIP", clusterIP: "10.0.0.1", ports: "80/TCP", age: "7m" }
+];
+
+function updateStatusBoard() {
+  livePods.innerHTML = `Pods: ${pods.map(p => p.name + ' (' + p.status + ')').join(', ')}`;
+  liveDeployments.innerHTML = `Deployments: ${deployments.map(d => d.name + ' (' + d.ready + ')').join(', ')}`;
+  liveServices.innerHTML = `Services: ${services.map(s => s.name + ' (' + s.type + ')').join(', ')}`;
+}
+
+function runCommand(rawCommand) {
+  const command = rawCommand.trim().replace(/^k /, 'kubectl ');
+  const parts = command.split(" ");
+
+  const promptLine = document.createElement("div");
+  promptLine.className = "line prompt";
+  promptLine.textContent = rawCommand;
+  terminalBody.appendChild(promptLine);
+
+  const outputLine = document.createElement("div");
+  outputLine.className = "line";
+  let output = "";
+
+  if (command === "help") {
+    output = `Available kubectl commands:\n- kubectl get pods|deployments|services\n- kubectl describe <pod|deployment> <name>\n- kubectl delete <pod|deployment|service> <name>\n- kubectl apply -f <file|editor>\n- kubectl version\n- clear`;
+  } else if (command === "kubectl version") {
+    output = `Client Version: v1.28.0\nServer Version: v1.28.0 (simulated)`;
+  } else if (command === "kubectl get pods") {
+    output = pods.map(p => `${p.name}   ${p.status}   ${p.age}`).join("\n") || "No pods found.";
+  } else if (command === "kubectl get deployments") {
+    output = deployments.map(d => `${d.name}   ${d.ready}   ${d.upToDate}   ${d.available}   ${d.age}`).join("\n") || "No deployments found.";
+  } else if (command === "kubectl get services") {
+    output = services.map(s => `${s.name}   ${s.type}   ${s.clusterIP}   ${s.ports}   ${s.age}`).join("\n") || "No services found.";
+  } else if (parts[0] === "kubectl" && parts[1] === "describe") {
+    const resource = parts[2], name = parts[3];
+    if (resource === "pod") {
+      const pod = pods.find(p => p.name === name);
+      output = pod ? `Name: ${pod.name}\nStatus: ${pod.status}\nAge: ${pod.age}` : "Pod not found.";
+    } else if (resource === "deployment") {
+      const dep = deployments.find(d => d.name === name);
+      output = dep ? `Name: ${dep.name}\nReady: ${dep.ready}\nAge: ${dep.age}` : "Deployment not found.";
+    }
+  } else if (parts[0] === "kubectl" && parts[1] === "delete") {
+    const resource = parts[2], name = parts[3];
+    if (resource === "pod") pods = pods.filter(p => p.name !== name);
+    else if (resource === "deployment") deployments = deployments.filter(d => d.name !== name);
+    else if (resource === "service") services = services.filter(s => s.name !== name);
+    output = `${resource.charAt(0).toUpperCase() + resource.slice(1)} ${name} deleted.`;
+  } else if (command === "kubectl apply -f editor") {
+    const yamlText = yamlEditor.innerText;
+    if (yamlText.includes("kind: Pod")) {
+      const match = yamlText.match(/name:\s*(\w+)/);
+      if (match) {
+        const name = match[1];
+        pods.push({ name, status: "Running", age: "0s" });
+        output = `Pod ${name} created.`;
+      }
+    } else {
+      output = `Unsupported YAML resource or parsing failed.`;
+    }
+  } else if (parts[0] === "kubectl" && parts[1] === "apply" && parts[2] === "-f") {
+    output = `Applied ${parts[3]} (simulated)`;
+  } else if (command === "clear") {
+    terminalBody.innerHTML = "";
+    return;
+  } else {
+    output = "Unknown or unsupported command. Type 'help' for options.";
+  }
+
+  outputLine.textContent = output;
+  terminalBody.appendChild(outputLine);
+  terminalBody.scrollTop = terminalBody.scrollHeight;
+  updateStatusBoard();
+}
+
+function exportState() {
+  const state = { pods, deployments, services };
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "kube-emulator-state.json";
+  link.click();
+}
+
+function importState() {
+  document.getElementById('stateFile').click();
+  document.getElementById('stateFile').onchange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const state = JSON.parse(e.target.result);
+        if (state.pods && state.deployments && state.services) {
+          pods = state.pods;
+          deployments = state.deployments;
+          services = state.services;
+          updateStatusBoard();
+          alert("State imported successfully.");
+        }
+      } catch {
+        alert("Failed to import state.");
+      }
+    };
+    reader.readAsText(file);
+  };
+}
+
+commandInput.addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    const cmd = commandInput.value.trim();
+    if (cmd) runCommand(cmd);
+    commandInput.value = "";
+  }
+});
+
+updateStatusBoard();
+</script>
+</body>
+</html>
