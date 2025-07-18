@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete JavaScript Tutorial</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        /* JavaScript Example Output Styles */
+        .js-example-output {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 15px;
+            background-color: #f8faff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            color: #333;
+            min-height: 50px; /* Ensure visibility even if empty */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1.1em;
+            word-wrap: break-word; /* Allow long words to break */
+            white-space: pre-wrap; /* Preserve whitespace and break lines */
+        }
+        .js-example-container {
+            margin-bottom: 20px;
+        }
+        .js-example-button {
+            background-color: #667eea;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .js-example-button:hover {
+            background-color: #764ba2;
+        }
+        .js-example-input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 10px;
+            width: 80%;
+            max-width: 300px;
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete JavaScript Tutorial</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction-to-javascript">1. Introduction to JavaScript</a></li>
+                <li><a href="#where-to-write-js">2. Where to Write JavaScript</a></li>
+                <li><a href="#js-variables-data-types">3. Variables and Data Types</a></li>
+                <li><a href="#js-operators">4. Operators</a></li>
+                <li><a href="#js-control-flow">5. Control Flow (Conditionals & Loops)</a></li>
+                <li><a href="#js-functions">6. Functions</a></li>
+                <li><a href="#js-arrays">7. Arrays</a></li>
+                <li><a href="#js-objects">8. Objects</a></li>
+                <li><a href="#dom-manipulation">9. DOM Manipulation</a></li>
+                <li><a href="#event-handling">10. Event Handling</a></li>
+                <li><a href="#error-handling">11. Error Handling</a></li>
+                <li><a href="#asynchronous-js">12. Asynchronous JavaScript</a></li>
+                <li><a href="#es6-features">13. ES6+ Features</a></li>
+                <li><a href="#best-practices">14. Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction-to-javascript">1. Introduction to JavaScript</h2>
+        <p>JavaScript (JS) is a lightweight, interpreted, or just-in-time compiled programming language with first-class functions. It is best known as the scripting language for Web pages, but it's also used in many non-browser environments such as Node.js, mobile apps (React Native), and desktop apps (Electron).</p>
+        <p>It enables interactive web pages and is an essential part of web applications.</p>
+        <ul>
+            <li><strong>HTML:</strong> Defines the content and structure of web pages.</li>
+            <li><strong>CSS:</strong> Styles the layout of web pages.</li>
+            <li><strong>JavaScript:</strong> Programs the dynamic behavior and interactivity of web pages.</li>
+        </ul>
+        <div class="tip">
+            <strong>Tip for Practice:</strong> Open your browser's Developer Tools (F12 or right-click &gt; Inspect, then go to the "Console" tab) to test JavaScript snippets directly and see their output. For HTML/DOM manipulation, create local HTML files and link external JS.
+        </div>
+
+        <h2 id="where-to-write-js">2. Where to Write JavaScript</h2>
+        <p>JavaScript code can be placed in HTML documents in three ways:</p>
+
+        <h3>A. Inline JavaScript (Discouraged for maintainability)</h3>
+        <p>Code is written directly within an HTML tag using an event attribute (e.g., `onclick`, `onmouseover`).</p>
+        <pre><code class="language-html">&lt;button onclick="alert('Hello from inline JS!');"&gt;Click Me&lt;/button&gt;</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="js-example-container">
+            <button class="js-example-button" onclick="alert('Hello from inline JS!');">Click Me (Inline)</button>
+            <p style="font-size: 0.9em; color: #777; margin-top: 5px;"><em>(Clicking this button will show an alert box.)</em></p>
+        </div>
+
+        <h3>B. Internal (Embedded) JavaScript</h3>
+        <p>Code is placed within `&lt;script&gt;` tags inside the HTML document. Common for small scripts or when the script is specific to that page.</p>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Internal JS Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2 id="demo"&gt;Original Text&lt;/h2&gt;
+
+    &lt;script&gt;
+        // Get the element by its ID
+        const element = document.getElementById('demo');
+        // Change its text content
+        element.textContent = 'Text changed by internal JS!';
+        // Log to console (check your browser's DevTools Console)
+        console.log('Internal JS executed!');
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <p><strong>Visual Example (After page loads):</strong></p>
+        <div class="js-example-container">
+            <h2 id="internalJsDemo" style="color: #2d3748;">Original Text</h2>
+            <script>
+                document.getElementById('internalJsDemo').textContent = 'Text changed by internal JS!';
+                console.log('Internal JS executed!');
+            </script>
+            <p style="font-size: 0.9em; color: #777; margin-top: 5px;"><em>(The text above changes immediately on page load from "Original Text" to "Text changed by internal JS!". Check your browser console for "Internal JS executed!".)</em></p>
+        </div>
+
+        <h3>C. External JavaScript (Recommended)</h3>
+        <p>Code is written in a separate `.js` file and linked to the HTML document using the `&lt;script&gt;` tag with the `src` attribute. This is the best practice for larger projects as it improves organization, caching, and maintainability.</p>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;External JS Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2 id="extJsDemo"&gt;Text from HTML&lt;/h2&gt;
+    &lt;button id="extJsButton" class="js-example-button"&gt;Click for External JS&lt;/button&gt;
+
+    &lt;!-- Link to your external JavaScript file --&gt;
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <p>And in your `script.js` file:</p>
+        <pre><code class="language-javascript">// script.js
+document.addEventListener('DOMContentLoaded', function() {
+    const heading = document.getElementById('extJsDemo');
+    const button = document.getElementById('extJsButton');
+
+    if (button) {
+        button.addEventListener('click', function() {
+            if (heading) {
+                heading.textContent = 'Text changed by external JS!';
+                heading.style.color = 'blue';
+            }
+            console.log('Button clicked! External JS function triggered.');
+        });
+    }
+    console.log('External script.js loaded!');
+});</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="js-example-container">
+            <h2 id="extJsDemoLive" style="color: #2d3748;">Text from HTML</h2>
+            <button id="extJsButtonLive" class="js-example-button">Click for External JS</button>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const heading = document.getElementById('extJsDemoLive');
+                    const button = document.getElementById('extJsButtonLive');
+                    if (button) {
+                        button.addEventListener('click', function() {
+                            if (heading) {
+                                heading.textContent = 'Text changed by external JS!';
+                                heading.style.color = 'blue';
+                            }
+                            console.log('Button clicked! External JS function triggered (live example).');
+                        });
+                    }
+                    console.log('External script.js loaded (live example)!');
+                });
+            </script>
+            <p style="font-size: 0.9em; color: #777; margin-top: 5px;"><em>(The text above will change and turn blue when you click the button. Check your browser console for log messages.)</em></p>
+        </div>
+        <div class="tip">
+            <strong>`defer` and `async` attributes:</strong>
+            <ul>
+                <li>`defer`: Downloads script in parallel with HTML parsing and executes after HTML is fully parsed. Use for scripts that interact with the DOM.</li>
+                <li>`async`: Downloads script in parallel with HTML parsing and executes as soon as it's downloaded. Use for independent scripts (e.g., analytics).</li>
+            </ul>
+        </div>
+
+        <h2 id="js-variables-data-types">3. Variables and Data Types</h2>
+        <p>Variables are containers for storing data values. JavaScript has three keywords to declare variables: `var`, `let`, and `const`.</p>
+        <ul>
+            <li>`var`: Oldest way. Function-scoped, can be re-declared and re-assigned. (Avoid in modern JS)</li>
+            <li>`let`: Block-scoped. Can be re-assigned, but not re-declared in the same block.</li>
+            <li>`const`: Block-scoped. Cannot be re-assigned or re-declared. Must be initialized at declaration.</li>
+        </ul>
+        <pre><code class="language-javascript">var oldVar = "Hello";
+oldVar = "World"; // Re-assigned
+var oldVar = "New Value"; // Re-declared (can lead to bugs)
+
+let message = "Hi there!";
+message = "Goodbye!"; // Re-assigned
+// let message = "Another Hi!"; // Error: Cannot re-declare
+
+const PI = 3.14159;
+// PI = 3.14; // Error: Cannot re-assign a const
+const USER_ID = 101; // Good for constants</code></pre>
+
+        <h3>Data Types:</h3>
+        <p>JavaScript is a dynamically typed language, meaning you don't declare the type of a variable. It automatically determines the type when a value is assigned.</p>
+        <ul>
+            <li><strong>Primitive Data Types:</strong>
+                <ul>
+                    <li>`String`: Textual data (e.g., `"Hello World"`, `'single quotes'`).</li>
+                    <li>`Number`: Integers and floating-point numbers (e.g., `10`, `3.14`, `-5`).</li>
+                    <li>`Boolean`: Logical entity, `true` or `false`.</li>
+                    <li>`Undefined`: A variable that has been declared but not assigned a value.</li>
+                    <li>`Null`: Intentional absence of any object value.</li>
+                    <li>`Symbol`: (ES6) A unique and immutable data type.</li>
+                    <li>`BigInt`: (ES2020) For integers larger than `2^53 - 1`.</li>
+                </ul>
+            </li>
+            <li><strong>Non-Primitive (Object) Data Type:</strong>
+                <ul>
+                    <li>`Object`: Complex data structures like `Object` literals, `Array`, `Function`, `Date`, etc.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-javascript">let greeting = "Hello, JavaScript!"; // String
+let year = 2023; // Number
+let price = 19.99; // Number
+let isActive = true; // Boolean
+let myVar; // Undefined
+let emptyValue = null; // Null
+let person = { name: "Alice", age: 30 }; // Object
+let colors = ["red", "green", "blue"]; // Array (which is also an object)
+
+console.log(typeof greeting);     // Output: string
+console.log(typeof year);         // Output: number
+console.log(typeof isActive);     // Output: boolean
+console.log(typeof myVar);        // Output: undefined
+console.log(typeof emptyValue);   // Output: object (a quirk in JS)
+console.log(typeof person);       // Output: object
+console.log(typeof colors);       // Output: object (Arrays are objects)</code></pre>
+        <p><strong>Visual Example (Output to Browser Console):</strong></p>
+        <div class="js-example-output" id="dataTypesOutput">
+            <p>Check the browser console (F12 > Console) after loading this page to see the `typeof` outputs.</p>
+            <script>
+                let greetingConsole = "Hello, JavaScript!";
+                let yearConsole = 2023;
+                let isActiveConsole = true;
+                let myVarConsole;
+                let emptyValueConsole = null;
+                let personConsole = { name: "Alice", age: 30 };
+                let colorsConsole = ["red", "green", "blue"];
+
+                console.log("--- Data Types Example ---");
+                console.log("Type of 'greeting':", typeof greetingConsole);
+                console.log("Type of 'year':", typeof yearConsole);
+                console.log("Type of 'isActive':", typeof isActiveConsole);
+                console.log("Type of 'myVar':", typeof myVarConsole);
+                console.log("Type of 'emptyValue':", typeof emptyValueConsole);
+                console.log("Type of 'person':", typeof personConsole);
+                console.log("Type of 'colors':", typeof colorsConsole);
+            </script>
+        </div>
+
+        <h2 id="js-operators">4. Operators</h2>
+        <p>Operators perform operations on values and variables.</p>
+        <ul>
+            <li><strong>Arithmetic Operators:</strong> `+`, `-`, `*`, `/`, `%` (modulus), `**` (exponentiation), `++` (increment), `--` (decrement).</li>
+                <pre><code class="language-javascript">let a = 10;
+let b = 3;
+console.log(a + b); // 13
+console.log(a % b); // 1 (remainder)
+console.log(a ** 2); // 100 (10 squared)
+a++; // a is now 11</code></pre>
+            <li><strong>Assignment Operators:</strong> `=`, `+=`, `-=`, `*=`, `/=`, `%=`, `**=`.</li>
+                <pre><code class="language-javascript">let x = 5;
+x += 3; // x is now 8 (same as x = x + 3)
+x *= 2; // x is now 16 (same as x = x * 2)</code></pre>
+            <li><strong>Comparison Operators:</strong> `==` (equal value), `===` (equal value and type), `!=` (not equal value), `!==` (not equal value or type), `>`, `<`, `>=`, `<=`.</li>
+                <pre><code class="language-javascript">console.log(5 == "5");   // true (value only)
+console.log(5 === "5");  // false (value and type)
+console.log(10 &gt; 5);    // true</code></pre>
+            <li><strong>Logical Operators:</strong> `&&` (AND), `||` (OR), `!` (NOT).</li>
+                <pre><code class="language-javascript">let isAdult = true;
+let hasLicense = false;
+console.log(isAdult && hasLicense); // false
+console.log(isAdult || hasLicense); // true
+console.log(!isAdult); // false</code></pre>
+            <li><strong>Ternary Operator:</strong> `condition ? exprIfTrue : exprIfFalse`. (Shorthand for `if-else`).</li>
+                <pre><code class="language-javascript">let age = 18;
+let status = (age &gt;= 18) ? "Adult" : "Minor";
+console.log(status); // Adult</code></pre>
+        </ul>
+        <p><strong>Visual Example (Output to Browser Console):</strong></p>
+        <div class="js-example-output" id="operatorsOutput">
+            <p>Check the browser console (F12 > Console) for the output of these operations.</p>
+            <script>
+                console.log("--- Operators Example ---");
+                let aOp = 10;
+                let bOp = 3;
+                console.log("a + b =", aOp + bOp);
+                console.log("a % b =", aOp % bOp);
+                console.log("a ** 2 =", aOp ** 2);
+
+                let xOp = 5;
+                xOp += 3;
+                console.log("x after x += 3:", xOp);
+
+                console.log("5 == '5':", 5 == "5");
+                console.log("5 === '5':", 5 === "5");
+
+                let isAdultOp = true;
+                let hasLicenseOp = false;
+                console.log("isAdult && hasLicense:", isAdultOp && hasLicenseOp);
+                console.log("!isAdult:", !isAdultOp);
+
+                let ageOp = 18;
+                let statusOp = (ageOp >= 18) ? "Adult" : "Minor";
+                console.log("Status for age 18:", statusOp);
+            </script>
+        </div>
+
+        <h2 id="js-control-flow">5. Control Flow (Conditionals & Loops)</h2>
+        <p>Control flow statements dictate the order in which instructions are executed.</p>
+
+        <h3>Conditionals:</h3>
+        <ul>
+            <li><strong>`if`, `else if`, `else`:</strong> Execute different code blocks based on conditions.</li>
+                <pre><code class="language-javascript">let temperature = 25;
+if (temperature &gt; 30) {
+    console.log("It's hot!");
+} else if (temperature &gt; 20) {
+    console.log("It's warm.");
+} else {
+    console.log("It's cool.");
+}</code></pre>
+            <li><strong>`switch`:</strong> Useful for multiple branches of code based on a single variable's value.</li>
+                <pre><code class="language-javascript">let day = "Monday";
+switch (day) {
+    case "Monday":
+        console.log("Start of the week.");
+        break; // Important to break to prevent "fall-through"
+    case "Friday":
+        console.log("Almost weekend!");
+        break;
+    default:
+        console.log("Mid-week.");
+}</code></pre>
+        </ul>
+
+        <h3>Loops:</h3>
+        <ul>
+            <li><strong>`for` loop:</strong> Repeats a block of code a specific number of times.</li>
+                <pre><code class="language-javascript">for (let i = 0; i &lt; 5; i++) {
+    console.log("Count: " + i);
+}</code></pre>
+            <li><strong>`while` loop:</strong> Repeats a block of code as long as a condition is true.</li>
+                <pre><code class="language-javascript">let count = 0;
+while (count &lt; 3) {
+    console.log("Loop " + count);
+    count++;
+}</code></pre>
+            <li><strong>`do...while` loop:</strong> Similar to `while`, but guarantees the code block executes at least once.</li>
+            <li><strong>`for...of` loop:</strong> (ES6) Iterates over iterable objects (arrays, strings, maps, sets).</li>
+                <pre><code class="language-javascript">const fruits = ["apple", "banana", "cherry"];
+for (const fruit of fruits) {
+    console.log(fruit);
+}</code></pre>
+            <li><strong>`for...in` loop:</strong> Iterates over enumerable properties of an object. (Primarily for objects, not arrays).</li>
+                <pre><code class="language-javascript">const personObj = { name: "Dave", age: 40 };
+for (const key in personObj) {
+    console.log(key + ": " + personObj[key]);
+}</code></pre>
+        </ul>
+        <p><strong>Visual Example (Output to Browser Console):</strong></p>
+        <div class="js-example-output" id="controlFlowOutput">
+            <p>Check the browser console (F12 > Console) for the output of these control flow examples.</p>
+            <script>
+                console.log("--- Control Flow Example ---");
+                let tempConsole = 25;
+                if (tempConsole > 30) {
+                    console.log("It's hot!");
+                } else if (tempConsole > 20) {
+                    console.log("It's warm.");
+                } else {
+                    console.log("It's cool.");
+                } // Output: It's warm.
+
+                let dayConsole = "Monday";
+                switch (dayConsole) {
+                    case "Monday":
+                        console.log("Start of the week.");
+                        break;
+                    case "Friday":
+                        console.log("Almost weekend!");
+                        break;
+                    default:
+                        console.log("Mid-week.");
+                } // Output: Start of the week.
+
+                for (let i = 0; i < 2; i++) {
+                    console.log("For loop count: " + i);
+                } // Output: For loop count: 0, For loop count: 1
+
+                const fruitsConsole = ["mango", "grape"];
+                for (const fruit of fruitsConsole) {
+                    console.log("Fruit (for...of): " + fruit);
+                } // Output: mango, grape
+            </script>
+        </div>
+
+        <h2 id="js-functions">6. Functions</h2>
+        <p>Functions are reusable blocks of code that perform a specific task. They can take inputs (parameters) and return a value.</p>
+        <ul>
+            <li><strong>Function Declaration:</strong></li>
+                <pre><code class="language-javascript">function add(a, b) {
+    return a + b;
+}
+console.log(add(5, 3)); // 8</code></pre>
+            <li><strong>Function Expression:</strong></li>
+                <pre><code class="language-javascript">const multiply = function(x, y) {
+    return x * y;
+};
+console.log(multiply(4, 2)); // 8</code></pre>
+            <li><strong>Arrow Functions (ES6):</strong> Concise syntax for functions, especially useful for simple functions or callbacks.</li>
+                <pre><code class="language-javascript">const subtract = (a, b) =&gt; a - b;
+console.log(subtract(10, 4)); // 6
+
+const greetUser = name =&gt; console.log(`Hello, ${name}!`);
+greetUser("Charlie"); // Hello, Charlie!</code></pre>
+            <li><strong>Higher-Order Functions:</strong> Functions that take other functions as arguments or return functions (e.g., `map`, `filter`, `reduce`).</li>
+                <pre><code class="language-javascript">const numbers = [1, 2, 3];
+const doubled = numbers.map(num =&gt; num * 2); // map is a higher-order function
+console.log(doubled); // [2, 4, 6]</code></pre>
+        </ul>
+        <p><strong>Visual Example (Output to Browser Console):</strong></p>
+        <div class="js-example-output" id="functionsOutput">
+            <p>Check the browser console for function outputs.</p>
+            <script>
+                console.log("--- Functions Example ---");
+                function addConsole(a, b) { return a + b; }
+                console.log("add(5, 3) =", addConsole(5, 3));
+
+                const multiplyConsole = function(x, y) { return x * y; };
+                console.log("multiply(4, 2) =", multiplyConsole(4, 2));
+
+                const subtractConsole = (a, b) => a - b;
+                console.log("subtract(10, 4) =", subtractConsole(10, 4));
+
+                const numbersConsole = [1, 2, 3];
+                const doubledConsole = numbersConsole.map(num => num * 2);
+                console.log("Doubled array:", doubledConsole);
+            </script>
+        </div>
+
+        <h2 id="js-arrays">7. Arrays</h2>
+        <p>Arrays are ordered lists of values. They are zero-indexed, meaning the first element is at index 0.</p>
+        <pre><code class="language-javascript">const fruits = ["apple", "banana", "cherry"];
+
+console.log(fruits[0]); // apple
+console.log(fruits.length); // 3
+
+// Common Array Methods
+fruits.push("date"); // Adds to the end: ["apple", "banana", "cherry", "date"]
+fruits.pop(); // Removes from the end: ["apple", "banana", "cherry"]
+fruits.unshift("kiwi"); // Adds to the beginning: ["kiwi", "apple", "banana", "cherry"]
+fruits.shift(); // Removes from the beginning: ["apple", "banana", "cherry"]
+
+const index = fruits.indexOf("banana"); // 1
+fruits.splice(index, 1); // Removes "banana": ["apple", "cherry"]
+
+const citrus = fruits.slice(0, 1); // Creates a new array: ["apple"] (non-destructive)
+
+fruits.forEach(fruit =&gt; console.log("I like " + fruit));
+const newFruits = fruits.map(fruit =&gt; fruit.toUpperCase()); // ["APPLE", "CHERRY"]
+const filteredFruits = fruits.filter(fruit =&gt; fruit.startsWith("a")); // ["apple"]</code></pre>
+        <p><strong>Visual Example (Output to Browser Console):</strong></p>
+        <div class="js-example-output" id="arraysOutput">
+            <p>Check the browser console for array manipulation outputs.</p>
+            <script>
+                console.log("--- Arrays Example ---");
+                const fruitsConsoleArr = ["apple", "banana", "cherry"];
+                console.log("Initial fruits:", fruitsConsoleArr);
+                console.log("First fruit:", fruitsConsoleArr[0]);
+                
+                fruitsConsoleArr.push("date");
+                console.log("After push 'date':", fruitsConsoleArr);
+                
+                fruitsConsoleArr.pop();
+                console.log("After pop:", fruitsConsoleArr);
+
+                const newFruitsConsole = fruitsConsoleArr.map(f => f.toUpperCase());
+                console.log("Uppercase fruits:", newFruitsConsole);
+                
+                const filteredFruitsConsole = fruitsConsoleArr.filter(f => f.length > 5);
+                console.log("Fruits with length > 5:", filteredFruitsConsole);
+            </script>
+        </div>
+
+        <h2 id="js-objects">8. Objects</h2>
+        <p>Objects are collections of key-value pairs. They are fundamental for representing complex data.</p>
+        <pre><code class="language-javascript">const person = {
+    firstName: "Jane",
+    lastName: "Doe",
+    age: 28,
+    isStudent: false,
+    hobbies: ["reading", "hiking", "cooking"],
+    address: {
+        street: "123 Main St",
+        city: "Anytown"
+    },
+    // Method within an object
+    fullName: function() {
+        return this.firstName + " " + this.lastName;
+    }
+};
+
+// Accessing properties
+console.log(person.firstName); // Jane
+console.log(person["age"]); // 28
+console.log(person.hobbies[1]); // hiking
+console.log(person.address.city); // Anytown
+console.log(person.fullName()); // Jane Doe
+
+// Modifying properties
+person.age = 29;
+person.email = "jane.doe@example.com"; // Add new property
+
+// Deleting properties
+delete person.isStudent;
+
+// Iterating over object properties
+for (const key in person) {
+    if (typeof person[key] !== 'function') { // Exclude methods
+        console.log(`${key}: ${person[key]}`);
+    }
+}</code></pre>
+        <p><strong>Visual Example (Output to Browser Console):</strong></p>
+        <div class="js-example-output" id="objectsOutput">
+            <p>Check the browser console for object property access and iteration.</p>
+            <script>
+                console.log("--- Objects Example ---");
+                const personConsoleObj = {
+                    firstName: "Jane",
+                    lastName: "Doe",
+                    age: 28,
+                    hobbies: ["reading"],
+                    fullName: function() { return this.firstName + " " + this.lastName; }
+                };
+                console.log("Person's first name:", personConsoleObj.firstName);
+                console.log("Person's full name:", personConsoleObj.fullName());
+                personConsoleObj.age = 29;
+                console.log("Person's updated age:", personConsoleObj.age);
+                
+                console.log("Object properties:");
+                for (const key in personConsoleObj) {
+                    if (typeof personConsoleObj[key] !== 'function') {
+                        console.log(`${key}: ${personConsoleObj[key]}`);
+                    }
+                }
+            </script>
+        </div>
+
+        <h2 id="dom-manipulation">9. DOM Manipulation</h2>
+        <p>The Document Object Model (DOM) is a programming interface for web documents. It represents the page structure as a tree of objects. JavaScript can access and change all the elements on an HTML page.</p>
+        <ul>
+            <li><strong>Selecting Elements:</strong>
+                <ul>
+                    <li>`document.getElementById('id')`: Selects a single element by its ID.</li>
+                    <li>`document.querySelector('selector')`: Selects the first element that matches a CSS selector.</li>
+                    <li>`document.querySelectorAll('selector')`: Selects all elements that match a CSS selector (returns a NodeList).</li>
+                    <li>`document.getElementsByClassName('class')`: Selects elements by class name (returns an HTMLCollection).</li>
+                    <li>`document.getElementsByTagName('tag')`: Selects elements by tag name.</li>
+                </ul>
+            </li>
+            <li><strong>Modifying Content:</strong>
+                <ul>
+                    <li>`element.textContent`: Gets or sets the text content of an element.</li>
+                    <li>`element.innerHTML`: Gets or sets the HTML content of an element. (Use with caution due to security risks - XSS).</li>
+                </ul>
+            </li>
+            <li><strong>Modifying Attributes:</strong>
+                <ul>
+                    <li>`element.setAttribute('attribute', 'value')`</li>
+                    <li>`element.getAttribute('attribute')`</li>
+                    <li>`element.removeAttribute('attribute')`</li>
+                </ul>
+            </li>
+            <li><strong>Modifying Styles:</strong>
+                <ul>
+                    <li>`element.style.propertyName = 'value';` (for inline styles)</li>
+                    <li>`element.classList.add('className')`</li>
+                    <li>`element.classList.remove('className')`</li>
+                    <li>`element.classList.toggle('className')`</li>
+                </ul>
+            </li>
+            <li><strong>Creating and Appending Elements:</strong>
+                <ul>
+                    <li>`document.createElement('tagName')`</li>
+                    <li>`parentElement.appendChild(childElement)`</li>
+                    <li>`parentElement.removeChild(childElement)`</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-html">&lt;div id="domDemo" style="border: 1px solid #ccc; padding: 10px;"&gt;
+    &lt;p&gt;Original DOM content.&lt;/p&gt;
+&lt;/div&gt;
+&lt;button id="changeDomBtn" class="js-example-button"&gt;Change DOM&lt;/button&gt;
+&lt;button id="addRemoveBtn" class="js-example-button"&gt;Add/Remove Item&lt;/button&gt;
+
+&lt;style&gt;
+    .highlighted {
+        background-color: yellow;
+        font-weight: bold;
+    }
+&lt;/style&gt;
+&lt;script&gt;
+    document.addEventListener('DOMContentLoaded', function() {
+        const domDemoDiv = document.getElementById('domDemo');
+        const changeBtn = document.getElementById('changeDomBtn');
+        const addRemoveBtn = document.getElementById('addRemoveBtn');
+        let itemCount = 0;
+
+        changeBtn.addEventListener('click', function() {
+            domDemoDiv.innerHTML = '&lt;h3&gt;DOM Changed!&lt;/h3&gt;&lt;p class="highlighted"&gt;New content with a highlight.&lt;/p&gt;';
+            domDemoDiv.style.backgroundColor = '#e0f7fa'; // Change background style
+        });
+
+        addRemoveBtn.addEventListener('click', function() {
+            if (itemCount % 2 === 0) {
+                const newItem = document.createElement('p');
+                newItem.textContent = `Dynamically added item ${++itemCount}`;
+                newItem.style.color = 'blue';
+                domDemoDiv.appendChild(newItem);
+            } else {
+                if (domDemoDiv.lastChild && domDemoDiv.lastChild.nodeName === 'P') { // Ensure it's a paragraph
+                     domDemoDiv.removeChild(domDemoDiv.lastChild);
+                     itemCount--;
+                }
+            }
+        });
+    });
+&lt;/script&gt;</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="js-example-container">
+            <div id="domDemoLive" class="js-example-output" style="border: 1px solid #ccc; padding: 10px;">
+                <p>Original DOM content.</p>
+            </div>
+            <button id="changeDomBtnLive" class="js-example-button">Change DOM</button>
+            <button id="addRemoveBtnLive" class="js-example-button">Add/Remove Item</button>
+
+            <style>
+                .highlighted {
+                    background-color: yellow;
+                    font-weight: bold;
+                }
+            </style>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const domDemoDiv = document.getElementById('domDemoLive');
+                    const changeBtn = document.getElementById('changeDomBtnLive');
+                    const addRemoveBtn = document.getElementById('addRemoveBtnLive');
+                    let itemCount = 0;
+
+                    changeBtn.addEventListener('click', function() {
+                        domDemoDiv.innerHTML = '<h3>DOM Changed!</h3><p class="highlighted">New content with a highlight.</p>';
+                        domDemoDiv.style.backgroundColor = '#e0f7fa';
+                    });
+
+                    addRemoveBtn.addEventListener('click', function() {
+                        if (itemCount % 2 === 0) {
+                            const newItem = document.createElement('p');
+                            newItem.textContent = `Dynamically added item ${++itemCount}`;
+                            newItem.style.color = 'blue';
+                            domDemoDiv.appendChild(newItem);
+                        } else {
+                            if (domDemoDiv.lastChild && domDemoDiv.lastChild.nodeName === 'P' && domDemoDiv.lastChild.textContent.startsWith('Dynamically added item')) {
+                                 domDemoDiv.removeChild(domDemoDiv.lastChild);
+                                 itemCount--;
+                            }
+                        }
+                    });
+                });
+            </script>
+            <p style="font-size: 0.9em; color: #777; margin-top: 5px;"><em>(Click "Change DOM" to replace content. Click "Add/Remove Item" to dynamically add/remove paragraphs.)</em></p>
+        </div>
+
+        <h2 id="event-handling">10. Event Handling</h2>
+        <p>JavaScript allows you to react to user actions or browser events (e.g., clicks, key presses, page load). This is done using event listeners.</p>
+        <pre><code class="language-html">&lt;button id="myButton"&gt;Click me!&lt;/button&gt;
+&lt;input type="text" id="myInput" placeholder="Type here..."&gt;
+&lt;p id="outputArea"&gt;Watch output here.&lt;/p&gt;
+
+&lt;script&gt;
+    document.addEventListener('DOMContentLoaded', function() {
+        const button = document.getElementById('myButton');
+        const input = document.getElementById('myInput');
+        const output = document.getElementById('outputArea');
+
+        // Add a click event listener
+        button.addEventListener('click', function() {
+            output.textContent = 'Button was clicked!';
+        });
+
+        // Add a keyup event listener
+        input.addEventListener('keyup', function() {
+            output.textContent = 'You typed: ' + input.value;
+        });
+
+        // Event object provides details about the event
+        input.addEventListener('keydown', function(event) {
+            console.log('Key pressed:', event.key, 'Code:', event.code);
+        });
+    });
+&lt;/script&gt;</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="js-example-container">
+            <button id="myButtonLive" class="js-example-button">Click me!</button>
+            <input type="text" id="myInputLive" class="js-example-input" placeholder="Type here...">
+            <div id="outputAreaLive" class="js-example-output" style="min-height: 40px; margin-top: 10px;">Watch output here.</div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const button = document.getElementById('myButtonLive');
+                    const input = document.getElementById('myInputLive');
+                    const output = document.getElementById('outputAreaLive');
+
+                    button.addEventListener('click', function() {
+                        output.textContent = 'Button was clicked!';
+                    });
+
+                    input.addEventListener('keyup', function() {
+                        output.textContent = 'You typed: ' + input.value;
+                    });
+                });
+            </script>
+            <p style="font-size: 0.9em; color: #777; margin-top: 5px;"><em>(Click the button or type in the input field to see the output change.)</em></p>
+        </div>
+
+        <h2 id="error-handling">11. Error Handling</h2>
+        <p>JavaScript provides mechanisms to handle errors gracefully, preventing your script from crashing.</p>
+        <ul>
+            <li><strong>`try...catch`:</strong> Used to catch and handle runtime errors.</li>
+                <pre><code class="language-javascript">try {
+    // Code that might throw an error
+    let result = nonExistentVariable * 10; // This will cause an error
+    console.log(result);
+} catch (error) {
+    // Code to handle the error
+    console.error("An error occurred:", error.message);
+    // You could display a user-friendly message here
+    // document.getElementById('errorDisplay').textContent = "Something went wrong!";
+} finally {
+    // Code that runs regardless of whether an error occurred
+    console.log("Execution finished (try...catch block).");
+}</code></pre>
+            <li><strong>`throw`:</strong> Used to create custom errors.</li>
+                <pre><code class="language-javascript">function divide(a, b) {
+    if (b === 0) {
+        throw new Error("Cannot divide by zero!");
+    }
+    return a / b;
+}
+
+try {
+    console.log(divide(10, 2)); // 5
+    console.log(divide(10, 0)); // Throws an error
+} catch (e) {
+    console.error("Caught custom error:", e.message);
+}</code></pre>
+        </ul>
+        <p><strong>Visual Example (Output to Browser Console):</strong></p>
+        <div class="js-example-output" id="errorHandlingOutput">
+            <p>Check the browser console to see how errors are caught and logged.</p>
+            <script>
+                console.log("--- Error Handling Example ---");
+                try {
+                    console.log("Attempting to access nonExistentVariable...");
+                    // This line will cause a ReferenceError
+                    // let result = nonExistentVariable * 10; 
+                    // To demonstrate, let's use a deliberate error:
+                    JSON.parse('invalid json'); // This will throw a SyntaxError
+                } catch (error) {
+                    console.error("Caught an error:", error.message);
+                } finally {
+                    console.log("Finally block executed.");
+                }
+
+                function divideConsole(a, b) {
+                    if (b === 0) {
+                        throw new Error("Cannot divide by zero!");
+                    }
+                    return a / b;
+                }
+                try {
+                    console.log("10 / 2 =", divideConsole(10, 2));
+                    console.log("10 / 0 =", divideConsole(10, 0));
+                } catch (e) {
+                    console.error("Caught custom error for division:", e.message);
+                }
+            </script>
+        </div>
+
+        <h2 id="asynchronous-js">12. Asynchronous JavaScript</h2>
+        <p>JavaScript is single-threaded, but it can handle operations that take time (like fetching data from a server) without blocking the main thread, using asynchronous patterns.</p>
+        <ul>
+            <li><strong>Callbacks:</strong> Functions passed as arguments to other functions, to be executed later. (Older pattern, can lead to "callback hell").</li>
+                <pre><code class="language-javascript">function fetchData(callback) {
+    setTimeout(() =&gt; {
+        const data = { message: "Data fetched!" };
+        callback(data);
+    }, 1000); // Simulate network delay
+}
+
+fetchData(function(data) {
+    console.log(data.message); // Data fetched! (after 1 second)
+});
+console.log("Request sent."); // This logs immediately</code></pre>
+            <li><strong>Promises (ES6):</strong> A cleaner way to handle asynchronous operations. Represents a value that may be available now, or in the future, or never.
+                <pre><code class="language-javascript">function fetchDataPromise() {
+    return new Promise((resolve, reject) =&gt; {
+        setTimeout(() =&gt; {
+            const success = true; // Simulate success/failure
+            if (success) {
+                resolve({ message: "Promise data fetched!" });
+            } else {
+                reject("Failed to fetch data.");
+            }
+        }, 1000);
+    });
+}
+
+fetchDataPromise()
+    .then(data =&gt; console.log(data.message)) // Handles success
+    .catch(error =&gt; console.error("Promise Error:", error)) // Handles failure
+    .finally(() =&gt; console.log("Promise finished."));
+
+console.log("Promise request sent.");</code></pre>
+            <li><strong>`async`/`await` (ES2017):</strong> Syntactic sugar built on Promises, making asynchronous code look and behave more like synchronous code.</li>
+                <pre><code class="language-javascript">async function getAsyncData() {
+    try {
+        console.log("Fetching async data...");
+        const response = await fetchDataPromise(); // Await the promise to resolve
+        console.log("Async/Await:", response.message);
+        console.log("After await operation.");
+    } catch (error) {
+        console.error("Async/Await Error:", error);
+    }
+}
+getAsyncData();
+console.log("Async function called.");</code></pre>
+        </ul>
+        <p><strong>Visual Example (Output to Browser Console with delays):</strong></p>
+        <div class="js-example-output" id="asyncJsOutput">
+            <p>Check the browser console (F12 > Console) to observe the sequence of logs for asynchronous operations.</p>
+            <script>
+                console.log("--- Asynchronous JS Example ---");
+
+                function fetchDataCallback(callback) {
+                    setTimeout(() => {
+                        callback({ message: "Data fetched by callback!" });
+                    }, 500);
+                }
+                fetchDataCallback(function(data) {
+                    console.log("Callback result:", data.message);
+                });
+                console.log("Callback request sent immediately.");
+
+                function fetchDataPromiseConsole() {
+                    return new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve({ message: "Data fetched by promise!" });
+                        }, 700);
+                    });
+                }
+                fetchDataPromiseConsole()
+                    .then(data => console.log("Promise result:", data.message))
+                    .finally(() => console.log("Promise chain finished."));
+                console.log("Promise request sent immediately.");
+
+                async function getAsyncDataConsole() {
+                    console.log("Fetching async/await data...");
+                    const response = await new Promise(resolve => setTimeout(() => resolve({ message: "Data fetched by async/await!" }), 1000));
+                    console.log("Async/Await result:", response.message);
+                }
+                getAsyncDataConsole();
+                console.log("Async function called immediately.");
+            </script>
+        </div>
+        <p style="font-size: 0.9em; color: #777;"><em>(You'll see "Callback/Promise/Async function called immediately" logs first, followed by "Data fetched..." logs after their respective delays.)</em></p>
+
+
+        <h2 id="es6-features">13. ES6+ Features</h2>
+        <p>ECMAScript 2015 (ES6) introduced many significant features that revolutionized JavaScript development. Subsequent versions (ES7, ES8, etc.) continue to add improvements.</p>
+        <ul>
+            <li><strong>`let` and `const`:</strong> (Already covered in Variables) Provide block-scoping.</li>
+            <li><strong>Arrow Functions:</strong> (Already covered in Functions) Concise syntax, `this` binding behaves differently.</li>
+            <li><strong>Template Literals:</strong> (Backticks `` ` ``) Allow embedded expressions and multiline strings.</li>
+                <pre><code class="language-javascript">const name = "Alice";
+const greeting = `Hello, ${name}! You are ${2025 - 1995} years old.`;
+console.log(greeting); // Hello, Alice! You are 30 years old.</code></pre>
+            <li><strong>Destructuring Assignment:</strong> Extract values from arrays or properties from objects into distinct variables.</li>
+                <pre><code class="language-javascript">const [first, second] = ["red", "green", "blue"];
+console.log(first); // red
+
+const { firstName, age } = { firstName: "Bob", lastName: "Smith", age: 35 };
+console.log(firstName, age); // Bob 35</code></pre>
+            <li><strong>Spread/Rest Operator (`...`):</strong>
+                <ul>
+                    <li>Spread: Expands iterables (arrays, strings) into individual elements; copies arrays/objects.</li>
+                        <pre><code class="language-javascript">const arr1 = [1, 2];
+const arr2 = [...arr1, 3, 4]; // [1, 2, 3, 4]
+const obj1 = { a: 1, b: 2 };
+const obj2 = { ...obj1, c: 3 }; // { a: 1, b: 2, c: 3 }</code></pre>
+                    <li>Rest: Collects remaining elements into an array.</li>
+                        <pre><code class="language-javascript">function sum(first, ...restOfNumbers) {
+    console.log(first); // first argument
+    console.log(restOfNumbers); // array of remaining arguments
+}
+sum(10, 20, 30, 40); // 10, [20, 30, 40]</code></pre>
+                </ul>
+            </li>
+            <li><strong>Classes:</strong> Syntactic sugar over JavaScript's prototype-based inheritance.</li>
+                <pre><code class="language-javascript">class Person {
+    constructor(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    greet() {
+        console.log(`Hi, I'm ${this.name} and I'm ${this.age} years old.`);
+    }
+}
+const p = new Person("Eve", 25);
+p.greet(); // Hi, I'm Eve and I'm 25 years old.</code></pre>
+            <li><strong>Modules (`import`/`export`):</strong> Standardized way to organize code into reusable modules.</li>
+                <pre><code class="language-javascript">// utils.js
+export const PI = 3.14;
+export function add(a, b) { return a + b; }
+
+// main.js
+import { PI, add } from './utils.js';
+console.log(PI); // 3.14
+console.log(add(2, 3)); // 5</code></pre>
+            <li><strong>Promises:</strong> (Already covered in Asynchronous JS)</li>
+        </ul>
+        <p><strong>Visual Example (Output to Browser Console):</strong></p>
+        <div class="js-example-output" id="es6FeaturesOutput">
+            <p>Check the browser console for ES6+ feature outputs.</p>
+            <script>
+                console.log("--- ES6+ Features Example ---");
+                const nameES6 = "Alice";
+                const greetingES6 = `Hello, ${nameES6}! You are ${new Date().getFullYear() - 1995} years old.`;
+                console.log("Template Literal:", greetingES6);
+
+                const [firstES6, secondES6] = ["red", "green"];
+                console.log("Destructuring Array:", firstES6, secondES6);
+
+                const { firstName: fnES6, age: ageES6 } = { firstName: "Bob", lastName: "Smith", age: 35 };
+                console.log("Destructuring Object:", fnES6, ageES6);
+
+                const arr1ES6 = [1, 2];
+                const arr2ES6 = [...arr1ES6, 3, 4];
+                console.log("Spread Operator (Array):", arr2ES6);
+
+                class PersonES6 {
+                    constructor(name) { this.name = name; }
+                    greet() { console.log(`Hello from ${this.name}!`); }
+                }
+                const pES6 = new PersonES6("Charlie");
+                pES6.greet();
+            </script>
+        </div>
+
+
+        <h2 id="best-practices">14. Best Practices</h2>
+        <ul>
+            <li><strong>Use `const` and `let` over `var`:</strong> For better scope management and to avoid common pitfalls.</li>
+            <li><strong>Write Readable Code:</strong> Use meaningful variable/function names, consistent indentation, and comments.</li>
+            <li><strong>Modularity:</strong> Break down your code into smaller, reusable functions and modules.</li>
+            <li><strong>Error Handling:</strong> Implement `try...catch` blocks for code that might fail (e.g., network requests, user input parsing).</li>
+            <li><strong>Avoid Global Variables:</strong> Minimize the use of global variables to prevent naming conflicts and maintain cleaner scope.</li>
+            <li><strong>Use Strict Mode:</strong> Add `'use strict';` at the top of your scripts or functions to enable strict mode, which helps write "secure" JavaScript code by disallowing certain "bad syntax".</li>
+            <li><strong>Understand Asynchronicity:</strong> Master Promises and `async/await` for handling asynchronous operations cleanly.</li>
+            <li><strong>DOM Manipulation Efficiency:</strong> Minimize direct DOM manipulations as they can be slow. Batch updates or use frameworks that optimize this.</li>
+            <li><strong>Validate User Input:</strong> Always validate input coming from users to prevent security vulnerabilities and unexpected behavior.</li>
+            <li><strong>Browser Compatibility:</strong> Be aware of browser support for newer JavaScript features. Use Babel (a JavaScript compiler) if you need to support older browsers.</li>
+            <li><strong>Use Developer Tools:</strong> Leverage browser developer tools for debugging, inspecting variables, and performance profiling.</li>
+            <li><strong>Learn Modern JS Features:</strong> Stay updated with new ECMAScript features to write more efficient and elegant code.</li>
+            <li><strong>Code Linting & Formatting:</strong> Use linters (ESLint) and formatters (Prettier) to enforce code style and catch potential errors early.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>The Journey Continues!</strong>
+            <p>JavaScript is a dynamic and powerful language that is constantly evolving. Mastering these fundamentals is the first step. From here, you can dive into advanced topics like Web APIs (Fetch API, Web Storage), advanced array/object methods, design patterns, and explore popular frameworks/libraries like React, Angular, or Vue.js to build complex and interactive web applications.</p>
+        </div>
+    </div>
+</body>
+</html>
