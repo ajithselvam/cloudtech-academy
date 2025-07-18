@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete npm Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete npm Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-npm">1. What is npm?</a></li>
+                <li><a href="#installing-npm">2. Installing npm</a></li>
+                <li><a href="#initializing-a-project">3. Initializing a Project (`npm init`)</a></li>
+                <li><a href="#installing-packages">4. Installing Packages (`npm install`)</a></li>
+                <li><a href="#managing-dependencies">5. Managing Dependencies (package.json & package-lock.json)</a></li>
+                <li><a href="#uninstalling-packages">6. Uninstalling Packages (`npm uninstall`)</a></li>
+                <li><a href="#updating-packages">7. Updating Packages (`npm update`)</a></li>
+                <li><a href="#running-scripts">8. Running Scripts (`npm run`)</a></li>
+                <li><a href="#global-packages">9. Global Packages (`npm install -g`)</a></li>
+                <li><a href="#publishing-packages">10. Publishing Packages (`npm publish`)</a></li>
+                <li><a href="#npm-audit">11. npm audit (Security)</a></li>
+                <li><a href="#common-npm-commands">12. Other Common npm Commands</a></li>
+                <li><a href="#best-practices">13. Best Practices with npm</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-npm">1. What is npm?</h2>
+        <p><strong>npm</strong> (Node Package Manager) is the default package manager for Node.js and the world's largest software registry. It provides two main functionalities:</p>
+        <ul>
+            <li>A **command-line utility** for interacting with the npm registry. This allows developers to install, share, and manage project dependencies (reusable code packages).</li>
+            <li>An **online registry** that hosts over a million open-source code packages.</li>
+        </ul>
+        <p>In essence, npm helps you manage external libraries and tools your JavaScript projects need, making it easy to include complex functionalities without writing everything from scratch.</p>
+
+        <h2 id="installing-npm">2. Installing npm</h2>
+        <p>npm is distributed with Node.js. When you install Node.js, npm is installed automatically.</p>
+        <ul>
+            <li><strong>Download Node.js:</strong> Go to the official Node.js website (<a href="https://nodejs.org/" target="_blank">nodejs.org</a>) and download the LTS (Long Term Support) version recommended for most users.</li>
+            <li><strong>Installation:</strong> Follow the installer's instructions. It will install both Node.js and npm.</li>
+        </ul>
+        <h3>Verify Installation:</h3>
+        <p>Open your terminal or command prompt and run the following commands:</p>
+        <pre><code class="language-bash">node -v
+npm -v</code></pre>
+        <p>You should see the installed versions of Node.js and npm respectively.</p>
+        <pre><code class="language-bash"># Example Output:
+v20.14.0  # Node.js version
+10.7.0   # npm version</code></pre>
+
+        <h2 id="initializing-a-project">3. Initializing a Project (`npm init`)</h2>
+        <p>Before you can use npm to manage dependencies for your project, you need to initialize it. This creates a `package.json` file, which is the heart of any npm project.</p>
+        <h3>Basic Initialization:</h3>
+        <p>Navigate to your project's root directory in the terminal:</p>
+        <pre><code class="language-bash">mkdir my-npm-project
+cd my-npm-project
+npm init</code></pre>
+        <p>npm will then ask you a series of questions (package name, version, description, entry point, test command, git repository, keywords, author, license). You can press <kbd>Enter</kbd> to accept the default values for most of these.</p>
+        <pre><code class="language-json"># After running npm init and accepting defaults, your package.json might look like this:
+{
+  "name": "my-npm-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}</code></pre>
+
+        <h3>Quick Initialization:</h3>
+        <p>To accept all default values without being prompted, use the `-y` or `--yes` flag:</p>
+        <pre><code class="language-bash">npm init -y</code></pre>
+        <p>This is useful for quickly setting up new projects or for scripting.</p>
+
+        <h2 id="installing-packages">4. Installing Packages (`npm install`)</h2>
+        <p>This is the most common npm command, used to add external libraries to your project.</p>
+        <h3>A. Installing a Local Package (Project Dependency):</h3>
+        <p>Installs a package into your project's `node_modules` folder and adds it as a dependency in `package.json`.</p>
+        <pre><code class="language-bash">npm install &lt;package-name&gt;</code></pre>
+        <p><strong>Example: Installing Express.js (a web framework)</strong></p>
+        <pre><code class="language-bash">npm install express</code></pre>
+        <p>This command does two things:</p>
+        <ol>
+            <li>Downloads the `express` package and its own dependencies into a `node_modules` directory in your project's root.</li>
+            <li>Adds `"express": "^X.Y.Z"` to the `dependencies` section of your `package.json` file. The caret (`^`) denotes a compatible version range.</li>
+        </ol>
+        <pre><code class="language-json"># package.json after installing express
+{
+  "name": "my-npm-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2" // This line is added
+  }
+}</code></pre>
+
+        <h3>B. Installing a Dev Dependency:</h3>
+        <p>Installs a package needed only during development (e.g., testing frameworks, build tools, linters). These are not deployed with your production code.</p>
+        <pre><code class="language-bash">npm install &lt;package-name&gt; --save-dev
+# Or shorthand:
+npm install &lt;package-name&gt; -D</code></pre>
+        <p><strong>Example: Installing Jest (a testing framework)</strong></p>
+        <pre><code class="language-bash">npm install jest --save-dev</code></pre>
+        <pre><code class="language-json"># package.json after installing jest as a dev dependency
+{
+  // ...
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": { // This new section is added
+    "jest": "^29.5.0"
+  }
+}</code></pre>
+
+        <h3>C. Installing Multiple Packages:</h3>
+        <p>You can install several packages at once:</p>
+        <pre><code class="language-bash">npm install express dotenv mongoose
+npm install webpack webpack-cli -D</code></pre>
+
+        <h3>D. Installing all Project Dependencies:</h3>
+        <p>If you've cloned a project or a `node_modules` folder was deleted, you can install all dependencies listed in `package.json`:</p>
+        <pre><code class="language-bash">npm install</code></pre>
+        <p>This command reads `package.json` and `package-lock.json` and installs all necessary packages.</p>
+
+        <h2 id="managing-dependencies">5. Managing Dependencies (package.json & package-lock.json)</h2>
+        <p>These two files are crucial for managing your project's dependencies.</p>
+
+        <h3>A. `package.json`</h3>
+        <p>This file defines your project's metadata (name, version, description, author, license) and lists its direct dependencies.</p>
+        <pre><code class="language-json"># Example package.json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "description": "A simple Node.js application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.0.3"
+  },
+  "devDependencies": {
+    "jest": "^29.5.0",
+    "nodemon": "^2.0.22"
+  }
+}</code></pre>
+        <p><strong>Dependency Versioning:</strong>
+            <ul>
+                <li>`^`: (Caret) The most common. Allows minor and patch updates, but not major updates (e.g., `^1.2.3` will install `1.x.x` but not `2.0.0`). This tries to maintain backward compatibility.</li>
+                <li>`~`: (Tilde) Allows patch updates only (e.g., `~1.2.3` will install `1.2.x` but not `1.3.0`). More strict.</li>
+                <li>`*`: Allows any version (not recommended for production).</li>
+                <li>`1.2.3`: Exact version. No updates.</li>
+            </ul>
+        </p>
+
+        <h3>B. `package-lock.json`</h3>
+        <p>This file is automatically generated and updated by npm whenever you modify your `node_modules` tree (e.g., `npm install`, `npm update`). It records the exact versions of *all* installed packages and their dependencies (even nested ones), along with their integrity hashes.</p>
+        <p><strong>Purpose:</strong> Ensures that running `npm install` on any machine (or by any developer) will result in the exact same `node_modules` tree, providing consistent builds and preventing "works on my machine" issues.</p>
+        <pre><code class="language-json"># Example snippet from package-lock.json (much larger than package.json)
+{
+  "name": "my-npm-project",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "my-npm-project",
+      "version": "1.0.0",
+      "devDependencies": {
+        "jest": "^29.5.0"
+      },
+      "dependencies": {
+        "express": "^4.18.2"
+      }
+    },
+    "node_modules/accepts": {
+      "version": "1.3.8",
+      "resolved": "https://registry.npmjs.org/accepts/-/accepts-1.3.8.tgz",
+      "integrity": "sha512-py/yzLCYmY6F/UtyUzN/P3W+jSykx+Jt0pQ7y1/NfB3+yI+Ew/uF9bFvG8GjA==",
+      "dependencies": {
+        "mime-types": "~2.1.24",
+        "negotiator": "0.6.3"
+      }
+    },
+    // ... many more entries for nested dependencies
+  }
+}</code></pre>
+        <div class="tip">
+            <strong>Important:</strong> Always commit both `package.json` and `package-lock.json` to your version control system (e.g., Git).
+        </div>
+
+        <h2 id="uninstalling-packages">6. Uninstalling Packages (`npm uninstall`)</h2>
+        <p>Removes a package from your `node_modules` folder and from `package.json`.</p>
+        <h3>Uninstall a Local Package:</h3>
+        <pre><code class="language-bash">npm uninstall &lt;package-name&gt;
+# Or shorthand:
+npm un &lt;package-name&gt;</code></pre>
+        <p><strong>Example:</strong></p>
+        <pre><code class="language-bash">npm uninstall express</code></pre>
+
+        <h3>Uninstall a Dev Dependency:</h3>
+        <pre><code class="language-bash">npm uninstall &lt;package-name&gt; --save-dev
+# Or shorthand:
+npm un &lt;package-name&gt; -D</code></pre>
+        <p><strong>Example:</strong></p>
+        <pre><code class="language-bash">npm uninstall jest -D</code></pre>
+
+        <h2 id="updating-packages">7. Updating Packages (`npm update`)</h2>
+        <p>Updates packages to their latest compatible versions according to the version ranges specified in `package.json`.</p>
+        <h3>Update All Packages:</h3>
+        <pre><code class="language-bash">npm update</code></pre>
+        <p>This command will check the npm registry for newer versions of all packages (and their dependencies) that satisfy the version ranges in your `package.json` and `package-lock.json`, and then update them in `node_modules` and update `package-lock.json` accordingly.</p>
+
+        <h3>Update Specific Package:</h3>
+        <pre><code class="language-bash">npm update &lt;package-name&gt;</code></pre>
+
+        <h3>Major Version Updates (`npm install @latest` or `npm outdated`):</h3>
+        <p>`npm update` will NOT update to a new major version (e.g., from `^1.x.x` to `2.x.x`) because major versions often introduce breaking changes.</p>
+        <p>To explicitly update to the latest major version (use with caution, check release notes for breaking changes):</p>
+        <pre><code class="language-bash">npm install &lt;package-name&gt;@latest</code></pre>
+        <p>To see which packages are outdated (i.e., have newer versions available outside your `package.json` range):</p>
+        <pre><code class="language-bash">npm outdated</code></pre>
+        <p>This command shows `Current`, `Wanted` (highest matching `package.json` range), and `Latest` versions.</p>
+
+        <h2 id="running-scripts">8. Running Scripts (`npm run`)</h2>
+        <p>The `scripts` section in `package.json` allows you to define custom commands to automate tasks, such as starting your application, running tests, or building your project.</p>
+        <h3>Define a Script:</h3>
+        <p>Add entries to the `scripts` object in `package.json`:</p>
+        <pre><code class="language-json"># package.json
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",       // To start your app
+    "test": "jest",                 // To run tests
+    "dev": "nodemon index.js",      // To run in development mode with auto-restart
+    "build": "webpack",             // To build your project for production
+    "lint": "eslint .",             // To run a linter
+    "hello": "echo Hello, npm!"     // A simple custom script
+  },
+  "dependencies": { /* ... */ }
+}</code></pre>
+        <h3>Run a Script:</h3>
+        <pre><code class="language-bash">npm run &lt;script-name&gt;</code></pre>
+        <p><strong>Examples:</strong></p>
+        <pre><code class="language-bash">npm run start
+npm run test
+npm run dev
+npm run build
+npm run lint
+npm run hello</code></pre>
+        <p>For `start` and `test` scripts, `npm` provides shorthands:</p>
+        <pre><code class="language-bash">npm start   # Same as npm run start
+npm test    # Same as npm run test</code></pre>
+        <div class="tip">
+            <strong>Power of npm scripts:</strong> Commands executed by `npm run` automatically have access to executables installed in `node_modules/.bin/`. This means you don't need to specify the full path to `jest`, `webpack`, `eslint`, etc., if they are installed locally as project dependencies.
+        </div>
+
+        <h2 id="global-packages">9. Global Packages (`npm install -g`)</h2>
+        <p>Some tools are command-line utilities that you might want to use across multiple projects or system-wide (e.g., a CLI tool, a code formatter).</p>
+        <h3>Install a Global Package:</h3>
+        <pre><code class="language-bash">npm install -g &lt;package-name&gt;</code></pre>
+        <p><strong>Example: Installing `create-react-app` CLI tool</strong></p>
+        <pre><code class="language-bash">npm install -g create-react-app</code></pre>
+        <p>Now, you can run `create-react-app` from any directory in your terminal.</p>
+        <pre><code class="language-bash">create-react-app my-new-react-app</code></pre>
+        <h3>List Global Packages:</h3>
+        <pre><code class="language-bash">npm list -g --depth=0 # List top-level global packages</code></pre>
+        <h3>Uninstall a Global Package:</h3>
+        <pre><code class="language-bash">npm uninstall -g &lt;package-name&gt;</code></pre>
+        <div class="warning">
+            <strong>Caution with Global Installs:</strong> While convenient, global installs can sometimes lead to version conflicts between projects. For development tools, it's often preferred to install them as `devDependencies` and use `npm run` scripts to execute them. Tools like `npx` (covered below) offer a way to run CLI tools without installing them globally.
+        </div>
+
+        <h2 id="publishing-packages">10. Publishing Packages (`npm publish`)</h2>
+        <p>If you've created your own reusable JavaScript module, you can publish it to the npm registry for others (or yourself) to use.</p>
+        <h3>Steps to Publish:</h3>
+        <ol>
+            <li><strong>Create an npm account:</strong> If you don't have one, register at <a href="https://www.npmjs.com/" target="_blank">npmjs.com</a>.</li>
+            <li><strong>Log in from CLI:</strong>
+                <pre><code class="language-bash">npm login</code></pre>
+                <p>Follow the prompts for username, password, and email.</p>
+            </li>
+            <li><strong>Prepare your package.json:</strong>
+                <ul>
+                    <li>Ensure `name` is unique on npm.</li>
+                    <li>Set `version` (use <a href="https://semver.org/" target="_blank">Semantic Versioning</a>: MAJOR.MINOR.PATCH).</li>
+                    <li>Add a `description`, `keywords`, `author`, `license`.</li>
+                    <li>Ensure `main` points to your package's entry file.</li>
+                    <li>Include a `repository` field for source control.</li>
+                </ul>
+            </li>
+            <li><strong>Publish:</strong>
+                <pre><code class="language-bash">npm publish</code></pre>
+                <p>This command publishes the package to the public npm registry. If it's a scoped package (e.g., `@yourorg/mypackage`), you might need `--access public` for public scope if it's a new organization.</p>
+            </li>
+        </ol>
+        <pre><code class="language-json"># Example package.json for publishing
+{
+  "name": "my-utility-package",
+  "version": "1.0.0",
+  "description": "A simple utility function for calculations.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["utility", "math", "calculator"],
+  "author": "Your Name &lt;your.email@example.com&gt;",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/my-utility-package.git"
+  }
+}</code></pre>
+
+        <h2 id="npm-audit">11. npm audit (Security)</h2>
+        <p>The `npm audit` command checks your project's dependencies for known security vulnerabilities and provides recommendations for remediation.</p>
+        <h3>Run an Audit:</h3>
+        <pre><code class="language-bash">npm audit</code></pre>
+        <p>This will output a report detailing any vulnerabilities found, their severity, and affected packages.</p>
+        <h3>Fix Vulnerabilities:</h3>
+        <p>npm can often automatically fix many vulnerabilities by updating packages to secure versions.</p>
+        <pre><code class="language-bash">npm audit fix</code></pre>
+        <p>For vulnerabilities that cannot be automatically fixed (e.g., requiring a major version upgrade with breaking changes), `npm audit` will provide manual remediation steps.</p>
+
+        <h2 id="common-npm-commands">12. Other Common npm Commands</h2>
+        <ul>
+            <li><strong>`npm outdated`:</strong> Checks for outdated packages.
+                <pre><code class="language-bash">npm outdated</code></pre>
+            </li>
+            <li><strong>`npm list` / `npm ls`:</strong> Lists installed packages.
+                <pre><code class="language-bash">npm ls          # List all installed local packages (tree view)
+npm ls --depth=0 # List only top-level local packages</code></pre>
+            </li>
+            <li><strong>`npm view &lt;package-name&gt;`:</strong> Displays package metadata from the registry.
+                <pre><code class="language-bash">npm view express versions # View all available versions of express
+npm view react main       # View the main entry file for react</code></pre>
+            </li>
+            <li><strong>`npm search &lt;keyword&gt;`:</strong> Searches the npm registry for packages matching a keyword.
+                <pre><code class="language-bash">npm search cli-tool</code></pre>
+            </li>
+            <li><strong>`npm cache clean --force`:</strong> Clears the npm cache. Useful for resolving installation issues. (Note: `npm cache clean` is deprecated in newer versions, use `npm cache clean --force` or `npm cache verify`).
+                <pre><code class="language-bash">npm cache verify # Verify the integrity of the cache folder's contents</code></pre>
+            </li>
+            <li><strong>`npm doctor`:</strong> Runs a series of checks to ensure your npm installation is configured correctly.
+                <pre><code class="language-bash">npm doctor</code></pre>
+            </li>
+            <li><strong>`npx`:</strong> Executes Node.js package binaries (CLI tools) without globally installing them.
+                <pre><code class="language-bash"># Instead of npm install -g create-react-app, then create-react-app my-app
+npx create-react-app my-app # Downloads and runs create-react-app without global install</code></pre>
+                <p>`npx` is great for running one-off CLI tools or ensuring you always use the latest version without managing global installs.</p>
+            </li>
+        </ul>
+
+        <h2 id="best-practices">13. Best Practices with npm</h2>
+        <ul>
+            <li><strong>Always use `npm init`:</strong> Start every new project with `npm init` or `npm init -y`.</li>
+            <li><strong>Commit `package.json` and `package-lock.json`:</strong> Ensure consistent builds across development environments and CI/CD.</li>
+            <li><strong>Understand Dependency Types:</strong> Differentiate between `dependencies` (required for production) and `devDependencies` (only for development/testing).</li>
+            <li><strong>Use Semantic Versioning:</strong> Adhere to SemVer for your own packages and understand how `^`, `~`, and exact versions work for external dependencies.</li>
+            <li><strong>Regularly update dependencies:</strong> Use `npm update` and `npm audit fix` regularly to keep your project secure and up-to-date. Review `npm outdated` output.</li>
+            <li><strong>Use `npx` for one-off CLI tools:</strong> Avoid polluting your global npm space.</li>
+            <li><strong>Avoid `sudo npm install`:</strong> Installing global packages with `sudo` can lead to permission issues. Configure npm to install global packages in your user directory if needed.
+                <pre><code class="language-bash"># Recommended fix for global install permissions (from npm docs):
+mkdir ~/.npm-global
+npm config set prefix '~/.npm-global'
+export PATH=~/.npm-global/bin:$PATH # Add to your .bashrc or .zshrc
+source ~/.bashrc # Or .zshrc</code></pre>
+            </li>
+            <li><strong>Clear cache if issues arise:</strong> `npm cache verify` is a good first step for strange installation problems.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Mastering npm is essential for JavaScript developers.</strong>
+            <p>It's your gateway to a vast ecosystem of reusable code, allowing you to build robust applications more quickly and efficiently. By understanding these commands and best practices, you'll be well-equipped to manage dependencies effectively in any Node.js or frontend project.</p>
+        </div>
+    </div>
+</body>
+</html>
