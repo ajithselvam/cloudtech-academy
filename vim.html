@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Vim Editor Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Vim Editor Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-vim">1. What is Vim?</a></li>
+                <li><a href="#installing-vim">2. Installing Vim</a></li>
+                <li><a href="#vim-modes">3. Vim Modes</a></li>
+                <li><a href="#basic-navigation">4. Basic Navigation</a></li>
+                <li><a href="#insert-mode">5. Insert Mode</a></li>
+                <li><a href="#saving-and-exiting">6. Saving and Exiting</a></li>
+                <li><a href="#basic-editing-commands">7. Basic Editing Commands</a></li>
+                <li><a href="#copy-paste-delete">8. Copy, Paste, Delete (Yank, Put, Delete)</a></li>
+                <li><a href="#searching-and-replacing">9. Searching and Replacing</a></li>
+                <li><a href="#undo-redo">10. Undo and Redo</a></li>
+                <li><a href="#advanced-navigation">11. Advanced Navigation</a></li>
+                <li><a href="#multiple-files-and-windows">12. Multiple Files & Windows</a></li>
+                <li><a href="#visual-mode">13. Visual Mode</a></li>
+                <li><a href="#macros">14. Macros</a></li>
+                <li><a href="#vimrc-configuration">15. .vimrc Configuration</a></li>
+                <li><a href="#plugins">16. Plugins</a></li>
+                <li><a href="#vimtutor">17. The vimtutor</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-vim">1. What is Vim?</h2>
+        <p><strong>Vim</strong> (Vi IMproved) is a highly configurable, powerful, and efficient text editor that runs in the command-line interface (CLI) and as a standalone graphical user interface (GUI). It's a modal editor, meaning it operates in different "modes," each with specific functionalities. Vim is widely used by programmers, system administrators, and anyone who needs to edit text files quickly and efficiently, especially on Linux/Unix-like systems.</p>
+        <h3>Why Learn Vim?</h3>
+        <ul>
+            <li><strong>Efficiency:</strong> Once mastered, Vim allows for incredibly fast text editing with minimal keystrokes, as you spend less time reaching for the mouse.</li>
+            <li><strong>Ubiquity:</strong> Vim (or its predecessor Vi) is available on virtually every Unix-like system by default.</li>
+            <li><strong>Power & Customization:</strong> Extremely flexible with extensive configuration options and a rich plugin ecosystem.</li>
+            <li><strong>Keyboard-Centric:</strong> Encourages staying on the keyboard, leading to improved workflow and reduced wrist strain.</li>
+        </ul>
+
+        <h2 id="installing-vim">2. Installing Vim</h2>
+        <p>Vim is often pre-installed on Linux and macOS. If not, you can easily install it.</p>
+        <ul>
+            <li><strong>Linux (Debian/Ubuntu-based):</strong>
+                <pre><code class="language-bash">sudo apt update
+sudo apt install vim</code></pre>
+            </li>
+            <li><strong>Linux (Fedora/CentOS-based):</strong>
+                <pre><code class="language-bash">sudo dnf install vim</code></pre>
+            </li>
+            <li><strong>macOS:</strong> Vim is usually pre-installed. You can get a more recent version via Homebrew.
+                <pre><code class="language-bash">brew install vim</code></pre>
+            </li>
+            <li><strong>Windows:</strong> Download the installer from the official Vim website (<a href="https://www.vim.org/download.php" target="_blank">vim.org/download.php</a>) or use WSL (Windows Subsystem for Linux) and install it within your Linux distribution.</li>
+        </ul>
+        <p>To start Vim and open a file:</p>
+        <pre><code class="language-bash">vim my_file.txt</code></pre>
+        <p>If the file doesn't exist, Vim will create it when you save.</p>
+
+        <h2 id="vim-modes">3. Vim Modes</h2>
+        <p>Vim's core concept is its modal nature. You're always in one of several modes. Switching between them is key to efficiency.</p>
+        <ul>
+            <li><strong>Normal Mode (Command Mode):</strong>
+                <ul>
+                    <li>This is the default mode when you open Vim.</li>
+                    <li>Used for navigation (moving cursor), deleting text, copying (yanking), pasting (putting), and executing commands.</li>
+                    <li>You <strong>cannot type text directly</strong> in this mode.</li>
+                    <li>Press <kbd>Esc</kbd> to return to Normal Mode from any other mode.</li>
+                </ul>
+            </li>
+            <li><strong>Insert Mode:</strong>
+                <ul>
+                    <li>Used for typing and editing text, similar to a standard text editor.</li>
+                    <li>Enter Insert Mode from Normal Mode by pressing `i`, `a`, `o`, `I`, `A`, `O`, etc.</li>
+                    <li>Press <kbd>Esc</kbd> to exit Insert Mode and return to Normal Mode.</li>
+                </ul>
+            </li>
+            <li><strong>Visual Mode:</strong>
+                <ul>
+                    <li>Used for selecting text blocks. Once selected, you can perform operations like copying, cutting, or deleting on the selected block.</li>
+                    <li>Enter Visual Mode from Normal Mode by pressing `v` (character-wise), `V` (line-wise), or <kbd>Ctrl</kbd> + <kbd>v</kbd> (block-wise).</li>
+                    <li>Press <kbd>Esc</kbd> to exit Visual Mode.</li>
+                </ul>
+            </li>
+            <li><strong>Command-Line Mode (Ex Mode):</strong>
+                <ul>
+                    <li>Used for executing commands that affect the entire file or interact with Vim's settings.</li>
+                    <li>Enter Command-Line Mode from Normal Mode by pressing `:` (colon).</li>
+                    <li>After typing a command, press <kbd>Enter</kbd> to execute it.</li>
+                    <li>Commands like saving, quitting, search/replace are done here.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="basic-navigation">4. Basic Navigation (Normal Mode)</h2>
+        <p>Moving around in Vim without the arrow keys is fundamental.</p>
+        <ul>
+            <li><strong>Character-wise:</strong>
+                <ul>
+                    <li><kbd>h</kbd>: Move left</li>
+                    <li><kbd>j</kbd>: Move down</li>
+                    <li><kbd>k</kbd>: Move up</li>
+                    <li><kbd>l</kbd>: Move right</li>
+                </ul>
+            </li>
+            <li><strong>Word-wise:</strong>
+                <ul>
+                    <li><kbd>w</kbd>: Move to the beginning of the next word.</li>
+                    <li><kbd>b</kbd>: Move to the beginning of the previous word.</li>
+                    <li><kbd>e</kbd>: Move to the end of the current word.</li>
+                </ul>
+            </li>
+            <li><strong>Line-wise:</strong>
+                <ul>
+                    <li><kbd>0</kbd> (zero): Move to the beginning of the line.</li>
+                    <li><kbd>$</kbd>: Move to the end of the line.</li>
+                    <li><kbd>^</kbd>: Move to the first non-blank character of the line.</li>
+                </ul>
+            </li>
+            <li><strong>Screen-wise:</strong>
+                <ul>
+                    <li><kbd>H</kbd>: Move to the top of the screen (High).</li>
+                    <li><kbd>M</kbd>: Move to the middle of the screen (Middle).</li>
+                    <li><kbd>L</kbd>: Move to the bottom of the screen (Low).</li>
+                </ul>
+            </li>
+            <li><strong>File-wise:</strong>
+                <ul>
+                    <li><kbd>gg</kbd>: Move to the very beginning of the file.</li>
+                    <li><kbd>G</kbd>: Move to the very end of the file.</li>
+                    <li><kbd>%</kbd>: Move to the matching parenthesis, bracket, or brace.</li>
+                </ul>
+            </li>
+            <li><strong>Repeating Commands:</strong> Prefix a command with a number to repeat it.
+                <pre><code class="language-vim">10j     # Move down 10 lines
+5w      # Move 5 words forward
+3h      # Move 3 characters left</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="insert-mode">5. Insert Mode</h2>
+        <p>This is where you type actual text. You enter Insert Mode from Normal Mode using specific commands:</p>
+        <ul>
+            <li><kbd>i</kbd>: Insert text before the cursor.</li>
+            <li><kbd>a</kbd>: Insert text after the cursor.</li>
+            <li><kbd>o</kbd>: Insert a new line below the current line and enter Insert Mode.</li>
+            <li><kbd>I</kbd>: Insert text at the beginning of the current line.</li>
+            <li><kbd>A</kbd>: Insert text at the end of the current line.</li>
+            <li><kbd>O</kbd>: Insert a new line above the current line and enter Insert Mode.</li>
+            <li><kbd>s</kbd>: Delete character under cursor and enter Insert Mode.</li>
+            <li><kbd>S</kbd>: Delete current line and enter Insert Mode.</li>
+        </ul>
+        <p><strong>To exit Insert Mode and return to Normal Mode:</strong> Press <kbd>Esc</kbd>.</p>
+
+        <h2 id="saving-and-exiting">6. Saving and Exiting (Command-Line Mode)</h2>
+        <p>You need to be in Command-Line Mode (press `:` from Normal Mode) to perform these actions.</p>
+        <ul>
+            <li><kbd>:w</kbd>: Save the current file.</li>
+            <li><kbd>:w filename</kbd>: Save the file as `filename`.</li>
+            <li><kbd>:q</kbd>: Quit Vim (only if there are no unsaved changes).</li>
+            <li><kbd>:wq</kbd>: Save and quit. (Also <kbd>ZZ</kbd> in Normal Mode for current file only).</li>
+            <li><kbd>:x</kbd>: Save and quit (only writes if changes were made).</li>
+            <li><kbd>:q!</kbd>: Quit without saving changes (force quit).</li>
+            <li><kbd>:wq!</kbd>: Save and quit, even if the file is read-only (if you have permission).</li>
+        </ul>
+
+        <h2 id="basic-editing-commands">7. Basic Editing Commands (Normal Mode)</h2>
+        <p>These commands perform actions on text.</p>
+        <ul>
+            <li><strong>Delete:</strong>
+                <ul>
+                    <li><kbd>x</kbd>: Delete character under the cursor.</li>
+                    <li><kbd>dw</kbd>: Delete from cursor to the end of the word.</li>
+                    <li><kbd>d$</kbd>: Delete from cursor to the end of the line.</li>
+                    <li><kbd>dd</kbd>: Delete the entire current line.</li>
+                    <li><kbd>dG</kbd>: Delete from current line to the end of the file.</li>
+                    <li><kbd>dgg</kbd>: Delete from current line to the beginning of the file.</li>
+                </ul>
+            </li>
+            <li><strong>Change (Delete & Insert):</strong>
+                <ul>
+                    <li><kbd>cw</kbd>: Change word (delete to end of word, then enter Insert Mode).</li>
+                    <li><kbd>c$</kbd>: Change to end of line (delete to end of line, then enter Insert Mode).</li>
+                    <li><kbd>cc</kbd>: Change line (delete current line, then enter Insert Mode).</li>
+                    <li><kbd>C</kbd>: Same as `c$`.</li>
+                </ul>
+            </li>
+            <li><strong>Replace (single character):</strong>
+                <ul>
+                    <li><kbd>r</kbd>: Replace single character under cursor. (e.g., `ra` replaces char with 'a'). Does not enter Insert Mode.</li>
+                    <li><kbd>R</kbd>: Enter Replace Mode (overwrites characters until <kbd>Esc</kbd> is pressed).</li>
+                </ul>
+            </li>
+        </ul>
+        <p><strong>Combining Commands:</strong> Vim commands often follow a `[number][command][motion]` pattern.</p>
+        <pre><code class="language-vim">5dd     # Delete 5 lines
+3dw     # Delete 3 words
+d2w     # Delete 2 words (same as 2dw)
+c3w     # Change 3 words
+dG      # Delete from current line to the end of the file</code></pre>
+
+        <h2 id="copy-paste-delete">8. Copy, Paste, Delete (Yank, Put, Delete)</h2>
+        <p>Vim uses different terms for these operations, often interacting with registers.</p>
+        <ul>
+            <li><strong>Yank (Copy):</strong>
+                <ul>
+                    <li><kbd>yy</kbd>: Yank (copy) the current line.</li>
+                    <li><kbd>yw</kbd>: Yank from cursor to the end of the word.</li>
+                    <li><kbd>y$</kbd>: Yank from cursor to the end of the line.</li>
+                    <li><kbd>yG</kbd>: Yank from current line to the end of the file.</li>
+                    <li><kbd>ygg</kbd>: Yank from current line to the beginning of the file.</li>
+                    <li><kbd>number</kbd><kbd>yy</kbd>: Yank (copy) `number` of lines (e.g., `5yy`).</li>
+                </ul>
+            </li>
+            <li><strong>Put (Paste):</strong>
+                <ul>
+                    <li><kbd>p</kbd>: Put (paste) after the cursor (or below the current line for line-wise yank).</li>
+                    <li><kbd>P</kbd>: Put (paste) before the cursor (or above the current line for line-wise yank).</li>
+                </ul>
+            </li>
+            <li><strong>Delete:</strong>
+                <p>When you delete text using `d` or `x`, it's implicitly copied to a default register, so you can `p`aste it afterward.</p>
+            </li>
+            <li><strong>Registers:</strong> Vim has named registers to store text.
+                <ul>
+                    <li><kbd>"a</kbd><kbd>yy</kbd>: Yank current line into register `a`.</li>
+                    <li><kbd>"ap</kbd>: Paste content of register `a`.</li>
+                    <li><kbd>"adw</kbd>: Delete word into register `a`.</li>
+                    <li><kbd>":set paste</kbd> (in Command-Line Mode): Useful when pasting into Insert Mode from an external source to prevent auto-indentation issues.</li>
+                    <li><kbd>":set nopaste</kbd>: Turn paste mode off.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="searching-and-replacing">9. Searching and Replacing (Command-Line Mode)</h2>
+        <p>Powerful features for navigating and modifying text.</p>
+        <ul>
+            <li><strong>Searching:</strong>
+                <ul>
+                    <li><kbd>/pattern</kbd>: Search forward for `pattern`. Press <kbd>n</kbd> for next match, <kbd>N</kbd> for previous.</li>
+                    <li><kbd>?pattern</kbd>: Search backward for `pattern`. Press <kbd>n</kbd> for next (backward) match, <kbd>N</kbd> for previous (forward).</li>
+                    <li><kbd>*</kbd>: Search for the word under the cursor, forward.</li>
+                    <li><kbd>#</kbd>: Search for the word under the cursor, backward.</li>
+                </ul>
+            </li>
+            <li><strong>Replacing:</strong> (Uses `:s` for substitute command)
+                <ul>
+                    <li><kbd>:%s/old/new/</kbd>: Replace first occurrence of `old` with `new` on each line.</li>
+                    <li><kbd>:%s/old/new/g</kbd>: Replace ALL occurrences of `old` with `new` on each line (`g` for global).</li>
+                    <li><kbd>:%s/old/new/gc</kbd>: Replace ALL occurrences, with confirmation for each (`c` for confirm).</li>
+                    <li><kbd>:start_line,end_line s/old/new/g</kbd>: Replace in a specific range of lines. (e.g., `1,10s/error/bug/g` replaces in lines 1 to 10).</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="undo-redo">10. Undo and Redo (Normal Mode)</h2>
+        <ul>
+            <li><kbd>u</kbd>: Undo the last change.</li>
+            <li><kbd>Ctrl</kbd> + <kbd>r</kbd>: Redo the last undone change.</li>
+            <li><kbd>. (dot)</kbd>: Repeat the last change/command. Extremely powerful for repetitive tasks.</li>
+        </ul>
+
+        <h2 id="advanced-navigation">11. Advanced Navigation (Normal Mode)</h2>
+        <ul>
+            <li><strong>Jumping between lines/paragraphs:</strong>
+                <ul>
+                    <li><kbd>{</kbd>: Move to the previous paragraph.</li>
+                    <li><kbd>}</kbd>: Move to the next paragraph.</li>
+                </ul>
+            </li>
+            <li><strong>Jumping between matching brackets/parentheses:</strong>
+                <ul>
+                    <li><kbd>%</kbd>: Jump between matching `()`, `[]`, `{}`.</li>
+                </ul>
+            </li>
+            <li><strong>Marks:</strong> Set custom markers in your file.
+                <ul>
+                    <li><kbd>m</kbd><kbd>a</kbd>: Set mark `a` at current cursor position.</li>
+                    <li><kbd>`a</kbd>: Jump to the exact position of mark `a`.</li>
+                    <li><kbd>'a</kbd>: Jump to the beginning of the line containing mark `a`.</li>
+                </ul>
+            </li>
+            <li><strong>Jumplists:</strong> Vim keeps a history of cursor positions.
+                <ul>
+                    <li><kbd>Ctrl</kbd> + <kbd>o</kbd>: Jump to older position in jumplist.</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>i</kbd>: Jump to newer position in jumplist.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="multiple-files-and-windows">12. Multiple Files & Windows</h2>
+        <p>Vim can efficiently manage multiple files and split its view.</p>
+        <ul>
+            <li><strong>Buffers (Open Files):</strong>
+                <ul>
+                    <li><kbd>:e filename</kbd>: Open `filename` in the current window.</li>
+                    <li><kbd>:bn</kbd>: Go to next buffer.</li>
+                    <li><kbd>:bp</kbd>: Go to previous buffer.</li>
+                    <li><kbd>:ls</kbd>: List all open buffers.</li>
+                    <li><kbd>:b number</kbd>: Go to buffer by its number (from `:ls`).</li>
+                    <li><kbd>:bd</kbd>: Close current buffer.</li>
+                </ul>
+            </li>
+            <li><strong>Splitting Windows:</strong> Divide the Vim window into multiple panes.
+                <ul>
+                    <li><kbd>:sp</kbd>: Split horizontally, opening a new buffer (or current buffer if no filename).</li>
+                    <li><kbd>:vsp</kbd>: Split vertically.</li>
+                    <li><kbd>:sp filename</kbd>: Split horizontally and open `filename`.</li>
+                    <li><kbd>:vsp filename</kbd>: Split vertically and open `filename`.</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>w</kbd> <kbd>w</kbd>: Move cursor to the next window.</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>w</kbd> <kbd>h</kbd>/<kbd>j</kbd>/<kbd>k</kbd>/<kbd>l</kbd>: Move cursor to left/down/up/right window.</li>
+                    <li><kbd>Ctrl</kbd> + <kbd>w</kbd> <kbd>q</kbd>: Close current window.</li>
+                </ul>
+            </li>
+            <li><strong>Tabs:</strong> Manage multiple layouts of windows.
+                <ul>
+                    <li><kbd>:tabnew</kbd>: Create a new tab.</li>
+                    <li><kbd>:tabnew filename</kbd>: Create a new tab and open `filename`.</li>
+                    <li><kbd>gt</kbd>: Go to next tab.</li>
+                    <li><kbd>gT</kbd>: Go to previous tab.</li>
+                    <li><kbd>:tabc</kbd>: Close current tab.</li>
+                    <li><kbd>:tabo</kbd>: Close all other tabs.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="visual-mode">13. Visual Mode</h2>
+        <p>Used for selecting text, then performing an operation on the selection.</p>
+        <ul>
+            <li><kbd>v</kbd>: Character-wise visual mode. Select characters using navigation keys.</li>
+            <li><kbd>V</kbd>: Line-wise visual mode. Select whole lines.</li>
+            <li><kbd>Ctrl</kbd> + <kbd>v</kbd>: Block-wise visual mode. Select a rectangular block of text.</li>
+            <li><strong>Once selected:</strong>
+                <ul>
+                    <li><kbd>y</kbd>: Yank (copy) the selection.</li>
+                    <li><kbd>d</kbd>: Delete the selection.</li>
+                    <li><kbd>c</kbd>: Change (delete) the selection and enter Insert Mode.</li>
+                    <li><kbd>~</kbd>: Change case of selected characters.</li>
+                </ul>
+            </li>
+            <li><strong>Example:</strong>
+                <pre><code class="language-vim"># Go to start of text
+vwwyw      # Select two words character-wise and yank them
+:s/pattern/replacement/g # Select lines with V, then replace
+Ctrl-v 3j I # Select a block, then insert text at the beginning of each selected line.
+# (Ctrl-v to enter block mode, 3j to extend selection 3 lines down, I (capital I) to insert at beginning of block, type text, then Esc)</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="macros">14. Macros</h2>
+        <p>Record a sequence of keystrokes and play them back, automating repetitive tasks.</p>
+        <ul>
+            <li><kbd>q</kbd><kbd>register</kbd>: Start recording a macro into a specific register (e.g., `qa` for register 'a').</li>
+            <li>Perform your sequence of commands.</li>
+            <li><kbd>q</kbd>: Stop recording.</li>
+            <li><kbd>@</kbd><kbd>register</kbd>: Play back the macro once (e.g., `@a`).</li>
+            <li><kbd>number</kbd><kbd>@</kbd><kbd>register</kbd>: Play back the macro `number` of times (e.g., `5@a`).</li>
+            <li><kbd>@@</kbd>: Play back the last executed macro again.</li>
+        </ul>
+        <pre><code class="language-vim"># Example: Add a semicolon and then a comment "// END" to the end of 5 lines
+qa              # Start recording into register 'a'
+$               # Go to end of line
+a               # Enter Insert mode after cursor
+; // END        # Type the text
+&lt;Esc&gt;           # Exit Insert mode
+j               # Go to next line
+q               # Stop recording
+
+# Now, execute 4 more times (total 5 lines modified)
+4@a</code></pre>
+
+        <h2 id="vimrc-configuration">15. .vimrc Configuration</h2>
+        <p>The `.vimrc` file (located in your home directory `~/.vimrc` on Linux/macOS, or `_vimrc` in Vim installation directory on Windows) is where you customize Vim's behavior, appearance, and key bindings.</p>
+        <ul>
+            <li><strong>Open/Create `.vimrc`:</strong>
+                <pre><code class="language-bash">vim ~/.vimrc</code></pre>
+            </li>
+            <li><strong>Common Settings:</strong>
+                <pre><code class="language-vim">" Basic settings
+set nocompatible      " Behave like Vim, not Vi
+set autoindent        " Auto indent new lines
+set smartindent       " Smart auto-indent for programming
+set tabstop=4         " Number of spaces a &lt;Tab&gt; in the file counts for
+set shiftwidth=4      " Number of spaces to use for autoindenting
+set expandtab         " Use spaces instead of tabs
+
+" User Interface
+set number            " Show line numbers
+set relativenumber    " Show relative line numbers (useful for motions)
+set wrap              " Wrap long lines
+set incsearch         " Incremental search
+set hlsearch          " Highlight all matches for search pattern
+set ignorecase        " Ignore case in search patterns
+set smartcase         " Overrides ignorecase if pattern contains uppercase
+
+" Status line
+set showcmd           " Show incomplete commands
+set showmode          " Show current mode
+set laststatus=2      " Always show the status line
+
+" Visual customization
+syntax on             " Enable syntax highlighting
+colorscheme default   " Set a color scheme (e.g., dracula, gruvbox)
+set mouse=a           " Enable mouse support in all modes</code></pre>
+            </li>
+            <li><strong>Reload `.vimrc`:</strong> After making changes, save the file and then source it in Vim:
+                <pre><code class="language-vim">:source ~/.vimrc</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="plugins">16. Plugins</h2>
+        <p>Vim's functionality can be greatly extended with plugins, adding features like file explorers, fuzzy finders, auto-completion, and advanced syntax highlighting.</p>
+        <h3>Popular Plugin Managers:</h3>
+        <ul>
+            <li><strong>Vim-plug:</strong> Lightweight and easy to use.
+                <pre><code class="language-vim">" In your ~/.vimrc
+call plug#begin('~/.vim/plugged') " Directory where plugins will be installed
+
+" Plugins
+Plug 'VundleVim/Vundle.vim'     " Example: A different plugin manager
+Plug 'tpope/vim-fugitive'      " Git wrapper
+Plug 'vim-airline/vim-airline'  " Lean & mean status/tabline
+Plug 'scrooloose/nerdtree'     " File explorer
+
+call plug#end()</code></pre>
+                <p><strong>Installation:</strong> Follow Vim-plug's instructions to install `plug.vim`. Then, in Vim, run `:PlugInstall` to download and install plugins.</p>
+            </li>
+            <li><strong>Vundle:</strong> Another popular option.</li>
+        </ul>
+        <h3>Examples of Popular Plugins:</h3>
+        <ul>
+            <li><strong>NerdTree:</strong> A file system explorer. (Use `:NERDTree` to open).</li>
+            <li><strong>Vim-Airline:</strong> A customizable status line for Vim.</li>
+            <li><strong>Fugitive:</strong> A Git wrapper, allowing Git commands directly from Vim.</li>
+            <li><strong>CtrlP:</strong> A fuzzy file finder.</li>
+            <li><strong>YouCompleteMe (YCM):</strong> A fast, as-you-type code completion engine.</li>
+        </ul>
+
+        <h2 id="vimtutor">17. The vimtutor</h2>
+        <p>Vim comes with an excellent built-in interactive tutorial called `vimtutor`. It's highly recommended for beginners as it teaches the basic commands interactively.</p>
+        <pre><code class="language-bash">vimtutor</code></pre>
+        <p><strong>Usage:</strong> Simply type `vimtutor` in your terminal and follow the instructions. It takes about 25-30 minutes to complete and covers many of the fundamental concepts discussed here.</p>
+
+        <div class="tip">
+            <strong>The Learning Curve:</strong>
+            <p>Vim has a steep learning curve initially because its modal nature and keyboard-centric commands are very different from traditional editors. However, with consistent practice, these commands become muscle memory, and you'll find yourself editing text with unparalleled speed and precision. Start with the basics, practice daily, and gradually explore more advanced features and plugins. Happy Vimming!</p>
+        </div>
+    </div>
+</body>
+</html>
