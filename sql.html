@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete SQL Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete SQL Tutorial</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-sql">1. What is SQL?</a></li>
+                <li><a href="#database-basics">2. Database Basics</a></li>
+                <li><a href="#ddl-commands">3. DDL Commands</a></li>
+                <li><a href="#dml-commands">4. DML Commands</a></li>
+                <li><a href="#operators">5. Operators</a></li>
+                <li><a href="#functions">6. Functions</a></li>
+                <li><a href="#joins">7. Joins</a></li>
+                <li><a href="#subqueries">8. Subqueries</a></li>
+                <li><a href="#views">9. Views</a></li>
+                <li><a href="#indexes">10. Indexes</a></li>
+                <li><a href="#transactions">11. Transactions</a></li>
+                <li><a href="#advanced-topics">12. Advanced Topics</a></li>
+                <li><a href="#best-practices">13. Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-sql">What is SQL?</h2>
+        <p>SQL (Structured Query Language) is a standard language for managing and manipulating relational databases. It allows you to create, retrieve, update, and delete data, as well as define database structures and control access.</p>
+
+        <h2 id="database-basics">Database Basics</h2>
+        <p>Before diving into SQL commands, let's understand some fundamental database concepts:</p>
+        <ul>
+            <li><strong>Database:</strong> An organized collection of data.</li>
+            <li><strong>Table:</strong> A collection of related data organized into rows and columns.</li>
+            <li><strong>Column (Field):</strong> A vertical entity in a table that contains a specific type of data (e.g., Name, Age).</li>
+            <li><strong>Row (Record/Tuple):</strong> A horizontal entity in a table representing a single data entry.</li>
+            <li><strong>Primary Key:</strong> A column (or set of columns) that uniquely identifies each row in a table.</li>
+            <li><strong>Foreign Key:</strong> A column (or set of columns) in one table that refers to the Primary Key in another table, establishing a relationship between them.</li>
+        </ul>
+        <pre><code>-- Example: A simple 'Students' table structure
+CREATE TABLE Students (
+    StudentID INT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Age INT,
+    City VARCHAR(50)
+);</code></pre>
+
+        <h2 id="ddl-commands">DDL Commands (Data Definition Language)</h2>
+        <p>DDL commands are used to define, modify, and delete database structures.</p>
+
+        <h3>CREATE DATABASE</h3>
+        <p>Used to create a new database.</p>
+        <pre><code>CREATE DATABASE MySchoolDB;</code></pre>
+
+        <h3>CREATE TABLE</h3>
+        <p>Used to create a new table in the database.</p>
+        <pre><code>USE MySchoolDB; -- Select the database (syntax might vary by DB system)
+
+CREATE TABLE Courses (
+    CourseID INT PRIMARY KEY,
+    CourseName VARCHAR(100) NOT NULL,
+    Credits INT
+);
+
+CREATE TABLE Enrollments (
+    EnrollmentID INT PRIMARY KEY AUTO_INCREMENT, -- AUTO_INCREMENT for MySQL/MariaDB
+    StudentID INT,
+    CourseID INT,
+    EnrollmentDate DATE,
+    FOREIGN KEY (StudentID) REFERENCES Students(StudentID),
+    FOREIGN KEY (CourseID) REFERENCES Courses(CourseID)
+);</code></pre>
+
+        <h3>ALTER TABLE</h3>
+        <p>Used to modify an existing table's structure.</p>
+        <pre><code>-- Add a new column
+ALTER TABLE Students
+ADD Email VARCHAR(100);
+
+-- Modify an existing column
+ALTER TABLE Students
+MODIFY COLUMN Age SMALLINT; -- Syntax varies (e.g., ALTER COLUMN in SQL Server)
+
+-- Drop a column
+ALTER TABLE Students
+DROP COLUMN City;</code></pre>
+
+        <h3>DROP DATABASE</h3>
+        <p>Used to delete an existing database.</p>
+        <pre><code>DROP DATABASE MySchoolDB;</code></pre>
+
+        <h3>DROP TABLE</h3>
+        <p>Used to delete an existing table.</p>
+        <pre><code>DROP TABLE Courses;</code></pre>
+
+        <h3>TRUNCATE TABLE</h3>
+        <p>Removes all rows from a table, but keeps the table structure. It's faster than DELETE for all rows and resets auto-increment counters.</p>
+        <pre><code>TRUNCATE TABLE Enrollments;</code></pre>
+
+        <h2 id="dml-commands">DML Commands (Data Manipulation Language)</h2>
+        <p>DML commands are used to manipulate data within database objects.</p>
+
+        <h3>INSERT INTO</h3>
+        <p>Used to add new rows of data into a table.</p>
+        <pre><code>-- Insert all column values (order must match table definition)
+INSERT INTO Students (StudentID, FirstName, LastName, Age, Email)
+VALUES (1, 'Alice', 'Smith', 20, 'alice.s@example.com');
+
+-- Insert specific column values
+INSERT INTO Courses (CourseID, CourseName, Credits)
+VALUES (101, 'Introduction to SQL', 3);
+
+-- Multiple rows (syntax varies slightly by DB)
+INSERT INTO Students (StudentID, FirstName, LastName, Age, Email) VALUES
+(2, 'Bob', 'Johnson', 22, 'bob.j@example.com'),
+(3, 'Charlie', 'Brown', 21, 'charlie.b@example.com');</code></pre>
+
+        <h3>SELECT</h3>
+        <p>Used to retrieve data from one or more tables.</p>
+        <pre><code>-- Select all columns from a table
+SELECT * FROM Students;
+
+-- Select specific columns
+SELECT FirstName, LastName, Age FROM Students;
+
+-- Select with a WHERE clause (filtering rows)
+SELECT * FROM Students
+WHERE Age > 20;
+
+SELECT CourseName FROM Courses
+WHERE Credits = 3;</code></pre>
+
+        <h3>UPDATE</h3>
+        <p>Used to modify existing data in a table.</p>
+        <pre><code>-- Update a single column for a specific row
+UPDATE Students
+SET Email = 'alice.smith@example.com'
+WHERE StudentID = 1;
+
+-- Update multiple columns
+UPDATE Students
+SET Age = 21, City = 'New York'
+WHERE StudentID = 1;
+
+-- Update all rows (USE WITH CAUTION!)
+UPDATE Students
+SET City = 'Unknown';</code></pre>
+
+        <h3>DELETE FROM</h3>
+        <p>Used to delete rows from a table.</p>
+        <pre><code>-- Delete specific rows
+DELETE FROM Students
+WHERE StudentID = 3;
+
+-- Delete all rows (USE WITH CAUTION!)
+DELETE FROM Students;</code></pre>
+
+        <h2 id="operators">Operators</h2>
+        <p>SQL provides various operators for comparisons, logic, and arithmetic.</p>
+
+        <h3>Comparison Operators (=, <>, >, <, >=, <=)</h3>
+        <pre><code>SELECT * FROM Students WHERE Age = 20;
+SELECT * FROM Students WHERE Age &lt;&gt; 20; -- Not equal to
+SELECT * FROM Students WHERE Age >= 21;</code></pre>
+
+        <h3>Logical Operators (AND, OR, NOT)</h3>
+        <pre><code>SELECT * FROM Students WHERE Age > 20 AND City = 'New York';
+SELECT * FROM Students WHERE Age < 20 OR City = 'Boston';
+SELECT * FROM Students WHERE NOT Age = 20;</code></pre>
+
+        <h3>Special Operators (LIKE, IN, BETWEEN, IS NULL)</h3>
+        <pre><code>-- LIKE (pattern matching)
+SELECT * FROM Students WHERE FirstName LIKE 'A%'; -- Starts with 'A'
+SELECT * FROM Students WHERE LastName LIKE '%son'; -- Ends with 'son'
+SELECT * FROM Students WHERE FirstName LIKE '%li%'; -- Contains 'li'
+
+-- IN (match any value in a list)
+SELECT * FROM Students WHERE City IN ('New York', 'Boston', 'Chicago');
+
+-- BETWEEN (range)
+SELECT * FROM Students WHERE Age BETWEEN 20 AND 25;
+
+-- IS NULL / IS NOT NULL
+SELECT * FROM Students WHERE Email IS NULL;
+SELECT * FROM Students WHERE Email IS NOT NULL;</code></pre>
+
+        <h2 id="functions">Functions</h2>
+        <p>SQL offers various built-in functions for data manipulation and aggregation.</p>
+
+        <h3>Aggregate Functions (COUNT, SUM, AVG, MIN, MAX)</h3>
+        <pre><code>SELECT COUNT(*) FROM Students; -- Total number of students
+SELECT SUM(Credits) FROM Courses; -- Total credits of all courses
+SELECT AVG(Age) FROM Students; -- Average age of students
+SELECT MIN(Age) FROM Students; -- Minimum age
+SELECT MAX(Age) FROM Students; -- Maximum age</code></pre>
+
+        <h3>Scalar Functions (UPPER, LOWER, LENGTH, ROUND, NOW)</h3>
+        <pre><code>SELECT UPPER(FirstName) FROM Students; -- Convert to uppercase
+SELECT LOWER(CourseName) FROM Courses; -- Convert to lowercase
+SELECT LENGTH(Email) FROM Students; -- Length of email string (or LEN in SQL Server)
+SELECT ROUND(3.14159, 2); -- Round to 2 decimal places
+SELECT NOW(); -- Current date and time (or GETDATE(), CURRENT_TIMESTAMP)</code></pre>
+
+        <h3>GROUP BY and HAVING</h3>
+        <p><code>GROUP BY</code> groups rows that have the same values in specified columns into a summary row. <code>HAVING</code> is used to filter groups based on a condition.</p>
+        <pre><code>-- Count students by age
+SELECT Age, COUNT(*) AS NumberOfStudents
+FROM Students
+GROUP BY Age;
+
+-- Count students by city, only for cities with more than 1 student
+SELECT City, COUNT(*) AS NumberOfStudents
+FROM Students
+GROUP BY City
+HAVING COUNT(*) > 1;</code></pre>
+
+        <h3>ORDER BY</h3>
+        <p>Sorts the result set of a query.</p>
+        <pre><code>SELECT * FROM Students
+ORDER BY LastName ASC; -- Ascending order (default)
+
+SELECT * FROM Students
+ORDER BY Age DESC, FirstName ASC; -- Sort by Age descending, then FirstName ascending</code></pre>
+
+        <h3>LIMIT / OFFSET (or TOP in SQL Server)</h3>
+        <p>Limits the number of rows returned by a query and can be used for pagination.</p>
+        <pre><code>-- Limit to first 5 rows (MySQL/PostgreSQL)
+SELECT * FROM Students
+LIMIT 5;
+
+-- Skip first 5 rows, then get next 10 rows (MySQL/PostgreSQL)
+SELECT * FROM Students
+LIMIT 10 OFFSET 5;
+
+-- Top 5 rows (SQL Server)
+SELECT TOP 5 * FROM Students;</code></pre>
+
+        <h2 id="joins">Joins</h2>
+        <p>Joins are used to combine rows from two or more tables based on a related column between them.</p>
+
+        <h3>INNER JOIN</h3>
+        <p>Returns only the rows that have matching values in both tables.</p>
+        <pre><code>SELECT S.FirstName, S.LastName, C.CourseName
+FROM Students AS S
+INNER JOIN Enrollments AS E ON S.StudentID = E.StudentID
+INNER JOIN Courses AS C ON E.CourseID = C.CourseID;</code></pre>
+
+        <h3>LEFT (OUTER) JOIN</h3>
+        <p>Returns all rows from the left table, and the matching rows from the right table. If there's no match, NULLs are returned for the right table's columns.</p>
+        <pre><code>-- Get all students and the courses they are enrolled in (if any)
+SELECT S.FirstName, S.LastName, C.CourseName
+FROM Students AS S
+LEFT JOIN Enrollments AS E ON S.StudentID = E.StudentID
+LEFT JOIN Courses AS C ON E.CourseID = C.CourseID;</code></pre>
+
+        <h3>RIGHT (OUTER) JOIN</h3>
+        <p>Returns all rows from the right table, and the matching rows from the left table. If there's no match, NULLs are returned for the left table's columns.</p>
+        <pre><code>-- Get all courses and the students enrolled in them (if any)
+SELECT C.CourseName, S.FirstName, S.LastName
+FROM Courses AS C
+RIGHT JOIN Enrollments AS E ON C.CourseID = E.CourseID
+RIGHT JOIN Students AS S ON E.StudentID = S.StudentID;</code></pre>
+
+        <h3>FULL (OUTER) JOIN</h3>
+        <p>Returns all rows when there is a match in one of the tables. If there is no match, the rows from the non-matching side will have NULLs.</p>
+        <pre><code>-- (Note: FULL JOIN is not supported in MySQL prior to 8.0, often simulated with UNION of LEFT and RIGHT JOINs)
+SELECT S.FirstName, S.LastName, C.CourseName
+FROM Students AS S
+FULL OUTER JOIN Enrollments AS E ON S.StudentID = E.StudentID
+FULL OUTER JOIN Courses AS C ON E.CourseID = C.CourseID;</code></pre>
+
+        <h3>CROSS JOIN</h3>
+        <p>Returns the Cartesian product of the rows from the tables in the join. Each row from the first table is combined with each row from the second table.</p>
+        <pre><code>SELECT S.FirstName, C.CourseName
+FROM Students S
+CROSS JOIN Courses C;</code></pre>
+
+        <h2 id="subqueries">Subqueries (Nested Queries)</h2>
+        <p>A subquery is a query embedded inside another SQL query. It can be used in <code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, and <code>DELETE</code> statements, as well as with operators like <code>IN</code>, <code>EXISTS</code>, <code>ANY</code>/<code>ALL</code>.</p>
+        <pre><code>-- Select students whose age is greater than the average age
+SELECT FirstName, LastName, Age
+FROM Students
+WHERE Age > (SELECT AVG(Age) FROM Students);
+
+-- Select courses that have no enrollments
+SELECT CourseName
+FROM Courses
+WHERE CourseID NOT IN (SELECT DISTINCT CourseID FROM Enrollments);
+
+-- Using a subquery in SELECT clause (correlated subquery)
+SELECT
+    FirstName,
+    LastName,
+    (SELECT COUNT(*) FROM Enrollments WHERE Enrollments.StudentID = Students.StudentID) AS NumberOfCourses
+FROM Students;</code></pre>
+
+        <h2 id="views">Views</h2>
+        <p>A view is a virtual table based on the result-set of an SQL query. It does not store data itself but rather a query that is executed when the view is accessed.</p>
+        <pre><code>-- Create a view of active students
+CREATE VIEW ActiveStudents AS
+SELECT StudentID, FirstName, LastName, Email
+FROM Students
+WHERE Age > 18;
+
+-- Query the view
+SELECT * FROM ActiveStudents;
+
+-- Drop a view
+DROP VIEW ActiveStudents;</code></pre>
+
+        <h2 id="indexes">Indexes</h2>
+        <p>Indexes are special lookup tables that the database search engine can use to speed up data retrieval. They are like an index in a book.</p>
+        <pre><code>-- Create an index on a column
+CREATE INDEX idx_lastname
+ON Students (LastName);
+
+-- Create a unique index (ensures no duplicate values in the indexed column(s))
+CREATE UNIQUE INDEX idx_email
+ON Students (Email);
+
+-- Drop an index
+DROP INDEX idx_lastname ON Students; -- Syntax varies (e.g., DROP INDEX Students.idx_lastname in SQL Server)</code></pre>
+
+        <h2 id="transactions">Transactions</h2>
+        <p>A transaction is a sequence of operations performed as a single logical unit of work. Transactions ensure data integrity and reliability, typically adhering to ACID properties (Atomicity, Consistency, Isolation, Durability).</p>
+        <pre><code>-- Start a transaction
+START TRANSACTION; -- or BEGIN TRANSACTION / BEGIN;
+
+-- Perform operations
+UPDATE Accounts SET Balance = Balance - 100 WHERE AccountID = 1;
+UPDATE Accounts SET Balance = Balance + 100 WHERE AccountID = 2;
+
+-- Commit the transaction if all operations are successful
+COMMIT;
+
+-- Rollback if any operation fails or an error occurs
+-- ROLLBACK;</code></pre>
+
+        <h2 id="advanced-topics">Advanced Topics</h2>
+
+        <h3>1. Common Table Expressions (CTEs)</h3>
+        <p>CTEs provide a way to define a temporary named result set that you can reference within a single SQL statement. They improve readability and modularity of complex queries.</p>
+        <pre><code>WITH StudentCourseCount AS (
+    SELECT
+        StudentID,
+        COUNT(CourseID) AS NumCoursesEnrolled
+    FROM Enrollments
+    GROUP BY StudentID
+)
+SELECT S.FirstName, S.LastName, SCC.NumCoursesEnrolled
+FROM Students AS S
+JOIN StudentCourseCount AS SCC ON S.StudentID = SCC.StudentID
+WHERE SCC.NumCoursesEnrolled > 1;</code></pre>
+
+        <h3>2. Window Functions</h3>
+        <p>Perform calculations across a set of table rows that are related to the current row. Unlike aggregate functions, window functions do not collapse rows into a single output row.</p>
+        <pre><code>-- RANK: Assign a rank within each partition
+SELECT
+    StudentID,
+    CourseID,
+    EnrollmentDate,
+    RANK() OVER (PARTITION BY StudentID ORDER BY EnrollmentDate) AS EnrollmentRank
+FROM Enrollments;
+
+-- ROW_NUMBER: Assign a sequential integer to each row within its partition
+SELECT
+    FirstName,
+    LastName,
+    Age,
+    ROW_NUMBER() OVER (ORDER BY Age DESC) AS RankByAge
+FROM Students;</code></pre>
+
+        <h3>3. Stored Procedures</h3>
+        <p>A stored procedure is a prepared SQL code that you can save, so the code can be reused over and over again. It can accept parameters and return values.</p>
+        <pre><code>-- Example (syntax varies greatly by DB system - this is a simplified example)
+DELIMITER //
+
+CREATE PROCEDURE GetStudentsByAge (IN minAge INT, IN maxAge INT)
+BEGIN
+    SELECT FirstName, LastName, Age
+    FROM Students
+    WHERE Age BETWEEN minAge AND maxAge;
+END //
+
+DELIMITER ;
+
+-- Call the stored procedure
+CALL GetStudentsByAge(20, 25);</code></pre>
+
+        <h3>4. Triggers</h3>
+        <p>A trigger is a special type of stored procedure that automatically runs when an event occurs in the database (e.g., INSERT, UPDATE, DELETE).</p>
+        <pre><code>-- Example (syntax varies greatly by DB system)
+-- This trigger logs changes to the Students table
+DELIMITER //
+
+CREATE TRIGGER AfterUpdateStudentAge
+AFTER UPDATE ON Students
+FOR EACH ROW
+BEGIN
+    IF OLD.Age &lt;&gt; NEW.Age THEN
+        INSERT INTO AuditLog (TableName, Operation, OldValue, NewValue, ChangeDate)
+        VALUES ('Students', 'UPDATE_AGE', OLD.Age, NEW.Age, NOW());
+    END IF;
+END //
+
+DELIMITER ;</code></pre>
+
+        <h2 id="best-practices">Best Practices</h2>
+
+        <div class="tip">
+            <h3>1. Use Meaningful Naming Conventions</h3>
+            <p>Use clear, consistent names for tables, columns, views, and procedures (e.g., PascalCase for tables, camelCase or snake_case for columns).</p>
+            <pre><code>-- Good
+CREATE TABLE CustomerOrders (
+    OrderID INT PRIMARY KEY,
+    CustomerID INT,
+    OrderDate DATE
+);
+
+-- Bad
+CREATE TABLE co (
+    id INT,
+    cid INT,
+    dt DATE
+);</code></pre>
+        </div>
+
+        <div class="tip">
+            <h3>2. Always Use a WHERE Clause with UPDATE/DELETE</h3>
+            <p>Unless you explicitly intend to modify or delete all rows, always use a <code>WHERE</code> clause to target specific records.</p>
+            <pre><code>-- Always confirm your WHERE clause before executing
+DELETE FROM Products WHERE ProductID = 123;
+UPDATE Users SET Status = 'Inactive' WHERE LastLogin < '2024-01-01';</code></pre>
+        </div>
+
+        <div class="tip">
+            <h3>3. Normalize Your Database</h3>
+            <p>Organize tables and columns to minimize data redundancy and improve data integrity. This typically involves following database normalization forms (1NF, 2NF, 3NF, BCNF).</p>
+            <p>Example: Instead of storing customer address repeatedly in an orders table, create a separate 'Addresses' table and link it with a foreign key.</p>
+        </div>
+
+        <div class="tip">
+            <h3>4. Use Aliases for Tables in Joins</h3>
+            <p>Makes queries more readable, especially when joining multiple tables or tables with long names.</p>
+            <pre><code>SELECT S.FirstName, C.CourseName
+FROM Students AS S
+JOIN Enrollments AS E ON S.StudentID = E.StudentID
+JOIN Courses AS C ON E.CourseID = C.CourseID;</code></pre>
+        </div>
+
+        <div class="tip">
+            <h3>5. Avoid SELECT * in Production Code</h3>
+            <p>Explicitly list the columns you need. This improves performance (retrieves less data), makes queries more robust to schema changes, and enhances readability.</p>
+            <pre><code>-- Good
+SELECT ProductID, ProductName, Price FROM Products;
+
+-- Bad
+SELECT * FROM Products;</code></pre>
+        </div>
+
+        <div class="tip">
+            <h3>6. Comment Your SQL Code</h3>
+            <p>Especially for complex queries, stored procedures, or schema definitions, comments explain the purpose and logic.</p>
+            <pre><code>-- This query retrieves the top 10 most expensive products
+SELECT ProductName, Price
+FROM Products
+ORDER BY Price DESC
+LIMIT 10;</code></pre>
+        </div>
+
+        <div class="tip">
+            <h3>7. Use Transactions for Data Integrity</h3>
+            <p>When performing multiple related DML operations that must succeed or fail together, wrap them in a transaction.</p>
+        </div>
+        
+        <div class="tip">
+            <strong>Note:</strong> SQL is a vast language with many different implementations (dialects) like MySQL, PostgreSQL, SQL Server, Oracle, SQLite, etc. While the core concepts and commands are largely the same, specific syntax and advanced features can vary. Always consult the documentation for your specific database system.
+        </div>
+    </div>
+</body>
+</html>
