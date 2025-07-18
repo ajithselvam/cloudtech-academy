@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Nano Editor Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Nano Editor Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-nano">1. What is Nano?</a></li>
+                <li><a href="#installing-nano">2. Installing Nano</a></li>
+                <li><a href="#opening-and-creating-files">3. Opening and Creating Files</a></li>
+                <li><a href="#basic-navigation">4. Basic Navigation</a></li>
+                <li><a href="#editing-text">5. Editing Text</a></li>
+                <li><a href="#saving-and-exiting">6. Saving and Exiting</a></li>
+                <li><a href="#searching-and-replacing">7. Searching and Replacing</a></li>
+                <li><a href="#cut-copy-paste">8. Cut, Copy, and Paste</a></li>
+                <li><a href="#undo-redo">9. Undo and Redo</a></li>
+                <li><a href="#common-keyboard-shortcuts">10. Common Keyboard Shortcuts</a></li>
+                <li><a href="#nano-features-and-options">11. Nano Features and Options</a></li>
+                <li><a href="#nano-configuration-file">12. Nano Configuration File (.nanorc)</a></li>
+                <li><a href="#tips-for-efficient-use">13. Tips for Efficient Use</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-nano">1. What is Nano?</h2>
+        <p><strong>Nano</strong> is a user-friendly text editor for Unix-like operating systems, primarily used in the command-line interface (CLI). It's designed to be simple and intuitive, making it a popular choice for beginners and those who need to quickly edit configuration files or short scripts directly in the terminal.</p>
+        <p>Unlike modal editors like Vim, Nano operates in a single, direct editing mode, similar to Notepad on Windows or TextEdit on macOS. Its most distinguishing feature is the always-visible list of common keyboard shortcuts at the bottom of the screen.</p>
+        <h3>Why Use Nano?</h3>
+        <ul>
+            <li><strong>Ease of Use:</strong> Minimal learning curve, ideal for new Linux users.</li>
+            <li><strong>Intuitive Interface:</strong> On-screen help for basic commands.</li>
+            <li><strong>Lightweight:</strong> Small footprint, runs well on minimal systems.</li>
+            <li><strong>Ubiquitous:</strong> Often pre-installed on many Linux distributions (like Ubuntu, Debian, Kali).</li>
+        </ul>
+
+        <h2 id="installing-nano">2. Installing Nano</h2>
+        <p>Nano is typically pre-installed on most Linux distributions. If it's not, you can easily install it using your distribution's package manager:</p>
+        <ul>
+            <li><strong>Linux (Debian/Ubuntu-based, including Kali Linux):</strong>
+                <pre><code class="language-bash">sudo apt update
+sudo apt install nano</code></pre>
+            </li>
+            <li><strong>Linux (Fedora/CentOS-based):</strong>
+                <pre><code class="language-bash">sudo dnf install nano</code></pre>
+            </li>
+            <li><strong>macOS:</strong> Can be installed via Homebrew.
+                <pre><code class="language-bash">brew install nano</code></pre>
+            </li>
+            <li><strong>Windows:</strong> Nano is primarily a Linux/Unix tool. On Windows, you would typically use it within <a href="https://learn.microsoft.com/en-us/windows/wsl/" target="_blank">WSL (Windows Subsystem for Linux)</a>, where you can install it as shown above.</li>
+        </ul>
+
+        <h2 id="opening-and-creating-files">3. Opening and Creating Files</h2>
+        <p>To open an existing file or create a new one, simply type `nano` followed by the filename in your terminal.</p>
+        <pre><code class="language-bash">nano my_document.txt</code></pre>
+        <ul>
+            <li>If `my_document.txt` exists, Nano will open it for editing.</li>
+            <li>If `my_document.txt` does not exist, Nano will open a new, blank buffer with that name. The file will be created when you save it.</li>
+        </ul>
+        <p>You can also open multiple files in separate buffers (tabs in graphical editors), though Nano's interface won't show them side-by-side like Vim splits. You'll switch between them.</p>
+        <pre><code class="language-bash">nano file1.txt file2.txt file3.txt</code></pre>
+        <p>To switch to the next buffer when multiple files are open, press <kbd>Alt</kbd> + <kbd>&gt;</kbd> (or <kbd>Alt</kbd> + <kbd>N</kbd>). For the previous buffer, use <kbd>Alt</kbd> + <kbd>&lt;</kbd> (or <kbd>Alt</kbd> + <kbd>P</kbd>).</p>
+
+        <h2 id="basic-navigation">4. Basic Navigation</h2>
+        <p>Unlike Vim, you can use your **arrow keys** to move the cursor around in Nano. However, knowing the keyboard shortcuts can be faster for many users.</p>
+        <p>Nano's commands are shown at the bottom of the screen. `^` represents the <kbd>Ctrl</kbd> key, and `M-` represents the <kbd>Alt</kbd> key (or <kbd>Esc</kbd> followed by the key on some terminals).</p>
+        <ul>
+            <li><kbd>Arrow Keys</kbd>: Move cursor one character/line at a time.</li>
+            <li><kbd>Ctrl</kbd> + <kbd>f</kbd> (Forward): Move cursor forward one character (same as Right Arrow).</li>
+            <li><kbd>Ctrl</kbd> + <kbd>b</kbd> (Backward): Move cursor backward one character (same as Left Arrow).</li>
+            <li><kbd>Ctrl</kbd> + <kbd>n</kbd> (Next): Move cursor to next line (same as Down Arrow).</li>
+            <li><kbd>Ctrl</kbd> + <kbd>p</kbd> (Previous): Move cursor to previous line (same as Up Arrow).</li>
+            <li><kbd>Ctrl</kbd> + <kbd>a</kbd> (Ahead): Move cursor to the beginning of the current line.</li>
+            <li><kbd>Ctrl</kbd> + <kbd>e</kbd> (End): Move cursor to the end of the current line.</li>
+            <li><kbd>Ctrl</kbd> + <kbd>v</kbd> (Page Down): Move forward one page.</li>
+            <li><kbd>Ctrl</kbd> + <kbd>y</kbd> (Page Up): Move backward one page.</li>
+            <li><kbd>Alt</kbd> + <kbd>/</kbd> or <kbd>Ctrl</kbd> + <kbd>_</kbd> (Go To Line): Prompt for a specific line number to jump to.</li>
+            <li><kbd>Alt</kbd> + <kbd>g</kbd> (Go To Line): Same as <kbd>Alt</kbd> + <kbd>/</kbd>.</li>
+            <li><kbd>Alt</kbd> + <kbd>j</kbd> (Justify): Justify the entire paragraph.</li>
+        </ul>
+
+        <h2 id="editing-text">5. Editing Text</h2>
+        <p>Once you've opened a file in Nano, you can simply start typing. It works like a basic word processor.</p>
+        <ul>
+            <li><strong>Typing:</strong> Just type your text.</li>
+            <li><strong>Backspace / Delete:</strong> Use these keys to delete characters.</li>
+            <li><strong>Inserting Lines:</strong> Press <kbd>Enter</kbd> to insert a new line.</li>
+            <li><strong>Deleting Characters:</strong> Use <kbd>Backspace</kbd> or <kbd>Delete</kbd> key.</li>
+            <li><strong>Deleting a Line:</strong> Press <kbd>Ctrl</kbd> + <kbd>k</kbd> (Cut Text) to cut the current line. If you don't paste it, it's effectively deleted.</li>
+        </ul>
+
+        <h2 id="saving-and-exiting">6. Saving and Exiting</h2>
+        <p>These are common operations, always visible at the bottom of the Nano interface.</p>
+        <ul>
+            <li><kbd>Ctrl</kbd> + <kbd>o</kbd> (Write Out): Save the current file.
+                <ul>
+                    <li>Nano will prompt you for the filename at the bottom. Press <kbd>Enter</kbd> to confirm the current filename or type a new one.</li>
+                </ul>
+            </li>
+            <li><kbd>Ctrl</kbd> + <kbd>x</kbd> (Exit): Exit Nano.
+                <ul>
+                    <li>If you have unsaved changes, Nano will ask if you want to save (`Y` for Yes, `N` for No, <kbd>Ctrl</kbd> + <kbd>c</kbd> to Cancel).</li>
+                </ul>
+            </li>
+            <li><strong>Combined:</strong> You can typically press <kbd>Ctrl</kbd> + <kbd>x</kbd>, then `Y` (if prompted to save) and <kbd>Enter</kbd> to save and exit quickly.</li>
+        </ul>
+        <pre><code class="language-bash"># Open/create a file
+nano example.txt
+
+# Type some text...
+This is a test document.
+It contains some text.
+
+# Press Ctrl+O to save. Confirm filename by pressing Enter.
+# Press Ctrl+X to exit. If unsaved changes, press Y and Enter.</code></pre>
+
+        <h2 id="searching-and-replacing">7. Searching and Replacing</h2>
+        <p>Nano offers straightforward search and replace functionality.</p>
+        <ul>
+            <li><kbd>Ctrl</kbd> + <kbd>w</kbd> (Where Is): Search for text.
+                <ul>
+                    <li>Type the text you want to search for at the prompt at the bottom.</li>
+                    <li>Press <kbd>Enter</kbd>. Nano will jump to the first occurrence.</li>
+                    <li>To find the next occurrence, press <kbd>Alt</kbd> + <kbd>w</kbd>.</li>
+                </ul>
+            </li>
+            <li><kbd>Ctrl</kbd> + <kbd>\</kbd> (Replace): Search and replace text.
+                <ul>
+                    <li>Nano will prompt for "Search (to replace)". Enter the text to find and press <kbd>Enter</kbd>.</li>
+                    <li>Then, it will prompt for "Replace with". Enter the replacement text and press <kbd>Enter</kbd>.</li>
+                    <li>You'll be given options: `Y` (Yes) to replace the current match, `N` (No) to skip, `A` (All) to replace all matches without asking, <kbd>Ctrl</kbd> + <kbd>c</kbd> to cancel.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-bash"># Inside nano...
+# Sample text:
+# This is line one.
+# This is line two.
+# This is line three.
+
+# Press Ctrl+W, type "line", Enter. Cursor jumps to "line" in "line one".
+# Press Alt+W. Cursor jumps to "line" in "line two".
+
+# Press Ctrl+\, type "line", Enter.
+# Type "row", Enter.
+# Press 'Y' to replace "line one" with "row one".
+# Press 'A' to replace "line two" and "line three" with "row two" and "row three" without further prompts.
+# Result:
+# This is row one.
+# This is row two.
+# This is row three.</code></pre>
+
+        <h2 id="cut-copy-paste">8. Cut, Copy, and Paste</h2>
+        <p>Nano uses "Cut" for both cutting and copying, and "Uncut" for pasting.</p>
+        <ul>
+            <li><strong>Select Text (Mark Set):</strong>
+                <ul>
+                    <li>Move cursor to the start of the text you want to select.</li>
+                    <li>Press <kbd>Ctrl</kbd> + <kbd>^</kbd> (or <kbd>Ctrl</kbd> + <kbd>6</kbd>) to set a mark.</li>
+                    <li>Move cursor to the end of the text you want to select (using arrow keys or other navigation). The text will be highlighted.</li>
+                </ul>
+            </li>
+            <li><strong>Cut Selected Text:</strong>
+                <ul>
+                    <li>With text selected, press <kbd>Ctrl</kbd> + <kbd>k</kbd>. The selected text is cut and placed in Nano's buffer.</li>
+                </ul>
+            </li>
+            <li><strong>Copy Selected Text:</strong>
+                <ul>
+                    <li>With text selected, press <kbd>Alt</kbd> + <kbd>6</kbd> (Copy Text). The selected text is copied to Nano's buffer.</li>
+                </ul>
+            </li>
+            <li><strong>Cut Entire Line:</strong>
+                <ul>
+                    <li>Place cursor anywhere on the line. Press <kbd>Ctrl</kbd> + <kbd>k</kbd>. The entire line is cut.</li>
+                    <li>You can press <kbd>Ctrl</kbd> + <kbd>k</kbd> multiple times to cut multiple consecutive lines.</li>
+                </ul>
+            </li>
+            <li><strong>Paste (Uncut) Text:</strong>
+                <ul>
+                    <li>Move cursor to where you want to paste.</li>
+                    <li>Press <kbd>Ctrl</kbd> + <kbd>u</kbd> (Uncut Text). The text from Nano's buffer is pasted.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-bash"># Inside nano...
+# Current text:
+# Line 1
+# Line 2
+# Line 3
+
+# To copy "Line 2":
+# 1. Move cursor to the beginning of "Line 2".
+# 2. Press Ctrl+^ (or Ctrl+6) to set mark.
+# 3. Move cursor to the end of "Line 2". (Text will be highlighted)
+# 4. Press Alt+6 to copy the selection.
+# 5. Move cursor to a new line.
+# 6. Press Ctrl+U to paste.
+# Result after pasting:
+# Line 1
+# Line 2
+# Line 3
+# Line 2
+
+# To cut "Line 1":
+# 1. Move cursor anywhere on "Line 1".
+# 2. Press Ctrl+K. (Line 1 disappears)
+# 3. Move cursor to the bottom.
+# 4. Press Ctrl+U to paste.
+# Result after pasting:
+# Line 2
+# Line 3
+# Line 1</code></pre>
+
+        <h2 id="undo-redo">9. Undo and Redo</h2>
+        <p>Nano has basic undo and redo functionality.</p>
+        <ul>
+            <li><kbd>Alt</kbd> + <kbd>u</kbd> (Undo): Undo the last change.</li>
+            <li><kbd>Alt</kbd> + <kbd>e</kbd> (Redo): Redo the last undone change.</li>
+        </ul>
+
+        <h2 id="common-keyboard-shortcuts">10. Common Keyboard Shortcuts (Visible at bottom)</h2>
+        <p>Nano's most helpful feature is the constant display of common commands at the bottom of the screen. Here's a breakdown of what they mean:</p>
+        <ul>
+            <li>`^G` Get Help (<kbd>Ctrl</kbd> + <kbd>g</kbd>)</li>
+            <li>`^X` Exit (<kbd>Ctrl</kbd> + <kbd>x</kbd>)</li>
+            <li>`^O` Write Out (<kbd>Ctrl</kbd> + <kbd>o</kbd>) - Save</li>
+            <li>`^R` Read File (<kbd>Ctrl</kbd> + <kbd>r</kbd>) - Insert another file into the current buffer</li>
+            <li>`^W` Where Is (<kbd>Ctrl</kbd> + <kbd>w</kbd>) - Search</li>
+            <li>`^K` Cut Text (<kbd>Ctrl</kbd> + <kbd>k</kbd>) - Cut current line or selected text</li>
+            <li>`^U` Uncut Text (<kbd>Ctrl</kbd> + <kbd>u</kbd>) - Paste</li>
+            <li>`^T` To Spell (<kbd>Ctrl</kbd> + <kbd>t</kbd>) - Spell check (if enabled)</li>
+            <li>`^C` Cur Pos (<kbd>Ctrl</kbd> + <kbd>c</kbd>) - Display current cursor position (line/column)</li>
+            <li>`^J` Justify (<kbd>Ctrl</kbd> + <kbd>j</kbd>) - Justify paragraph (wrap text)</li>
+            <li>`^D` Delete (<kbd>Ctrl</kbd> + <kbd>d</kbd>) - Delete character under cursor (similar to Delete key)</li>
+            <li>`^Y` Prev Pg (<kbd>Ctrl</kbd> + <kbd>y</kbd>) - Page Up</li>
+            <li>`^V` Next Pg (<kbd>Ctrl</kbd> + <kbd>v</kbd>) - Page Down</li>
+            <li>`^B` Back (<kbd>Ctrl</kbd> + <kbd>b</kbd>) - Left Arrow</li>
+            <li>`^F` Forward (<kbd>Ctrl</kbd> + <kbd>f</kbd>) - Right Arrow</li>
+            <li>`^P` Prev Line (<kbd>Ctrl</kbd> + <kbd>p</kbd>) - Up Arrow</li>
+            <li>`^N` Next Line (<kbd>Ctrl</kbd> + <kbd>n</kbd>) - Down Arrow</li>
+            <li>`^A` To Head (<kbd>Ctrl</kbd> + <kbd>a</kbd>) - Go to beginning of line</li>
+            <li>`^E` To End (<kbd>Ctrl</kbd> + <kbd>e</kbd>) - Go to end of line</li>
+            <li>`^\` Replace (<kbd>Ctrl</kbd> + <kbd>\</kbd>) - Search and Replace</li>
+            <li>`M-W` Next (<kbd>Alt</kbd> + <kbd>w</kbd>) - Find next match</li>
+            <li>`M-^` Copy (<kbd>Alt</kbd> + <kbd>6</kbd>) - Copy selected text</li>
+            <li>`M-U` Undo (<kbd>Alt</kbd> + <kbd>u</kbd>)</li>
+            <li>`M-E` Redo (<kbd>Alt</kbd> + <kbd>e</kbd>)</li>
+            <li>`M-S` Softwrap (<kbd>Alt</kbd> + <kbd>s</kbd>) - Toggle soft wrapping (lines break visually, not by newlines)</li>
+            <li>`M-G` Go To Line (<kbd>Alt</kbd> + <kbd>g</kbd>) - Prompt for line/column number</li>
+            <li>`M-M` Mouse Support (<kbd>Alt</kbd> + <kbd>m</kbd>) - Toggle mouse support (allows clicking to move cursor)</li>
+        </ul>
+
+        <h2 id="nano-features-and-options">11. Nano Features and Options</h2>
+        <p>Nano can be launched with various command-line options to alter its behavior.</p>
+        <ul>
+            <li><strong>`--help`:</strong> Display Nano's help message.
+                <pre><code class="language-bash">nano --help</code></pre>
+            </li>
+            <li><strong>`-c` or `--const`:</strong> Constantly display the cursor position.
+                <pre><code class="language-bash">nano -c my_file.txt</code></pre>
+            </li>
+            <li><strong>`-l` or `--linenumbers`:</strong> Display line numbers on the left margin.
+                <pre><code class="language-bash">nano -l my_file.txt</code></pre>
+            </li>
+            <li><strong>`-m` or `--mouse`:</strong> Enable mouse support (allows clicking to move the cursor).
+                <pre><code class="language-bash">nano -m my_file.txt</code></pre>
+            </li>
+            <li><strong>`-w` or `--nowrap`:</strong> Disable softwrapping of long lines.
+                <pre><code class="language-bash">nano -w my_file.txt</code></pre>
+            </li>
+            <li><strong>`-B` or `--backup`:</strong> When saving, make a backup of the previous version of the file.</li>
+            <li><strong>`-i` or `--autoindent`:</strong> Automatically indent new lines to the same level as the previous line.</li>
+            <li><strong>`-S` or `--softwrap`:</strong> Enable softwrapping of long lines (default behavior).</li>
+            <li><strong>`-v` or `--view`:</strong> Open the file in view-only (read-only) mode.
+                <pre><code class="language-bash">nano -v /etc/fstab</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="nano-configuration-file">12. Nano Configuration File (.nanorc)</h2>
+        <p>You can customize Nano's default behavior by creating or editing the `.nanorc` file in your home directory (`~/.nanorc`).</p>
+        <pre><code class="language-bash">nano ~/.nanorc</code></pre>
+        <p><strong>Common `.nanorc` settings:</strong></p>
+        <pre><code class="language-bash"># Enable line numbers by default
+set linenumbers
+
+# Enable mouse support by default
+set mouse
+
+# Enable auto-indentation
+set autoindent
+
+# Set default tab size to 4 spaces instead of 8
+set tabsize 4
+set tabstospaces # Convert typed tabs to spaces
+
+# Enable softwrapping (default)
+set softwrap
+
+# Enable syntax highlighting for specific file types
+# include "/usr/share/nano/*.nanorc" # Uncomment or add specific includes
+# For example, to enable Python syntax highlighting:
+# include "/usr/share/nano/python.nanorc"
+
+# Set a custom status bar format
+# set statusformat "File: %f | Line: %l/%L | Col: %c"</code></pre>
+        <p>After editing and saving `.nanorc`, restart Nano for changes to take effect.</p>
+
+        <h2 id="tips-for-efficient-use">13. Tips for Efficient Use</h2>
+        <ul>
+            <li><strong>Memorize Basic Shortcuts:</strong> Focus on `Ctrl+O` (Save), `Ctrl+X` (Exit), `Ctrl+W` (Search), `Ctrl+K` (Cut), `Ctrl+U` (Paste).</li>
+            <li><strong>Use `Ctrl` for actions, `Alt` for settings/features:</strong> This is a general pattern in Nano.</li>
+            <li><strong>Practice in a Dummy File:</strong> Create a temporary file to experiment with commands without worrying about damaging important data.
+                <pre><code class="language-bash">nano playground.txt</code></pre>
+            </li>
+            <li><strong>Leverage the On-Screen Help:</strong> The bottom bar is your friend. It constantly reminds you of the most relevant commands.</li>
+            <li><strong>Use Search and Replace:</strong> For editing multiple occurrences of text, `Ctrl+\` is a huge time-saver.</li>
+            <li><strong>Customize with `.nanorc`:</strong> Set your preferred options so Nano behaves exactly how you want it to every time you open it.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Nano: The Friendly Terminal Editor!</strong>
+            <p>Nano stands out for its simplicity and immediate usability, making it an excellent choice for anyone starting with Linux command-line text editing or needing a quick, no-fuss editor. While it lacks the advanced power of Vim, its straightforward interface and on-screen help ensure you're never lost. It's the perfect tool for quick edits, configuration file adjustments, and general text manipulation in a terminal environment.</p>
+        </div>
+    </div>
+</body>
+</html>
