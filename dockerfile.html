@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Dockerfile Tutorial</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+        pre {
+            background-color: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+        }
+        .toc {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 30px;
+        }
+        .toc ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .toc li {
+            margin: 8px 0;
+        }
+        .toc a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .toc a:hover {
+            text-decoration: underline;
+        }
+        .highlight {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .tip {
+            background-color: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .warning {
+            background-color: #f8d7da;
+            padding: 15px;
+            border-left: 4px solid #dc3545;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        @media print {
+            body { background-color: white; }
+            .container { box-shadow: none; }
+            pre { background-color: #f4f4f4; color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Dockerfile Tutorial</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-a-dockerfile">1. What is a Dockerfile?</a></li>
+                <li><a href="#basic-structure">2. Basic Structure</a></li>
+                <li><a href="#essential-instructions">3. Essential Instructions</a></li>
+                <li><a href="#best-practices">4. Best Practices</a></li>
+                <li><a href="#advanced-techniques">5. Advanced Techniques</a></li>
+                <li><a href="#multi-stage-builds">6. Multi-Stage Builds</a></li>
+                <li><a href="#security-considerations">7. Security Considerations</a></li>
+                <li><a href="#real-world-examples">8. Real-World Examples</a></li>
+                <li><a href="#troubleshooting">9. Troubleshooting</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-a-dockerfile">What is a Dockerfile?</h2>
+        <p>A Dockerfile is a text file containing instructions to build a Docker image. It's like a recipe that tells Docker how to create your application's container environment step by step.</p>
+
+        <h2 id="basic-structure">Basic Structure</h2>
+        <p>Every Dockerfile follows this general pattern:</p>
+        <pre><code># Comments start with #
+FROM base_image
+LABEL maintainer="your-email@example.com"
+WORKDIR /app
+COPY . .
+RUN command_to_run
+EXPOSE port_number
+CMD ["executable", "param1", "param2"]</code></pre>
+
+        <h2 id="essential-instructions">Essential Instructions</h2>
+
+        <h3>FROM</h3>
+        <p>Specifies the base image for your Docker image.</p>
+        <pre><code># Use official Python runtime as base image
+FROM python:3.9-slim
+
+# Use specific version for reproducibility
+FROM node:16.14.0-alpine
+
+# Use multi-architecture image
+FROM --platform=linux/amd64 ubuntu:20.04</code></pre>
+
+        <h3>WORKDIR</h3>
+        <p>Sets the working directory inside the container.</p>
+        <pre><code># Set working directory
+WORKDIR /app
+
+# All subsequent commands will run from /app
+COPY package.json .
+RUN npm install</code></pre>
+
+        <h3>COPY vs ADD</h3>
+        <p>Both copy files from host to container, but ADD has extra features.</p>
+        <pre><code># COPY - preferred for simple file copying
+COPY src/ /app/src/
+COPY package*.json ./
+
+# ADD - can extract archives and download URLs
+ADD https://example.com/file.tar.gz /tmp/
+ADD archive.tar.gz /extracted/</code></pre>
+
+        <h3>RUN</h3>
+        <p>Executes commands during image build.</p>
+        <pre><code># Install packages
+RUN apt-get update && apt-get install -y \
+    curl \
+    vim \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Run multiple commands
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Use shell form
+RUN echo "Hello World" > /tmp/hello.txt
+
+# Use exec form (preferred)
+RUN ["python", "-c", "print('Hello from Python')"]</code></pre>
+
+        <h3>EXPOSE</h3>
+        <p>Informs Docker that the container listens on specified ports.</p>
+        <pre><code># Single port
+EXPOSE 8080
+
+# Multiple ports
+EXPOSE 8080 8443
+
+# UDP port
+EXPOSE 53/udp</code></pre>
+
+        <h3>ENV</h3>
+        <p>Sets environment variables.</p>
+        <pre><code># Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV DATABASE_URL=postgres://localhost/mydb
+
+# Multiple variables
+ENV NODE_ENV=production \
+    PORT=3000 \
+    DEBUG=false</code></pre>
+
+        <h3>ARG</h3>
+        <p>Defines build-time variables.</p>
+        <pre><code># Define build argument
+ARG VERSION=latest
+ARG BUILD_DATE
+
+# Use argument
+FROM node:${VERSION}
+LABEL build-date=${BUILD_DATE}
+
+# Build with: docker build --build-arg VERSION=16 --build-arg BUILD_DATE=$(date) .</code></pre>
+
+        <h3>CMD vs ENTRYPOINT</h3>
+        <p>Both specify what command to run when container starts.</p>
+        <pre><code># CMD - can be overridden by docker run arguments
+CMD ["python", "app.py"]
+CMD python app.py
+
+# ENTRYPOINT - always executes, docker run args become parameters
+ENTRYPOINT ["python", "app.py"]
+
+# Combine both
+ENTRYPOINT ["python", "app.py"]
+CMD ["--help"]</code></pre>
+
+        <h3>VOLUME</h3>
+        <p>Creates mount points for external volumes.</p>
+        <pre><code># Create volume mount points
+VOLUME ["/data"]
+VOLUME ["/var/log", "/var/db"]
+
+# Single volume
+VOLUME /app/uploads</code></pre>
+
+        <h3>USER</h3>
+        <p>Sets the user for subsequent instructions.</p>
+        <pre><code># Create user and switch to it
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+USER appuser
+
+# Use numeric IDs for better security
+USER 1000:1000</code></pre>
+
+        <h3>HEALTHCHECK</h3>
+        <p>Defines how to test if container is healthy.</p>
+        <pre><code># HTTP health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Custom health check
+HEALTHCHECK --interval=30s --timeout=10s --retries=3 \
+    CMD python health_check.py || exit 1
+
+# Disable health check
+HEALTHCHECK NONE</code></pre>
+
+        <h2 id="best-practices">Best Practices</h2>
+
+        <h3>1. Use Multi-Stage Builds</h3>
+        <p>Reduce final image size by using multiple FROM statements.</p>
+        <pre><code># Build stage
+FROM node:16 AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+
+# Production stage
+FROM node:16-alpine
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY . .
+EXPOSE 3000
+CMD ["node", "server.js"]</code></pre>
+
+        <h3>2. Optimize Layer Caching</h3>
+        <p>Order instructions from least to most frequently changing.</p>
+        <pre><code># Good - dependencies change less frequently
+FROM python:3.9-slim
+WORKDIR /app
+
+# Copy requirements first
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy source code last
+COPY . .
+CMD ["python", "app.py"]</code></pre>
+
+        <h3>3. Minimize Image Size</h3>
+        <p>Use alpine images, remove unnecessary packages, and clean up.</p>
+        <pre><code>FROM python:3.9-alpine
+
+# Install packages and clean up in same layer
+RUN apk add --no-cache \
+    gcc \
+    musl-dev \
+    && pip install --no-cache-dir -r requirements.txt \
+    && apk del gcc musl-dev
+
+# Use .dockerignore to exclude unnecessary files</code></pre>
+
+        <h3>4. Use Specific Tags</h3>
+        <p>Avoid <code>latest</code> tag for reproducible builds.</p>
+        <pre><code># Bad
+FROM python:latest
+
+# Good
+FROM python:3.9.7-slim-buster</code></pre>
+
+        <h3>5. Run as Non-Root User</h3>
+        <p>Improve security by creating and using a non-root user.</p>
+        <pre><code>FROM python:3.9-slim
+
+# Create user
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Set up app directory
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copy app and change ownership
+COPY . .
+RUN chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
+
+CMD ["python", "app.py"]</code></pre>
+
+        <h2 id="advanced-techniques">Advanced Techniques</h2>
+
+        <h3>1. Build Arguments for Flexibility</h3>
+        <pre><code>ARG PYTHON_VERSION=3.9
+ARG ENVIRONMENT=production
+
+FROM python:${PYTHON_VERSION}-slim
+
+ENV APP_ENV=${ENVIRONMENT}
+
+RUN if [ "$ENVIRONMENT" = "development" ]; then \
+        pip install pytest flake8; \
+    fi</code></pre>
+
+        <h3>2. Conditional Logic</h3>
+        <pre><code>ARG INSTALL_DEV=false
+
+RUN if [ "$INSTALL_DEV" = "true" ]; then \
+        apt-get update && apt-get install -y \
+        vim \
+        curl \
+        git; \
+    fi</code></pre>
+
+        <h3>3. Using Build Context Efficiently</h3>
+        <pre><code># Use .dockerignore to exclude files
+# .dockerignore content:
+# node_modules
+# .git
+# *.md
+# .env*
+
+FROM node:16-alpine
+WORKDIR /app
+
+# Copy only necessary files
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY src/ ./src/
+COPY public/ ./public/</code></pre>
+
+        <h2 id="multi-stage-builds">Multi-Stage Builds</h2>
+
+        <h3>Example: Go Application</h3>
+        <pre><code># Build stage
+FROM golang:1.19-alpine AS builder
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+
+# Production stage
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /app/main .
+CMD ["./main"]</code></pre>
+
+        <h3>Example: React Application</h3>
+        <pre><code># Build stage
+FROM node:16-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# Production stage
+FROM nginx:alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/nginx.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]</code></pre>
+
+        <h2 id="security-considerations">Security Considerations</h2>
+
+        <h3>1. Use Minimal Base Images</h3>
+        <pre><code># Use distroless or alpine images
+FROM gcr.io/distroless/python3
+FROM alpine:3.15</code></pre>
+
+        <h3>2. Scan for Vulnerabilities</h3>
+        <pre><code># Add labels for better tracking
+LABEL org.opencontainers.image.source="https://github.com/user/repo"
+LABEL org.opencontainers.image.created="2023-01-01T00:00:00Z"
+LABEL org.opencontainers.image.revision="abc123"</code></pre>
+
+        <h3>3. Manage Secrets Properly</h3>
+        <pre><code># Use build secrets (BuildKit)
+# docker build --secret id=mypassword,src=./password.txt .
+
+FROM alpine
+RUN --mount=type=secret,id=mypassword \
+    PASSWORD=$(cat /run/secrets/mypassword) && \
+    echo "Password loaded securely"</code></pre>
+
+        <h2 id="real-world-examples">Real-World Examples</h2>
+
+        <h3>Python Flask Application</h3>
+        <pre><code>FROM python:3.9-slim
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Create and set work directory
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Create non-root user
+RUN adduser --disabled-password --gecos '' appuser
+
+# Copy application code
+COPY . .
+
+# Change ownership and switch to non-root user
+RUN chown -R appuser:appuser /app
+USER appuser
+
+# Expose port
+EXPOSE 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:5000/health || exit 1
+
+# Run application
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]</code></pre>
+
+        <h3>Node.js Application</h3>
+        <pre><code>FROM node:16-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Add a non-root user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production && npm cache clean --force
+
+# Copy source code
+COPY . .
+
+# Change ownership
+RUN chown -R nextjs:nodejs /app
+USER nextjs
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/api/health || exit 1
+
+# Start application
+CMD ["npm", "start"]</code></pre>
+
+        <h3>Database with Initialization</h3>
+        <pre><code>FROM postgres:13-alpine
+
+# Environment variables
+ENV POSTGRES_DB=myapp
+ENV POSTGRES_USER=appuser
+ENV POSTGRES_PASSWORD=secretpassword
+
+# Copy initialization scripts
+COPY init-scripts/ /docker-entrypoint-initdb.d/
+
+# Copy custom configuration
+COPY postgresql.conf /usr/local/share/postgresql/postgresql.conf.sample
+
+# Expose port
+EXPOSE 5432
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB} || exit 1
+
+# Volume for data persistence
+VOLUME ["/var/lib/postgresql/data"]</code></pre>
+
+        <h2 id="troubleshooting">Troubleshooting</h2>
+
+        <h3>Common Issues and Solutions</h3>
+
+        <h4>1. Layer Caching Problems</h4>
+        <pre><code># Problem: Dependencies reinstall every time
+COPY . .
+RUN pip install -r requirements.txt
+
+# Solution: Copy requirements first
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .</code></pre>
+
+        <h4>2. Large Image Size</h4>
+        <pre><code># Problem: Multiple RUN commands create layers
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt-get clean
+
+# Solution: Chain commands
+RUN apt-get update && \
+    apt-get install -y curl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*</code></pre>
+
+        <h4>3. Permission Issues</h4>
+        <pre><code># Problem: Files owned by root
+COPY . .
+USER appuser
+
+# Solution: Change ownership
+COPY . .
+RUN chown -R appuser:appuser /app
+USER appuser</code></pre>
+
+        <h4>4. Build Context Too Large</h4>
+        <pre><code># Use .dockerignore file:
+.git
+node_modules
+*.log
+.env*
+README.md</code></pre>
+
+        <h3>Debugging Tips</h3>
+        <ol>
+            <li><strong>Use docker build --no-cache</strong> to rebuild without cache</li>
+            <li><strong>Add temporary RUN commands</strong> to debug:
+                <pre><code>RUN ls -la /app
+RUN whoami
+RUN env</code></pre>
+            </li>
+            <li><strong>Use multi-stage builds</strong> to separate build and runtime environments</li>
+            <li><strong>Check logs</strong> with <code>docker logs container_name</code></li>
+            <li><strong>Interactive debugging</strong>:
+                <pre><code>docker run -it --entrypoint /bin/sh image_name</code></pre>
+            </li>
+        </ol>
+
+        <h2>Build and Run Commands</h2>
+
+        <h3>Building Images</h3>
+        <pre><code># Basic build
+docker build -t my-app .
+
+# Build with arguments
+docker build --build-arg VERSION=1.0 -t my-app .
+
+# Build with specific Dockerfile
+docker build -f Dockerfile.dev -t my-app-dev .
+
+# Build with build context from URL
+docker build -t my-app https://github.com/user/repo.git</code></pre>
+
+        <h3>Running Containers</h3>
+        <pre><code># Basic run
+docker run -p 8080:8080 my-app
+
+# Run with environment variables
+docker run -e NODE_ENV=production -p 8080:8080 my-app
+
+# Run with volumes
+docker run -v /host/path:/container/path my-app
+
+# Run in detached mode
+docker run -d --name my-container my-app</code></pre>
+
+        <div class="tip">
+            <strong>Note:</strong> This tutorial covers the essential aspects of Dockerfile creation, from basic concepts to advanced techniques. Remember to always test your Dockerfiles thoroughly and follow security best practices for production deployments.
+        </div>
+    </div>
+</body>
+</html>
