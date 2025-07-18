@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Frontend Web Development Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Frontend Web Development Tutorial</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction-to-frontend">1. Introduction to Frontend Web Development</a></li>
+                <li><a href="#html-the-structure">2. HTML: The Structure of the Web</a></li>
+                <li><a href="#css-the-style">3. CSS: Styling the Web</a></li>
+                <li><a href="#javascript-the-interactivity">4. JavaScript: Adding Interactivity</a></li>
+                <li><a href="#integrating-files">5. Integrating HTML, CSS, and JavaScript Files</a></li>
+                <li><a href="#responsive-web-design">6. Responsive Web Design</a></li>
+                <li><a href="#developer-tools">7. Browser Developer Tools</a></li>
+                <li><a href="#version-control">8. Version Control (Git & GitHub)</a></li>
+                <li><a href="#modern-frontend-ecosystem">9. Modern Frontend Ecosystem (Beyond the Basics)</a></li>
+                <li><a href="#best-practices">10. Best Practices for Frontend Development</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction-to-frontend">1. Introduction to Frontend Web Development</h2>
+        <p>Frontend web development involves creating the parts of a website that users see and interact with. It's about building the "client-side" of a web application, ensuring a great user experience, visual appeal, and responsiveness. The core technologies are HTML, CSS, and JavaScript.</p>
+        <ul>
+            <li><strong>HTML (HyperText Markup Language):</strong> Provides the structure and content of a web page.</li>
+            <li><strong>CSS (Cascading Style Sheets):</strong> Controls the visual presentation, layout, and styling of HTML elements.</li>
+            <li><strong>JavaScript (JS):</strong> Adds interactivity, dynamic behavior, and complex functionalities to web pages.</li>
+        </ul>
+
+        <h2 id="html-the-structure">2. HTML: The Structure of the Web</h2>
+        <p>HTML uses "tags" to mark up different parts of content, telling the browser how to display them.</p>
+        <h3>Basic HTML Document Structure:</h3>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt; &lt;!-- Document type declaration --&gt;
+&lt;html lang="en"&gt; &lt;!-- Root element, specifies language --&gt;
+&lt;head&gt; &lt;!-- Contains meta-information about the HTML document --&gt;
+    &lt;meta charset="UTF-8"&gt; &lt;!-- Character encoding --&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt; &lt;!-- Responsive design --&gt;
+    &lt;title&gt;My First Web Page&lt;/title&gt; &lt;!-- Title displayed in browser tab --&gt;
+    &lt;!-- CSS and JavaScript links usually go here (more on this later) --&gt;
+&lt;/head&gt;
+&lt;body&gt; &lt;!-- Contains the visible page content --&gt;
+    &lt;!-- Your content goes here --&gt;
+    &lt;h1&gt;Welcome to My Website&lt;/h1&gt;
+    &lt;p&gt;This is a paragraph of text.&lt;/p&gt;
+    &lt;a href="https://www.example.com"&gt;Visit Example&lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+        <h3>Common HTML Tags:</h3>
+        <ul>
+            <li><strong>Headings:</strong> <code>&lt;h1&gt;</code> to <code>&lt;h6&gt;</code> (<code>&lt;h1&gt;</code> being the most important).</li>
+            <li><strong>Paragraphs:</strong> <code>&lt;p&gt;</code> for blocks of text.</li>
+            <li><strong>Links (Anchors):</strong> <code>&lt;a href="url"&gt;Link Text&lt;/a&gt;</code> to create hyperlinks.</li>
+            <li><strong>Images:</strong> <code>&lt;img src="image.jpg" alt="Description"&gt;</code> to embed images.</li>
+            <li><strong>Lists:</strong>
+                <ul>
+                    <li>Unordered List: <code>&lt;ul&gt;&lt;li&gt;Item 1&lt;/li&gt;&lt;/ul&gt;</code></li>
+                    <li>Ordered List: <code>&lt;ol&gt;&lt;li&gt;Item 1&lt;/li&gt;&lt;/ol&gt;</code></li>
+                </ul>
+            </li>
+            <li><strong>Divisions/Sections:</strong> <code>&lt;div&gt;</code> for generic block-level containers, <code>&lt;span&gt;</code> for inline containers. Semantic tags like <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code> provide more meaning.</li>
+            <li><strong>Forms:</strong> <code>&lt;form&gt;</code>, <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code>, <code>&lt;button&gt;</code> for user input.</li>
+            <li><strong>Semantic Tags:</strong> <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;aside&gt;</code>, <code>&lt;footer&gt;</code> improve structure and SEO.</li>
+        </ul>
+
+        <h2 id="css-the-style">3. CSS: Styling the Web</h2>
+        <p>CSS is used to control the presentation of HTML documents. It dictates colors, fonts, layout, and how elements appear on different screens.</p>
+        <h3>CSS Syntax:</h3>
+        <pre><code class="language-css">selector {
+    property: value;
+    property: value;
+}</code></pre>
+        <p>Example:</p>
+        <pre><code class="language-css">p {
+    color: blue;
+    font-size: 16px;
+}
+
+#header { /* Styles for an element with id="header" */
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.button { /* Styles for elements with class="button" */
+    background-color: green;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+}</code></pre>
+
+        <h3>Ways to Apply CSS:</h3>
+        <ul>
+            <li><strong>Inline CSS:</strong> Applied directly within an HTML tag using the <code>style</code> attribute. (Generally discouraged for larger projects).</li>
+            <pre><code class="language-html">&lt;p style="color: red; font-weight: bold;"&gt;This text is red and bold.&lt;/p&gt;</code></pre>
+            <li><strong>Internal CSS:</strong> Placed within <code>&lt;style&gt;</code> tags in the <code>&lt;head&gt;</code> section of the HTML document. Good for single-page styles.</li>
+            <pre><code class="language-html">&lt;head&gt;
+    &lt;style&gt;
+        h1 {
+            color: purple;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;</code></pre>
+            <li><strong>External CSS:</strong> The most common and recommended method. Styles are written in a separate <code>.css</code> file and linked to the HTML document. (See "Integrating Files" below).</li>
+        </ul>
+
+        <h3>Common CSS Properties:</h3>
+        <ul>
+            <li><strong>Color & Text:</strong> <code>color</code>, <code>font-family</code>, <code>font-size</code>, <code>font-weight</code>, <code>text-align</code>, <code>line-height</code>.</li>
+            <li><strong>Box Model:</strong> <code>width</code>, <code>height</code>, <code>padding</code>, <code>margin</code>, <code>border</code>.</li>
+            <li><strong>Layout:</strong> <code>display</code> (block, inline, inline-block, flex, grid), <code>position</code> (static, relative, absolute, fixed, sticky), <code>float</code>.</li>
+            <li><strong>Backgrounds:</strong> <code>background-color</code>, <code>background-image</code>, <code>background-repeat</code>, <code>background-size</code>.</li>
+            <li><strong>Flexbox:</strong> A one-dimensional layout method for arranging items in rows or columns (<code>display: flex</code>, <code>justify-content</code>, <code>align-items</code>).</li>
+            <li><strong>CSS Grid:</strong> A two-dimensional layout system for arranging items in rows and columns (<code>display: grid</code>, <code>grid-template-columns</code>, <code>grid-template-rows</code>).</li>
+        </ul>
+
+        <h2 id="javascript-the-interactivity">4. JavaScript: Adding Interactivity</h2>
+        <p>JavaScript is a programming language that enables dynamic and interactive web pages. It can manipulate HTML and CSS, handle events, make network requests, and much more.</p>
+        <h3>Basic JavaScript Concepts:</h3>
+        <ul>
+            <li><strong>Variables:</strong> <code>let</code>, <code>const</code>, <code>var</code> to store data.</li>
+            <li><strong>Data Types:</strong> Numbers, strings, booleans, arrays, objects, null, undefined.</li>
+            <li><strong>Operators:</strong> Arithmetic (+, -, *, /), comparison (==, ===, <, >), logical (&&, ||, !).</li>
+            <li><strong>Control Flow:</strong> <code>if/else</code> statements, <code>for</code> loops, <code>while</code> loops.</li>
+            <li><strong>Functions:</strong> Reusable blocks of code.</li>
+            <pre><code class="language-javascript">function greet(name) {
+    return "Hello, " + name + "!";
+}
+console.log(greet("World")); // Output: Hello, World!</code></pre>
+            <li><strong>DOM Manipulation:</strong> JavaScript interacts with the Document Object Model (DOM), which is a programming interface for web documents. It represents the page structure as a tree of objects.</li>
+            <pre><code class="language-javascript">// Get an element by its ID
+const myElement = document.getElementById('myId');
+
+// Change its text content
+myElement.textContent = 'New text!';
+
+// Add a CSS class
+myElement.classList.add('active');
+
+// Add an event listener
+myElement.addEventListener('click', function() {
+    alert('Element clicked!');
+});</code></pre>
+        </ul>
+
+        <h3>Ways to Apply JavaScript:</h3>
+        <ul>
+            <li><strong>Inline JavaScript:</strong> Directly in HTML attributes (discouraged).</li>
+            <pre><code class="language-html">&lt;button onclick="alert('Button clicked!')"&gt;Click Me&lt;/button&gt;</code></pre>
+            <li><strong>Internal JavaScript:</strong> Within <code>&lt;script&gt;</code> tags in the HTML document. Can be placed in <code>&lt;head&gt;</code> or, more commonly, at the end of <code>&lt;body&gt;</code>.</li>
+            <pre><code class="language-html">&lt;body&gt;
+    &lt;h1 id="greeting"&gt;Hello There!&lt;/h1&gt;
+    &lt;script&gt;
+        document.getElementById('greeting').textContent = 'Hello from JavaScript!';
+    &lt;/script&gt;
+&lt;/body&gt;</code></pre>
+            <li><strong>External JavaScript:</strong> The most common and recommended method. Code is written in a separate <code>.js</code> file and linked to the HTML document. (See "Integrating Files" below).</li>
+        </ul>
+
+        <h2 id="integrating-files">5. Integrating HTML, CSS, and JavaScript Files</h2>
+        <p>Keeping HTML, CSS, and JavaScript in separate files promotes modularity, reusability, and easier maintenance. This is the standard practice in web development.</p>
+
+        <h3>File Structure Example:</h3>
+        <pre><code>/my-website/
+├── index.html
+├── css/
+│   └── style.css
+└── js/
+    └── script.js</code></pre>
+
+        <h3>Integrating CSS with HTML (External CSS):</h3>
+        <p>To link an external CSS file, use the <code>&lt;link&gt;</code> tag in the <code>&lt;head&gt;</code> section of your HTML file.</p>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Styled Page&lt;/title&gt;
+    &lt;!-- Link to your external CSS file --&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt; 
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;This heading will be styled by CSS.&lt;/h1&gt;
+    &lt;p&gt;This paragraph too.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <p>And in <code>css/style.css</code>:</p>
+        <pre><code class="language-css">body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+p {
+    color: #555;
+    line-height: 1.6;
+}</code></pre>
+
+        <h3>Integrating JavaScript with HTML (External JavaScript):</h3>
+        <p>To link an external JavaScript file, use the <code>&lt;script&gt;</code> tag with the <code>src</code> attribute. It's generally recommended to place JavaScript links just before the closing <code>&lt;/body&gt;</code> tag to ensure HTML content loads first, preventing issues if JS tries to manipulate elements that aren't yet loaded.</p>
+        <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;My Interactive Page&lt;/title&gt;
+    &lt;link rel="stylesheet" href="css/style.css"&gt; 
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 id="pageTitle"&gt;Hello World!&lt;/h1&gt;
+    &lt;button id="changeTextBtn"&gt;Change Title&lt;/button&gt;
+    
+    &lt;!-- Link to your external JavaScript file --&gt;
+    &lt;script src="js/script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <p>And in <code>js/script.js</code>:</p>
+        <pre><code class="language-javascript">document.addEventListener('DOMContentLoaded', function() {
+    const titleElement = document.getElementById('pageTitle');
+    const buttonElement = document.getElementById('changeTextBtn');
+
+    if (buttonElement) {
+        buttonElement.addEventListener('click', function() {
+            if (titleElement) {
+                titleElement.textContent = 'Title Changed by JavaScript!';
+                titleElement.style.color = 'blue'; // You can even change CSS with JS!
+            }
+        });
+    }
+});</code></pre>
+        <div class="tip">
+            <strong><code>defer</code> and <code>async</code> attributes for <code>&lt;script&gt;</code>:</strong>
+            <ul>
+                <li><code>&lt;script src="script.js" defer&gt;&lt;/script&gt;</code>: Downloads script in parallel with HTML parsing and executes it after parsing is complete. Recommended for scripts that interact with the DOM.</li>
+                <li><code>&lt;script src="script.js" async&gt;&lt;/script&gt;</code>: Downloads script in parallel with HTML parsing and executes it as soon as it's downloaded, potentially before HTML parsing is complete. Good for independent scripts (e.g., analytics).</li>
+            </ul>
+        </div>
+
+        <h2 id="responsive-web-design">6. Responsive Web Design</h2>
+        <p>Responsive web design ensures that your website looks good and functions well across all devices (desktops, tablets, mobile phones).</p>
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>Meta Viewport Tag:</strong> Crucial for responsive design. Placed in <code>&lt;head&gt;</code>.
+                <pre><code class="language-html">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</code></pre>
+            </li>
+            <li><strong>Fluid Layouts:</strong> Use percentages or viewport units (<code>vw</code>, <code>vh</code>, <code>vmin</code>, <code>vmax</code>) for widths and heights instead of fixed pixels.</li>
+            <li><strong>Flexible Images:</strong> Make images responsive.
+                <pre><code class="language-css">img {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Removes extra space below image */
+}</code></pre>
+            </li>
+            <li><strong>Media Queries:</strong> CSS rules that apply styles only when certain conditions are met (e.g., screen size).</li>
+            <pre><code class="language-css">/* Styles for screens smaller than 600px wide */
+@media (max-width: 600px) {
+    body {
+        font-size: 14px;
+    }
+    .container {
+        padding: 10px;
+    }
+    nav ul {
+        flex-direction: column; /* Stack navigation items vertically on small screens */
+    }
+}
+
+/* Styles for screens larger than 1024px wide */
+@media (min-width: 1024px) {
+    body {
+        font-size: 18px;
+    }
+}</code></pre>
+            <li><strong>Flexbox and CSS Grid:</strong> Modern CSS layout modules designed with responsiveness in mind.</li>
+        </ul>
+
+        <h2 id="developer-tools">7. Browser Developer Tools</h2>
+        <p>Modern web browsers come with powerful built-in developer tools that are essential for frontend development and debugging.</p>
+        <p>To open: Right-click on a web page and select "Inspect" or press <code>F12</code> (Windows/Linux) / <code>Cmd + Opt + I</code> (macOS).</p>
+        <ul>
+            <li><strong>Elements Tab:</strong> Inspect and modify HTML and CSS in real-time. See how styles are applied and debug layout issues.</li>
+            <li><strong>Console Tab:</strong> View JavaScript errors, log messages (<code>console.log()</code>), and execute JavaScript code directly.</li>
+            <li><strong>Sources Tab:</strong> Debug JavaScript code by setting breakpoints and stepping through execution.</li>
+            <li><strong>Network Tab:</strong> Monitor network requests, check response times, status codes, and analyze asset loading.</li>
+            <li><strong>Application Tab:</strong> Inspect local storage, session storage, cookies, and service workers.</li>
+            <li><strong>Performance Tab:</strong> Analyze page load and runtime performance.</li>
+            <li><strong>Lighthouse / Audits Tab:</strong> Run automated audits for performance, accessibility, SEO, and best practices.</li>
+            <li><strong>Responsive Design Mode:</strong> Simulate different device sizes and orientations to test responsiveness.</li>
+        </ul>
+
+        <h2 id="version-control">8. Version Control (Git & GitHub)</h2>
+        <p>Version control systems track changes to your code over time. Git is the most popular distributed version control system, and GitHub is a web-based hosting service for Git repositories.</p>
+        <h3>Basic Git Workflow:</h3>
+        <pre><code class="language-bash"># Initialize a new Git repository
+git init
+
+# Add files to the staging area
+git add index.html style.css script.js
+
+# Commit changes
+git commit -m "Initial commit: Added basic page structure"
+
+# Check status
+git status
+
+# Create a new branch
+git branch feature/new-nav
+
+# Switch to the new branch
+git checkout feature/new-nav
+
+# Make changes, then add and commit
+git add .
+git commit -m "Added responsive navigation"
+
+# Switch back to main (or master)
+git checkout main
+
+# Merge the feature branch
+git merge feature/new-nav
+
+# Push changes to a remote repository (e.g., GitHub)
+git remote add origin https://github.com/your-username/your-repo.git
+git push -u origin main</code></pre>
+
+        <h2 id="modern-frontend-ecosystem">9. Modern Frontend Ecosystem (Beyond the Basics)</h2>
+        <p>Once you've mastered HTML, CSS, and JavaScript, you can explore the vast modern frontend ecosystem.</p>
+        <ul>
+            <li><strong>CSS Frameworks:</strong>
+                <ul>
+                    <li><strong>Bootstrap:</strong> Popular framework for building responsive, mobile-first websites quickly.</li>
+                    <li><strong>Tailwind CSS:</strong> A utility-first CSS framework for rapidly building custom designs.</li>
+                </ul>
+            </li>
+            <li><strong>JavaScript Libraries/Frameworks:</strong>
+                <ul>
+                    <li><strong>React:</strong> A declarative, component-based JavaScript library for building user interfaces (developed by Facebook/Meta).</li>
+                    <li><strong>Angular:</strong> A comprehensive, opinionated framework for building complex single-page applications (developed by Google).</li>
+                    <li><strong>Vue.js:</strong> A progressive framework, approachable for beginners, yet powerful for large applications.</li>
+                </ul>
+            </li>
+            <li><strong>Package Managers:</strong>
+                <ul>
+                    <li><strong>npm (Node Package Manager):</strong> Used to install and manage JavaScript packages/libraries.</li>
+                    <li><strong>Yarn:</strong> An alternative package manager from Facebook, often faster than npm.</li>
+                </ul>
+            </li>
+            <li><strong>Module Bundlers:</strong>
+                <ul>
+                    <li><strong>Webpack:</strong> A static module bundler for modern JavaScript applications.</li>
+                    <li><strong>Vite:</strong> A faster, next-generation frontend tooling that provides an instant dev server.</li>
+                </ul>
+            </li>
+            <li><strong>Preprocessors (CSS):</strong>
+                <ul>
+                    <li><strong>Sass/Less:</strong> Extend CSS with features like variables, nesting, and mixins, then compile to standard CSS.</li>
+                </ul>
+            </li>
+            <li><strong>Static Site Generators:</strong>
+                <ul>
+                    <li><strong>Next.js (React), Nuxt.js (Vue), Astro, Hugo, Jekyll:</strong> Tools to build websites that are served as static HTML, CSS, and JS files, offering performance and security benefits.</li>
+                </ul>
+            </li>
+            <li><strong>Testing Libraries:</strong>
+                <ul>
+                    <li><strong>Jest (JS):</strong> A delightful JavaScript Testing Framework with a focus on simplicity.</li>
+                    <li><strong>React Testing Library / Enzyme:</strong> For testing React components.</li>
+                    <li><strong>Cypress / Playwright / Selenium:</strong> For end-to-end (E2E) browser automation testing.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="best-practices">10. Best Practices for Frontend Development</h2>
+        <ul>
+            <li><strong>Semantic HTML:</strong> Use HTML tags that accurately describe the content they contain (e.g., <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;article&gt;</code>) for better accessibility and SEO.</li>
+            <li><strong>Maintainable CSS:</strong>
+                <ul>
+                    <li>Use a consistent naming convention (e.g., BEM, SMACSS).</li>
+                    <li>Organize CSS into logical files/modules.</li>
+                    <li>Avoid inline styles and <code>!important</code> unless absolutely necessary.</li>
+                    <li>Comment your CSS.</li>
+                </ul>
+            </li>
+            <li><strong>Clean JavaScript:</strong>
+                <ul>
+                    <li>Write modular and reusable functions.</li>
+                    <li>Avoid global variables.</li>
+                    <li>Handle errors gracefully.</li>
+                    <li>Use meaningful variable and function names.</li>
+                </ul>
+            </li>
+            <li><strong>Responsive Design First:</strong> Start designing and developing for smaller screens (mobile-first approach) and progressively enhance for larger ones.</li>
+            <li><strong>Accessibility (A11y):</strong> Design and develop with accessibility in mind, ensuring your website is usable by people with disabilities (e.g., proper alt text for images, keyboard navigation, ARIA attributes).</li>
+            <li><strong>Performance Optimization:</strong>
+                <ul>
+                    <li>Optimize images (compress, use appropriate formats like WebP).</li>
+                    <li>Minify CSS and JavaScript files.</li>
+                    <li>Lazy load images and other heavy assets.</li>
+                    <li>Reduce HTTP requests.</li>
+                </ul>
+            </li>
+            <li><strong>Cross-Browser Compatibility:</strong> Test your website across different browsers and devices to ensure consistent behavior.</li>
+            <li><strong>Security:</strong> Be aware of common frontend vulnerabilities (e.g., XSS, CSRF) and implement measures to prevent them.</li>
+            <li><strong>Learn Browser Developer Tools:</strong> Master your browser's dev tools for debugging and inspecting.</li>
+            <li><strong>Keep Learning:</strong> The frontend landscape changes rapidly. Stay updated with new technologies and best practices.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Your Frontend Journey Starts Here!</strong>
+            <p>Frontend web development is a creative and constantly evolving field. By mastering HTML, CSS, and JavaScript, and understanding how to effectively integrate them, you lay a solid foundation. From there, you can explore specialized frameworks and tools to build increasingly complex and dynamic web applications.</p>
+        </div>
+    </div>
+</body>
+</html>
