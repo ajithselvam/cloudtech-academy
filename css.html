@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete CSS Tutorial</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        /* CSS Example Output Styles (for demonstration) */
+        .example-css-output {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 15px;
+            background-color: #f8faff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-family: Arial, sans-serif;
+        }
+
+        .example-selector-id #example-id-element {
+            color: darkred;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .example-selector-class .example-class-element {
+            background-color: lightyellow;
+            border: 1px solid goldenrod;
+            padding: 5px;
+        }
+        .example-selector-tag h4 {
+            text-decoration: underline;
+        }
+        .example-selector-group p, .example-selector-group span {
+            font-style: italic;
+        }
+        .example-selector-descendant .parent span {
+            color: purple;
+            font-weight: bold;
+        }
+        .example-selector-child > div {
+            border: 1px dashed blue;
+            margin-bottom: 5px;
+        }
+        .example-selector-adjacent + p {
+            background-color: #e0ffe0;
+        }
+        .example-selector-general ~ p {
+            font-size: 0.9em;
+            color: #666;
+        }
+        .example-selector-pseudo-class a:hover {
+            color: orange;
+            text-decoration: none;
+        }
+        .example-selector-pseudo-element::first-line {
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* Box Model examples */
+        .box-model-example .box {
+            background-color: #cceeff;
+            border: 2px solid #6699cc;
+            padding: 20px; /* Internal space */
+            margin: 30px; /* External space */
+            width: 150px;
+            height: 80px;
+            text-align: center;
+            line-height: 80px; /* Vertically centers text in this case */
+            color: #333;
+            box-sizing: border-box; /* Crucial for consistent sizing */
+        }
+
+        /* Display Property Examples */
+        .display-example .block-element {
+            background-color: #ffcc99;
+            padding: 10px;
+            margin-bottom: 5px;
+            width: 100px; /* Block takes full width by default, but width can be set */
+        }
+        .display-example .inline-element {
+            background-color: #99ff99;
+            padding: 5px;
+            margin-right: 5px;
+            /* width/height don't apply to inline */
+        }
+        .display-example .inline-block-element {
+            background-color: #ccccff;
+            padding: 10px;
+            margin-right: 10px;
+            width: 80px;
+            height: 40px;
+            display: inline-block;
+        }
+
+        /* Position Examples */
+        .position-relative-example {
+            position: relative;
+            border: 1px dashed gray;
+            padding: 20px;
+            margin-top: 20px;
+            height: 120px;
+        }
+        .position-relative-example .child-relative {
+            position: relative;
+            left: 20px;
+            top: 10px;
+            background-color: lightcoral;
+            padding: 10px;
+            width: fit-content;
+        }
+        .position-absolute-example {
+            position: relative; /* Parent needs to be positioned */
+            border: 1px dashed gray;
+            padding: 20px;
+            margin-top: 20px;
+            height: 150px;
+        }
+        .position-absolute-example .child-absolute {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: lightgreen;
+            padding: 10px;
+            width: fit-content;
+        }
+        .position-fixed-example .fixed-box {
+             position: fixed;
+             bottom: 20px;
+             right: 20px;
+             background-color: #ffbbbb;
+             padding: 15px;
+             border: 1px solid red;
+             z-index: 1000;
+        }
+        .position-sticky-example .sticky-header {
+            position: sticky;
+            top: 0;
+            background-color: #ccffcc;
+            padding: 10px;
+            border-bottom: 1px solid green;
+            z-index: 900;
+        }
+        .sticky-content {
+            height: 300px; /* To enable scrolling */
+            background-color: #f0f8ff;
+            padding: 15px;
+        }
+
+
+        /* Flexbox Examples */
+        .flexbox-container {
+            display: flex;
+            border: 1px solid #667eea;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #e6f7ff;
+        }
+        .flexbox-item {
+            background-color: #a5d6ff;
+            border: 1px solid #4a90e2;
+            padding: 15px;
+            text-align: center;
+            color: #1a202c;
+            flex: 1; /* Makes items grow and shrink */
+        }
+        .flexbox-container.row-wrap {
+            flex-wrap: wrap;
+            height: 150px; /* Demonstrate wrapping */
+        }
+        .flexbox-container.row-wrap .flexbox-item {
+            flex: 0 0 45%; /* Shrink, don't grow, base size 45% */
+            margin: 5px;
+        }
+
+        /* Grid Examples */
+        .grid-container {
+            display: grid;
+            border: 1px solid #764ba2;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #f3e6ff;
+        }
+        .grid-item {
+            background-color: #c399e2;
+            border: 1px solid #9a6bbd;
+            padding: 15px;
+            text-align: center;
+            color: #1a202c;
+        }
+        .grid-example-columns {
+            grid-template-columns: 1fr 2fr 1fr; /* Three columns: 1 part, 2 parts, 1 part */
+            gap: 10px;
+        }
+        .grid-example-rows {
+            grid-template-columns: repeat(2, 1fr); /* 2 columns, equal width */
+            grid-template-rows: auto 80px auto; /* Auto, fixed 80px, Auto */
+            gap: 10px;
+        }
+        .grid-example-span .item-span {
+            grid-column: span 2; /* Spans 2 columns */
+            background-color: #f7a5d6;
+        }
+
+
+        /* Transitions Example */
+        .transition-box {
+            width: 100px;
+            height: 100px;
+            background-color: #ff7b72;
+            transition: background-color 0.5s ease-in-out, transform 0.5s ease-out; /* Smooth transition */
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .transition-box:hover {
+            background-color: #a5d6ff;
+            transform: scale(1.1) rotate(5deg); /* Grow and rotate on hover */
+        }
+
+        /* Animations Example */
+        @keyframes pulse-example {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animation-box {
+            width: 120px;
+            height: 120px;
+            background-color: #79c0ff;
+            border-radius: 50%; /* Circle */
+            animation: pulse-example 2s infinite ease-in-out; /* Apply animation */
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+
+        /* Media Query Examples */
+        .media-query-box {
+            padding: 20px;
+            background-color: lightgrey;
+            text-align: center;
+            border: 1px solid grey;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        /* Default styles for desktop */
+        .media-query-box::after {
+            content: " (Desktop View)";
+            color: green;
+            font-weight: bold;
+        }
+
+        /* Styles for screens smaller than 768px (Tablet/Mobile) */
+        @media (max-width: 768px) {
+            .media-query-box {
+                background-color: lightsalmon;
+                font-size: 0.9em;
+            }
+            .media-query-box::after {
+                content: " (Tablet/Mobile View)";
+                color: darkred;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete CSS Tutorial</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction-to-css">1. Introduction to CSS</a></li>
+                <li><a href="#css-syntax">2. CSS Syntax</a></li>
+                <li><a href="#ways-to-include-css">3. Ways to Include CSS</a></li>
+                <li><a href="#css-selectors">4. CSS Selectors</a></li>
+                <li><a href="#css-box-model">5. CSS Box Model</a></li>
+                <li><a href="#css-display-property">6. CSS Display Property</a></li>
+                <li><a href="#css-positioning">7. CSS Positioning</a></li>
+                <li><a href="#css-flexbox">8. CSS Flexbox</a></li>
+                <li><a href="#css-grid">9. CSS Grid</a></li>
+                <li><a href="#css-typography">10. CSS Typography</a></li>
+                <li><a href="#css-colors-backgrounds">11. CSS Colors & Backgrounds</a></li>
+                <li><a href="#css-transitions">12. CSS Transitions</a></li>
+                <li><a href="#css-animations">13. CSS Animations</a></li>
+                <li><a href="#responsive-css-media-queries">14. Responsive CSS (Media Queries)</a></li>
+                <li><a href="#best-practices">15. Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction-to-css">1. Introduction to CSS</h2>
+        <p>CSS (Cascading Style Sheets) is a stylesheet language used to describe the presentation of a document written in HTML or XML (including XML dialects such as SVG, MathML). CSS describes how elements should be rendered on screen, on paper, in speech, or on other media.</p>
+        <p>It separates the content (HTML) from its visual presentation, making web development more efficient and manageable.</p>
+
+        <h2 id="css-syntax">2. CSS Syntax</h2>
+        <p>A CSS rule-set consists of a selector and a declaration block.</p>
+        <pre><code class="language-css">selector {
+    property: value; /* Declaration 1 */
+    property: value; /* Declaration 2 */
+}</code></pre>
+        <ul>
+            <li><strong>Selector:</strong> Points to the HTML element you want to style (e.g., `p`, `#id`, `.class`).</li>
+            <li><strong>Declaration Block:</strong> Contains one or more declarations separated by semicolons.</li>
+            <li><strong>Declaration:</strong> Includes a CSS property name and a value, separated by a colon (e.g., `color: blue;`).</li>
+        </ul>
+        <pre><code class="language-css">h1 { /* h1 is the selector */
+    color: darkblue; /* color is property, darkblue is value */
+    font-size: 36px; /* font-size is property, 36px is value */
+    text-align: center;
+}
+
+.intro-text { /* .intro-text is the selector (class) */
+    background-color: lightgrey;
+    padding: 15px;
+    border-radius: 8px;
+}</code></pre>
+        <p><strong>Visual Example (Conceptual):</strong> An `h1` tag would appear dark blue, large, and centered. Any element with `class="intro-text"` would have a light grey background with padding and rounded corners.</p>
+
+        <h2 id="ways-to-include-css">3. Ways to Include CSS</h2>
+        <p>There are three main ways to integrate CSS into your HTML document:</p>
+
+        <h3>A. Inline CSS</h3>
+        <p>Applied directly within an HTML tag using the `style` attribute. Useful for single, unique style applications, but generally discouraged for larger projects due to poor maintainability and separation of concerns.</p>
+        <pre><code class="language-html">&lt;h3 style="color: purple; font-style: italic;"&gt;This heading is styled inline.&lt;/h3&gt;
+&lt;p style="background-color: yellow; padding: 5px;"&gt;This paragraph has an inline background.&lt;/p&gt;</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output">
+            <h3 style="color: purple; font-style: italic;">This heading is styled inline.</h3>
+            <p style="background-color: yellow; padding: 5px;">This paragraph has an inline background.</p>
+        </div>
+
+        <h3>B. Internal (Embedded) CSS</h3>
+        <p>Placed within a `&lt;style&gt;` tag in the `&lt;head&gt;` section of the HTML document. Good for single HTML pages or when styles are specific to that page and won't be reused elsewhere.</p>
+        <pre><code class="language-html">&lt;head&gt;
+    &lt;style&gt;
+        .internal-box {
+            border: 2px solid green;
+            padding: 10px;
+            background-color: lightgreen;
+        }
+        .internal-text {
+            text-decoration: underline;
+            color: darkgreen;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="internal-box"&gt;
+        &lt;p class="internal-text"&gt;This content is styled internally.&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/body&gt;</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output">
+            <div style="border: 2px solid green; padding: 10px; background-color: lightgreen;">
+                <p style="text-decoration: underline; color: darkgreen;">This content is styled internally.</p>
+            </div>
+        </div>
+
+        <h3>C. External CSS (Recommended)</h3>
+        <p>The most common and recommended method for styling. Styles are written in a separate `.css` file and linked to the HTML document using the `&lt;link&gt;` tag in the `&lt;head&gt;` section. This promotes reusability, maintainability, and cleaner HTML.</p>
+        <pre><code class="language-html">&lt;head&gt;
+    &lt;link rel="stylesheet" href="styles.css"&gt; &lt;!-- Link to your external CSS file --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2 class="external-styled-heading"&gt;This heading is from an external stylesheet.&lt;/h2&gt;
+    &lt;p&gt;All content will be influenced by 'styles.css'.&lt;/p&gt;
+&lt;/body&gt;</code></pre>
+        <p>And in your `styles.css` file (which would be in the same directory or specified path):</p>
+        <pre><code class="language-css">/* styles.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.external-styled-heading {
+    color: #4a5568;
+    background-color: #edf2f7;
+    padding: 10px;
+    border-left: 5px solid #667eea;
+}</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            <h2 style="color: #4a5568; background-color: #edf2f7; padding: 10px; border-left: 5px solid #667eea; font-size: 1.5em;">This heading is from an external stylesheet.</h2>
+            <p>All content will be influenced by 'styles.css'.</p>
+        </div>
+
+        <h2 id="css-selectors">4. CSS Selectors</h2>
+        <p>Selectors are used to "find" (or select) HTML elements based on their name, id, class, attributes, etc., to apply styles.</p>
+        <ul>
+            <li><strong>Element Selector:</strong> Selects all elements of a given HTML tag name.
+                <pre><code class="language-css">p {
+    text-indent: 20px;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> Every paragraph (`&lt;p&gt;`) on the page will have its first line indented by 20 pixels.</p>
+                <div class="example-css-output example-selector-tag">
+                    <h4>Example H4 (underlined by tag selector)</h4>
+                    <p style="text-indent: 20px;">This is a paragraph. It should be indented.</p>
+                    <p style="text-indent: 20px;">Another paragraph, also indented.</p>
+                </div>
+            </li>
+            <li><strong>ID Selector:</strong> Selects a unique element with a specific `id` attribute. IDs must be unique within an HTML document.
+                <pre><code class="language-css">#my-header {
+    background-color: lightblue;
+    color: darkblue;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> Only the single element with `id="my-header"` will have a light blue background and dark blue text.</p>
+                <div class="example-css-output example-selector-id">
+                    <div id="example-id-element" style="background-color: lightblue; color: darkblue; padding: 10px; border-radius: 5px;">This text is styled by an ID selector.</div>
+                    <p>This paragraph is not affected.</p>
+                </div>
+            </li>
+            <li><strong>Class Selector:</strong> Selects all elements with a specific `class` attribute. Multiple elements can share the same class.
+                <pre><code class="language-css">.highlight {
+    background-color: yellow;
+    font-weight: bold;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> Any element with `class="highlight"` will have a yellow background and bold text.</p>
+                <div class="example-css-output example-selector-class">
+                    <p>This is normal text.</p>
+                    <span class="example-class-element">This text is highlighted by a class.</span>
+                    <div class="example-class-element">This div is also highlighted by the same class.</div>
+                </div>
+            </li>
+            <li><strong>Group Selector:</strong> Selects multiple elements to apply the same style.
+                <pre><code class="language-css">h1, h2, h3 {
+    text-decoration: underline;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> All `h1`, `h2`, and `h3` headings will be underlined.</p>
+                <div class="example-css-output example-selector-group">
+                    <p style="font-style: italic;">This paragraph is italicized.</p>
+                    <span style="font-style: italic;">This span is also italicized.</span>
+                </div>
+            </li>
+            <li><strong>Descendant Selector:</strong> Selects elements that are descendants of another element (anywhere down the hierarchy).
+                <pre><code class="language-css">div p { /* Selects all p elements inside any div */
+    margin-bottom: 5px;
+    color: grey;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> Only paragraphs nested inside a `div` will have a grey color and smaller bottom margin.</p>
+                <div class="example-css-output example-selector-descendant">
+                    <div class="parent">
+                        <p style="color: purple; font-weight: bold;">Paragraph inside a div.</p>
+                        <span>Span inside a div.</span>
+                    </div>
+                    <p>Paragraph outside a div.</p>
+                </div>
+            </li>
+            <li><strong>Child Selector:</strong> Selects elements that are direct children of another element.
+                <pre><code class="language-css">ul &gt; li { /* Selects all li elements that are direct children of a ul */
+    border-left: 3px solid orange;
+    padding-left: 5px;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> Only `&lt;li&gt;` elements immediately inside a `&lt;ul&gt;` will get an orange left border.</p>
+                <div class="example-css-output example-selector-child">
+                    <div style="border: 1px dashed blue; margin-bottom: 5px;">Direct child div.</div>
+                    <div>
+                        <div style="border: 1px dashed blue; margin-bottom: 5px;">Nested direct child div.</div>
+                    </div>
+                </div>
+            </li>
+            <li><strong>Adjacent Sibling Selector:</strong> Selects an element that is immediately preceded by a specified sibling element.
+                <pre><code class="language-css">h2 + p { /* Selects a p element immediately after an h2 */
+    font-size: 1.2em;
+    color: darkgreen;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> A paragraph directly following an `&lt;h2&gt;` will appear larger and dark green.</p>
+                <div class="example-css-output example-selector-adjacent">
+                    <h2>Heading 2</h2>
+                    <p style="background-color: #e0ffe0; padding: 5px; border-radius: 3px;">This paragraph is immediately after h2.</p>
+                    <p>This paragraph is not.</p>
+                </div>
+            </li>
+            <li><strong>General Sibling Selector:</strong> Selects all elements that are siblings of a specified element.
+                <pre><code class="language-css">h2 ~ p { /* Selects all p elements that are siblings of an h2 (after it) */
+    background-color: lightcyan;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> All paragraphs that come after an `&lt;h2&gt;` (at the same level) will have a light cyan background.</p>
+                <div class="example-css-output example-selector-general">
+                    <h2>General Sibling Test</h2>
+                    <p style="font-size: 0.9em; color: #666; background-color: lightcyan; padding: 5px; border-radius: 3px;">This is a sibling paragraph.</p>
+                    <div>Another element.</div>
+                    <p style="font-size: 0.9em; color: #666; background-color: lightcyan; padding: 5px; border-radius: 3px;">This is also a sibling paragraph.</p>
+                </div>
+            </li>
+            <li><strong>Attribute Selector:</strong> Selects elements with a specific attribute or attribute value.
+                <pre><code class="language-css">a[target="_blank"] { /* Selects links that open in a new tab */
+    color: orange;
+}
+input[type="text"] { /* Selects all text input fields */
+    border: 1px solid blue;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> Links opening in a new tab will be orange. Text input fields will have a blue border.</p>
+                <div class="example-css-output">
+                    <a href="#" target="_blank" style="color: orange;">Link opens in new tab</a><br>
+                    <a href="#">Normal link</a><br>
+                    <input type="text" placeholder="Text input" style="border: 1px solid blue;"><br>
+                    <input type="password" placeholder="Password input">
+                </div>
+            </li>
+            <li><strong>Pseudo-classes:</strong> Selects elements based on a specific state.
+                <pre><code class="language-css">a:hover { /* Styles a link when the mouse pointer is over it */
+    color: red;
+    text-decoration: underline;
+}
+input:focus { /* Styles an input field when it's focused */
+    border-color: blue;
+    box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
+}
+p:first-child { /* Styles the first p element among its siblings */
+    font-weight: bold;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> When you hover over a link, its color changes to red and it gets underlined. When you click/tab into an input field, its border changes color and a shadow appears. The very first paragraph among its siblings will be bold.</p>
+                <div class="example-css-output example-selector-pseudo-class">
+                    <a href="#" style="color: initial;">Hover over me</a> (color changes to orange on hover)<br>
+                    <input type="text" placeholder="Focus on me"> (border/shadow changes on focus)
+                </div>
+            </li>
+            <li><strong>Pseudo-elements:</strong> Selects and styles a specific part of an element.
+                <pre><code class="language-css">p::first-line { /* Styles the first line of a paragraph */
+    font-weight: bold;
+    color: darkblue;
+}
+p::before { /* Inserts content before the content of an element */
+    content: "READ THIS: ";
+    color: red;
+    font-weight: bold;
+}</code></pre>
+                <p><strong>Visual Impact:</strong> The first line of a paragraph will be bold and dark blue. "READ THIS: " will appear before every paragraph's content.</p>
+                <div class="example-css-output example-selector-pseudo-element">
+                    <p style="text-transform: uppercase; font-weight: bold;">This is the first line of a paragraph. The rest of the paragraph is normal.</p>
+                </div>
+            </li>
+        </ul>
+
+        <h2 id="css-box-model">5. CSS Box Model</h2>
+        <p>The CSS Box Model describes how HTML elements are rendered as boxes. Every element is a rectangular box, and this box is made up of: content, padding, border, and margin.</p>
+        <ul>
+            <li><strong>Content:</strong> The actual content of the element (text, image, etc.).</li>
+            <li><strong>Padding:</strong> Transparent space between the content and the border.</li>
+            <li><strong>Border:</strong> A line that goes around the padding and content.</li>
+            <li><strong>Margin:</strong> Transparent space around the border, separating the element from other elements.</li>
+        </ul>
+        <pre><code class="language-css">.box {
+    width: 200px;
+    height: 100px;
+    padding: 20px; /* Space inside */
+    border: 5px solid blue; /* Border around padding */
+    margin: 30px; /* Space outside */
+    background-color: lightcyan;
+    box-sizing: border-box; /* Crucial for consistent sizing */
+}</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output box-model-example">
+            <div class="box">Content</div>
+            <p>This text is below the box, affected by its margin.</p>
+        </div>
+        <p><strong>`box-sizing` Property:</strong>
+            <ul>
+                <li>`content-box` (default): `width` and `height` only apply to the content area. Padding and border are added on top, making the element larger than specified `width`/`height`.</li>
+                <li>`border-box`: `width` and `height` include padding and border. This makes layout calculations much more intuitive and predictable. It's widely used in modern CSS.</li>
+            </ul>
+        </p>
+
+        <h2 id="css-display-property">6. CSS Display Property</h2>
+        <p>The `display` property is one of the most important CSS properties for controlling the layout of elements.</p>
+        <ul>
+            <li><strong>`block` (Default for &lt;div&gt;, &lt;p&gt;, &lt;h1&gt;, etc.):</strong>
+                <p>Starts on a new line and takes up the full available width. `width`, `height`, `padding`, `margin` apply.</p>
+                <pre><code class="language-css">.block-element {
+    display: block;
+    background-color: #ffcc99;
+    padding: 10px;
+    margin-bottom: 5px;
+    width: 150px;
+}</code></pre>
+                <p><strong>Visual Example:</strong></p>
+                <div class="example-css-output display-example">
+                    <span class="block-element">Block 1</span>
+                    <span class="block-element">Block 2</span>
+                </div>
+            </li>
+            <li><strong>`inline` (Default for &lt;span&gt;, &lt;a&gt;, &lt;img&gt;, etc.):</strong>
+                <p>Does not start on a new line and only takes up as much width as necessary. `width` and `height` properties do NOT apply, only horizontal `padding` and `margin` apply (vertical padding/margin might not affect layout).</p>
+                <pre><code class="language-css">.inline-element {
+    display: inline;
+    background-color: #99ff99;
+    padding: 5px;
+    margin-right: 5px;
+}</code></pre>
+                <p><strong>Visual Example:</strong></p>
+                <div class="example-css-output display-example">
+                    <div class="inline-element">Inline 1</div> <div class="inline-element">Inline 2</div>
+                </div>
+            </li>
+            <li><strong>`inline-block`:</strong>
+                <p>Behaves like an inline element (doesn't force a new line) but accepts `width` and `height` properties like a block element.</p>
+                <pre><code class="language-css">.inline-block-element {
+    display: inline-block;
+    background-color: #ccccff;
+    padding: 10px;
+    margin-right: 10px;
+    width: 80px;
+    height: 40px;
+}</code></pre>
+                <p><strong>Visual Example:</strong></p>
+                <div class="example-css-output display-example">
+                    <div class="inline-block-element">IB 1</div> <div class="inline-block-element">IB 2</div> <div class="inline-block-element">IB 3</div>
+                </div>
+            </li>
+            <li><strong>`flex` & `grid`:</strong> These are specialized `display` values for advanced 1D and 2D layouts, respectively. Covered in their own sections.</li>
+            <li><strong>`none`:</strong> Hides an element completely from the layout.
+                <pre><code class="language-css">.hidden-element {
+    display: none; /* Element will not be rendered at all */
+}</code></pre>
+                <p><strong>Visual Impact:</strong> The element will disappear from the page, and take up no space. It's as if it was never in the HTML.</p>
+            </li>
+        </ul>
+
+        <h2 id="css-positioning">7. CSS Positioning</h2>
+        <p>The `position` property controls how an element is positioned on the page. It works with `top`, `bottom`, `left`, `right` properties.</p>
+        <ul>
+            <li><strong>`static` (Default):</strong> Elements are positioned according to the normal flow of the document. `top`, `bottom`, `left`, `right` have no effect.</li>
+            <li><strong>`relative`:</strong> Element is positioned relative to its normal position. `top`, `bottom`, `left`, `right` values shift it from that normal position, but it still occupies its original space in the layout.
+                <pre><code class="language-css">.relative-box {
+    position: relative;
+    top: 20px;
+    left: 30px;
+    background-color: lightblue;
+    width: 100px;
+    height: 50px;
+}</code></pre>
+                <p><strong>Visual Example:</strong> The box shifts 20px down and 30px right from where it *would* normally be, but it pushes subsequent content as if it were still in its original spot.</p>
+                <div class="example-css-output position-relative-example">
+                    <div style="background-color: #f0f0f0; padding: 5px;">Parent content</div>
+                    <div class="child-relative">Relative Box (shifted)</div>
+                    <div style="background-color: #f0f0f0; padding: 5px;">More content (original space reserved for box)</div>
+                </div>
+            </li>
+            <li><strong>`absolute`:</strong> Element is positioned relative to its nearest *positioned* (non-static) ancestor. If no such ancestor exists, it's positioned relative to the initial containing block (usually the `&lt;html&gt;` element). The element is removed from the normal document flow, so it doesn't occupy space.
+                <pre><code class="language-css">.parent-relative {
+    position: relative; /* This makes it the positioning context */
+    width: 300px;
+    height: 150px;
+    border: 2px dashed grey;
+    padding: 10px;
+}
+.absolute-box {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: lightgreen;
+    padding: 10px;
+}</code></pre>
+                <p><strong>Visual Example:</strong> The absolute box floats over other content, positioned from the top-right corner of its relative parent.</p>
+                <div class="example-css-output position-absolute-example">
+                    <div style="background-color: #f0f0f0; padding: 5px;">Parent content</div>
+                    <div class="child-absolute">Absolute Box</div>
+                    <div style="background-color: #f0f0f0; padding: 5px;">More content (absolute box doesn't push this)</div>
+                </div>
+            </li>
+            <li><strong>`fixed`:</strong> Element is positioned relative to the viewport, meaning it stays in the same place even if the page is scrolled. It's removed from the normal document flow.
+                <pre><code class="language-css">.fixed-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: red;
+    color: white;
+    padding: 15px;
+    border-radius: 50%; /* Circle */
+}</code></pre>
+                <p><strong>Visual Example:</strong> Imagine a "Back to Top" button that always stays in the bottom-right corner of the screen as you scroll.</p>
+                <div class="example-css-output position-fixed-example" style="height: 200px; overflow: auto; background-color: #f5f5f5;">
+                    <div class="fixed-box">Fixed Box</div>
+                    <p style="height: 100px;">Scroll down to see fixed box.</p>
+                    <p style="height: 100px;">More content here...</p>
+                    <p style="height: 100px;">Even more content here...</p>
+                </div>
+            </li>
+            <li><strong>`sticky`:</strong> Element is positioned based on the user's scroll position. It behaves like `relative` until a certain scroll position is met, at which point it becomes `fixed`.
+                <pre><code class="language-css">.sticky-header {
+    position: sticky;
+    top: 0; /* Sticks to the top of the viewport */
+    background-color: lightgray;
+    padding: 10px;
+    border-bottom: 1px solid gray;
+}</code></pre>
+                <p><strong>Visual Example:</strong> A navigation bar that scrolls with the content until it reaches the top of the viewport, then stays "stuck" there while the rest of the content scrolls underneath.</p>
+                <div class="example-css-output position-sticky-example" style="height: 250px; overflow: auto; background-color: #f0f8ff;">
+                    <p>Scroll down to see the header stick.</p>
+                    <p style="height: 50px;">Content...</p>
+                    <div class="sticky-header">Sticky Header</div>
+                    <div class="sticky-content">
+                        <p>This content will scroll under the sticky header.</p>
+                        <p style="height: 50px;">More content...</p>
+                        <p style="height: 50px;">Even more content...</p>
+                        <p style="height: 50px;">Scroll further...</p>
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+        <h2 id="css-flexbox">8. CSS Flexbox (Flexible Box Layout)</h2>
+        <p>Flexbox is a one-dimensional layout system for arranging items in a single row or column. It's incredibly powerful for distributing space among items and aligning them within a container.</p>
+        <h3>Main Concepts:</h3>
+        <ul>
+            <li><strong>Flex Container:</strong> The parent element with `display: flex;` or `display: inline-flex;`.</li>
+            <li><strong>Flex Items:</strong> The direct children of the flex container.</li>
+            <li><strong>Main Axis:</strong> The primary axis along which flex items are laid out (`flex-direction`).</li>
+            <li><strong>Cross Axis:</strong> The axis perpendicular to the main axis.</li>
+        </ul>
+        <h3>Common Flexbox Properties:</h3>
+        <ul>
+            <li><strong>On the Flex Container:</strong>
+                <ul>
+                    <li>`display: flex;` (or `inline-flex;`)</li>
+                    <li>`flex-direction`: `row` (default), `row-reverse`, `column`, `column-reverse`.</li>
+                    <li>`justify-content`: Aligns items along the main axis (`flex-start`, `flex-end`, `center`, `space-between`, `space-around`, `space-evenly`).</li>
+                    <li>`align-items`: Aligns items along the cross axis (`flex-start`, `flex-end`, `center`, `baseline`, `stretch`).</li>
+                    <li>`flex-wrap`: `nowrap` (default), `wrap`, `wrap-reverse`.</li>
+                    <li>`gap`: Space between flex items (e.g., `gap: 10px;`).</li>
+                </ul>
+            </li>
+            <li><strong>On the Flex Items:</strong>
+                <ul>
+                    <li>`flex-grow`: Ability to grow if necessary (`flex-grow: 1;`).</li>
+                    <li>`flex-shrink`: Ability to shrink if necessary (`flex-shrink: 1;`).</li>
+                    <li>`flex-basis`: Default size before remaining space is distributed (`flex-basis: 100px;`).</li>
+                    <li>`flex`: Shorthand for `flex-grow`, `flex-shrink`, and `flex-basis` (e.g., `flex: 1 1 auto;`).</li>
+                    <li>`align-self`: Overrides the container's `align-items` for a single item.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-html">&lt;div class="flexbox-container"&gt;
+    &lt;div class="flexbox-item"&gt;Item A&lt;/div&gt;
+    &lt;div class="flexbox-item"&gt;Item B&lt;/div&gt;
+    &lt;div class="flexbox-item"&gt;Item C&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        <pre><code class="language-css">.flexbox-container {
+    display: flex; /* Makes it a flex container */
+    justify-content: space-around; /* Distributes items with space around */
+    align-items: center; /* Vertically centers items */
+    gap: 10px;
+}
+.flexbox-item {
+    flex: 1; /* Allows items to grow and shrink equally */
+    background-color: #a5d6ff;
+    padding: 15px;
+    border: 1px solid #4a90e2;
+}</code></pre>
+        <p><strong>Visual Example (Flexbox with `justify-content: space-around;` and `align-items: center;`):</strong></p>
+        <div class="example-css-output">
+            <div class="flexbox-container" style="justify-content: space-around; align-items: center; height: 100px;">
+                <div class="flexbox-item" style="flex: 0 0 auto;">Item A</div>
+                <div class="flexbox-item" style="flex: 0 0 auto;">Item B</div>
+                <div class="flexbox-item" style="flex: 0 0 auto;">Item C</div>
+            </div>
+            <p style="font-size: 0.9em; color: #777; margin-top: 10px;"><em>Items are spaced horizontally and centered vertically.</em></p>
+        </div>
+
+        <p><strong>Visual Example (Flexbox with `flex-wrap: wrap;`):</strong></p>
+        <div class="example-css-output">
+            <div class="flexbox-container row-wrap" style="justify-content: space-between; align-items: flex-start;">
+                <div class="flexbox-item">Item 1</div>
+                <div class="flexbox-item">Item 2</div>
+                <div class="flexbox-item">Item 3</div>
+                <div class="flexbox-item">Item 4</div>
+            </div>
+            <p style="font-size: 0.9em; color: #777; margin-top: 10px;"><em>Items wrap to the next line if container is too narrow.</em></p>
+        </div>
+
+
+        <h2 id="css-grid">9. CSS Grid (Grid Layout)</h2>
+        <p>CSS Grid is a two-dimensional layout system that allows you to arrange elements in rows and columns. It's ideal for defining overall page layouts or complex sections.</p>
+        <h3>Main Concepts:</h3>
+        <ul>
+            <li><strong>Grid Container:</strong> The parent element with `display: grid;` or `display: inline-grid;`.</li>
+            <li><strong>Grid Items:</strong> The direct children of the grid container.</li>
+            <li><strong>Grid Lines:</strong> Horizontal and vertical lines that form the grid structure.</li>
+            <li><strong>Grid Tracks:</strong> The space between two grid lines (rows or columns).</li>
+            <li><strong>Grid Cells:</strong> The smallest unit of the grid, formed by the intersection of a row and column track.</li>
+            <li><strong>Grid Areas:</strong> Named areas of the grid, spanning multiple cells.</li>
+        </ul>
+        <h3>Common Grid Properties:</h3>
+        <ul>
+            <li><strong>On the Grid Container:</strong>
+                <ul>
+                    <li>`display: grid;` (or `inline-grid;`)</li>
+                    <li>`grid-template-columns`: Defines column sizes (`1fr 1fr`, `100px auto 1fr`, `repeat(3, 1fr)`).</li>
+                    <li>`grid-template-rows`: Defines row sizes.</li>
+                    <li>`gap`: Space between grid tracks (`row-gap`, `column-gap`, `gap` shorthand).</li>
+                    <li>`justify-items`: Aligns grid items along the row axis within their cell.</li>
+                    <li>`align-items`: Aligns grid items along the column axis within their cell.</li>
+                    <li>`grid-template-areas`: Defines a grid layout using names.</li>
+                </ul>
+            </li>
+            <li><strong>On the Grid Items:</strong>
+                <ul>
+                    <li>`grid-column`: Specifies column span (`grid-column: 1 / 3;` or `span 2;`).</li>
+                    <li>`grid-row`: Specifies row span.</li>
+                    <li>`grid-area`: Assigns an item to a named grid area.</li>
+                    <li>`justify-self`: Aligns an individual item along the row axis.</li>
+                    <li>`align-self`: Aligns an individual item along the column axis.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-html">&lt;div class="grid-container grid-example-columns"&gt;
+    &lt;div class="grid-item"&gt;Col 1&lt;/div&gt;
+    &lt;div class="grid-item"&gt;Col 2 (Wider)&lt;/div&gt;
+    &lt;div class="grid-item"&gt;Col 3&lt;/div&gt;
+    &lt;div class="grid-item"&gt;Item 4&lt;/div&gt;
+    &lt;div class="grid-item"&gt;Item 5&lt;/div&gt;
+    &lt;div class="grid-item"&gt;Item 6&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+        <pre><code class="language-css">.grid-container {
+    display: grid;
+    gap: 10px;
+    padding: 10px;
+    border: 1px solid #764ba2;
+    background-color: #f3e6ff;
+}
+.grid-example-columns {
+    grid-template-columns: 1fr 2fr 1fr; /* Three columns: 1 part, 2 parts, 1 part */
+}
+.grid-item {
+    background-color: #c399e2;
+    padding: 15px;
+    text-align: center;
+    color: #1a202c;
+}</code></pre>
+        <p><strong>Visual Example (Grid with `grid-template-columns: 1fr 2fr 1fr;`):</strong></p>
+        <div class="example-css-output">
+            <div class="grid-container grid-example-columns">
+                <div class="grid-item">Col 1</div>
+                <div class="grid-item">Col 2 (Wider)</div>
+                <div class="grid-item">Col 3</div>
+                <div class="grid-item">Item 4</div>
+                <div class="grid-item">Item 5</div>
+                <div class="grid-item">Item 6</div>
+            </div>
+            <p style="font-size: 0.9em; color: #777; margin-top: 10px;"><em>Items are arranged in a 3-column grid, with the middle column twice as wide.</em></p>
+        </div>
+
+        <p><strong>Visual Example (Grid with `grid-column: span 2;`):</strong></p>
+        <div class="example-css-output">
+            <div class="grid-container" style="grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="grid-item">Item A</div>
+                <div class="grid-item item-span" style="grid-column: span 2; background-color: #f7a5d6;">Item B (Spans 2 Columns)</div>
+                <div class="grid-item">Item C</div>
+                <div class="grid-item">Item D</div>
+            </div>
+            <p style="font-size: 0.9em; color: #777; margin-top: 10px;"><em>Item B stretches across two columns.</em></p>
+        </div>
+
+
+        <h2 id="css-typography">10. CSS Typography</h2>
+        <p>Styling text is a core part of CSS. Key properties include:</p>
+        <ul>
+            <li>`font-family`: Specifies the font for an element (e.g., `font-family: Arial, sans-serif;`).</li>
+            <li>`font-size`: Sets the size of the text (e.g., `font-size: 16px;`, `1.2em;`, `1rem;`).</li>
+            <li>`font-weight`: Sets the thickness of the characters (e.g., `font-weight: bold;`, `700;`).</li>
+            <li>`color`: Sets the color of the text.</li>
+            <li>`text-align`: Aligns text within its element (`left`, `right`, `center`, `justify`).</li>
+            <li>`line-height`: Sets the height of each line of text.</li>
+            <li>`text-decoration`: Adds decoration to text (`underline`, `overline`, `line-through`, `none`).</li>
+            <li>`text-transform`: Controls capitalization (`uppercase`, `lowercase`, `capitalize`).</li>
+            <li>`letter-spacing` / `word-spacing`: Adjusts spacing between letters/words.</li>
+        </ul>
+        <pre><code class="language-css">.custom-text {
+    font-family: Georgia, serif;
+    font-size: 1.2rem;
+    color: #336699;
+    text-align: justify;
+    line-height: 1.7;
+    text-decoration: underline;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+}</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output" style="font-family: Georgia, serif; font-size: 1.2rem; color: #336699; text-align: justify; line-height: 1.7; text-decoration: underline; text-transform: capitalize; letter-spacing: 0.5px;">
+            this is some sample text to demonstrate css typography properties. Each word starts with a capital letter, the text is justified, and it is underlined. The line height is also increased.
+        </div>
+
+        <h2 id="css-colors-backgrounds">11. CSS Colors & Backgrounds</h2>
+        <h3>Colors:</h3>
+        <p>Can be defined using:
+            <ul>
+                <li>Named colors: `red`, `blue`, `green`, `rebeccapurple`.</li>
+                <li>Hexadecimal values: `#RRGGBB` (e.g., `#FF0000` for red, `#336699`).</li>
+                <li>RGB values: `rgb(red, green, blue)` (e.g., `rgb(255, 0, 0)`).</li>
+                <li>RGBA values: `rgba(red, green, blue, alpha)` (alpha for transparency, 0-1) (e.g., `rgba(255, 0, 0, 0.5)`).</li>
+                <li>HSL values: `hsl(hue, saturation, lightness)` (e.g., `hsl(0, 100%, 50%)` for red).</li>
+            </ul>
+        </p>
+        <pre><code class="language-css">.color-box {
+    background-color: #f0f8ff; /* AliceBlue */
+    color: rgb(75, 0, 130); /* Indigo */
+    border: 2px solid rgba(0, 128, 0, 0.7); /* Semi-transparent green */
+    padding: 10px;
+}</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output" style="background-color: #f0f8ff; color: rgb(75, 0, 130); border: 2px solid rgba(0, 128, 0, 0.7); padding: 10px;">
+            This box uses various color formats.
+        </div>
+
+        <h3>Backgrounds:</h3>
+        <ul>
+            <li>`background-color`: Sets the background color of an element.</li>
+            <li>`background-image`: Sets one or more background images (`url()`).</li>
+            <li>`background-repeat`: Controls if/how a background image repeats (`repeat`, `no-repeat`, `repeat-x`, `repeat-y`).</li>
+            <li>`background-position`: Sets the starting position of a background image (`center`, `top left`, `50% 50%`).</li>
+            <li>`background-size`: Specifies the size of the background image (`auto`, `cover`, `contain`, `100px 100px`).</li>
+            <li>`background`: Shorthand for all background properties.</li>
+        </ul>
+        <pre><code class="language-css">.hero-banner {
+    background: url('https://via.placeholder.com/400x100/ADD8E6/000000?text=Background') no-repeat center center / cover;
+    height: 150px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5em;
+    font-weight: bold;
+}</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output" style="background: url('https://via.placeholder.com/400x100/ADD8E6/000000?text=Background') no-repeat center center / cover; height: 150px; color: #333; display: flex; align-items: center; justify-content: center; font-size: 1.5em; font-weight: bold;">
+            HERO SECTION
+        </div>
+
+        <h2 id="css-transitions">12. CSS Transitions</h2>
+        <p>CSS transitions allow you to create smooth animated changes to CSS properties over a specified duration when an element's state changes (e.g., on hover, focus, or class change).</p>
+        <ul>
+            <li>`transition-property`: The CSS property to which the transition is applied (e.g., `background-color`, `all`).</li>
+            <li>`transition-duration`: The time it takes for the transition to complete (e.g., `0.5s`, `500ms`).</li>
+            <li>`transition-timing-function`: How the transition progresses over time (`ease`, `linear`, `ease-in`, `ease-out`, `ease-in-out`).</li>
+            <li>`transition-delay`: A delay before the transition starts.</li>
+            <li>`transition`: Shorthand for all transition properties.</li>
+        </ul>
+        <pre><code class="language-css">.animated-box {
+    width: 100px;
+    height: 100px;
+    background-color: #ff7b72;
+    transition: background-color 0.5s ease-in-out, transform 0.5s ease-out; /* Smooth transition */
+}
+.animated-box:hover {
+    background-color: #a5d6ff; /* Changes color on hover */
+    transform: scale(1.1) rotate(5deg); /* Grows and rotates */
+}</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output">
+            <div class="transition-box">Hover Me!</div>
+            <p style="font-size: 0.9em; color: #777; margin-top: 10px;"><em>(Hover over the box above to see the smooth transition.)</em></p>
+        </div>
+
+        <h2 id="css-animations">13. CSS Animations</h2>
+        <p>CSS animations allow for more complex, multi-step animations. They are defined using `@keyframes` rules and then applied to elements.</p>
+        <ul>
+            <li>`@keyframes`: Defines the animation sequence.</li>
+            <li>`animation-name`: Name of the `@keyframes` rule to bind to the element.</li>
+            <li>`animation-duration`: Time an animation takes to complete one cycle.</li>
+            <li>`animation-timing-function`: How the animation progresses over time.</li>
+            <li>`animation-delay`: Delay before animation starts.</li>
+            <li>`animation-iteration-count`: Number of times an animation should play (`infinite`).</li>
+            <li>`animation-direction`: Whether the animation should alternate direction (`normal`, `alternate`).</li>
+            <li>`animation-fill-mode`: Styles applied before/after animation (`forwards`, `backwards`, `both`).</li>
+            <li>`animation`: Shorthand for all animation properties.</li>
+        </ul>
+        <pre><code class="language-css">@keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+.bouncing-ball {
+    width: 50px;
+    height: 50px;
+    background-color: blue;
+    border-radius: 50%;
+    animation: bounce 1s infinite ease-in-out; /* Apply animation */
+}</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output" style="display: flex; justify-content: center; align-items: center; height: 180px;">
+            <div class="animation-box">Pulse</div>
+            <p style="font-size: 0.9em; color: #777; position: absolute; bottom: 5px;"><em>(The circle above demonstrates a pulsing animation.)</em></p>
+        </div>
+
+        <h2 id="responsive-css-media-queries">14. Responsive CSS (Media Queries)</h2>
+        <p>Media queries allow you to apply CSS styles conditionally based on device characteristics like screen width, height, resolution, and orientation. This is fundamental for responsive web design.</p>
+        <pre><code class="language-css">/* Default styles (for larger screens first - 'mobile-last' approach) */
+.my-card {
+    width: 300px;
+    padding: 20px;
+    margin: 10px;
+    background-color: lightblue;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Styles for screens up to 768px wide (tablets and smaller) */
+@media (max-width: 768px) {
+    .my-card {
+        width: 90%; /* Take up more width on smaller screens */
+        margin: 10px auto; /* Center the card */
+        background-color: lightcoral; /* Change color for visual distinction */
+    }
+}
+
+/* Styles for screens smaller than 480px wide (phones) */
+@media (max-width: 480px) {
+    .my-card {
+        font-size: 0.9em; /* Smaller font size on tiny screens */
+        padding: 15px;
+    }
+}</code></pre>
+        <p><strong>Visual Example:</strong></p>
+        <div class="example-css-output">
+            <p>Resize your browser window horizontally to see the box below change its background color and size based on the screen width.</p>
+            <div class="media-query-box">
+                This box adapts based on screen size.
+            </div>
+            <p style="font-size: 0.9em; color: #777; margin-top: 10px;"><em>(On a live page, this box would change color to lightcoral on screens &lt; 768px and text size on screens &lt; 480px.)</em></p>
+        </div>
+
+        <h2 id="best-practices">15. Best Practices</h2>
+        <ul>
+            <li><strong>External Stylesheets:</strong> Always prefer external CSS files for better organization, caching, and maintainability.</li>
+            <li><strong>Use Semantic HTML:</strong> Write meaningful HTML before styling. CSS should enhance, not replace, good structure.</li>
+            <li><strong>Modular CSS:</strong> Organize your CSS into smaller, reusable modules (e.g., using BEM, SMACSS, or ITCSS methodologies).</li>
+            <li><strong>Mobile-First Approach:</strong> Design and write CSS for mobile devices first, then use media queries to enhance for larger screens.</li>
+            <li><strong>Consistent Naming Conventions:</strong> Use consistent naming for classes and IDs (e.g., kebab-case for CSS classes).</li>
+            <li><strong>Avoid `!important`:</strong> Overusing `!important` leads to CSS specificity issues and makes styles hard to override.</li>
+            <li><strong>Understand Specificity:</strong> Know how different selectors combine to determine which style rules apply.
+                <pre><code class="language-css">/* Higher specificity than p {} */
+#my-element { color: blue; } 
+
+/* Higher specificity than .my-class {} */
+div.my-class { color: green; }</code></pre>
+            </li>
+            <li><strong>Use Shorthand Properties Wisely:</strong> Use shorthands (e.g., `margin`, `padding`, `background`, `font`) to write concise code, but ensure clarity.</li>
+            <li><strong>Optimize Performance:</strong> Minify CSS, remove unused styles, optimize images, and consider lazy loading for faster page loads.</li>
+            <li><strong>Cross-Browser Compatibility:</strong> Test your CSS across various browsers to ensure consistent appearance. Use tools like Autoprefixer for vendor prefixes if needed.</li>
+            <li><strong>Comments:</strong> Use comments to explain complex or non-obvious CSS rules.</li>
+            <li><strong>Accessibility:</strong> Ensure your CSS choices support accessibility (e.g., sufficient color contrast, proper focus states).</li>
+            <li><strong>CSS Variables (Custom Properties):</strong> Use `--variable-name: value;` to define reusable values, improving consistency and maintainability.
+                <pre><code class="language-css">:root {
+    --primary-color: #667eea;
+    --spacing-unit: 16px;
+}
+.button {
+    background-color: var(--primary-color);
+    padding: var(--spacing-unit);
+}</code></pre>
+            </li>
+        </ul>
+
+        <div class="tip">
+            <strong>Keep Practicing!</strong>
+            <p>CSS is a vast and powerful language. The best way to learn is by building projects, experimenting with properties, and using your browser's developer tools to inspect and modify styles live. Don't be afraid to break things and learn from your mistakes!</p>
+        </div>
+    </div>
+</body>
+</html>
