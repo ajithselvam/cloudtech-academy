@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete YAML Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete YAML Tutorial</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-yaml">1. What is YAML?</a></li>
+                <li><a href="#basic-syntax">2. Basic Syntax</a></li>
+                <li><a href="#data-types">3. Data Types</a></li>
+                <li><a href="#advanced-features">4. Advanced Features</a></li>
+                <li><a href="#common-pitfalls">5. Common Pitfalls</a></li>
+                <li><a href="#real-world-examples">6. Real-World Examples</a></li>
+                <li><a href="#yaml-vs-json">7. YAML vs. JSON</a></li>
+                <li><a href="#tools-and-validation">8. Tools and Validation</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-yaml">What is YAML?</h2>
+        <p>YAML (YAML Ain't Markup Language) is a human-friendly data serialization standard for all programming languages. It's often used for configuration files, inter-process messaging, and data persistence. Its focus on readability makes it popular for many DevOps and automation tools like Kubernetes and Ansible.</p>
+
+        <h2 id="basic-syntax">Basic Syntax</h2>
+        <p>YAML relies on indentation (spaces, not tabs!) to define structure. It's case-sensitive.</p>
+
+        <h3>Key-Value Pairs (Mappings/Dictionaries)</h3>
+        <p>The most fundamental building block, representing a simple association between a key and a value.</p>
+        <pre><code># Basic key-value pair
+name: John Doe
+
+# String values don't always need quotes
+message: Hello, world!
+number: 123
+boolean: true</code></pre>
+
+        <h3>Lists (Sequences/Arrays)</h3>
+        <p>Represented by hyphens followed by a space for each item.</p>
+        <pre><code># A list of strings
+fruits:
+  - Apple
+  - Banana
+  - Orange
+
+# A list of numbers
+prime_numbers:
+  - 2
+  - 3
+  - 5
+  - 7
+
+# A list of mappings
+people:
+  - name: Alice
+    age: 30
+  - name: Bob
+    age: 25</code></pre>
+
+        <h3>Indentation</h3>
+        <p>Indentation defines the hierarchy. Each level of indentation indicates a nested structure.</p>
+        <pre><code># Nested structure
+company:
+  name: Acme Corp
+  location: New York
+  employees:
+    - name: Alice
+      role: Developer
+    - name: Bob
+      role: Manager</code></pre>
+
+        <h3>Comments</h3>
+        <p>Comments start with a hash symbol (<code>#</code>) and are ignored by YAML parsers.</p>
+        <pre><code># This is a single-line comment
+key: value # Inline comment
+
+another_key:
+  # This is a comment within a block
+  nested_key: nested_value</code></pre>
+
+        <h2 id="data-types">Data Types</h2>
+        <p>YAML supports various data types, often inferred automatically.</p>
+
+        <h3>Strings</h3>
+        <p>Can be plain or quoted. Quoting is necessary for strings that contain special characters or might be misinterpreted as other data types (e.g., numbers, booleans).</p>
+        <pre><code>plain_string: This is a plain string.
+quoted_string: "This string has spaces and special characters: #!@"
+boolean_as_string: "Yes" # Quoted to avoid being parsed as boolean
+number_as_string: "123"   # Quoted to avoid being parsed as integer
+multiline_string_folded: >
+  This is a long string that will be
+  folded into a single line.
+
+multiline_string_literal: |
+  This is a
+  literal block string.
+  Each line break is preserved.</code></pre>
+
+        <h3>Numbers (Integers, Floats)</h3>
+        <pre><code>integer: 100
+negative_integer: -50
+float: 3.14
+scientific_notation: 1.2e+5</code></pre>
+
+        <h3>Booleans</h3>
+        <p>Represented by <code>true</code>/<code>false</code>, <code>on</code>/<code>off</code>, <code>yes</code>/<code>no</code> (case-insensitive).</p>
+        <pre><code>is_active: true
+allow_access: no
+feature_enabled: ON</code></pre>
+
+        <h3>Null</h3>
+        <p>Represented by <code>null</code> or <code>~</code>.</p>
+        <pre><code>empty_value: null
+another_empty: ~</code></pre>
+
+        <h3>Dates and Times</h3>
+        <p>YAML can parse ISO 8601 formatted dates and times.</p>
+        <pre><code>date: 2023-10-27
+datetime: 2023-10-27T10:30:00Z
+local_datetime: 2023-10-27 10:30:00 -05:00</code></pre>
+
+        <h2 id="advanced-features">Advanced Features</h2>
+
+        <h3>Anchors and Aliases (Reusability)</h3>
+        <p>Allows you to define a block of content once and reuse it in multiple places, promoting DRY (Don't Repeat Yourself) principles.</p>
+        <pre><code># Define an anchor for a common address
+default_address: &amp;addr
+  street: 123 Main St
+  city: Anytown
+  zip: "12345"
+
+user1:
+  name: Alice
+  address: *addr # Use the alias
+
+user2:
+  name: Bob
+  address:
+    &lt;&lt;: *addr # Merge the default address
+    apt: 4B # Add a specific detail</code></pre>
+
+        <h3>Tags (Type Explicitly)</h3>
+        <p>You can explicitly specify a data type using tags, though it's rarely necessary as parsers usually infer correctly.</p>
+        <pre><code># Explicitly define string
+price: !!str 123.45
+
+# Explicitly define timestamp
+start_time: !!timestamp 2023-01-01 12:00:00
+
+# Custom tag (requires parser support)
+# employee: !person
+#   name: Carol
+#   id: 789</code></pre>
+
+        <h3>Block Styles for Collections</h3>
+        <p>Beyond the common "block" style (indentation), YAML offers "flow" styles for more compact representations.</p>
+        <pre><code># Block style mapping
+person:
+  name: David
+  age: 40
+
+# Flow style mapping (looks like JSON)
+person_flow: {name: Emily, age: 35}
+
+# Block style sequence
+colors:
+  - Red
+  - Green
+  - Blue
+
+# Flow style sequence
+colors_flow: [Yellow, Purple, Orange]</code></pre>
+
+        <h2 id="common-pitfalls">Common Pitfalls</h2>
+
+        <div class="warning">
+            <h3>1. Indentation Errors</h3>
+            <p>YAML is extremely sensitive to whitespace. Use spaces, not tabs, and ensure consistent indentation levels.</p>
+            <pre><code># Incorrect (using tabs or inconsistent spaces)
+key:
+	nested_key: value # Tab instead of spaces
+
+# Correct
+key:
+  nested_key: value</code></pre>
+        </div>
+
+        <div class="warning">
+            <h3>2. Missing Colons or Hyphens</h3>
+            <p>Forgetting these symbols can lead to parsing errors.</p>
+            <pre><code># Incorrect
+name John Doe # Missing colon
+
+# Correct
+name: John Doe
+
+# Incorrect
+fruits
+  Apple # Missing hyphen
+
+# Correct
+fruits:
+  - Apple</code></pre>
+        </div>
+
+        <div class="warning">
+            <h3>3. Unquoted Special Strings</h3>
+            <p>Strings that look like numbers, booleans, or contain special characters (<code>:</code>, <code>-</code>, <code>{</code>, <code>[</code>, <code>#</code>, <code>&amp;</code>, <code>*</code>, <code>!</code>, <code>|</code>, <code>></code>, <code>'</code>, <code>"</code>, <code>%</code>, <code>@</code>, `) should be quoted.</p>
+            <pre><code># Problem: "Yes" might be parsed as a boolean
+answer: Yes
+
+# Solution: Quote the string
+answer: "Yes"
+
+# Problem: Looks like a number
+id: 007
+
+# Solution: Quote the string
+id: "007"</code></pre>
+        </div>
+
+        <h2 id="real-world-examples">Real-World Examples</h2>
+
+        <h3>Kubernetes Deployment</h3>
+        <p>YAML is the primary language for defining Kubernetes resources.</p>
+        <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80</code></pre>
+
+        <h3>Ansible Playbook</h3>
+        <p>Ansible uses YAML for its playbooks, which define automation tasks.</p>
+        <pre><code>---
+- name: Install Nginx and deploy website
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Copy index.html
+      copy:
+        src: /path/to/local/index.html
+        dest: /var/www/html/index.html
+        mode: '0644'
+
+    - name: Ensure Nginx is running and enabled
+      systemd:
+        name: nginx
+        state: started
+        enabled: yes</code></pre>
+
+        <h3>Docker Compose</h3>
+        <p>Docker Compose uses YAML to define and run multi-container Docker applications.</p>
+        <pre><code>version: '3.8'
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - app
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: production
+      DATABASE_URL: postgres://user:password@db:5432/mydb
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+volumes:
+  db_data:</code></pre>
+
+        <h2 id="yaml-vs-json">YAML vs. JSON</h2>
+        <p>YAML is often considered a superset of JSON, meaning most JSON is valid YAML. However, YAML aims for greater human readability.</p>
+        <div class="interactive-section">
+            <h3>JSON Example:</h3>
+            <pre><code>{
+  "name": "Jane",
+  "age": 28,
+  "hobbies": ["reading", "hiking"],
+  "address": {
+    "street": "456 Oak Ave",
+    ""city"": "Springfield"
+  }
+}</code></pre>
+        </div>
+
+        <div class="interactive-section">
+            <h3>Equivalent YAML Example:</h3>
+            <pre><code>name: Jane
+age: 28
+hobbies:
+  - reading
+  - hiking
+address:
+  street: 456 Oak Ave
+  city: Springfield</code></pre>
+        </div>
+        <p>YAML offers features like comments, anchors, and a more concise syntax (no curly braces or square brackets for mapping/sequence boundaries when using block style) that JSON lacks.</p>
+
+        <h2 id="tools-and-validation">Tools and Validation</h2>
+        <p>Several tools can help you write and validate YAML.</p>
+        <ul>
+            <li><strong>Online YAML Validators:</strong> Websites like <a href="https://yaml-online-parser.appspot.com/" target="_blank">yaml-online-parser</a> or <a href="https://codebeautify.org/yaml-validator" target="_blank">CodeBeautify YAML Validator</a> can check your syntax.</li>
+            <li><strong>IDE Support:</strong> Most modern IDEs (VS Code, IntelliJ IDEA) offer excellent YAML support, including syntax highlighting, auto-completion, and live validation.</li>
+            <li><strong><code>yamllint</code>:</strong> A command-line tool to lint YAML files, checking for syntax errors, stylistic issues, and best practices.</li>
+            <li><strong>Schema Validation:</strong> For complex YAML structures, you can use tools that validate against a defined schema (e.g., JSON Schema).</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Note:</strong> YAML is a powerful and flexible data serialization language. While its human readability is a key advantage, mastering its indentation rules and special characters is crucial to avoid common errors. Always validate your YAML files, especially in production environments.
+        </div>
+    </div>
+</body>
+</html>
