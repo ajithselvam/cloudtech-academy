@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Bash Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Bash Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-bash">1. What is Bash?</a></li>
+                <li><a href="#accessing-bash">2. Accessing Bash</a></li>
+                <li><a href="#basic-commands">3. Basic Commands & Navigation</a></li>
+                <li><a href="#working-with-files-and-directories">4. Working with Files and Directories</a></li>
+                <li><a href="#file-permissions-and-ownership">5. File Permissions & Ownership</a></li>
+                <li><a href="#input-output-redirection">6. Input/Output Redirection</a></li>
+                <li><a href="#pipes-and-filters">7. Pipes & Filters</a></li>
+                <li><a href="#variables">8. Variables</a></li>
+                <li><a href="#arithmetic-operations">9. Arithmetic Operations</a></li>
+                <li><a href="#command-substitution">10. Command Substitution</a></li>
+                <li><a href="#quoting">11. Quoting</a></li>
+                <li><a href="#shell-scripting-fundamentals">12. Shell Scripting Fundamentals</a></li>
+                <li><a href="#conditional-statements">13. Conditional Statements (if/else)</a></li>
+                <li><a href="#looping-constructs">14. Looping Constructs (for, while)</a></li>
+                <li><a href="#functions">15. Functions</a></li>
+                <li><a href="#command-line-arguments">16. Command-Line Arguments</a></li>
+                <li><a href="#error-handling-and-debugging">17. Error Handling & Debugging</a></li>
+                <li><a href="#job-control">18. Job Control</a></li>
+                <li><a href="#regular-expressions-regex">19. Regular Expressions (Regex) with Bash Tools</a></li>
+                <li><a href="#alias-and-history">20. Alias & History</a></li>
+                <li><a href="#advanced-topics-and-best-practices">21. Advanced Topics & Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-bash">1. What is Bash?</h2>
+        <p><strong>Bash</strong> (Bourne Again SHell) is a Unix shell and command language, developed for the GNU Project as a free software replacement for the Bourne shell (sh). It's the default command-line interpreter on most Linux distributions and macOS (older versions), providing a powerful interface for interacting with the operating system.</p>
+        <p>Bash allows users to execute commands, navigate the file system, manage files and processes, and automate tasks through shell scripting.</p>
+        <h3>Key Characteristics:</h3>
+        <ul>
+            <li><strong>Command-line Interface (CLI):</strong> Interact with the OS by typing commands.</li>
+            <li><strong>Scripting Language:</strong> Write shell scripts to automate repetitive tasks.</li>
+            <li><strong>Customizable:</strong> Highly configurable via dotfiles (e.g., `.bashrc`, `.bash_profile`).</li>
+            <li><strong>Ubiquitous:</strong> Found on almost all Unix-like systems.</li>
+            <li><strong>Powerful:</strong> Combines basic commands with programming constructs (variables, loops, conditionals, functions).</li>
+        </ul>
+        <div class="tip">
+            <strong>Tip for Practice:</strong> The best way to learn Bash is by doing. Open a terminal on your Linux machine (or use WSL on Windows, or Terminal on macOS) and type along with the examples.
+        </div>
+
+        <h2 id="accessing-bash">2. Accessing Bash</h2>
+        <p>You access Bash through a terminal emulator.</p>
+        <ul>
+            <li><strong>Linux:</strong> Open the "Terminal" application (e.g., <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>t</kbd> on Ubuntu).</li>
+            <li><strong>macOS:</strong> Open "Terminal.app" (Finder &gt; Applications &gt; Utilities &gt; Terminal).</li>
+            <li><strong>Windows:</strong> Use <a href="https://learn.microsoft.com/en-us/windows/wsl/install" target="_blank">Windows Subsystem for Linux (WSL)</a> and launch your installed Linux distribution (e.g., Ubuntu).</li>
+            <li><strong>Cloud Shells:</strong> AWS CloudShell, Azure Cloud Shell, Google Cloud Shell all provide a Bash environment directly in your web browser.</li>
+        </ul>
+        <pre><code class="language-bash"># Check your current shell
+echo $SHELL
+# Output will likely be /bin/bash or /bin/zsh (zsh is default on newer macOS)
+
+# If not bash, you can usually start bash by typing:
+bash</code></pre>
+
+        <h2 id="basic-commands">3. Basic Commands & Navigation</h2>
+        <p>Fundamental commands for getting around and interacting with your system.</p>
+        <ul>
+            <li><strong>`pwd` (Print Working Directory):</strong> Shows your current directory.
+                <pre><code class="language-bash">pwd
+# Example Output: /home/yourusername</code></pre>
+            </li>
+            <li><strong>`ls` (List):</strong> Lists files and directories.
+                <pre><code class="language-bash">ls           # List contents of current directory
+ls -l        # Long format (permissions, owner, size, date)
+ls -a        # List all files, including hidden ones (starting with .)
+ls -lh       # Long format, human-readable sizes (KB, MB, GB)
+ls /etc      # List contents of a specific directory</code></pre>
+            </li>
+            <li><strong>`cd` (Change Directory):</strong> Navigates between directories.
+                <pre><code class="language-bash">cd Documents  # Move into 'Documents'
+cd ..         # Move up one directory
+cd ~          # Move to your home directory
+cd /          # Move to the root directory
+cd -          # Move to the previous directory</code></pre>
+            </li>
+            <li><strong>`clear`:</strong> Clears the terminal screen.</li>
+            <li><strong>`history`:</strong> Shows a list of previously executed commands.
+                <pre><code class="language-bash">history
+history 10 # Last 10 commands
+!50 # Re-execute command number 50 from history
+!! # Re-execute last command</code></pre>
+            </li>
+            <li><strong>`man` (Manual):</strong> Displays the manual page (documentation) for a command.
+                <pre><code class="language-bash">man ls # Press 'q' to quit</code></pre>
+            </li>
+            <li><strong>`echo`:</strong> Prints text to the terminal.
+                <pre><code class="language-bash">echo "Hello, Bash!"</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="working-with-files-and-directories">4. Working with Files and Directories</h2>
+        <p>Creating, moving, copying, and deleting files and folders.</p>
+        <ul>
+            <li><strong>`mkdir` (Make Directory):</strong> Creates new directories.
+                <pre><code class="language-bash">mkdir my_new_folder
+mkdir -p projects/my_app # Creates parent directories if they don't exist</code></pre>
+            </li>
+            <li><strong>`rmdir` (Remove Directory):</strong> Deletes empty directories.
+                <pre><code class="language-bash">rmdir my_empty_folder</code></pre>
+            </li>
+            <li><strong>`touch`:</strong> Creates empty files or updates a file's timestamp.
+                <pre><code class="language-bash">touch new_document.txt
+touch script.sh</code></pre>
+            </li>
+            <li><strong>`cp` (Copy):</strong> Copies files or directories.
+                <pre><code class="language-bash">cp file1.txt file2.txt      # Copy file1.txt to file2.txt in same directory
+cp image.jpg /home/user/Pictures/ # Copy to another directory
+cp -r my_folder /backup/    # Copy directory recursively</code></pre>
+            </li>
+            <li><strong>`mv` (Move):</strong> Moves or renames files/directories.
+                <pre><code class="language-bash">mv old_name.txt new_name.txt # Rename a file
+mv document.pdf /archive/    # Move file to /archive/</code></pre>
+            </li>
+            <li><strong>`rm` (Remove):</strong> Deletes files or directories.
+                <pre><code class="language-bash">rm unwanted_file.txt
+rm -i important_file.txt # Prompt before deleting
+rm -r my_folder          # Remove a directory and its contents recursively (USE WITH CAUTION!)
+rm -f stubborn_file.txt  # Force remove (no prompt)
+rm -rf very_critical_folder # Force remove recursively (EXTREME CAUTION: Irreversible!)</code></pre>
+            </li>
+            <li><strong>`cat` (Concatenate):</strong> Displays the content of files.
+                <pre><code class="language-bash">cat my_document.txt
+cat file1.txt file2.txt # Concatenate and display both files</code></pre>
+            </li>
+            <li><strong>`less` / `more`:</strong> View file content page by page.
+                <pre><code class="language-bash">less large_log_file.log # Press Space to scroll, 'q' to quit</code></pre>
+            </li>
+            <li><strong>`head` / `tail`:</strong> Display beginning/end of a file.
+                <pre><code class="language-bash">head -n 5 document.txt # Show first 5 lines
+tail -n 10 server.log # Show last 10 lines
+tail -f /var/log/syslog # Follow a log file in real-time (Ctrl+C to exit)</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="file-permissions-and-ownership">5. File Permissions & Ownership</h2>
+        <p>Linux is a multi-user system, and file permissions control who can read, write, or execute files and directories.</p>
+        <h3>Viewing Permissions (`ls -l`):</h3>
+        <pre><code class="language-bash">ls -l my_script.sh
+# Example Output: -rwxr-xr-- 1 user group 1234 Jul 19 10:00 my_script.sh</code></pre>
+        <ul>
+            <li>First character (`-`): File type (`-` for file, `d` for directory, `l` for symbolic link).</li>
+            <li>Next 3 (`rwx`): Owner's permissions (read, write, execute).</li>
+            <li>Next 3 (`r-x`): Group's permissions (read, execute, no write).</li>
+            <li>Last 3 (`r--`): Others' permissions (read, no write, no execute).</li>
+        </ul>
+        <h3>Changing Permissions (`chmod`):</h3>
+        <p>Uses symbolic mode (r, w, x, u, g, o, a) or octal (numeric) mode.</p>
+        <ul>
+            <li><strong>Octal (Numeric) Mode:</strong> Each permission has a numeric value: `r=4`, `w=2`, `x=1`. Sum the values for each category.
+                <pre><code class="language-bash">chmod 755 my_script.sh # Owner: rwx (7), Group: r-x (5), Others: r-x (5)
+# Visual: -rwxr-xr-x
+chmod 644 my_document.txt # Owner: rw- (6), Group: r-- (4), Others: r-- (4)
+# Visual: -rw-r--r--
+chmod +x my_script.sh # Add execute permission for all (equivalent to 755 if it was 644)</code></pre>
+            </li>
+        </ul>
+        <h3>Changing Ownership (`chown`, `chgrp`):</h3>
+        <p>Requires `sudo` (superuser privileges).</p>
+        <ul>
+            <li>`chown user:group file`: Change both owner and group.
+                <pre><code class="language-bash">sudo chown youruser:yourgroup myfile.txt
+sudo chown -R youruser:yourgroup myfolder # Recursively change for folder contents</code></pre>
+            </li>
+            <li>`chgrp group file`: Change only the group ownership.
+                <pre><code class="language-bash">sudo chgrp newgroup myfile.txt</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="input-output-redirection">6. Input/Output Redirection</h2>
+        <p>Control where command output goes and where input comes from.</p>
+        <ul>
+            <li>`>` (Redirect stdout to file, overwrite):
+                <pre><code class="language-bash">ls -l &gt; file_list.txt # Send output of ls -l to file_list.txt (overwrites if exists)</code></pre>
+            </li>
+            <li>`>>` (Redirect stdout to file, append):
+                <pre><code class="language-bash">echo "Another line." &gt;&gt; file_list.txt # Append text to file_list.txt</code></pre>
+            </li>
+            <li>`<` (Redirect stdin from file):
+                <pre><code class="language-bash">cat &lt; input.txt # Read input for cat command from input.txt</code></pre>
+            </li>
+            <li>`2>` (Redirect stderr to file):
+                <pre><code class="language-bash">ls non_existent_file 2&gt; error.log # Send error messages to error.log</code></pre>
+            </li>
+            <li>`&>` (Redirect stdout and stderr to file):
+                <pre><code class="language-bash">command &gt; output.log 2&gt;&amp;1 # Old syntax: redirect stderr to same place as stdout
+command &amp;&gt; output.log # Modern syntax: redirect both to output.log</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="pipes-and-filters">7. Pipes & Filters</h2>
+        <p>The pipe operator (`|`) sends the standard output of one command as the standard input to another command. Filters are commands that process data (like `grep`, `awk`, `sed`).</p>
+        <ul>
+            <li><strong>Pipe:</strong>
+                <pre><code class="language-bash">ls -l | less # Pipe output of ls -l to less for paginated viewing
+df -h | grep "/dev/sda" # Filter disk usage for a specific device</code></pre>
+            </li>
+            <li><strong>`grep` (Global Regular Expression Print):</strong> Filters lines containing a pattern.
+                <pre><code class="language-bash">cat /etc/passwd | grep "root" # Find lines with "root" in passwd file
+grep -i "error" /var/log/syslog # Case-insensitive search for "error" in syslog</code></pre>
+            </li>
+            <li><strong>`awk`:</strong> A powerful pattern scanning and processing language.
+                <pre><code class="language-bash">cat /etc/passwd | awk -F: '{print $1}' # Print first field (username) from passwd file, using ':' as delimiter</code></pre>
+            </li>
+            <li><strong>`sed` (Stream Editor):</strong> Non-interactive text editor for manipulating streams of text.
+                <pre><code class="language-bash">cat file.txt | sed 's/old_text/new_text/g' # Replace all occurrences of old_text with new_text
+sed -i 's/foo/bar/g' myfile.txt # In-place edit: replace foo with bar directly in myfile.txt</code></pre>
+            </li>
+            <li><strong>`sort`:</strong> Sorts lines of text.
+                <pre><code class="language-bash">ls -l | sort -k 5 -nr # Sort files by size (5th column), numeric, reverse</code></pre>
+            </li>
+            <li><strong>`uniq`:</strong> Reports or omits repeated lines.
+                <pre><code class="language-bash">cat words.txt | sort | uniq -c # Count unique lines after sorting</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="variables">8. Variables</h2>
+        <p>Store values in memory for later use. Variables are case-sensitive.</p>
+        <ul>
+            <li><strong>Creating and Using:</strong>
+                <pre><code class="language-bash">NAME="Alice"
+echo "Hello, $NAME!" # Output: Hello, Alice!
+MY_PATH="/home/user/documents"
+echo $MY_PATH</code></pre>
+            </li>
+            <li><strong>Environment Variables:</strong> Variables that affect the behavior of programs. Typically set in `.bashrc` or `.profile`.
+                <pre><code class="language-bash">echo $PATH # Shows directories where executables are searched
+echo $HOME # Your home directory
+echo $USER # Your current username
+
+export MY_VAR="some_value" # Make MY_VAR available to child processes</code></pre>
+            </li>
+            <li><strong>Special Variables:</strong>
+                <ul>
+                    <li>`$0`: Name of the script.</li>
+                    <li>`$1`, `$2`, ...: Positional parameters (command-line arguments).</li>
+                    <li>`$#`: Number of arguments.</li>
+                    <li>`$@`: All arguments as separate strings.</li>
+                    <li>`$*`: All arguments as a single string.</li>
+                    <li>`$?`: Exit status of the last executed command (0 for success, non-zero for failure).</li>
+                    <li>`$$`: PID of the current shell.</li>
+                </ul>
+                <pre><code class="language-bash"># In a script named 'myscript.sh'
+echo "Script name: $0"
+echo "First argument: $1"
+echo "Number of arguments: $#"
+echo "All arguments: $@"</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="arithmetic-operations">9. Arithmetic Operations</h2>
+        <p>Bash can perform basic arithmetic using `(( ))` or `expr`.</p>
+        <ul>
+            <li><strong>Using `(( ))`:</strong>
+                <pre><code class="language-bash">NUM1=10
+NUM2=5
+RESULT=$(( NUM1 + NUM2 ))
+echo "Sum: $RESULT" # Output: Sum: 15
+
+# Increment/Decrement
+COUNT=1
+((COUNT++))
+echo "Count: $COUNT" # Output: Count: 2
+
+# Operations: +, -, *, /, % (modulus)
+echo $(( 10 * 3 )) # Output: 30
+echo $(( 10 / 3 )) # Output: 3 (integer division)</code></pre>
+            </li>
+            <li><strong>Using `expr` (older, less preferred):</strong>
+                <pre><code class="language-bash">RESULT=$(expr 10 + 5)
+echo "Sum: $RESULT" # Output: Sum: 15</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="command-substitution">10. Command Substitution</h2>
+        <p>Allows the output of a command to be used as an argument to another command or assigned to a variable.</p>
+        <ul>
+            <li><strong>Using `` `command` `` (backticks - older syntax):</strong>
+                <pre><code class="language-bash">CURRENT_DATE=`date`
+echo "Today is: $CURRENT_DATE"
+
+FILE_COUNT=`ls -l | wc -l` # Count lines (files) in current directory
+echo "Number of files: $((FILE_COUNT - 1))" # Subtract 1 for total line from `ls -l` which includes total.</code></pre>
+            </li>
+            <li><strong>Using `$(command)` (modern, preferred syntax):</strong>
+                <pre><code class="language-bash">HOSTNAME=$(hostname)
+echo "Running on: $HOSTNAME"
+
+LIST_FILES=$(ls)
+echo "Files: $LIST_FILES"</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="quoting">11. Quoting</h2>
+        <p>Used to control how Bash interprets special characters.</p>
+        <ul>
+            <li><strong>Single Quotes (`''`):</strong> Prevents Bash from interpreting any special characters inside them (literal string).
+                <pre><code class="language-bash">echo '$PATH' # Output: $PATH (literal '$PATH')
+echo 'This is a $ string with spaces.'</code></pre>
+            </li>
+            <li><strong>Double Quotes (`""`):</strong> Allows variable expansion and command substitution, but prevents other special characters (like wildcards `*`, redirection `>`) from being interpreted.
+                <pre><code class="language-bash">NAME="Bob"
+echo "Hello, $NAME!" # Output: Hello, Bob! ($NAME is expanded)
+echo "Files in current directory: $(ls)" # Command substitution works
+echo "My * files" # Output: My * files (* is not expanded as wildcard)</code></pre>
+            </li>
+            <li><strong>Backslash (`\`):</strong> Escapes the next character, treating it literally.
+                <pre><code class="language-bash">echo "I have \$5." # Output: I have $5.
+echo This is a \*wildcard. # Output: This is a *wildcard.</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="shell-scripting-fundamentals">12. Shell Scripting Fundamentals</h2>
+        <p>Automate tasks by writing a series of commands in a file.</p>
+        <h3>A. Creating a Script:</h3>
+        <ol>
+            <li>Create a new file (e.g., `my_script.sh`) using a text editor (Nano, Vim, VS Code).</li>
+            <li>Add the shebang line at the very beginning: `#!/bin/bash`.</li>
+            <li>Write your commands line by line.</li>
+            <li>Save the file.</li>
+        </ol>
+        <pre><code class="language-bash"># my_script.sh
+#!/bin/bash
+# This is my first Bash script.
+
+echo "--- Script Start ---"
+echo "Current directory: $(pwd)"
+echo "Listing files:"
+ls -lh
+echo "--- Script End ---"</code></pre>
+        <h3>B. Making Executable:</h3>
+        <p>You need to give the script execute permissions.</p>
+        <pre><code class="language-bash">chmod +x my_script.sh</code></pre>
+        <h3>C. Running the Script:</h3>
+        <pre><code class="language-bash">./my_script.sh</code></pre>
+        <p>Or, if it's in your PATH:</p>
+        <pre><code class="language-bash">my_script.sh</code></pre>
+
+        <h2 id="conditional-statements">13. Conditional Statements (if/else)</h2>
+        <p>Execute code blocks based on conditions. The most common form uses `if`, `elif` (else if), and `else` with `[[ ]]` for evaluations.</p>
+        <ul>
+            <li><strong>Basic `if`:</strong>
+                <pre><code class="language-bash">#!/bin/bash
+echo "Enter a number:"
+read NUM
+if [[ $NUM -gt 10 ]]; then
+    echo "$NUM is greater than 10."
+fi</code></pre>
+            </li>
+            <li><strong>`if/else`:</strong>
+                <pre><code class="language-bash">#!/bin/bash
+echo "Is it sunny? (yes/no)"
+read WEATHER
+if [[ "$WEATHER" == "yes" ]]; then
+    echo "It's a good day for a walk!"
+else
+    echo "Stay indoors."
+fi</code></pre>
+            </li>
+            <li><strong>`if/elif/else`:</strong>
+                <pre><code class="language-bash">#!/bin/bash
+echo "Enter your age:"
+read AGE
+if [[ $AGE -lt 18 ]]; then
+    echo "You are a minor."
+elif [[ $AGE -ge 18 &amp;&amp; $AGE -lt 65 ]]; then
+    echo "You are an adult."
+else
+    echo "You are a senior citizen."
+fi</code></pre>
+            </li>
+            <li><strong>Common Test Operators (`[[ ]]`):</strong>
+                <ul>
+                    <li><strong>String Comparison:</strong> `==`, `!=`, `<` (less than), `>` (greater than, lexicographical). Use `[[ "$VAR" == "string" ]]`.</li>
+                    <li><strong>Numeric Comparison:</strong> `-eq` (equal), `-ne` (not equal), `-gt` (greater than), `-ge` (greater than or equal), `-lt` (less than), `-le` (less than or equal). Use `[[ $NUM -gt 5 ]]`.</li>
+                    <li><strong>File Tests:</strong> `-f` (file exists and is regular), `-d` (directory exists), `-e` (file/directory exists), `-r` (readable), `-w` (writable), `-x` (executable), `-s` (file not empty).
+                        <pre><code class="language-bash">if [[ -f "config.txt" ]]; then
+    echo "Config file found."
+fi</code></pre>
+                    </li>
+                    <li><strong>Logical Operators:</strong> `&&` (AND), `||` (OR), `!` (NOT).</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="looping-constructs">14. Looping Constructs (for, while)</h2>
+        <p>Repeat a block of code multiple times.</p>
+        <ul>
+            <li><strong>`for` loop (list iteration):</strong> Iterates over a list of items.
+                <pre><code class="language-bash">#!/bin/bash
+for FRUIT in apple banana cherry; do
+    echo "I like $FRUIT."
+done
+
+# Loop through numbers
+for i in {1..5}; do
+    echo "Count: $i"
+done
+
+# Loop through command output
+for FILE in $(ls *.txt); do
+    echo "Processing $FILE"
+done</code></pre>
+            </li>
+            <li><strong>`for` loop (C-style numeric iteration):</strong>
+                <pre><code class="language-bash">#!/bin/bash
+for (( i=0; i&lt;3; i++ )); do
+    echo "C-style loop: $i"
+done</code></pre>
+            </li>
+            <li><strong>`while` loop:</strong> Continues as long as a condition is true.
+                <pre><code class="language-bash">#!/bin/bash
+COUNT=0
+while [[ $COUNT -lt 3 ]]; do
+    echo "While loop: $COUNT"
+    ((COUNT++)) # Increment COUNT
+done</code></pre>
+            </li>
+            <li><strong>`until` loop:</strong> Continues as long as a condition is false.</li>
+            <li><strong>`break` / `continue`:</strong>
+                <ul>
+                    <li>`break`: Exits the loop entirely.</li>
+                    <li>`continue`: Skips the current iteration and moves to the next.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="functions">15. Functions</h2>
+        <p>Group commands into reusable blocks of code.</p>
+        <ul>
+            <li><strong>Defining a Function:</strong>
+                <pre><code class="language-bash">#!/bin/bash
+greet_user() {
+    echo "Hello, $1!" # $1 refers to the first argument passed to the function
+}
+
+# Call the function
+greet_user "Alice"    # Output: Hello, Alice!
+greet_user "Bob"      # Output: Hello, Bob!</code></pre>
+            </li>
+            <li><strong>Returning Values:</strong> Functions return an exit status (0 for success, non-zero for failure). To return a data value, print it to stdout and capture it using command substitution.
+                <pre><code class="language-bash">#!/bin/bash
+calculate_sum() {
+    local SUM=$(( $1 + $2 )) # 'local' makes variable scoped to function
+    echo $SUM # Print the sum
+}
+
+RESULT=$(calculate_sum 10 20)
+echo "The sum is: $RESULT" # Output: The sum is: 30</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="command-line-arguments">16. Command-Line Arguments</h2>
+        <p>Scripts can take inputs directly from the command line.</p>
+        <ul>
+            <li><strong>Accessing Arguments:</strong>
+                <ul>
+                    <li>`$0`: Name of the script itself.</li>
+                    <li>`$1`, `$2`, `$3`, ...: Individual arguments in order.</li>
+                    <li>`$#`: Number of arguments passed.</li>
+                    <li>`$@`: All arguments as separate quoted strings (best for loops).</li>
+                    <li>`$*`: All arguments as a single string.</li>
+                </ul>
+            </li>
+            <li><strong>Example Script (`process_args.sh`):</strong>
+                <pre><code class="language-bash">#!/bin/bash
+echo "Script name: $0"
+echo "Number of arguments: $#"
+
+if [[ $# -eq 0 ]]; then
+    echo "No arguments provided."
+    exit 1 # Exit with error code
+fi
+
+echo "First argument: $1"
+echo "All arguments (separate):"
+for arg in "$@"; do
+    echo "- $arg"
+done</code></pre>
+            </li>
+            <li><strong>Running with Arguments:</strong>
+                <pre><code class="language-bash">chmod +x process_args.sh
+./process_args.sh hello world 123</code></pre>
+                <p><strong>Example Output:</strong></p>
+                <pre><code class="language-bash">Script name: ./process_args.sh
+Number of arguments: 3
+First argument: hello
+All arguments (separate):
+- hello
+- world
+- 123</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="error-handling-and-debugging">17. Error Handling & Debugging</h2>
+        <p>Making scripts robust and finding issues.</p>
+        <ul>
+            <li><strong>Exit Status (`$?`):</strong>
+                <pre><code class="language-bash">ls non_existent_file
+echo "Exit status: $?" # Will be non-zero (e.g., 1 or 2)
+ls /home
+echo "Exit status: $?" # Will be 0</code></pre>
+            </li>
+            <li><strong>`set -e`:</strong> Exit immediately if a command exits with a non-zero status.
+                <pre><code class="language-bash">#!/bin/bash
+set -e # Script will stop here if 'ls non_existent_file' fails
+echo "Starting script..."
+ls non_existent_file
+echo "This line will not execute if previous command fails."</code></pre>
+            </li>
+            <li><strong>`set -x`:</strong> Print commands and their arguments as they are executed (for debugging).
+                <pre><code class="language-bash">#!/bin/bash
+set -x # Turn on debugging output
+echo "Debugging this script."
+VAR="test"
+ls $VAR
+set +x # Turn off debugging output
+echo "Debugging finished."</code></pre>
+            </li>
+            <li><strong>`trap`:</strong> Execute a command when a signal is received (e.g., script exits, Ctrl+C).
+                <pre><code class="language-bash">#!/bin/bash
+cleanup() {
+    echo "Cleaning up temporary files..."
+    rm -f /tmp/my_temp_file.txt
+}
+trap cleanup EXIT # Run cleanup function when script exits
+trap "echo 'Ctrl+C detected! Exiting...'; cleanup; exit 1" INT # Handle Ctrl+C (Interrupt)
+
+echo "Creating temp file..."
+touch /tmp/my_temp_file.txt
+echo "Running for 10 seconds. Press Ctrl+C to test trap."
+sleep 10
+echo "Script finished normally."</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="job-control">18. Job Control</h2>
+        <p>Manage commands running in the foreground or background.</p>
+        <ul>
+            <li><kbd>Ctrl</kbd> + <kbd>z</kbd>: Suspend a foreground job.
+                <pre><code class="language-bash">sleep 60 # Press Ctrl+Z
+# Output: [1]+  Stopped    sleep 60</code></pre>
+            </li>
+            <li>`jobs`: List background jobs.
+                <pre><code class="language-bash">jobs
+# Output: [1]+  Stopped    sleep 60</code></pre>
+            </li>
+            <li>`bg %job_number`: Send a suspended job to the background.
+                <pre><code class="language-bash">bg %1 # Send job 1 to background
+# Output: [1]+ sleep 60 &amp;</code></pre>
+            </li>
+            <li>`fg %job_number`: Bring a background job to the foreground.
+                <pre><code class="language-bash">fg %1</code></pre>
+            </li>
+            <li>`command &`: Run a command directly in the background.
+                <pre><code class="language-bash">./my_long_script.sh &amp; # Runs in background, shell is free</code></pre>
+            </li>
+            <li>`nohup command &`: Run a command in the background, even if the terminal closes.
+                <pre><code class="language-bash">nohup ./my_long_running_process.sh &amp;</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="regular-expressions-regex">19. Regular Expressions (Regex) with Bash Tools</h2>
+        <p>Regex is a powerful language for pattern matching in text. Bash itself has limited direct regex support, but many common CLI tools leverage it.</p>
+        <ul>
+            <li><strong>`grep`:</strong> For searching text patterns.
+                <pre><code class="language-bash">grep "^start" myfile.txt # Lines starting with "start"
+grep "end$" myfile.txt   # Lines ending with "end"
+grep -E "[0-9]{3}-[0-9]{3}-[0-9]{4}" contacts.txt # Phone numbers (e.g., 123-456-7890)
+grep -P "email:\s(\S+@\S+\.\S+)" user_data.txt # Perl-compatible regex for email</code></pre>
+            </li>
+            <li><strong>`sed`:</strong> For find and replace.
+                <pre><code class="language-bash">sed -E 's/([0-9]{3})(-)([0-9]{3})/\1.\3/g' phone_numbers.txt # Replace hyphens with dots in phone numbers
+sed '/^#/d' config.txt # Delete lines starting with '#' (comments)</code></pre>
+            </li>
+            <li><strong>`awk`:</strong> For text processing and reporting.
+                <pre><code class="language-bash">awk '/^user/ {print $1, $NF}' /etc/passwd # Print username and shell for lines starting with "user"</code></pre>
+            </li>
+            <li><strong>Bash `[[ =~ ]]` operator:</strong> Direct regex matching in Bash conditionals.
+                <pre><code class="language-bash">if [[ "hello world" =~ "world" ]]; then
+    echo "Pattern found."
+fi
+
+EMAIL="user@example.com"
+if [[ "$EMAIL" =~ ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$ ]]; then
+    echo "Valid email format."
+else
+    echo "Invalid email format."
+fi</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="alias-and-history">20. Alias & History</h2>
+        <p>Improve productivity by creating shortcuts and reusing commands.</p>
+        <ul>
+            <li><strong>`alias`:</strong> Create custom shortcuts for commands. Defined in `.bashrc` or `.bash_profile`.
+                <pre><code class="language-bash">alias ll='ls -lh' # Make 'll' run 'ls -lh'
+alias up='sudo apt update &amp;&amp; sudo apt upgrade -y' # Shortcut for updating system
+
+# To make aliases permanent, add them to ~/.bashrc and source it:
+# echo "alias ll='ls -lh'" &gt;&gt; ~/.bashrc
+# source ~/.bashrc</code></pre>
+            </li>
+            <li><strong>`history`:</strong> Review and reuse past commands.
+                <pre><code class="language-bash">history # Show all commands
+history | grep "ssh" # Find past SSH commands
+!ls # Run the last command starting with 'ls'
+!! # Run the very last command again
+!$` # Access the last argument of the previous command</code></pre>
+            </li>
+            <li><strong>Reverse Search:</strong> Press <kbd>Ctrl</kbd> + <kbd>r</kbd> and start typing to search through your command history. Press <kbd>Ctrl</kbd> + <kbd>r</kbd> again for older matches. Press <kbd>Enter</kbd> to execute, or Right Arrow to edit.</li>
+        </ul>
+
+        <h2 id="advanced-topics-and-best-practices">21. Advanced Topics & Best Practices</h2>
+        <p>Beyond the basics, Bash offers more powerful features and best practices for writing robust scripts.</p>
+        <ul>
+            <li><strong>Shebang (`#!`):</strong> Always use it for scripts. `#!/bin/bash` is common.</li>
+            <li><strong>Set Options for Robust Scripts:</strong>
+                <ul>
+                    <li>`set -e`: Exit immediately if a command exits with a non-zero status.</li>
+                    <li>`set -u`: Treat unset variables as an error and exit immediately.</li>
+                    <li>`set -o pipefail`: Return the exit status of the last command in the pipe that exited with a non-zero status. (Often used with `-e`).</li>
+                    <li>Commonly seen together: `set -euo pipefail`.</li>
+                </ul>
+            </li>
+            <li><strong>Quoting Variables:</strong> Always quote variables when they might contain spaces or special characters to prevent word splitting and pathname expansion.
+                <pre><code class="language-bash">FILENAME="My Document.txt"
+# WRONG: rm $FILENAME (will try to rm "My" and "Document.txt")
+rm "$FILENAME" # CORRECT</code></pre>
+            </li>
+            <li><strong>Input Validation:</strong> Always validate user input or command-line arguments in scripts.</li>
+            <li><strong>Error Messages:</strong> Use `>&2` to send error messages to standard error (stderr) so they can be redirected separately from normal output.
+                <pre><code class="language-bash">echo "Error: File not found." >&2</code></pre>
+            </li>
+            <li><strong>Logging:</strong> For longer scripts, consider simple logging functions.
+                <pre><code class="language-bash">LOG_FILE="/var/log/my_script.log"
+log_message() {
+    echo "$(date): $1" | tee -a "$LOG_FILE"
+}
+log_message "Script started."</code></pre>
+            </li>
+            <li><strong>Temporary Files:</strong> Use `mktemp` for creating temporary files/directories in scripts.</li>
+            <li><strong>`trap` Command:</strong> For handling signals (e.g., `Ctrl+C`, script exit) to perform cleanup.</li>
+            <li><strong>Source vs. Execute:</strong>
+                <ul>
+                    <li>`./script.sh`: Runs the script in a new subshell. Changes (e.g., variable exports) are not visible in the parent shell.</li>
+                    <li>`source script.sh` or `. script.sh`: Runs the script in the current shell. Changes persist. Useful for `.bashrc` or environment setup scripts.</li>
+                </ul>
+            </li>
+            <li><strong>Regular Expressions:</strong> Master `grep`, `sed`, `awk`, and Bash's `[[ =~ ]]` for powerful text processing.</li>
+            <li><strong>Package Management (`apt`, `dnf`):</strong> Use these to install and manage software effectively.</li>
+            <li><strong>Service Management (`systemctl`):</strong> Learn to manage background services.</li>
+            <li><strong>Version Control (`git`):</strong> Store your scripts in a version control system.</li>
+            <li><strong>Learn by Doing:</strong> Experiment, read documentation (`man`), and analyze existing scripts.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>The Power of the Command Line Awaits!</strong>
+            <p>Bash is an incredibly powerful and versatile tool. While the initial learning curve might seem steep, mastering Bash commands and scripting will dramatically improve your efficiency in managing Linux/Unix systems, automating tasks, and performing complex operations. Embrace the command line, practice regularly, and unlock a new level of control over your computing environment.</p>
+        </div>
+    </div>
+</body>
+</html>
