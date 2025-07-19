@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Ubuntu OS Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Ubuntu OS Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction-to-ubuntu">1. Introduction to Ubuntu</a></li>
+                <li><a href="#ubuntu-versions">2. Ubuntu Versions & Flavors</a></li>
+                <li><a href="#installation-methods">3. Installation Methods</a></li>
+                <li><a href="#getting-started-with-gui">4. Getting Started with the GUI (GNOME Desktop)</a></li>
+                <li><a href="#basic-terminal-commands">5. Basic Terminal Commands (CLI)</a></li>
+                <li><a href="#file-system-hierarchy">6. Linux File System Hierarchy (FHS)</a></li>
+                <li><a href="#file-permissions-and-ownership">7. File Permissions and Ownership</a></li>
+                <li><a href="#user-and-group-management">8. User and Group Management</a></li>
+                <li><a href="#package-management-apt">9. Package Management (APT)</a></li>
+                <li><a href="#process-management">10. Process Management</a></li>
+                <li><a href="#service-management-systemd">11. Service Management (systemd)</a></li>
+                <li><a href="#networking">12. Networking (Netplan, UFW)</a></li>
+                <li><a href="#storage-management">13. Storage Management</a></li>
+                <li><a href="#shell-scripting-basics">14. Shell Scripting Basics</a></li>
+                <li><a href="#text-editors">15. Text Editors (GUI & CLI)</a></li>
+                <li><a href="#security-best-practices">16. Security Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction-to-ubuntu">1. Introduction to Ubuntu</h2>
+        <p><strong>Ubuntu</strong> is a free, open-source Linux distribution based on Debian. Developed by Canonical Ltd., it's known for its user-friendliness, extensive software availability, strong community support, and regular release cycles. Ubuntu is designed to be a versatile operating system, suitable for desktops, servers, cloud computing, and IoT devices.</p>
+        <h3>Why Choose Ubuntu?</h3>
+        <ul>
+            <li><strong>User-Friendly:</strong> Often considered one of the easiest Linux distributions for new users, especially those coming from Windows or macOS.</li>
+            <li><strong>Wide Adoption:</strong> Very popular on desktops, and a dominant force in server and cloud environments.</li>
+            <li><strong>Rich Software Ecosystem:</strong> Access to millions of open-source applications through its package manager (APT).</li>
+            <li><strong>Strong Community Support:</strong> Vast online documentation, forums, and a global community to assist users.</li>
+            <li><strong>Regular Updates & LTS:</strong> New versions every six months, with Long Term Support (LTS) releases every two years for stability.</li>
+        </ul>
+
+        <h2 id="ubuntu-versions">2. Ubuntu Versions & Flavors</h2>
+        <h3>A. Release Cycles:</h3>
+        <ul>
+            <li><strong>Regular Releases:</strong> Released every six months (e.g., 24.04, 24.10, 25.04...). Supported for 9 months.</li>
+            <li><strong>LTS (Long Term Support) Releases:</strong> Released every two years (e.g., 20.04 LTS, 22.04 LTS, 24.04 LTS). Supported for 5 years for desktop and server, extendable to 10 years with Ubuntu Pro. LTS releases are recommended for stability, especially for servers and production environments.</li>
+        </ul>
+        <h3>B. Ubuntu Flavors (Different Desktop Environments):</h3>
+        <p>While Ubuntu's default desktop environment is GNOME, several official "flavors" offer alternative desktop experiences:</p>
+        <ul>
+            <li><strong>Ubuntu (Default):</strong> Uses the GNOME desktop environment, known for its modern and clean interface.</li>
+            <li><strong>Kubuntu:</strong> Ubuntu with the KDE Plasma desktop, highly customizable and feature-rich.</li>
+            <li><strong>Xubuntu:</strong> Ubuntu with the XFCE desktop, lightweight and fast, ideal for older hardware.</li>
+            <li><strong>Lubuntu:</strong> Ubuntu with the LXQt desktop, extremely lightweight, for minimal resource usage.</li>
+            <li><strong>Ubuntu MATE:</strong> Ubuntu with the MATE desktop, a traditional desktop experience.</li>
+            <li><strong>Ubuntu Budgie:</strong> Ubuntu with the Budgie desktop, modern and elegant.</li>
+        </ul>
+
+        <h2 id="installation-methods">3. Installation Methods</h2>
+        <p>Ubuntu can be installed in various environments:</p>
+        <ul>
+            <li><strong>Virtual Machine (VM):</strong>
+                <ul>
+                    <li><strong>Recommended for beginners:</strong> Safest way to learn without affecting your main OS.</li>
+                    <li>Install a hypervisor (e.g., VirtualBox, VMware Workstation Player) on your Windows/macOS host.</li>
+                    <li>Download the Ubuntu Desktop ISO from <a href="https://ubuntu.com/download" target="_blank">ubuntu.com/download</a>.</li>
+                    <li>Create a new VM and install Ubuntu from the ISO.</li>
+                </ul>
+            </li>
+            <li><strong>Dual Boot:</strong>
+                <ul>
+                    <li>Install Ubuntu alongside an existing operating system (e.g., Windows).</li>
+                    <li>Allows you to choose which OS to boot into at startup. More complex and requires careful disk partitioning.</li>
+                </ul>
+            </li>
+            <li><strong>Live USB:</strong>
+                <ul>
+                    <li>Boot your computer directly from a USB drive.</li>
+                    <li>Allows you to try Ubuntu without installing it. Can be made "persistent" to save changes.</li>
+                </ul>
+            </li>
+            <li><strong>Windows Subsystem for Linux (WSL):</strong>
+                <ul>
+                    <li>Run an Ubuntu command-line environment directly on Windows 10/11.</li>
+                    <li>Integrates well with Windows, easy to set up. Does not provide a full graphical desktop by default.</li>
+                </ul>
+                <pre><code class="language-bash"># To install Ubuntu on WSL (from PowerShell as Admin):
+wsl --install -d Ubuntu</code></pre>
+            </li>
+            <li><strong>Cloud Instance:</strong>
+                <ul>
+                    <li>Deploy an Ubuntu VM on cloud providers like AWS, Azure, or Google Cloud.</li>
+                    <li>Ideal for server-side use cases, accessible via SSH.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Basic GUI Installation Steps (Virtual Machine Example):</h3>
+        <ol>
+            <li>Boot your VM/computer from the Ubuntu Desktop ISO.</li>
+            <li>Choose "Try Ubuntu" (to test without installing) or "Install Ubuntu".</li>
+            <li>Select Language and Keyboard layout.</li>
+            <li><strong>Updates and other software:</strong>
+                <ul>
+                    <li>Choose "Normal installation" or "Minimal installation".</li>
+                    <li>Check "Download updates while installing" and "Install third-party software for graphics and Wi-Fi hardware and additional media formats".</li>
+                </ul>
+            </li>
+            <li><strong>Installation type:</strong>
+                <ul>
+                    <li>"Erase disk and install Ubuntu" (safest for VMs or dedicated systems).</li>
+                    <li>"Something else" (for custom partitioning, e.g., dual-boot).</li>
+                </ul>
+            </li>
+            <li><strong>Choose Location:</strong> Set your timezone.</li>
+            <li><strong>Who are you?:</strong> Create your user account (full name, username, password). Check "Require my password to log in" and "Encrypt my home folder" (optional, for security).</li>
+            <li>Click **Install Now**.</li>
+            <li>After installation, **Restart Now**. Remove the ISO from the drive if prompted.</li>
+            <li>Log in with your created user account.</li>
+        </ol>
+
+        <h2 id="getting-started-with-gui">4. Getting Started with the GUI (GNOME Desktop)</h2>
+        <p>Ubuntu's default desktop environment is GNOME, designed for a modern and user-friendly experience.</p>
+        <ul>
+            <li><strong>Desktop:</strong> Your main workspace. Right-click for context menu (Change Background, Display Settings, Open in Terminal).</li>
+            <li><strong>Top Bar:</strong>
+                <ul>
+                    <li><strong>Activities:</strong> Top-left corner. Click or press the <kbd>Super</kbd> (Windows) key to open the Activities Overview.</li>
+                    <li><strong>Application Menu:</strong> Next to "Activities," shows the active application's name.</li>
+                    <li><strong>Clock & Calendar:</strong> Center.</li>
+                    <li><strong>Status Icons:</strong> Top-right. Quick access to Network, Volume, Battery, User Menu (Shutdown, Restart, Lock Screen).</li>
+                </ul>
+            </li>
+            <li><strong>Dock (Launcher):</strong> Vertical bar on the left side (default position).
+                <ul>
+                    <li>Contains frequently used applications, running applications, and the Applications (grid) button at the bottom.</li>
+                    <li>Click to launch/switch apps. Right-click for contextual menus.</li>
+                </ul>
+            </li>
+            <li><strong>Activities Overview:</strong> (Press <kbd>Super</kbd> key or click "Activities").
+                <ul>
+                    <li>Shows all open windows and multiple virtual "Workspaces" (desktops) for organizing tasks.</li>
+                    <li>Search bar at the top for apps, files, settings, and web search.</li>
+                </ul>
+            </li>
+            <li><strong>Files (Nautilus):</strong> Ubuntu's default file manager, similar to Windows File Explorer or macOS Finder.
+                <ul>
+                    <li>Access from the Dock.</li>
+                    <li>Provides views (Icons, List), sidebar for quick access to Home, Documents, Downloads, Trash, Network, Drives.</li>
+                </ul>
+            </li>
+            <li><strong>Software Center (Ubuntu Software):</strong> Your graphical gateway to install and manage applications from Ubuntu's repositories and Snap Store.
+                <ul>
+                    <li>Access from the Dock. Browse categories, search for apps, install/uninstall with a few clicks.</li>
+                </ul>
+            </li>
+            <li><strong>Settings:</strong> Central hub for configuring your Ubuntu system.
+                <ul>
+                    <li>Access from the Status Icons (top-right) &gt; Gear icon, or search in Activities.</li>
+                    <li>Sections include Network, Bluetooth, Background, Appearance, Notifications, Privacy, Users, Displays, Sound, etc.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-bash"># Example: Customizing desktop via GUI
+# 1. Click on "Activities" (top-left) or press the Super key.
+# 2. Type "Settings" and open the Settings application.
+# 3. In the sidebar, click on "Appearance".
+# 4. Change "Style" (Light/Dark), "Accent color", "Dock position", "Icon size", etc.
+# 5. Observe changes on your desktop.</code></pre>
+
+        <h2 id="basic-terminal-commands">5. Basic Terminal Commands (CLI)</h2>
+        <p>The command-line interface (CLI) is fundamental for advanced tasks. Open the "Terminal" application (e.g., <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>t</kbd>).</p>
+        <ul>
+            <li><strong>`pwd` (Print Working Directory):</strong> Shows your current directory.
+                <pre><code class="language-bash">pwd
+# Output: /home/yourusername</code></pre>
+            </li>
+            <li><strong>`ls` (List):</strong> Lists files and directories.
+                <pre><code class="language-bash">ls -l        # Long format (details: permissions, owner, size, date)
+ls -a        # List all files, including hidden ones (starting with .)
+ls -lh       # Long format, human-readable sizes (KB, MB, GB)
+ls /var/log  # List contents of a specific directory</code></pre>
+            </li>
+            <li><strong>`cd` (Change Directory):</strong> Navigates between directories.
+                <pre><code class="language-bash">cd Documents  # Move into 'Documents'
+cd ..         # Move up one directory
+cd ~          # Move to your home directory
+cd /          # Move to the root directory
+cd -          # Move to the previous directory</code></pre>
+            </li>
+            <li><strong>`mkdir` (Make Directory):</strong> Creates new directories.
+                <pre><code class="language-bash">mkdir my_new_folder
+mkdir -p projects/my_app # Creates parent directories if they don't exist</code></pre>
+            </li>
+            <li><strong>`rmdir` (Remove Directory):</strong> Deletes empty directories.
+                <pre><code class="language-bash">rmdir my_empty_folder</code></pre>
+            </li>
+            <li><strong>`touch`:</strong> Creates empty files or updates a file's timestamp.
+                <pre><code class="language-bash">touch new_document.txt
+touch script.sh</code></pre>
+            </li>
+            <li><strong>`cp` (Copy):</strong> Copies files or directories.
+                <pre><code class="language-bash">cp file1.txt file2.txt        # Copy file1.txt to file2.txt in same directory
+cp image.jpg /home/user/Pictures/ # Copy to another directory
+cp -r my_folder /backup/      # Copy a directory recursively</code></pre>
+            </li>
+            <li><strong>`mv` (Move):</strong> Moves or renames files/directories.
+                <pre><code class="language-bash">mv old_name.txt new_name.txt # Rename a file
+mv document.pdf /archive/    # Move file to /archive/</code></pre>
+            </li>
+            <li><strong>`rm` (Remove):</strong> Deletes files or directories.
+                <pre><code class="language-bash">rm unwanted_file.txt
+rm -i important_file.txt # Prompt before deleting
+rm -r my_folder          # Remove a directory and its contents recursively (USE WITH CAUTION!)
+rm -f stubborn_file.txt  # Force remove (no prompt)
+rm -rf very_critical_folder # Force remove recursively (EXTREME CAUTION: Irreversible!)</code></pre>
+            </li>
+            <li><strong>`cat` (Concatenate):</strong> Displays the content of files.
+                <pre><code class="language-bash">cat my_document.txt
+cat /etc/os-release # Show OS information</code></pre>
+            </li>
+            <li><strong>`less` / `more`:</strong> View file content page by page.
+                <pre><code class="language-bash">less /var/log/syslog # Press Space to scroll, 'q' to quit</code></pre>
+            </li>
+            <li><strong>`head` / `tail`:</strong> Display beginning/end of a file.
+                <pre><code class="language-bash">head -n 5 file.txt # Show first 5 lines
+tail -n 10 file.txt # Show last 10 lines
+tail -f /var/log/auth.log # Follow a log file in real-time (Ctrl+C to exit)</code></pre>
+            </li>
+            <li><strong>`echo`:</strong> Prints text to the terminal.
+                <pre><code class="language-bash">echo "Hello, Ubuntu!"</code></pre>
+            </li>
+            <li><strong>`man` (Manual):</strong> Displays the manual page (documentation) for a command.
+                <pre><code class="language-bash">man ls # Press 'q' to quit</code></pre>
+            </li>
+            <li><strong>`sudo` (SuperUser Do):</strong> Executes a command with superuser (root) privileges. Required for many system administration tasks.
+                <pre><code class="language-bash">sudo apt update # Update package lists (requires password)</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="file-system-hierarchy">6. Linux File System Hierarchy (FHS)</h2>
+        <p>Ubuntu, like other Linux distributions, adheres to the Filesystem Hierarchy Standard (FHS), which defines a standardized directory structure.</p>
+        <ul>
+            <li><strong>`/` (Root):</strong> The top-level directory. All other directories and files are located under it.</li>
+            <li><strong>`/bin`:</strong> (Binaries) Essential command binaries for all users.</li>
+            <li><strong>`/sbin`:</strong> (System Binaries) Essential system binaries for system administration.</li>
+            <li><strong>`/etc`:</strong> (Etcetera) Host-specific system-wide configuration files.</li>
+            <li><strong>`/home`:</strong> Home directories for regular users (e.g., `/home/yourusername`).</li>
+            <li><strong>`/root`:</strong> The home directory for the `root` (superuser) account.</li>
+            <li><strong>`/opt`:</strong> (Optional) Optional application software packages.</li>
+            <li><strong>`/usr`:</strong> (Unix System Resources) Read-only user utilities and applications.
+                <ul>
+                    <li>`/usr/bin`: Most user commands.</li>
+                    <li>`/usr/local`: Locally installed software.</li>
+                </ul>
+            </li>
+            <li><strong>`/var`:</strong> (Variable) Variable data files, such as log files (`/var/log`), mail queues, and temporary files.</li>
+            <li><strong>`/tmp`:</strong> (Temporary) Temporary files, usually deleted on system reboot.</li>
+            <li><strong>`/dev`:</strong> (Devices) Special device files representing hardware devices.</li>
+            <li><strong>`/proc`:</strong> (Processes) A virtual filesystem providing information about running processes and kernel state.</li>
+            <li><strong>`/sys`:</strong> (System) A virtual filesystem providing access to kernel information and device drivers.</li>
+            <li><strong>`/boot`:</strong> Contains files needed to boot the operating system.</li>
+            <li><strong>`/media`:</strong> Mount points for removable media.</li>
+            <li><strong>`/mnt`:</strong> (Mount) Temporarily mounted filesystems.</li>
+            <li><strong>`/snap`:</strong> Where Snap packages are typically mounted.</li>
+        </ul>
+
+        <h2 id="file-permissions-and-ownership">7. File Permissions and Ownership</h2>
+        <p>Linux security relies on file permissions and ownership to control access to files and directories.</p>
+        <h3>Permissions (Read, Write, Execute):</h3>
+        <ul>
+            <li>`r` (Read): Can view content (file) or list contents (directory).</li>
+            <li>`w` (Write): Can modify/delete content (file) or create/delete/rename files within (directory).</li>
+            <li>`x` (Execute): Can run (file) or enter/traverse (directory).</li>
+        </ul>
+        <h3>Permission Categories:</h3>
+        <p>Permissions are assigned to three categories:</p>
+        <ul>
+            <li>`u` (User/Owner): The user who owns the file or directory.</li>
+            <li>`g` (Group): The group that owns the file or directory.</li>
+            <li>`o` (Others): All other users on the system.</li>
+        </ul>
+        <h3>Viewing Permissions (`ls -l`):</h3>
+        <pre><code class="language-bash">ls -l my_script.sh
+# Example Output: -rwxr-xr-- 1 yourusername yourusername 1234 Jul 19 10:00 my_script.sh</code></pre>
+        <p>Breakdown of `-rwxr-xr--`:</p>
+        <ul>
+            <li>First character (`-`): File type (`-` for regular file, `d` for directory, `l` for symbolic link).</li>
+            <li>Next 3 (`rwx`): Owner's permissions.</li>
+            <li>Next 3 (`r-x`): Group's permissions.</li>
+            <li>Last 3 (`r--`): Others' permissions.</li>
+        </ul>
+        <h3>Changing Permissions (`chmod`):</h3>
+        <p>Can use symbolic mode (r, w, x, u, g, o, a) or octal (numeric) mode.</p>
+        <ul>
+            <li><strong>Octal (Numeric) Mode:</strong> Each permission has a numeric value: `r=4`, `w=2`, `x=1`. Sum the values for each category.
+                <pre><code class="language-bash">chmod 755 my_script.sh # Owner: rwx (7), Group: r-x (5), Others: r-x (5)
+# Visual: -rwxr-xr-x
+chmod 644 my_document.txt # Owner: rw- (6), Group: r-- (4), Others: r-- (4)
+# Visual: -rw-r--r--
+chmod +x my_script.sh # Add execute permission for all (commonly used for scripts)</code></pre>
+            </li>
+        </ul>
+        <h3>Changing Ownership (`chown`, `chgrp`):</h3>
+        <p>Requires `sudo` (superuser privileges).</p>
+        <ul>
+            <li>`chown user:group file`: Change both owner and group.
+                <pre><code class="language-bash">sudo chown newuser:newgroup /var/www/html/index.html
+sudo chown -R newuser:newgroup /opt/my_app # Recursively change for folder contents</code></pre>
+            </li>
+            <li>`chgrp group file`: Change only the group ownership.
+                <pre><code class="language-bash">sudo chgrp webadmin /var/www/html/</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="user-and-group-management">8. User and Group Management</h2>
+        <p>Ubuntu provides commands for managing user accounts and groups.</p>
+        <h3>User Accounts:</h3>
+        <ul>
+            <li><strong>`root`:</strong> The superuser, has full administrative privileges.</li>
+            <li><strong>System users:</strong> Accounts created by services/applications (UIDs 1-999).</li>
+            <li><strong>Normal users:</strong> Regular user accounts (UIDs usually 1000+).</li>
+        </ul>
+        <h3>Common Commands (requires `sudo` for management):</h3>
+        <ul>
+            <li><strong>`whoami`:</strong> Display the current username.</li>
+            <li><strong>`id`:</strong> Display user and group IDs for the current or specified user.
+                <pre><code class="language-bash">id yourusername
+# Output example: uid=1000(yourusername) gid=1000(yourusername) groups=1000(yourusername),4(adm),24(cdrom),27(sudo)...</code></pre>
+            </li>
+            <li><strong>`adduser`:</strong> Create a new user account. This command is a higher-level script that sets up the home directory, default group, and prompts for password/details.
+                <pre><code class="language-bash">sudo adduser newuser
+# Follow prompts for password and user information.</code></pre>
+            </li>
+            <li><strong>`useradd`:</strong> A lower-level command for creating users. Doesn't create home directory or set password by default.
+                <pre><code class="language-bash">sudo useradd -m -s /bin/bash newuser2 # -m: create home dir, -s: set shell</code></pre>
+            </li>
+            <li><strong>`passwd`:</strong> Set or change a user's password.
+                <pre><code class="language-bash">passwd          # Change your own password
+sudo passwd newuser # Set password for newuser</code></pre>
+            </li>
+            <li><strong>`usermod`:</strong> Modify user account properties.
+                <pre><code class="language-bash">sudo usermod -aG sudo newuser # Add newuser to 'sudo' group (grant sudo privileges)
+sudo usermod -l new_name old_name # Change username (careful with this!)
+sudo usermod -d /home/customhome newuser # Change home directory</code></pre>
+            </li>
+            <li><strong>`deluser` / `userdel`:</strong> Delete a user account.
+                <pre><code class="language-bash">sudo deluser olduser # Delete user, but leave home directory
+sudo deluser --remove-home olduser2 # Delete user and home directory</code></pre>
+            </li>
+        </ul>
+        <h3>Groups:</h3>
+        <p>Groups are collections of users, simplifying permission management for multiple users.</p>
+        <ul>
+            <li><strong>`addgroup`:</strong> Create a new group.
+                <pre><code class="language-bash">sudo addgroup mydevgroup</code></pre>
+            </li>
+            <li><strong>`delgroup`:</strong> Delete a group.
+                <pre><code class="language-bash">sudo delgroup myoldgroup</code></pre>
+            </li>
+            <li><strong>`gpasswd`:</strong> Manage group members.
+                <pre><code class="language-bash">sudo gpasswd -a newuser mydevgroup # Add newuser to mydevgroup
+sudo gpasswd -d olduser mydevgroup # Remove olduser from mydevgroup</code></pre>
+            </li>
+            <li><strong>`groups`:</strong> List groups a user belongs to.
+                <pre><code class="language-bash">groups # List groups for current user
+groups newuser # List groups for newuser</code></pre>
+            </li>
+        </ul>
+        <h3>Configuration Files:</h3>
+        <ul>
+            <li>`/etc/passwd`: Stores user account information (username, UID, GID, home directory, shell).</li>
+            <li>`/etc/shadow`: Stores encrypted user passwords and password aging. (Root-readable only).</li>
+            <li>`/etc/group`: Stores information about groups.</li>
+            <li>`/etc/sudoers`: Defines which users/groups can run `sudo` commands (edited with `visudo`).</li>
+        </ul>
+
+        <h2 id="package-management-apt">9. Package Management (APT)</h2>
+        <p>Ubuntu uses the Advanced Package Tool (APT) for managing software packages. It's a powerful and easy-to-use system.</p>
+        <ul>
+            <li><strong>Update package lists:</strong> Downloads the latest package information from configured repositories. Essential before installing or upgrading.
+                <pre><code class="language-bash">sudo apt update</code></pre>
+            </li>
+            <li><strong>Install packages:</strong>
+                <pre><code class="language-bash">sudo apt install nginx       # Install Nginx web server
+sudo apt install git nano    # Install multiple packages</code></pre>
+            </li>
+            <li><strong>Upgrade installed packages:</strong> Updates all currently installed packages to their latest available versions.
+                <pre><code class="language-bash">sudo apt upgrade</code></pre>
+            </li>
+            <li><strong>Full upgrade:</strong> Performs a full upgrade, potentially installing or removing new dependencies.
+                <pre><code class="language-bash">sudo apt full-upgrade</code></pre>
+            </li>
+            <li><strong>Remove packages:</strong> Removes the package, but may leave configuration files.
+                <pre><code class="language-bash">sudo apt remove nginx</code></pre>
+            </li>
+            <li><strong>Purge packages:</strong> Removes the package and its configuration files.
+                <pre><code class="language-bash">sudo apt purge nginx</code></pre>
+            </li>
+            <li><strong>Autoremove:</strong> Removes unused dependency packages that were installed with other packages but are no longer needed.
+                <pre><code class="language-bash">sudo apt autoremove</code></pre>
+            </li>
+            <li><strong>Search for packages:</strong>
+                <pre><code class="language-bash">apt search vsftpd</code></pre>
+            </li>
+            <li><strong>Show package details:</strong>
+                <pre><code class="language-bash">apt show nginx</code></pre>
+            </li>
+            <li><strong>Snap Packages:</strong> Ubuntu also supports Snap packages (universal Linux packages).
+                <pre><code class="language-bash">snap install &lt;package-name&gt;
+snap refresh &lt;package-name&gt;
+snap remove &lt;package-name&gt;</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="process-management">10. Process Management</h2>
+        <p>Managing running programs and background tasks.</p>
+        <ul>
+            <li><strong>`ps` (Process Status):</strong> Displays information about running processes.
+                <pre><code class="language-bash">ps aux            # Show all running processes (user, CPU, memory usage)
+ps -ef            # Show all processes in full format (more details)
+ps -p &lt;PID&gt;       # Show info for a specific Process ID</code></pre>
+            </li>
+            <li><strong>`top`:</strong> Provides a real-time, dynamic view of running processes, CPU usage, memory usage, and other system information. Press <kbd>q</kbd> to quit.
+                <pre><code class="language-bash">top</code></pre>
+            </li>
+            <li><strong>`htop`:</strong> An interactive process viewer, similar to `top` but with a more user-friendly interface. (Installable: `sudo apt install htop`).
+                <pre><code class="language-bash">htop</code></pre>
+            </li>
+            <li><strong>`kill`:</strong> Sends a signal to a process, typically to terminate it. Requires the Process ID (PID).
+                <pre><code class="language-bash">kill &lt;PID&gt;            # Sends SIGTERM (graceful termination request)
+kill -9 &lt;PID&gt;         # Sends SIGKILL (forceful termination, cannot be ignored)</code></pre>
+            </li>
+            <li><strong>`pkill` / `killall`:</strong> Kill processes by name.
+                <pre><code class="language-bash">pkill firefox         # Kills all processes named firefox
+killall nginx         # Kills all processes named nginx</code></pre>
+            </li>
+            <li><strong>`jobs`:</strong> Lists background jobs in the current shell session.</li>
+            <li><strong>`fg` (Foreground):</strong> Brings a background job to the foreground.</li>
+            <li><strong>`bg` (Background):</strong> Sends a suspended job to the background. (Use <kbd>Ctrl</kbd> + <kbd>z</kbd> to suspend a foreground job first).</li>
+            <li><strong>`nohup command &`:</strong> Run a command in the background, immune to terminal closure.</li>
+        </ul>
+
+        <h2 id="service-management-systemd">11. Service Management (systemd)</h2>
+        <p>Ubuntu, like most modern Linux distributions, uses `systemd` as its init system and service manager. It controls system services (daemons).</p>
+        <ul>
+            <li><strong>`systemctl status &lt;service_name&gt;`:</strong> Check the status of a service.
+                <pre><code class="language-bash">systemctl status nginx.service
+# Output will show if it's active (running), inactive (dead), enabled (starts on boot), etc.</code></pre>
+            </li>
+            <li><strong>`systemctl start &lt;service_name&gt;`:</strong> Start a service.
+                <pre><code class="language-bash">sudo systemctl start nginx.service</code></pre>
+            </li>
+            <li><strong>`systemctl stop &lt;service_name&gt;`:</strong> Stop a service.
+                <pre><code class="language-bash">sudo systemctl stop nginx.service</code></pre>
+            </li>
+            <li><strong>`systemctl restart &lt;service_name&gt;`:</strong> Restart a service.
+                <pre><code class="language-bash">sudo systemctl restart nginx.service</code></pre>
+            </li>
+            <li><strong>`systemctl enable &lt;service_name&gt;`:</strong> Enable a service to start automatically on boot.
+                <pre><code class="language-bash">sudo systemctl enable nginx.service</code></pre>
+            </li>
+            <li><strong>`systemctl disable &lt;service_name&gt;`:</strong> Disable a service from starting automatically on boot.
+                <pre><code class="language-bash">sudo systemctl disable nginx.service</code></pre>
+            </li>
+            <li><strong>`systemctl reload &lt;service_name&gt;`:</strong> Reload a service's configuration without restarting (if supported by the service).
+                <pre><code class="language-bash">sudo systemctl reload nginx.service</code></pre>
+            </li>
+            <li><strong>`systemctl list-units --type=service`:</strong> List all active services.</li>
+            <li><strong>`systemctl is-active &lt;service_name&gt;`:</strong> Check if a service is running.</li>
+        </ul>
+
+        <h2 id="networking">12. Networking (Netplan, UFW)</h2>
+        <p>Ubuntu uses Netplan for network configuration and UFW for firewall management.</p>
+        <ul>
+            <li><strong>`ip a` (IP Address):</strong> Displays network interface information. (Recommended over `ifconfig`).
+                <pre><code class="language-bash">ip a # Shows interfaces like lo, eth0, enpXsY, wlan0 etc.</code></pre>
+            </li>
+            <li><strong>`ip route`:</strong> Displays the routing table.
+                <pre><code class="language-bash">ip route show</code></pre>
+            </li>
+            <li><strong>`ping`:</strong> Tests network connectivity to a host.
+                <pre><code class="language-bash">ping google.com</code></pre>
+            </li>
+            <li><strong>`ss` (Socket Statistics):</strong> Displays network socket information. (Modern replacement for `netstat`).
+                <pre><code class="language-bash">ss -tuln # Show TCP/UDP listening ports
+ss -tunap # Show all TCP/UDP connections with process info</code></pre>
+            </li>
+            <li><strong>`netstat` (Legacy, use `ss`):</strong> Displays network connections, routing tables, interface statistics.</li>
+            <li><strong>`curl` / `wget`:</strong> Command-line tools for making web requests and downloading files.
+                <pre><code class="language-bash">curl https://example.com
+wget https://example.com/software.deb</code></pre>
+            </li>
+            <li><strong>`nslookup` / `dig`:</strong> DNS lookup utilities.</li>
+            <li><strong>`netplan`:</strong> Ubuntu's modern network configuration utility. Configuration files are YAML files in `/etc/netplan/`.
+                <pre><code class="language-bash"># Example Netplan config (50-cloud-init.yaml for DHCP):
+# Use 'sudo nano /etc/netplan/50-cloud-init.yaml'
+# network:
+#   ethernets:
+#     enp0s3: # Your ethernet interface name
+#       dhcp4: true
+#   version: 2
+
+# After editing a Netplan file:
+sudo netplan generate # Generate configuration files
+sudo netplan apply    # Apply changes</code></pre>
+            </li>
+            <li><strong>UFW (Uncomplicated Firewall):</strong> Ubuntu's default firewall management tool, simplifying `iptables` commands.
+                <pre><code class="language-bash">sudo ufw enable       # Enable firewall
+sudo ufw allow ssh    # Allow SSH (port 22)
+sudo ufw allow http   # Allow HTTP (port 80)
+sudo ufw status verbose # Check status</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="storage-management">13. Storage Management</h2>
+        <p>Managing disk space, partitions, and file systems.</p>
+        <ul>
+            <li><strong>`df` (Disk Free):</strong> Reports file system disk space usage.
+                <pre><code class="language-bash">df -h # Human-readable output (GB, MB)</code></pre>
+            </li>
+            <li><strong>`du` (Disk Usage):</strong> Estimates file space usage of files and directories.
+                <pre><code class="language-bash">du -sh /home/yourusername # Summarize home directory size (human-readable)
+du -h /var/log           # Show sizes of subdirectories in /var/log</code></pre>
+            </li>
+            <li><strong>`lsblk` (List Block Devices):</strong> Lists information about all available or specified block devices (hard drives, partitions).
+                <pre><code class="language-bash">lsblk</code></pre>
+            </li>
+            <li><strong>`fdisk` (Partition Disk):</strong> Command-line utility for disk partitioning. (Use with extreme caution).
+                <pre><code class="language-bash">sudo fdisk /dev/sda # Opens interactive partitioning tool for sda</code></pre>
+            </li>
+            <li><strong>`mkfs` (Make Filesystem):</strong> Builds a Linux file system on a device.
+                <pre><code class="language-bash">sudo mkfs.ext4 /dev/sdb1 # Format partition sdb1 with ext4 filesystem</code></pre>
+            </li>
+            <li><strong>`mount` / `umount`:</strong> Mounts a file system onto a directory, making it accessible. `umount` unmounts it.
+                <pre><code class="language-bash">sudo mount /dev/sdb1 /mnt/data # Mount sdb1 to /mnt/data
+sudo umount /mnt/data # Unmount /mnt/data</code></pre>
+            </li>
+            <li><strong>`/etc/fstab`:</strong> A configuration file that defines static file systems to be mounted automatically at boot time.</li>
+            <li><strong>LVM (Logical Volume Manager):</strong> Provides a more flexible way to manage disk space. (More advanced topic).</li>
+        </ul>
+
+        <h2 id="shell-scripting-basics">14. Shell Scripting Basics</h2>
+        <p>Shell scripting allows you to automate tasks by writing a series of commands in a file that the shell can execute. Ubuntu typically uses Bash as its default shell.</p>
+        <h3>A. Creating a Script:</h3>
+        <pre><code class="language-bash"># Create a file named 'hello_ubuntu.sh'
+nano hello_ubuntu.sh
+
+# Add the following content:
+#!/bin/bash
+# This is my first Ubuntu script.
+
+echo "Hello from Ubuntu!"
+echo "User: $(whoami)"
+echo "Uptime: $(uptime -p)" # Human-readable uptime</code></pre>
+        <h3>B. Making Executable and Running:</h3>
+        <pre><code class="language-bash">chmod +x hello_ubuntu.sh
+./hello_ubuntu.sh</code></pre>
+        <h3>C. Basic Scripting Concepts:</h3>
+        <ul>
+            <li><strong>Variables:</strong> `NAME="Ubuntu"`, `echo "Welcome to $NAME"`.</li>
+            <li><strong>Input/Output:</strong> `echo` for output, `read` for user input.</li>
+            <li><strong>Conditionals (`if`, `elif`, `else`):</strong> `if [[ $NUM -gt 10 ]]; then ... fi`.
+                <ul>
+                    <li>String: `==`, `!=`. Numeric: `-eq`, `-gt`, `-lt`. File: `-f`, `-d`.</li>
+                </ul>
+            </li>
+            <li><strong>Loops (`for`, `while`):</strong> `for i in {1..3}; do ... done`. `while [[ $COUNT -lt 5 ]]; do ... done`.</li>
+            <li><strong>Functions:</strong> `my_func() { echo "Inside function"; }`.</li>
+            <li><strong>Command-line Arguments:</strong> `$0`, `$1`, `$#`, `$@`.</li>
+            <li><strong>Error Handling:</strong> `set -e` (exit on error), `set -x` (debug mode).</li>
+            <li><strong>Input/Output Redirection:</strong> `>`, `>>`, `2>`.</li>
+            <li><strong>Pipes (`|`):</strong> Chain commands together.</li>
+        </ul>
+
+        <h2 id="text-editors">15. Text Editors (GUI & CLI)</h2>
+        <p>Ubuntu provides both graphical and command-line text editors.</p>
+        <ul>
+            <li><strong>Gedit (GUI):</strong> Simple, user-friendly graphical text editor.
+                <pre><code class="language-bash">gedit my_document.txt &amp; # &amp; runs in background, keeps terminal free</code></pre>
+            </li>
+            <li><strong>Nano (CLI):</strong> Simple, intuitive terminal-based editor with on-screen shortcuts.
+                <pre><code class="language-bash">nano my_config.conf</code></pre>
+            </li>
+            <li><strong>Vim (CLI):</strong> Powerful, highly efficient modal editor. Steeper learning curve but very fast once mastered.
+                <pre><code class="language-bash">vim myscript.sh</code></pre>
+            </li>
+            <li><strong>VS Code / Sublime Text:</strong> Popular powerful graphical code editors often installed by developers.</li>
+        </ul>
+
+        <h2 id="security-best-practices">16. Security Best Practices</h2>
+        <p>Implementing security best practices is crucial for any Ubuntu system.</p>
+        <ul>
+            <li><strong>Keep System Updated:</strong> Regularly update your OS and software to apply security patches.
+                <pre><code class="language-bash">sudo apt update &amp;&amp; sudo apt upgrade -y</code></pre>
+            </li>
+            <li><strong>Use Strong Passwords & SSH Keys:</strong> For all user accounts, especially those with `sudo` privileges. Prefer SSH key-based authentication for remote access.</li>
+            <li><strong>Configure Firewall (UFW):</strong> Restrict network access to only necessary ports.
+                <pre><code class="language-bash">sudo ufw enable
+sudo ufw allow 22/tcp # Allow SSH
+sudo ufw allow 80/tcp # Allow HTTP
+sudo ufw status verbose # Check firewall status</code></pre>
+            </li>
+            <li><strong>Principle of Least Privilege:</strong> Grant users and services only the minimum permissions necessary. Avoid using `root` for daily operations.</li>
+            <li><strong>Disable Unnecessary Services:</strong> Stop and disable services you don't need to reduce the attack surface.
+                <pre><code class="language-bash">sudo systemctl disable &lt;service_name&gt;</code></pre>
+            </li>
+            <li><strong>Monitor Logs:</strong> Regularly review system logs (`/var/log/syslog`, `/var/log/auth.log`) for suspicious activity. Use `journalctl` for `systemd` logs.
+                <pre><code class="language-bash">sudo journalctl -f # Follow live logs
+sudo journalctl -u sshd # View SSH daemon logs</code></pre>
+            </li>
+            <li><strong>Regular Backups:</strong> Implement a robust backup strategy for critical data.</li>
+            <li><strong>Secure SSH:</strong> Disable password authentication (use keys), change default SSH port, and restrict root login directly.</li>
+            <li><strong>Fail2ban:</strong> Install Fail2ban to protect against brute-force attacks by blocking IPs that show malicious signs.
+                <pre><code class="language-bash">sudo apt install fail2ban
+sudo systemctl enable fail2ban
+sudo systemctl start fail2ban</code></pre>
+            </li>
+        </ul>
+
+        <div class="tip">
+            <strong>Your Ubuntu Journey Begins!</strong>
+            <p>Ubuntu provides an excellent entry point into the world of Linux. Its user-friendly GUI, robust command-line tools, and extensive software ecosystem make it a powerful choice for both personal computing and server administration. Consistent practice, experimentation, and leveraging its vast community resources will empower you to master this versatile operating system.</p>
+        </div>
+    </div>
+</body>
+</html>
