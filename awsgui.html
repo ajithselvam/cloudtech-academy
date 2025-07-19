@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete AWS Tutorial - GUI Version</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete AWS Tutorial - GUI Version</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-aws">1. What is AWS?</a></li>
+                <li><a href="#aws-global-infrastructure">2. AWS Global Infrastructure</a></li>
+                <li><a href="#getting-started-with-aws">3. Getting Started with AWS</a></li>
+                <li><a href="#compute-services">4. Compute Services (EC2, Lambda, ECS, EKS)</a></li>
+                <li><a href="#storage-services">5. Storage Services (S3, EBS, EFS, Glacier)</a></li>
+                <li><a href="#networking-services">6. Networking Services (VPC, Route 53, ELB, CloudFront)</a></li>
+                <li><a href="#database-services">7. Database Services (RDS, DynamoDB, Aurora, Redshift)</a></li>
+                <li><a href="#security-identity-and-compliance">8. Security, Identity, & Compliance (IAM, GuardDuty, Security Hub, WAF)</a></li>
+                <li><a href="#management-governance-and-serverless">9. Management, Governance, & Serverless (CloudWatch, CloudFormation, Systems Manager, Lambda)</a></li>
+                <li><a href="#analytics-and-machine-learning">10. Analytics & Machine Learning (Athena, Kinesis, Glue, SageMaker)</a></li>
+                <li><a href="#developer-tools">11. Developer Tools (CodeCommit, CodePipeline, CodeBuild, CodeDeploy)</a></li>
+                <li><a href="#cost-management">12. Cost Management</a></li>
+                <li><a href="#best-practices">13. Best Practices (Well-Architected Framework)</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-aws">1. What is AWS?</h2>
+        <p><strong>Amazon Web Services (AWS)</strong> is the world's most comprehensive and broadly adopted cloud platform, offering over 200 fully featured services from data centers globally. Millions of customers—including the fastest-growing startups, largest enterprises, and leading government agencies—are using AWS to lower costs, become more agile, and innovate faster.</p>
+        <p>AWS provides on-demand delivery of compute power, database storage, applications, and other IT resources via the internet with pay-as-you-go pricing.</p>
+        <h3>Key Advantages of Cloud Computing (AWS):</h3>
+        <ul>
+            <li><strong>Agility:</strong> Rapidly spin up resources as needed.</li>
+            <li><strong>Elasticity/Scalability:</strong> Scale resources up or down automatically based on demand.</li>
+            <li><strong>Cost-Effectiveness:</strong> Pay only for what you use, eliminating large upfront hardware investments.</li>
+            <li><strong>Global Reach:</strong> Deploy applications globally in minutes.</li>
+            <li><strong>Reliability:</strong> Highly reliable infrastructure with built-in redundancy.</li>
+            <li><strong>Security:</strong> Benefit from AWS's robust security measures and compliance certifications.</li>
+        </ul>
+
+        <h2 id="aws-global-infrastructure">2. AWS Global Infrastructure</h2>
+        <p>AWS operates a highly available and resilient infrastructure to serve its global customer base.</p>
+        <ul>
+            <li><strong>Regions:</strong> Geographic locations around the world where AWS clusters data centers. Each region is a separate, isolated geographical area. Examples: `US East (N. Virginia)`, `Europe (Ireland)`, `Asia Pacific (Singapore)`.</li>
+            <li><strong>Availability Zones (AZs):</strong> Isolated locations within a Region. Each AZ is physically distinct, with independent power, cooling, and networking, designed to be isolated from failures in other AZs. They are connected by low-latency links.</li>
+            <li><strong>Local Zones:</strong> Extensions of an AWS Region that place compute, storage, database, and other select services closer to large population, industry, and IT centers.</li>
+            <li><strong>Wavelength Zones:</strong> Deliver AWS services at the edge of the 5G network, enabling ultra-low latency applications.</li>
+            <li><strong>Edge Locations (CloudFront):</strong> Data centers operated by AWS that cache content closer to end-users globally, reducing latency for content delivery.</li>
+        </ul>
+        <div class="tip">
+            <strong>Region Choice:</strong> When deploying resources, choose a region closest to your users for lower latency, or based on data sovereignty requirements. You can select your current region from the dropdown menu in the top right of the AWS Console.
+        </div>
+
+        <h2 id="getting-started-with-aws">3. Getting Started with AWS</h2>
+        <h3>A. Create an AWS Account:</h3>
+        <p>Go to <a href="https://aws.amazon.com/" target="_blank">aws.amazon.com</a> and click "Create an AWS Account." You'll need an email address, password, credit card (for verification, you won't be charged for Free Tier usage), and a phone number.</p>
+        <div class="warning">
+            <strong>Security Best Practice:</strong> After creating your account, immediately set up **Multi-Factor Authentication (MFA)** for your root account and create an **IAM user** with administrative privileges for daily use. Avoid using the root account for routine tasks.
+        </div>
+        <p><strong>Steps for setting up MFA on AWS root account (GUI):</strong></p>
+        <ol>
+            <li>Log in to AWS Management Console as the root user.</li>
+            <li>In the top right, click on your account name (e.g., "Root user") and select **Security credentials**.</li>
+            <li>Under "Multi-factor authentication (MFA)", click **Activate MFA**.</li>
+            <li>Choose **Authenticator app** (e.g., Google Authenticator, Authy) and click **Next**.</li>
+            <li>Follow the on-screen instructions to scan the QR code with your authenticator app and enter two consecutive MFA codes. Click **Add MFA**.</li>
+        </ol>
+
+        <h3>B. The AWS Management Console:</h3>
+        <p>This is the web-based interface for managing your AWS resources. This tutorial will focus on using the Console GUI.</p>
+        <pre><code class="language-bash"># Access: https://aws.amazon.com/console/</code></pre>
+        <p>Upon logging in, you'll see the **AWS Management Console Home**, providing a search bar for services and links to recently visited services.</p>
+
+        <h3>C. AWS Free Tier:</h3>
+        <p>Offers free usage of many AWS services for new accounts (typically for 12 months) up to certain limits. Great for learning and experimenting without incurring costs. Always check the <a href="https://aws.amazon.com/free/" target="_blank">AWS Free Tier page</a> for current limits.</p>
+
+        <h2 id="compute-services">4. Compute Services</h2>
+        <p>These services provide the computing power for your applications.</p>
+
+        <h3>A. Amazon EC2 (Elastic Compute Cloud) - GUI Usage:</h3>
+        <p>Provides resizable compute capacity in the cloud (virtual servers).</p>
+        <ol>
+            <li><strong>Navigate to EC2:</strong>
+                <pre><code>AWS Management Console &gt; Search for "EC2" &gt; Select EC2 under Services</code></pre>
+            </li>
+            <li><strong>Launch an Instance:</strong>
+                <ul>
+                    <li>In the EC2 Dashboard, click **Launch instance** (or "Launch instances").</li>
+                    <li><strong>Name and tags:</strong> Provide a **Name** (e.g., `MyWebServer`).</li>
+                    <li><strong>Application and OS Images (Amazon Machine Image - AMI):</strong> Choose an AMI (e.g., `Amazon Linux`, `Ubuntu`, `Windows`). Select the **Free tier eligible** option if available.</li>
+                    <li><strong>Instance type:</strong> Select an instance type (e.g., `t2.micro` for Free Tier).</li>
+                    <li><strong>Key pair (login):</strong> Click **Create new key pair**. Give it a name (e.g., `my-ec2-key`), choose `RSA` and `.pem`. Click **Create key pair**. The `.pem` file will download; store it securely. You'll use this for SSH.</li>
+                    <li><strong>Network settings:</strong>
+                        <ul>
+                            <li>**Firewall (security groups):** Select **Create security group**. Give it a name (e.g., `my-web-sg`).</li>
+                            <li>Check "Allow SSH traffic from" (select `My IP` or `Anywhere` for testing).</li>
+                            <li>Check "Allow HTTP traffic from the Internet" (and HTTPS if needed).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Configure storage:</strong> Default 8GB is usually fine for `t2.micro`.</li>
+                    <li><strong>Advanced details:</strong> (Optional) Scroll down to "User data" to paste a script that runs on instance launch.
+                        <pre><code class="language-bash">#!/bin/bash
+sudo yum update -y # For Amazon Linux
+sudo yum install -y nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx</code></pre>
+                    </li>
+                    <li>Click **Launch instance**.</li>
+                </ul>
+            </li>
+            <li><strong>Connect to the EC2 Instance:</strong>
+                <ul>
+                    <li>Once the instance state is "Running," click on its Instance ID.</li>
+                    <li>Click the **Connect** button.</li>
+                    <li>Choose the **EC2 Instance Connect** tab (simplest, uses browser). Click **Connect**.</li>
+                    <li>Alternatively, use the **SSH client** tab for instructions on connecting from your local terminal using the `.pem` file.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>B. AWS Lambda (Serverless Compute) - GUI Usage:</h3>
+        <p>Runs code without provisioning or managing servers. You only pay for the compute time consumed.</p>
+        <ol>
+            <li><strong>Navigate to Lambda:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Lambda" &gt; Select Lambda under Services</code></pre>
+            </li>
+            <li><strong>Create a Function:</strong>
+                <ul>
+                    <li>Click **Create function**.</li>
+                    <li><strong>Author from scratch:</strong>
+                        <ul>
+                            <li><strong>Function name:</strong> (e.g., `MyS3Processor`).</li>
+                            <li><strong>Runtime:</strong> (e.g., `Python 3.9`).</li>
+                            <li><strong>Architecture:</strong> (e.g., `x86_64`).</li>
+                            <li><strong>Change default execution role:</strong> Select "Create a new role with basic Lambda permissions". This role allows your function to log to CloudWatch.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Create function**.</li>
+                </ul>
+            </li>
+            <li><strong>Add Trigger (e.g., S3):</strong>
+                <ul>
+                    <li>In the Function overview page, click **Add trigger**.</li>
+                    <li>Select `S3` as the trigger configuration.</li>
+                    <li><strong>Bucket:</strong> Select an existing S3 bucket or create a new one (e.g., `my-lambda-trigger-bucket-2025`).</li>
+                    <li><strong>Event types:</strong> (e.g., `All object create events`).</li>
+                    <li>Check "Enable trigger".</li>
+                    <li>Click **Add**.</li>
+                </ul>
+            </li>
+            <li><strong>Write/Edit Function Code:</strong>
+                <ul>
+                    <li>In the "Code" tab of your function, use the inline code editor.</li>
+                    <li>Paste your function code (e.g., the Python code from the CLI tutorial).</li>
+                    <pre><code class="language-python">import json
+
+def lambda_handler(event, context):
+    for record in event['Records']:
+        bucket_name = record['s3']['bucket']['name']
+        object_key = record['s3']['object']['key']
+        file_size = record['s3']['object']['size']
+        print(f"New object '{object_key}' uploaded to bucket '{bucket_name}' with size {file_size} bytes.")
+        
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Lambda processed S3 event successfully!')
+    }</code></pre>
+                    <li>Click **Deploy**.</li>
+                </ul>
+            </li>
+            <li><strong>Test:</strong> Upload a file to the S3 bucket you configured as a trigger. Go to the "Monitor" tab of your Lambda function and click "View CloudWatch logs" to see the output.</li>
+        </ol>
+
+        <h3>C. Amazon ECS (Elastic Container Service) - GUI Usage:</h3>
+        <p>A fully managed container orchestration service that makes it easy to run, stop, and manage Docker containers on a cluster.</p>
+        <ol>
+            <li><strong>Navigate to ECS:</strong>
+                <pre><code>AWS Management Console &gt; Search for "ECS" &gt; Select ECS under Services</code></pre>
+            </li>
+            <li><strong>Create Cluster & Task Definition & Service:</strong>
+                <ul>
+                    <li>Go to **Clusters** &gt; **Create Cluster**. Choose a networking configuration.</li>
+                    <li>Go to **Task Definitions** &gt; **Create new task definition**. Define your Docker container image, CPU, memory.</li>
+                    <li>Go to **Services** &gt; **Create**. Select your cluster, task definition, and configure desired count, load balancing.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>D. Amazon EKS (Elastic Kubernetes Service) - GUI Usage:</h3>
+        <p>A managed Kubernetes service that simplifies running Kubernetes on AWS.</p>
+        <ol>
+            <li><strong>Navigate to EKS:</strong>
+                <pre><code>AWS Management Console &gt; Search for "EKS" &gt; Select EKS under Services</code></pre>
+            </li>
+            <li><strong>Create Cluster:</strong>
+                <ul>
+                    <li>Go to **Clusters** &gt; **Create cluster**.</li>
+                    <li>Provide a **Name** and **Kubernetes version**.</li>
+                    <li>Configure networking and logging.</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Add Node Group:</strong> After cluster creation, add a node group (EC2 instances that will run your containers).</li>
+        </ol>
+
+        <h2 id="storage-services">5. Storage Services</h2>
+        <p>AWS offers various storage options for different use cases.</p>
+
+        <h3>A. Amazon S3 (Simple Storage Service) - GUI Usage:</h3>
+        <p>Object storage for the internet. Highly durable, available, and scalable.</p>
+        <ol>
+            <li><strong>Navigate to S3:</strong>
+                <pre><code>AWS Management Console &gt; Search for "S3" &gt; Select S3 under Services</code></pre>
+            </li>
+            <li><strong>Create a Bucket:</strong>
+                <ul>
+                    <li>Click **Create bucket**.</li>
+                    <li><strong>Bucket name:</strong> Enter a globally unique name (e.g., `my-unique-s3-bucket-2025-gui`).</li>
+                    <li><strong>AWS Region:</strong> Select a region.</li>
+                    <li>(Optional) Configure Object Ownership, Block Public Access settings (default is to block all public access, which is recommended).</li>
+                    <li>Click **Create bucket**.</li>
+                </ul>
+            </li>
+            <li><strong>Upload a File:</strong>
+                <ul>
+                    <li>Click on your newly created bucket name.</li>
+                    <li>Click **Upload**.</li>
+                    <li>Click **Add files** or drag and drop files.</li>
+                    <li>Click **Upload**.</li>
+                </ul>
+            </li>
+            <li><strong>Manage/Delete Files:</strong> On the bucket details page, you can select objects to download, delete, or change their properties. To delete the bucket, it must be empty first.</li>
+        </ol>
+
+        <h3>B. Amazon EBS (Elastic Block Store) - GUI Usage:</h3>
+        <p>Block storage volumes for use with EC2 instances. Think of them as network-attached hard drives.</p>
+        <ol>
+            <li><strong>Navigate to EBS:</strong>
+                <pre><code>AWS Management Console &gt; EC2 &gt; Elastic Block Store &gt; Volumes</code></pre>
+            </li>
+            <li><strong>Create Volume:</strong>
+                <ul>
+                    <li>Click **Create volume**.</li>
+                    <li><strong>Volume Type:</strong> (e.g., `gp3` General Purpose SSD).</li>
+                    <li><strong>Size:</strong> (e.g., `50 GiB`).</li>
+                    <li><strong>Availability Zone:</strong> Must be the same as the EC2 instance you'll attach it to.</li>
+                    <li>Click **Create volume**.</li>
+                </ul>
+            </li>
+            <li><strong>Attach to Instance:</strong> Once created, select the volume, go to **Actions** &gt; **Attach volume**. Choose your running EC2 instance.</li>
+        </ol>
+
+        <h3>C. Amazon EFS (Elastic File System) - GUI Usage:</h3>
+        <p>Scalable file storage for use with EC2 instances and on-premises servers.</p>
+        <ol>
+            <li><strong>Navigate to EFS:</strong>
+                <pre><code>AWS Management Console &gt; Search for "EFS" &gt; Select EFS under Services</code></pre>
+            </li>
+            <li><strong>Create File System:</strong>
+                <ul>
+                    <li>Click **Create file system**.</li>
+                    <li>Choose **VPC** (where your EC2 instances are).</li>
+                    <li>Review and configure mount targets (defines network access points for the EFS).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Mount on EC2:</strong> Follow the instructions provided in the EFS console for connecting to your EC2 instance (e.g., installing `amazon-efs-utils` and mounting).</li>
+        </ol>
+
+        <h3>D. Amazon S3 Glacier - GUI Usage:</h3>
+        <p>Extremely low-cost storage for data archiving and long-term backup.</p>
+        <ol>
+            <li><strong>Navigate to S3:</strong> (Glacier is a storage class within S3).
+                <pre><code>AWS Management Console &gt; S3 &gt; Buckets</code></pre>
+            </li>
+            <li><strong>Upload to Glacier:</strong>
+                <ul>
+                    <li>Create an S3 bucket or use an existing one.</li>
+                    <li>Upload objects (files) to the bucket.</li>
+                    <li>During upload, under "Storage class", select `S3 Glacier Instant Retrieval`, `S3 Glacier Flexible Retrieval`, or `S3 Glacier Deep Archive`.</li>
+                    <li>Alternatively, use S3 Lifecycle Rules to transition older data from S3 Standard to Glacier automatically.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="networking-services">6. Networking Services</h2>
+        <p>These services enable network connectivity and routing within and outside AWS.</p>
+
+        <h3>A. Amazon VPC (Virtual Private Cloud) - GUI Usage:</h3>
+        <p>Logically isolated section of the AWS Cloud where you can launch AWS resources in a virtual network that you define.</p>
+        <ol>
+            <li><strong>Navigate to VPC:</strong>
+                <pre><code>AWS Management Console &gt; Search for "VPC" &gt; Select VPC under Services</code></pre>
+            </li>
+            <li><strong>Create VPC (using the wizard):</strong>
+                <ul>
+                    <li>In the VPC Dashboard, click **Launch VPC wizard**.</li>
+                    <li>Choose "VPC with a single public subnet" or "VPC with public and private subnets".</li>
+                    <li>Provide a **VPC name** and **CIDR block** (e.g., `10.0.0.0/16`).</li>
+                    <li>For subnets, define names and CIDR blocks (e.g., `10.0.1.0/24` for public, `10.0.2.0/24` for private).</li>
+                    <li>The wizard will automatically create the Internet Gateway, Route Tables, and associate them.</li>
+                    <li>Click **Create VPC**.</li>
+                </ul>
+            </li>
+            <li><strong>Security Groups:</strong> (Managed from EC2 console under "Security Groups" or VPC console under "Security").</li>
+            <li><strong>Network ACLs (NACLs):</strong> (Managed from VPC console under "Security").</li>
+        </ol>
+
+        <h3>B. Amazon Route 53 - GUI Usage:</h3>
+        <p>A highly available and scalable cloud Domain Name System (DNS) web service.</p>
+        <ol>
+            <li><strong>Navigate to Route 53:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Route 53" &gt; Select Route 53 under Services</code></pre>
+            </li>
+            <li><strong>Create Hosted Zone:</strong>
+                <ul>
+                    <li>Click **Hosted zones** &gt; **Create hosted zone**.</li>
+                    <li><strong>Domain name:</strong> Enter your domain (e.g., `yourcompany.com`).</li>
+                    <li>Choose **Public hosted zone**.</li>
+                    <li>Click **Create hosted zone**.</li>
+                </ul>
+            </li>
+            <li><strong>Create Record:</strong>
+                <ul>
+                    <li>In your hosted zone, click **Create record**.</li>
+                    <li>Choose **Record type** (e.g., `A` for IP address, `CNAME` for alias).</li>
+                    <li>For A record: enter an **IP address** (e.g., your EC2 instance's EIP).</li>
+                    <li>Click **Create records**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>C. Elastic Load Balancing (ELB) - GUI Usage:</h3>
+        <p>Automatically distributes incoming application traffic across multiple targets, such as EC2 instances.</p>
+        <ol>
+            <li><strong>Navigate to EC2:</strong> (Load Balancers are configured under the EC2 service).
+                <pre><code>AWS Management Console &gt; EC2 &gt; Load Balancing &gt; Load Balancers</code></pre>
+            </li>
+            <li><strong>Create Load Balancer:</strong>
+                <ul>
+                    <li>Click **Create Load Balancer**.</li>
+                    <li>Choose a load balancer type (e.g., `Application Load Balancer` for HTTP/HTTPS, `Network Load Balancer` for high-performance TCP/UDP).</li>
+                    <li>Follow the wizard to configure:
+                        <ul>
+                            <li><strong>Name</strong>, **VPC**, **Availability Zones**.</li>
+                            <li><strong>Listeners</strong> (e.g., HTTP:80).</li>
+                            <li><strong>Target Groups:</strong> Create a new target group and register your EC2 instances.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Create load balancer**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>D. Amazon CloudFront - GUI Usage:</h3>
+        <p>A content delivery network (CDN) service that securely delivers data, videos, applications, and APIs to customers globally with low latency and high transfer speeds.</p>
+        <ol>
+            <li><strong>Navigate to CloudFront:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CloudFront" &gt; Select CloudFront under Services</code></pre>
+            </li>
+            <li><strong>Create Distribution:</strong>
+                <ul>
+                    <li>Click **Create distribution**.</li>
+                    <li><strong>Origin domain:</strong> Select your S3 bucket (for static websites) or your Load Balancer/EC2 instance (for dynamic content).</li>
+                    <li>Configure caching behaviors, SSL certificate.</li>
+                    <li>Click **Create distribution**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="database-services">7. Database Services</h2>
+        <p>AWS offers various managed database services.</p>
+
+        <h3>A. Amazon RDS (Relational Database Service) - GUI Usage:</h3>
+        <p>Makes it easy to set up, operate, and scale a relational database in the cloud.</p>
+        <ol>
+            <li><strong>Navigate to RDS:</strong>
+                <pre><code>AWS Management Console &gt; Search for "RDS" &gt; Select RDS under Services</code></pre>
+            </li>
+            <li><strong>Create Database:</strong>
+                <ul>
+                    <li>Click **Create database**.</li>
+                    <li><strong>Engine options:</strong> Choose a database engine (e.g., `MySQL`).</li>
+                    <li><strong>Templates:</strong> Select `Free tier` for learning.</li>
+                    <li><strong>DB instance identifier:</strong> (e.g., `mydbinstance`).</li>
+                    <li><strong>Master username & password:</strong> Set credentials.</li>
+                    <li><strong>Connectivity:</strong> Choose the VPC and Subnet group. For "Publicly accessible," select **Yes** for testing (No is recommended for production).</li>
+                    <li><strong>VPC security group:</strong> Select "Choose existing" and pick the security group that allows access from your EC2 instances (or your IP for testing).</li>
+                    <li>Click **Create database**.</li>
+                </ul>
+            </li>
+            <li><strong>Connect to RDS:</strong> Once the database status is "Available," you can find its Endpoint in the "Connectivity & security" tab. Use a database client (e.g., MySQL Workbench) to connect.</li>
+        </ol>
+
+        <h3>B. Amazon DynamoDB - GUI Usage:</h3>
+        <p>A fast and flexible NoSQL database service.</p>
+        <ol>
+            <li><strong>Navigate to DynamoDB:</strong>
+                <pre><code>AWS Management Console &gt; Search for "DynamoDB" &gt; Select DynamoDB under Services</code></pre>
+            </li>
+            <li><strong>Create Table:</strong>
+                <ul>
+                    <li>Click **Create table**.</li>
+                    <li><strong>Table name:</strong> (e.g., `MyProducts`).</li>
+                    <li><strong>Partition key:</strong> (e.g., `ProductId`, Type `String`).</li>
+                    <li><strong>Sort key:</strong> (e.g., `Category`, Type `String` - optional, but good for range queries).</li>
+                    <li>(Optional) Disable default settings to adjust capacity units, Auto Scaling.</li>
+                    <li>Click **Create table**.</li>
+                </ul>
+            </li>
+            <li><strong>Add Items:</strong> In the table, go to the "Items" tab and click "Create item" to manually add data.</li>
+        </ol>
+
+        <h3>C. Amazon Aurora - GUI Usage:</h3>
+        <p>A MySQL and PostgreSQL-compatible relational database built for the cloud, combining the performance and availability of traditional enterprise databases with the simplicity and cost-effectiveness of open-source databases.</p>
+        <ol>
+            <li><strong>Navigate to RDS:</strong> (Aurora is an engine option within RDS).
+                <pre><code>AWS Management Console &gt; RDS &gt; Databases</code></pre>
+            </li>
+            <li><strong>Create Database:</strong>
+                <ul>
+                    <li>Click **Create database**.</li>
+                    <li><strong>Engine options:</strong> Choose `Amazon Aurora`.</li>
+                    <li>Select an Edition (MySQL or PostgreSQL compatible).</li>
+                    <li>Follow the wizard similar to RDS, configuring instance size, storage, and connectivity.</li>
+                    <li>Click **Create database**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>D. Amazon Redshift - GUI Usage:</h3>
+        <p>A fast, fully managed, petabyte-scale cloud data warehouse service.</p>
+        <ol>
+            <li><strong>Navigate to Redshift:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Redshift" &gt; Select Amazon Redshift under Services</code></pre>
+            </li>
+            <li><strong>Create Cluster:</strong>
+                <ul>
+                    <li>Click **Create cluster**.</li>
+                    <li>Configure cluster identifier, node type, database configuration (admin user/password).</li>
+                    <li>Configure network settings (VPC, security group).</li>
+                    <li>Click **Create cluster**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="security-identity-and-compliance">8. Security, Identity, & Compliance</h2>
+        <p>These services help you protect your AWS resources and data.</p>
+
+        <h3>A. AWS IAM (Identity and Access Management) - GUI Usage:</h3>
+        <p>Manages access to AWS services and resources securely.</p>
+        <ol>
+            <li><strong>Navigate to IAM:</strong>
+                <pre><code>AWS Management Console &gt; Search for "IAM" &gt; Select IAM under Services</code></pre>
+            </li>
+            <li><strong>Create an IAM User:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Users** &gt; **Create user**.</li>
+                    <li><strong>User name:</strong> (e.g., `my-dev-user`). Click **Next**.</li>
+                    <li><strong>Set permissions:</strong>
+                        <ul>
+                            <li>Select "Attach policies directly".</li>
+                            <li>Search for a policy (e.g., `AmazonS3ReadOnlyAccess`). Check the box.</li>
+                            <li>(For initial learning, you might attach `AdministratorAccess` for broad access, but limit in production).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Next** &gt; **Create user**.</li>
+                    <li><strong>Access Keys (for CLI/SDK):</strong> After creating the user, click on the user name, go to **Security credentials** tab &gt; **Create access key**. Follow prompts to download the `.csv` file with Access Key ID and Secret Access Key (store securely!).</li>
+                </ul>
+            </li>
+            <li><strong>Create an IAM Role:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Roles** &gt; **Create role**.</li>
+                    <li>Choose the entity that will assume this role (e.g., `AWS service` &gt; `EC2`). Click **Next**.</li>
+                    <li>Attach permission policies (e.g., `AmazonS3ReadOnlyAccess`). Click **Next**.</li>
+                    <li>Add tags (optional) &gt; Click **Next**.</li>
+                    <li>Provide a **Role name** (e.g., `EC2S3ReadRole`) and **Description**.</li>
+                    <li>Click **Create role**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>B. Amazon GuardDuty - GUI Usage:</h3>
+        <p>A threat detection service that continuously monitors for malicious activity and unauthorized behavior.</p>
+        <ol>
+            <li><strong>Navigate to GuardDuty:</strong>
+                <pre><code>AWS Management Console &gt; Search for "GuardDuty" &gt; Select GuardDuty under Services</code></pre>
+            </li>
+            <li><strong>Enable GuardDuty:</strong>
+                <ul>
+                    <li>On the GuardDuty welcome page, click **Get started**.</li>
+                    <li>On the Welcome to GuardDuty page, click **Enable GuardDuty**.</li>
+                    <li>GuardDuty will automatically begin monitoring your AWS account.</li>
+                </ul>
+            </li>
+            <li><strong>Generate Sample Findings (Optional):</strong>
+                <ul>
+                    <li>In the GuardDuty console, go to **Settings** &gt; **Generate sample findings**.</li>
+                    <li>This will populate your findings list with sample alerts for various threat types.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>C. AWS Security Hub - GUI Usage:</h3>
+        <p>Provides a comprehensive view of your security alerts and security posture across your AWS accounts.</p>
+        <ol>
+            <li><strong>Navigate to Security Hub:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Security Hub" &gt; Select Security Hub under Services</code></pre>
+            </li>
+            <li><strong>Enable Security Hub:</strong>
+                <ul>
+                    <li>Click **Go to Security Hub**.</li>
+                    <li>Choose your regions and standards (e.g., AWS Foundational Security Best Practices).</li>
+                    <li>Click **Enable Security Hub**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>D. AWS WAF (Web Application Firewall) - GUI Usage:</h3>
+        <p>Helps protect your web applications or APIs against common web exploits that may affect availability, compromise security, or consume excessive resources.</p>
+        <ol>
+            <li><strong>Navigate to WAF & Shield:</strong>
+                <pre><code>AWS Management Console &gt; Search for "WAF" &gt; Select WAF & Shield under Services</code></pre>
+            </li>
+            <li><strong>Create Web ACL:</strong>
+                <ul>
+                    <li>Click **Web ACLs** &gt; **Create web ACL**.</li>
+                    <li>**Region:** Select the region where your resources (ALB, API Gateway, CloudFront) are deployed.</li>
+                    <li>Associate with a **resource** (e.g., an Application Load Balancer).</li>
+                    <li>Add **rules** (e.g., SQL injection, XSS rules) to protect against specific attacks.</li>
+                    <li>Click **Create web ACL**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="management-governance-and-serverless">9. Management, Governance, & Serverless</h2>
+        <p>Services to help you manage, monitor, and govern your AWS environment efficiently.</p>
+
+        <h3>A. Amazon CloudWatch - GUI Usage:</h3>
+        <p>Monitors your AWS resources and the applications you run on AWS in real-time.</p>
+        <ol>
+            <li><strong>Navigate to CloudWatch:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CloudWatch" &gt; Select CloudWatch under Services</code></pre>
+            </li>
+            <li><strong>Explore Metrics:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Metrics** &gt; **All metrics**.</li>
+                    <li>Explore metrics by AWS service (e.g., `EC2 > Per-Instance Metrics` to see CPU Utilization, Network In/Out).</li>
+                </ul>
+            </li>
+            <li><strong>Create Alarms:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Alarms** &gt; **Create alarm**.</li>
+                    <li>Select a metric (e.g., `EC2 > CPU Utilization` for a specific instance).</li>
+                    <li>Define a **Threshold type** (e.g., `Static`) and a **Threshold value** (e.g., `&gt; 80%`).</li>
+                    <li>Configure **Actions** (e.g., `Send a notification to an SNS topic`).</li>
+                    <li>Click **Create alarm**.</li>
+                </ul>
+            </li>
+            <li><strong>View Logs:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Logs** &gt; **Log groups**.</li>
+                    <li>Explore log groups created by Lambda, EC2 (with CloudWatch agent), etc.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>B. AWS CloudFormation - GUI Usage:</h3>
+        <p>Automates the creation and management of AWS resources using templates (Infrastructure as Code).</p>
+        <ol>
+            <li><strong>Navigate to CloudFormation:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CloudFormation" &gt; Select CloudFormation under Services</code></pre>
+            </li>
+            <li><strong>Create Stack:</strong>
+                <ul>
+                    <li>Click **Create stack** &gt; **With new resources (standard)**.</li>
+                    <li><strong>Prepare template:</strong> Select "Template is ready".</li>
+                    <li><strong>Template source:</strong> Choose "Upload a template file" and upload your `my-web-app.yaml` (from CLI tutorial) or `simple-vm-template.json` (from GCP CLI tutorial for illustration).</li>
+                    <li>Click **Next**.</li>
+                    <li><strong>Stack name:</strong> (e.g., `MyWebServerStackGUI`).</li>
+                    <li><strong>Parameters:</strong> Provide values for any parameters defined in your template (e.g., `adminPassword` for a VM).</li>
+                    <li>Click **Next**.</li>
+                    <li><strong>Configure stack options:</strong> (Optional, e.g., tags, rollback configurations). Click **Next**.</li>
+                    <li><strong>Review:</strong> Review details. Check "I acknowledge that AWS CloudFormation might create IAM resources."</li>
+                    <li>Click **Submit**.</li>
+                </ul>
+            </li>
+            <li><strong>Monitor & Delete:</strong> The CloudFormation console will show the status of your stack creation. To delete the stack and all its resources, select the stack and click **Delete**.</li>
+        </ol>
+
+        <h3>C. AWS Systems Manager (SSM) - GUI Usage:</h3>
+        <p>Provides visibility and control over your AWS infrastructure.</p>
+        <ol>
+            <li><strong>Navigate to Systems Manager:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Systems Manager" &gt; Select Systems Manager under Services</code></pre>
+            </li>
+            <li><strong>Explore Capabilities:</strong>
+                <ul>
+                    <li><strong>Session Manager:</strong> Get shell access to EC2 instances without opening SSH ports.</li>
+                    <li><strong>Patch Manager:</strong> Automate patching of OS and applications.</li>
+                    <li><strong>Run Command:</strong> Execute commands on multiple instances simultaneously.</li>
+                    <li><strong>Fleet Manager:</strong> Centrally manage your instances.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="analytics-and-machine-learning">10. Analytics & Machine Learning</h2>
+        <p>AWS offers a wide array of services for data analytics and AI/ML.</p>
+
+        <h3>A. Amazon Athena - GUI Usage:</h3>
+        <p>An interactive query service that makes it easy to analyze data directly in Amazon S3 using standard SQL.</p>
+        <ol>
+            <li><strong>Navigate to Athena:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Athena" &gt; Select Athena under Services</code></pre>
+            </li>
+            <li><strong>Set up Query Result Location:</strong>
+                <ul>
+                    <li>If it's your first time, you'll be prompted to set up a query result location in S3.</li>
+                    <li>Go to **Settings** &gt; **Manage settings** &gt; **Browse S3** to select/create a bucket.</li>
+                </ul>
+            </li>
+            <li><strong>Create Table from S3 Data:</strong>
+                <ul>
+                    <li>In the left pane, click the **+** next to "Tables" &gt; **Create table from S3 bucket data**.</li>
+                    <li>Follow the wizard to define:
+                        <ul>
+                            <li>**Database** (create new or select existing).</li>
+                            <li>**Table name**.</li>
+                            <li>**S3 input and output location**.</li>
+                            <li>**Data format** (e.g., CSV, JSON, Parquet).</li>
+                            <li>Define **columns** and their **data types**.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Create table**.</li>
+                </ul>
+            </li>
+            <li><strong>Run Queries:</strong> Use the query editor to write SQL queries against your S3 data.</li>
+        </ol>
+
+        <h3>B. Amazon Kinesis - GUI Usage:</h3>
+        <p>Collects, processes, and analyzes real-time streaming data.</p>
+        <ol>
+            <li><strong>Navigate to Kinesis:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Kinesis" &gt; Select Kinesis under Services</code></pre>
+            </li>
+            <li><strong>Create Kinesis Data Stream:</strong>
+                <ul>
+                    <li>Click **Create data stream**.</li>
+                    <li>Provide a **Data stream name** and number of **shards**.</li>
+                    <li>Click **Create data stream**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>C. AWS Glue - GUI Usage:</h3>
+        <p>A serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development.</p>
+        <ol>
+            <li><strong>Navigate to Glue:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Glue" &gt; Select AWS Glue under Services</code></pre>
+            </li>
+            <li><strong>Create Crawler:</strong>
+                <ul>
+                    <li>In the left pane, click **Crawlers** &gt; **Add crawler**.</li>
+                    <li>Configure crawler name, data source (e.g., S3 path), IAM role.</li>
+                    <li>This will create a "Data Catalog" (metadata repository) of your data.</li>
+                </ul>
+            </li>
+            <li><strong>Create ETL Job:</strong>
+                <ul>
+                    <li>Go to **ETL jobs** &gt; **Add job**.</li>
+                    <li>Define source and target data, transformations (e.g., join, filter).</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>D. Amazon SageMaker - GUI Usage:</h3>
+        <p>A fully managed service that helps developers and data scientists build, train, and deploy machine learning models quickly.</p>
+        <ol>
+            <li><strong>Navigate to SageMaker:</strong>
+                <pre><code>AWS Management Console &gt; Search for "SageMaker" &gt; Select Amazon SageMaker under Services</code></pre>
+            </li>
+            <li><strong>Create Notebook Instance:</strong>
+                <ul>
+                    <li>In the left pane, click **Notebook** &gt; **Notebook instances**.</li>
+                    <li>Click **Create notebook instance**.</li>
+                    <li>**Notebook instance name:** (e.g., `my-ml-notebook`).</li>
+                    <li>**Notebook instance type:** (e.g., `ml.t2.medium` for Free Tier if available).</li>
+                    <li><strong>Platform identifier:</strong> (e.g., `conda-python3`).</li>
+                    <li><strong>IAM role:</strong> Select "Create a new role" or choose an existing one with SageMaker permissions.</li>
+                    <li>Click **Create notebook instance**.</li>
+                </ul>
+            </li>
+            <li><strong>Open Jupyter:</strong> Once the status is "InService", click **Open Jupyter** or **Open JupyterLab** to start coding in a notebook.</li>
+        </ol>
+
+        <h2 id="developer-tools">11. Developer Tools</h2>
+        <p>Services for continuous integration and continuous delivery (CI/CD).</p>
+
+        <h3>A. AWS CodeCommit - GUI Usage:</h3>
+        <p>A fully-managed source control service that hosts secure Git-based repositories.</p>
+        <ol>
+            <li><strong>Navigate to CodeCommit:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CodeCommit" &gt; Select CodeCommit under Services</code></pre>
+            </li>
+            <li><strong>Create Repository:</strong>
+                <ul>
+                    <li>Click **Create repository**.</li>
+                    <li><strong>Repository name:</strong> (e.g., `my-app-repo`).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Connect:</strong> Follow the instructions provided to set up Git credentials (HTTPS or SSH) and clone/push your code.</li>
+        </ol>
+
+        <h3>B. AWS CodePipeline - GUI Usage:</h3>
+        <p>A continuous delivery service that automates your release pipelines.</p>
+        <ol>
+            <li><strong>Navigate to CodePipeline:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CodePipeline" &gt; Select CodePipeline under Services</code></pre>
+            </li>
+            <li><strong>Create Pipeline:</strong>
+                <ul>
+                    <li>Click **Create pipeline**.</li>
+                    <li><strong>Pipeline name:</strong> (e.g., `my-app-pipeline`).</li>
+                    <li>Choose a **Service role**.</li>
+                    <li><strong>Source stage:</strong> Choose **AWS CodeCommit**, select your repository and branch.</li>
+                    <li><strong>Build stage:</strong> Choose **AWS CodeBuild** (you'd need to create a CodeBuild project first).</li>
+                    <li><strong>Deploy stage:</strong> Choose **AWS CodeDeploy** or **Amazon S3** (for static website deployment).</li>
+                    <li>Click **Create pipeline**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>C. AWS CodeBuild - GUI Usage:</h3>
+        <p>A fully managed continuous integration service that compiles source code, runs tests, and produces software packages.</p>
+        <ol>
+            <li><strong>Navigate to CodeBuild:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CodeBuild" &gt; Select CodeBuild under Services</code></pre>
+            </li>
+            <li><strong>Create Build Project:</strong>
+                <ul>
+                    <li>Click **Create build project**.</li>
+                    <li><strong>Project name:</strong> (e.g., `my-app-build`).</li>
+                    <li><strong>Source:</strong> Select your source provider (CodeCommit, S3, GitHub).</li>
+                    <li><strong>Environment:</strong> Choose Managed image, Operating system, Runtime (e.g., Node.js, Python).</li>
+                    <li><strong>Buildspec:</strong> Define your build commands (e.g., `npm install`, `npm test`, `npm run build`) in a `buildspec.yml` file in your repository, or use the editor.</li>
+                    <li>Click **Create build project**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>D. AWS CodeDeploy - GUI Usage:</h3>
+        <p>Automates software deployments to a variety of compute services.</p>
+        <ol>
+            <li><strong>Navigate to CodeDeploy:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CodeDeploy" &gt; Select CodeDeploy under Services</code></pre>
+            </li>
+            <li><strong>Create Application & Deployment Group:</strong>
+                <ul>
+                    <li>Click **Applications** &gt; **Create application**. Provide a name.</li>
+                    <li>Click on the application &gt; **Create deployment group**.</li>
+                    <li>Configure deployment type (EC2/On-premises, ECS, Lambda), deployment strategy.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="cost-management">12. Cost Management</h2>
+        <p>Understanding and controlling your AWS spending is critical.</p>
+        <ol>
+            <li><strong>AWS Free Tier:</strong> As mentioned, leverage this for learning.</li>
+            <li><strong>AWS Cost Explorer:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Cost Explorer" &gt; Select Cost Explorer under Services</code></pre>
+                <ul>
+                    <li>Visualize, understand, and manage your AWS costs and usage over time. Apply filters, group by service, region, tags.</li>
+                </ul>
+            </li>
+            <li><strong>Budgets:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Budgets" &gt; Select AWS Budgets under Services</code></pre>
+                <ul>
+                    <li>Click **Create budget**.</li>
+                    <li>Choose budget type (e.g., `Cost budget`). Define your budget amount and period.</li>
+                    <li>Configure **Alerts** to notify you when actual or forecasted costs exceed thresholds.</li>
+                </ul>
+            </li>
+            <li><strong>Savings Plans & Reserved Instances (RIs):</strong>
+                <pre><code>AWS Management Console &gt; EC2 &gt; Savings Plans / Reserved Instances</code></pre>
+                <ul>
+                    <li>Explore options to commit to a certain amount of compute usage over 1 or 3 years for significant discounts.</li>
+                </ul>
+            </li>
+            <li><strong>Tagging:</strong> Apply tags (key-value pairs) to your resources to organize costs by project, department, etc. You can apply tags when creating most resources in the console.</li>
+            <li><strong>Right-Sizing:</strong> Continuously monitor resource utilization (e.g., in CloudWatch) and choose the smallest instance type or storage class that meets your needs.</li>
+        </ol>
+
+        <h2 id="best-practices">13. Best Practices (Well-Architected Framework)</h2>
+        <p>The AWS Well-Architected Framework provides guidance for designing and operating reliable, secure, efficient, and cost-effective systems in the cloud. It's built around six pillars:</p>
+        <ul>
+            <li><strong>Operational Excellence:</strong> Run and monitor systems, and continuously improve processes and procedures.</li>
+            <li><strong>Security:</strong> Protect information, systems, and assets while delivering business value through risk assessments and mitigation strategies.</li>
+            <li><strong>Reliability:</strong> Ensure your workload performs its intended function correctly and consistently when it's expected to.</li>
+            <li><strong>Performance Efficiency:</strong> Use computing resources efficiently to meet system requirements, and maintain that efficiency as demand changes and technologies evolve.</li>
+            <li><strong>Cost Optimization:</strong> Avoid unnecessary costs.</li>
+            <li><strong>Sustainability:</strong> Minimize the environmental impacts of running cloud workloads.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Your AWS Cloud Journey with the Console!</strong>
+            <p>The AWS Management Console is your primary interface for interacting with AWS services. By following the step-by-step instructions in this tutorial and consistently experimenting with different services, you'll gain invaluable hands-on experience in building and managing cloud solutions. Remember to always explore the extensive official AWS documentation for the most up-to-date information and new features, as well as their numerous workshops and quickstarts!</p>
+        </div>
+    </div>
+</body>
+</html>
