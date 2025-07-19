@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete CentOS Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete CentOS Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction-to-centos">1. Introduction to CentOS</a></li>
+                <li><a href="#centos-vs-rhel-vs-centos-stream">2. CentOS vs. RHEL vs. CentOS Stream</a></li>
+                <li><a href="#installation-methods">3. Installation Methods</a></li>
+                <li><a href="#basic-linux-commands">4. Basic Linux Commands (CLI)</a></li>
+                <li><a href="#file-system-hierarchy">5. Linux File System Hierarchy (FHS)</a></li>
+                <li><a href="#file-permissions-and-ownership">6. File Permissions and Ownership</a></li>
+                <li><a href="#user-and-group-management">7. User and Group Management</a></li>
+                <li><a href="#package-management-dnf-yum">8. Package Management (DNF/YUM)</a></li>
+                <li><a href="#process-management">9. Process Management</a></li>
+                <li><a href="#service-management-systemd">10. Service Management (systemd)</a></li>
+                <li><a href="#networking">11. Networking</a></li>
+                <li><a href="#storage-management">12. Storage Management</a></li>
+                <li><a href="#shell-scripting-basics">13. Shell Scripting Basics</a></li>
+                <li><a href="#text-editors">14. Text Editors (Nano, Vim)</a></li>
+                <li><a href="#security-best-practices">15. Security Best Practices (Firewall, SELinux)</a></li>
+                <li><a href="#desktop-environments-gui">16. Desktop Environments (GUI - Optional)</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction-to-centos">1. Introduction to CentOS</h2>
+        <p><strong>CentOS</strong> (Community Enterprise Operating System) is a Linux distribution that historically provided a free, community-supported, and functionally compatible alternative to Red Hat Enterprise Linux (RHEL). It was widely used for servers due to its stability, long-term support, and robustness.</p>
+        <p>While CentOS Linux (the traditional rebuild of RHEL) has ceased, it has been succeeded by **CentOS Stream**, which is an upstream development branch for RHEL. Despite this shift, understanding CentOS principles is crucial for anyone working with RHEL-based systems in enterprise environments.</p>
+        <h3>Key Characteristics:</h3>
+        <ul>
+            <li><strong>Stability:</strong> Known for its long release cycles and stability, ideal for production servers.</li>
+            <li><strong>Enterprise-grade:</strong> Built on the same codebase as RHEL, inheriting its enterprise features.</li>
+            <li><strong>Community Support:</strong> Extensive community support through forums and documentation.</li>
+            <li><strong>Security-focused:</strong> Integrates strong security features like SELinux and Firewalld.</li>
+            <li><strong>RPM-based:</strong> Uses the RPM Package Manager, with `dnf` (or `yum` in older versions) as the front-end.</li>
+        </ul>
+
+        <h2 id="centos-vs-rhel-vs-centos-stream">2. CentOS vs. RHEL vs. CentOS Stream</h2>
+        <p>It's important to clarify the relationship between these distributions:</p>
+        <ul>
+            <li><strong>Red Hat Enterprise Linux (RHEL):</strong> The flagship commercial Linux distribution from Red Hat. It's stable, well-tested, and comes with paid support and certifications.</li>
+            <li><strong>CentOS Linux (Historical):</strong> This was a downstream rebuild of RHEL. It took RHEL's source code, removed Red Hat branding, and released it as a free, community-supported OS. It was a binary-compatible clone of RHEL.</li>
+            <li><strong>CentOS Stream (Current):</strong> This is now the official upstream development branch for RHEL. It is a rolling release that sits *between* Fedora (bleeding edge) and RHEL (stable). Features and fixes land in CentOS Stream before they are incorporated into a future RHEL point release. It's more of a continuous delivery distribution than a point-release OS.</li>
+        </ul>
+        <div class="tip">
+            <strong>For Enterprise Users:</strong> If you need a free, stable, RHEL-compatible OS for production without commercial support, alternatives like AlmaLinux or Rocky Linux (which are true RHEL rebuilds) are now commonly used. CentOS Stream is better suited for development, continuous integration, and exploring future RHEL features.
+        </div>
+
+        <h2 id="installation-methods">3. Installation Methods</h2>
+        <p>CentOS (or CentOS Stream) is primarily used as a server OS, but can also be installed with a GUI for desktop use or learning.</p>
+        <ul>
+            <li><strong>Virtual Machine (VM):</strong>
+                <ul>
+                    <li><strong>Recommended for learning:</strong> Safest way to experiment.</li>
+                    <li>Download CentOS Stream ISO from <a href="https://www.centos.org/centos-stream/" target="_blank">centos.org/centos-stream/</a>.</li>
+                    <li>Use a hypervisor (e.g., VirtualBox, VMware Workstation Player) to create a new VM.</li>
+                    <li>During installation, choose "Server with GUI" (for desktop experience) or "Server" (minimal CLI) as the "Software Selection."</li>
+                </ul>
+            </li>
+            <li><strong>Bare Metal:</strong> Direct installation on physical server hardware.</li>
+            <li><strong>Dual Boot:</strong> Install alongside Windows/another OS.</li>
+            <li><strong>Cloud Instance:</strong> Deploy on cloud providers (AWS, Azure, GCP).</li>
+        </ul>
+        <h3>Basic Installation Steps (VM Graphical Install):</h3>
+        <ol>
+            <li>Boot your VM/computer from the CentOS Stream ISO.</li>
+            <li>Choose "Install CentOS Stream".</li>
+            <li>Select Language and Keyboard layout.</li>
+            <li><strong>Installation Summary:</strong>
+                <ul>
+                    <li><strong>Installation Destination:</strong> Select your virtual disk and configure partitioning (automatic is usually fine for beginners).</li>
+                    <li><strong>Network & Host Name:</strong> Configure network interface (e.g., enable Ethernet, set hostname).</li>
+                    <li><strong>Software Selection:</strong> Crucial step! Choose your base environment:
+                        <ul>
+                            <li>`Server with GUI`: Installs GNOME desktop and graphical tools.</li>
+                            <li>`Server`: Minimal installation, command-line only.</li>
+                            <li>`Minimal Install`: Even smaller, basic command-line utilities.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Time & Date:</strong> Set your timezone.</li>
+                    <li><strong>KDUMP:</strong> Leave enabled (default).</li>
+                    <li><strong>Security Policy:</strong> Can apply a security profile (optional).</li>
+                </ul>
+            </li>
+            <li><strong>User Settings:</strong>
+                <ul>
+                    <li><strong>Root Password:</strong> Set a strong password for the `root` user.</li>
+                    <li><strong>User Creation:</strong> Create a standard user account (recommended). Check "Make this user administrator" if you want `sudo` privileges for this user.</li>
+                </ul>
+            </li>
+            <li>Click **Begin Installation**.</li>
+            <li>After installation, **Reboot System**.</li>
+            <li>Log in with your created user account (or `root`). If you installed with GUI, you'll see the desktop.</li>
+        </ol>
+
+        <h2 id="basic-linux-commands">4. Basic Linux Commands (CLI)</h2>
+        <p>The command-line interface (CLI) is fundamental for managing CentOS. Open a "Terminal" application (if using GUI) or log in via SSH (if headless server).</p>
+        <ul>
+            <li><strong>`pwd` (Print Working Directory):</strong> Shows your current directory.
+                <pre><code class="language-bash">pwd</code></pre>
+            </li>
+            <li><strong>`ls` (List):</strong> Lists files and directories.
+                <pre><code class="language-bash">ls -l # Long format (details)
+ls -a # Show hidden files
+ls -lh # Human-readable sizes</code></pre>
+            </li>
+            <li><strong>`cd` (Change Directory):</strong> Navigates between directories.
+                <pre><code class="language-bash">cd /etc
+cd ~ # Home directory</code></pre>
+            </li>
+            <li><strong>`mkdir` (Make Directory):</strong> Creates new directories.
+                <pre><code class="language-bash">mkdir my_new_folder
+mkdir -p /opt/my_app/configs</code></pre>
+            </li>
+            <li><strong>`rmdir` (Remove Directory):</strong> Deletes empty directories.
+                <pre><code class="language-bash">rmdir empty_dir</code></pre>
+            </li>
+            <li><strong>`touch`:</strong> Creates empty files or updates a file's timestamp.
+                <pre><code class="language-bash">touch document.txt</code></pre>
+            </li>
+            <li><strong>`cp` (Copy):</strong> Copies files or directories.
+                <pre><code class="language-bash">cp source.txt destination.txt
+cp -r my_dir /tmp/</code></pre>
+            </li>
+            <li><strong>`mv` (Move):</strong> Moves or renames files/directories.
+                <pre><code class="language-bash">mv old_name.txt new_name.txt
+mv file.txt /archive/</code></pre>
+            </li>
+            <li><strong>`rm` (Remove):</strong> Deletes files or directories.
+                <pre><code class="language-bash">rm unwanted.txt
+rm -rf my_dangerous_folder # Force remove recursively (EXTREME CAUTION!)</code></pre>
+            </li>
+            <li><strong>`cat` (Concatenate):</strong> Displays the content of files.
+                <pre><code class="language-bash">cat /etc/os-release # Show OS information</code></pre>
+            </li>
+            <li><strong>`less` / `more`:</strong> View file content page by page.
+                <pre><code class="language-bash">less /var/log/messages</code></pre>
+            </li>
+            <li><strong>`head` / `tail`:</strong> Display beginning/end of a file.
+                <pre><code class="language-bash">tail -f /var/log/audit/audit.log # Follow a log file in real-time</code></pre>
+            </li>
+            <li><strong>`echo`:</strong> Prints text to the terminal.
+                <pre><code class="language-bash">echo "Hello, CentOS!"</code></pre>
+            </li>
+            <li><strong>`man` (Manual):</strong> Displays documentation for a command.
+                <pre><code class="language-bash">man dnf</code></pre>
+            </li>
+            <li><strong>`sudo` (SuperUser Do):</strong> Executes a command with root privileges.
+                <pre><code class="language-bash">sudo dnf update # Update package lists</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="file-system-hierarchy">5. Linux File System Hierarchy (FHS)</h2>
+        <p>CentOS adheres to the Filesystem Hierarchy Standard (FHS), which defines a standardized directory structure for Linux systems.</p>
+        <ul>
+            <li><strong>`/` (Root):</strong> The top-level directory. All other directories and files are located under it.</li>
+            <li><strong>`/bin`:</strong> Essential command binaries for all users.</li>
+            <li><strong>`/sbin`:</strong> Essential system binaries, typically for root or system administration.</li>
+            <li><strong>`/etc`:</strong> Host-specific system-wide configuration files (e.g., `/etc/fstab`, `/etc/ssh/sshd_config`).</li>
+            <li><strong>`/home`:</strong> Home directories for regular users (e.g., `/home/yourusername`).</li>
+            <li><strong>`/root`:</strong> The home directory for the `root` user.</li>
+            <li><strong>`/opt`:</strong> Optional application software packages, often for third-party software.</li>
+            <li><strong>`/usr`:</strong> User utilities and applications, including most commands, libraries, and documentation.
+                <ul>
+                    <li>`/usr/bin`: Most user commands.</li>
+                    <li>`/usr/local`: Locally installed software.</li>
+                </ul>
+            </li>
+            <li><strong>`/var`:</strong> Variable data files, such as log files (`/var/log`), mail queues, and temporary files that persist across reboots.</li>
+            <li><strong>`/tmp`:</strong> Temporary files, usually deleted on system reboot.</li>
+            <li><strong>`/dev`:</strong> Special device files representing hardware.</li>
+            <li><strong>`/proc`:</strong> Virtual filesystem providing information about running processes and kernel state.</li>
+            <li><strong>`/sys`:</strong> Virtual filesystem providing access to kernel information and device drivers.</li>
+            <li><strong>`/boot`:</strong> Files needed to boot the operating system.</li>
+            <li><strong>`/media`:</strong> Mount points for removable media.</li>
+            <li><strong>`/mnt`:</strong> Temporarily mounted filesystems.</li>
+            <li><strong>`/run`:</strong> Runtime variable data (replaced `/var/run` in newer systems).</li>
+        </ul>
+
+        <h2 id="file-permissions-and-ownership">6. File Permissions and Ownership</h2>
+        <p>Linux security relies heavily on file permissions and ownership to control access.</p>
+        <h3>Permissions (Read, Write, Execute):</h3>
+        <ul>
+            <li>`r` (Read): Can view content (file) or list contents (directory).</li>
+            <li>`w` (Write): Can modify/delete content (file) or create/delete/rename files within (directory).</li>
+            <li>`x` (Execute): Can run (file) or enter/traverse (directory).</li>
+        </ul>
+        <h3>Permission Categories:</h3>
+        <ul>
+            <li>`u` (User/Owner): The file's owner.</li>
+            <li>`g` (Group): The group that owns the file.</li>
+            <li>`o` (Others): All other users.</li>
+            <li>`a` (All): All categories.</li>
+        </ul>
+        <h3>Viewing Permissions (`ls -l`):</h3>
+        <pre><code class="language-bash">ls -l my_script.sh
+# Example Output: -rwxr-xr-- 1 user group 1234 Jul 19 10:00 my_script.sh</code></pre>
+        <h3>Changing Permissions (`chmod`):</h3>
+        <p>Can use symbolic mode or octal (numeric) mode.</p>
+        <ul>
+            <li><strong>Octal (Numeric) Mode:</strong> `r=4`, `w=2`, `x=1`. Sum for each category.
+                <pre><code class="language-bash">chmod 755 my_script.sh # Owner: rwx, Group: r-x, Others: r-x (-rwxr-xr-x)
+chmod 644 my_document.txt # Owner: rw-, Group: r--, Others: r-- (-rw-r--r--)
+chmod 700 my_private_key.pem # Only owner has full access</code></pre>
+            </li>
+            <li><strong>Symbolic Mode:</strong>
+                <pre><code class="language-bash">chmod u+x my_script.sh     # Add execute permission for owner
+chmod go-w my_document.txt # Remove write for group and others</code></pre>
+            </li>
+        </ul>
+        <h3>Changing Ownership (`chown`, `chgrp`):</h3>
+        <p>Requires `sudo`.</p>
+        <ul>
+            <li>`chown user:group file`: Change owner and group.
+                <pre><code class="language-bash">sudo chown newuser:newgroup /opt/app/config.conf</code></pre>
+            </li>
+            <li>`chgrp group file`: Change only group ownership.
+                <pre><code class="language-bash">sudo chgrp webadmin /var/www/html/index.html</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="user-and-group-management">7. User and Group Management</h2>
+        <p>CentOS, like other Linux systems, supports multi-user environments.</p>
+        <h3>User Accounts:</h3>
+        <ul>
+            <li><strong>`root`:</strong> The superuser (UID 0), with full administrative control.</li>
+            <li><strong>System users:</strong> Created for services/applications (UIDs typically 1-999).</li>
+            <li><strong>Normal users:</strong> Regular user accounts (UIDs typically 1000+).</li>
+        </ul>
+        <h3>Common Commands (requires `sudo` for management):</h3>
+        <ul>
+            <li><strong>`adduser`:</strong> Create a new user account. This command typically creates the home directory and sets up the default shell.
+                <pre><code class="language-bash">sudo adduser newuser
+sudo passwd newuser # Set password for newuser</code></pre>
+            </li>
+            <li><strong>`useradd`:</strong> A lower-level command than `adduser`. Doesn't create home directory or set password by default unless specified.
+                <pre><code class="language-bash">sudo useradd -m -s /bin/bash newuser2 # Create home dir, set Bash shell</code></pre>
+            </li>
+            <li><strong>`usermod`:</strong> Modify user account properties.
+                <pre><code class="language-bash">sudo usermod -aG wheel newuser # Add newuser to 'wheel' group (grants sudo privileges on CentOS)
+sudo usermod -l new_name old_name # Change username</code></pre>
+            </li>
+            <li><strong>`deluser` / `userdel`:</strong> Delete a user account.
+                <pre><code class="language-bash">sudo userdel newuser         # Delete user, leave home directory
+sudo userdel -r newuser2     # Delete user and remove home directory</code></pre>
+            </li>
+            <li><strong>`whoami`:</strong> Display current username.</li>
+            <li><strong>`id`:</strong> Display user and group IDs.</li>
+        </ul>
+        <h3>Groups:</h3>
+        <ul>
+            <li><strong>`groupadd`:</strong> Create a new group.
+                <pre><code class="language-bash">sudo groupadd webdevs</code></pre>
+            </li>
+            <li><strong>`groupdel`:</strong> Delete a group.
+                <pre><code class="language-bash">sudo groupdel oldgroup</code></pre>
+            </li>
+            <li><strong>`gpasswd`:</strong> Manage group members.
+                <pre><code class="language-bash">sudo gpasswd -a newuser webdevs # Add newuser to webdevs group
+sudo gpasswd -d olduser webdevs # Remove olduser from webdevs group</code></pre>
+            </li>
+            <li><strong>`groups`:</strong> List groups a user belongs to.</li>
+        </ul>
+        <h3>Configuration Files:</h3>
+        <ul>
+            <li>`/etc/passwd`: User account information (no passwords).</li>
+            <li>`/etc/shadow`: Encrypted user passwords and aging information (root-readable only).</li>
+            <li>`/etc/group`: Group information.</li>
+            <li>`/etc/gshadow`: Encrypted group passwords.</li>
+            <li>`/etc/sudoers`: Defines which users/groups can use `sudo` (edit with `visudo` command for safety).</li>
+        </ul>
+
+        <h2 id="package-management-dnf-yum">8. Package Management (DNF/YUM)</h2>
+        <p>CentOS (and RHEL-based systems) uses the RPM Package Manager, with `dnf` (Dandified YUM) being the modern front-end for installing, updating, and removing software packages. Older CentOS 7 and earlier used `yum`.</p>
+        <h3>Common `dnf` Commands:</h3>
+        <ul>
+            <li><strong>Update package lists (synchronize repositories):</strong>
+                <pre><code class="language-bash">sudo dnf check-update # Check for available updates
+sudo dnf update       # Updates all installed packages</code></pre>
+            </li>
+            <li><strong>Install packages:</strong>
+                <pre><code class="language-bash">sudo dnf install httpd       # Install Apache HTTP Server
+sudo dnf install git nano vim # Install multiple packages</code></pre>
+            </li>
+            <li><strong>Remove packages:</strong>
+                <pre><code class="language-bash">sudo dnf remove httpd
+sudo dnf erase httpd # Same as remove</code></pre>
+            </li>
+            <li><strong>Search for packages:</strong>
+                <pre><code class="language-bash">dnf search php</code></pre>
+            </li>
+            <li><strong>Show package details:</strong>
+                <pre><code class="language-bash">dnf info httpd</code></pre>
+            </li>
+            <li><strong>List installed packages:</strong>
+                <pre><code class="language-bash">dnf list installed</code></pre>
+            </li>
+            <li><strong>List available packages:</strong>
+                <pre><code class="language-bash">dnf list available</code></pre>
+            </li>
+            <li><strong>Install software groups:</strong>
+                <pre><code class="language-bash">sudo dnf group list                # List available groups
+sudo dnf groupinstall "Development Tools" # Install a group of related packages</code></pre>
+            </li>
+            <li><strong>Remove orphaned packages (autoremove):</strong>
+                <pre><code class="language-bash">sudo dnf autoremove</code></pre>
+            </li>
+            <li><strong>Clean package cache:</strong>
+                <pre><code class="language-bash">sudo dnf clean all</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="process-management">9. Process Management</h2>
+        <p>Managing running programs and tasks on your system.</p>
+        <ul>
+            <li><strong>`ps` (Process Status):</strong> Displays information about running processes.
+                <pre><code class="language-bash">ps aux            # Show all running processes (user, CPU, memory)
+ps -ef            # Show all processes in full format
+ps -p &lt;PID&gt;       # Show info for a specific Process ID</code></pre>
+            </li>
+            <li><strong>`top`:</strong> Provides a real-time, dynamic view of running processes. Press <kbd>q</kbd> to quit.
+                <pre><code class="language-bash">top</code></pre>
+            </li>
+            <li><strong>`htop`:</strong> An interactive process viewer, more user-friendly than `top`. (Installable: `sudo dnf install htop`).
+                <pre><code class="language-bash">htop</code></pre>
+            </li>
+            <li><strong>`kill`:</strong> Sends a signal to a process to terminate it. Needs the Process ID (PID).
+                <pre><code class="language-bash">kill &lt;PID&gt;       # Sends SIGTERM (graceful termination request)
+kill -9 &lt;PID&gt;    # Sends SIGKILL (forceful termination, cannot be ignored)</code></pre>
+            </li>
+            <li><strong>`pkill` / `killall`:</strong> Kill processes by name.
+                <pre><code class="language-bash">pkill firefox     # Kills all processes named firefox
+killall nginx     # Kills all processes named nginx</code></pre>
+            </li>
+            <li><strong>`jobs`:</strong> Lists background jobs in the current shell session.</li>
+            <li><strong>`fg` (Foreground):</strong> Brings a background job to the foreground.</li>
+            <li><strong>`bg` (Background):</strong> Sends a suspended job to the background (use <kbd>Ctrl</kbd> + <kbd>z</kbd> to suspend first).</li>
+            <li><strong>`nohup command &`:</strong> Runs a command in the background, making it immune to terminal closure.</li>
+        </ul>
+
+        <h2 id="service-management-systemd">10. Service Management (systemd)</h2>
+        <p>CentOS (and other RHEL-based systems) uses `systemd` to manage system services (daemons) and boot processes.</p>
+        <ul>
+            <li><strong>`systemctl status &lt;service_name&gt;`:</strong> Check the status of a service.
+                <pre><code class="language-bash">systemctl status httpd.service # Check Apache status
+# Output shows Active: (running), Loaded: (enabled/disabled), etc.</code></pre>
+            </li>
+            <li><strong>`systemctl start &lt;service_name&gt;`:</strong> Start a service.
+                <pre><code class="language-bash">sudo systemctl start httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl stop &lt;service_name&gt;`:</strong> Stop a service.
+                <pre><code class="language-bash">sudo systemctl stop httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl restart &lt;service_name&gt;`:</strong> Restart a service.
+                <pre><code class="language-bash">sudo systemctl restart httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl enable &lt;service_name&gt;`:</strong> Enable a service to start automatically on boot.
+                <pre><code class="language-bash">sudo systemctl enable httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl disable &lt;service_name&gt;`:</strong> Disable a service from starting automatically on boot.
+                <pre><code class="language-bash">sudo systemctl disable httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl reload &lt;service_name&gt;`:</strong> Reload a service's configuration without full restart (if supported by the service).
+                <pre><code class="language-bash">sudo systemctl reload httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl list-units --type=service`:</strong> List all active services.</li>
+            <li><strong>`systemctl get-default`:</strong> Show the default target (boot mode: graphical or multi-user).</li>
+            <li><strong>`systemctl set-default graphical.target`:</strong> Set default boot to GUI.</li>
+            <li><strong>`systemctl set-default multi-user.target`:</strong> Set default boot to CLI.</li>
+        </ul>
+
+        <h2 id="networking">11. Networking</h2>
+        <p>CentOS uses `NetworkManager` or `systemd-networkd` for network configuration. Configuration files are typically in `/etc/sysconfig/network-scripts/`.</p>
+        <ul>
+            <li><strong>`ip a` (IP Address):</strong> Displays network interface information. (Recommended over `ifconfig`).
+                <pre><code class="language-bash">ip a # Shows interfaces like lo, eth0, ens33, etc.</code></pre>
+            </li>
+            <li><strong>`ip route`:</strong> Displays the routing table.
+                <pre><code class="language-bash">ip route show</code></pre>
+            </li>
+            <li><strong>`ping`:</strong> Tests network connectivity.
+                <pre><code class="language-bash">ping google.com</code></pre>
+            </li>
+            <li><strong>`ss` (Socket Statistics):</strong> Displays network socket information (connections, listening ports). (Modern replacement for `netstat`).
+                <pre><code class="language-bash">ss -tulnp # Show TCP/UDP listening ports with process info</code></pre>
+            </li>
+            <li><strong>`nmcli` (NetworkManager CLI):</strong> Command-line tool for NetworkManager.
+                <pre><code class="language-bash">nmcli device status # Show network device status
+nmcli connection show # Show active network connections
+nmcli device wifi list # Scan for Wi-Fi networks
+nmcli device wifi connect "SSID" password "PASSWD" # Connect to Wi-Fi</code></pre>
+            </li>
+            <li><strong>Firewalld:</strong> CentOS uses `firewalld` as its default firewall management tool.
+                <pre><code class="language-bash">sudo systemctl status firewalld # Check firewall status
+sudo systemctl start firewalld   # Start firewall
+sudo systemctl enable firewalld  # Enable firewall on boot
+sudo firewall-cmd --permanent --add-service=http # Allow HTTP traffic permanently
+sudo firewall-cmd --reload # Apply changes</code></pre>
+            </li>
+            <li><strong>Network Configuration Files:</strong>
+                <ul>
+                    <li>`/etc/sysconfig/network-scripts/ifcfg-&lt;interface_name&gt;`: Per-interface configuration (e.g., `ifcfg-eth0`).</li>
+                    <li>`/etc/resolv.conf`: DNS resolver configuration.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-bash"># Example ifcfg-eth0 for static IP:
+# Use 'sudo nano /etc/sysconfig/network-scripts/ifcfg-eth0' or 'sudo vi /etc/sysconfig/network-scripts/ifcfg-eth0'
+
+# DEVICE=eth0
+# BOOTPROTO=static
+# ONBOOT=yes
+# IPADDR=192.168.1.100
+# NETMASK=255.255.255.0
+# GATEWAY=1992.168.1.1
+# DNS1=8.8.8.8
+# DNS2=8.8.4.4
+
+# After editing:
+# sudo systemctl restart NetworkManager # Or network.service on older versions</code></pre>
+
+        <h2 id="storage-management">12. Storage Management</h2>
+        <p>Managing disk space, partitions, and file systems on CentOS.</p>
+        <ul>
+            <li><strong>`df` (Disk Free):</strong> Reports file system disk space usage.
+                <pre><code class="language-bash">df -h # Human-readable output</code></pre>
+            </li>
+            <li><strong>`du` (Disk Usage):</strong> Estimates file space usage of files and directories.
+                <pre><code class="language-bash">du -sh /var/log # Summarize size of /var/log</code></pre>
+            </li>
+            <li><strong>`lsblk` (List Block Devices):</strong> Lists information about all block devices (disks, partitions).
+                <pre><code class="language-bash">lsblk</code></pre>
+            </li>
+            <li><strong>`fdisk` (Partition Disk):</strong> Command-line utility for disk partitioning. (Use with caution).
+                <pre><code class="language-bash">sudo fdisk /dev/sda # Interactive partitioning tool</code></pre>
+            </li>
+            <li><strong>`mkfs` (Make Filesystem):</strong> Builds a Linux file system on a device.
+                <pre><code class="language-bash">sudo mkfs.xfs /dev/sdb1 # Format partition sdb1 with XFS (common on CentOS)</code></pre>
+            </li>
+            <li><strong>`mount` / `umount`:</strong> Mounts/unmounts a file system.
+                <pre><code class="language-bash">sudo mount /dev/sdb1 /mnt/data # Mount sdb1 to /mnt/data
+sudo umount /mnt/data # Unmount</code></pre>
+            </li>
+            <li><strong>`/etc/fstab`:</strong> Configures filesystems to be mounted automatically at boot.</li>
+            <li><strong>LVM (Logical Volume Manager):</strong> Provides a flexible way to manage disk space, allowing dynamic resizing and snapshots. (More advanced topic).
+                <pre><code class="language-bash"># Basic LVM commands (conceptual):
+sudo pvcreate /dev/sdb1       # Create Physical Volume
+sudo vgcreate myvg /dev/sdb1  # Create Volume Group
+sudo lvcreate -L 10G -n mylv myvg # Create Logical Volume
+sudo mkfs.xfs /dev/myvg/mylv  # Format LV
+sudo mount /dev/myvg/mylv /data # Mount LV</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="shell-scripting-basics">13. Shell Scripting Basics</h2>
+        <p>Automate tasks by writing a series of commands in a file.</p>
+        <h3>A. Creating a Script:</h3>
+        <pre><code class="language-bash"># Create a file named 'hello_centos.sh'
+nano hello_centos.sh
+
+# Add the following content:
+#!/bin/bash
+# This is a basic CentOS shell script
+
+echo "Hello from CentOS!"
+echo "Current date and time: $(date)"
+echo "Disk usage of /home: $(df -h /home | awk 'NR==2{print $5}')"</code></pre>
+        <h3>B. Making Executable and Running:</h3>
+        <pre><code class="language-bash">chmod +x hello_centos.sh
+./hello_centos.sh</code></pre>
+        <h3>C. Scripting Concepts:</h3>
+        <ul>
+            <li><strong>Variables:</strong> `NAME="World"`, `echo "Hello, $NAME"`.</li>
+            <li><strong>Input/Output:</strong> `echo`, `read`.</li>
+            <li><strong>Conditionals (`if`, `elif`, `else`):</strong> `if [[ $NUM -gt 10 ]]; then ... fi`.
+                <ul>
+                    <li>String: `==`, `!=`, `<`. Numeric: `-eq`, `-ne`, `-gt`, `-lt`. File: `-f`, `-d`, `-e`.</li>
+                </ul>
+            </li>
+            <li><strong>Loops (`for`, `while`):</strong> `for i in {1..3}; do ... done`. `while [[ $COUNT -lt 5 ]]; do ... done`.</li>
+            <li><strong>Functions:</strong> `my_func() { echo "Inside function"; }`.</li>
+            <li><strong>Command-line Arguments:</strong> `$0`, `$1`, `$#`, `$@`.</li>
+            <li><strong>Error Handling:</strong> `set -e` (exit on error), `set -x` (debug mode).</li>
+            <li><strong>Input/Output Redirection:</strong> `>`, `>>`, `2>`.</li>
+            <li><strong>Pipes (`|`):</strong> Chain commands together.</li>
+        </ul>
+
+        <h2 id="text-editors">14. Text Editors (Nano, Vim)</h2>
+        <p>You'll frequently use command-line text editors in CentOS, especially for configuration files.</p>
+        <ul>
+            <li><strong>Nano:</strong> User-friendly, intuitive, with on-screen shortcuts. Great for beginners.
+                <pre><code class="language-bash">nano /etc/nginx/nginx.conf</code></pre>
+            </li>
+            <li><strong>Vim:</strong> Powerful, efficient modal editor with a steeper learning curve. Highly customizable.
+                <pre><code class="language-bash">vim /etc/ssh/sshd_config</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="security-best-practices">15. Security Best Practices (Firewall, SELinux)</h2>
+        <p>CentOS integrates robust security features. Proper configuration is key.</p>
+        <ul>
+            <li><strong>Keep System Updated:</strong> Regularly apply updates.
+                <pre><code class="language-bash">sudo dnf update -y</code></pre>
+            </li>
+            <li><strong>Strong Passwords & SSH Keys:</strong> Use strong, unique passwords. Enable SSH key-based authentication and disable password authentication for SSH.</li>
+            <li><strong>Firewalld:</strong> CentOS's default dynamic firewall.
+                <ul>
+                    <li>`sudo systemctl status firewalld`</li>
+                    <li>`sudo firewall-cmd --state`</li>
+                    <li>`sudo firewall-cmd --permanent --add-service=http` (Allow HTTP)</li>
+                    <li>`sudo firewall-cmd --permanent --add-port=8080/tcp` (Allow specific port)</li>
+                    <li>`sudo firewall-cmd --reload` (Apply changes)</li>
+                    <li>`sudo firewall-cmd --list-all` (List all rules)</li>
+                </ul>
+            </li>
+            <li><strong>SELinux (Security-Enhanced Linux):</strong> A Mandatory Access Control (MAC) security module that adds an extra layer of security by enforcing access control policies for applications, files, and processes.
+                <ul>
+                    <li><strong>Modes:</strong>
+                        <ul>
+                            <li>`enforcing`: Enforces policies, denies violations. (Recommended for production).</li>
+                            <li>`permissive`: Logs policy violations but does not deny them. (Good for troubleshooting).</li>
+                            <li>`disabled`: SELinux is off. (Least secure, avoid).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Check status:</strong>
+                        <pre><code class="language-bash">sestatus</code></pre>
+                    </li>
+                    <li><strong>Change mode (temporarily):</strong>
+                        <pre><code class="language-bash">sudo setenforce 0 # Switch to Permissive
+sudo setenforce 1 # Switch to Enforcing</code></pre>
+                    </li>
+                    <li><strong>Change mode (permanently, edit config file):</strong>
+                        <pre><code class="language-bash">sudo nano /etc/selinux/config
+# Change SELINUX=enforcing to SELINUX=permissive or SELINUX=disabled
+# Reboot after changing this file for permanent effect.</code></pre>
+                    </li>
+                    <li><strong>Contexts:</strong> Files and processes have SELinux contexts. When troubleshooting "permission denied" errors, look for AVC (Access Vector Cache) denials in logs:
+                        <pre><code class="language-bash">sudo ausearch -c 'httpd' --raw | audit2allow -M mywebserver
+sudo semodule -i mywebserver.pp # Create and apply custom SELinux policy</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Disable Unnecessary Services:</strong> Reduce attack surface.</li>
+            <li><strong>Monitor Logs:</strong> Regularly review `/var/log/messages`, `/var/log/secure`, or use `journalctl`.
+                <pre><code class="language-bash">journalctl -f # Follow all logs
+journalctl -u sshd.service # View SSH service logs</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="desktop-environments-gui">16. Desktop Environments (GUI - Optional)</h2>
+        <p>If you installed CentOS Stream as "Server with GUI", it comes with the GNOME desktop environment. If you installed a minimal version and want to add a GUI:</p>
+        <ol>
+            <li><strong>Update your system:</strong>
+                <pre><code class="language-bash">sudo dnf update -y</code></pre>
+            </li>
+            <li><strong>Install the "Server with GUI" group:</strong>
+                <pre><code class="language-bash">sudo dnf groupinstall "Server with GUI" -y</code></pre>
+            </li>
+            <li><strong>Set the default target to graphical:</strong>
+                <pre><code class="language-bash">sudo systemctl set-default graphical.target</code></pre>
+            </li>
+            <li><strong>Reboot your system:</strong>
+                <pre><code class="language-bash">sudo reboot</code></pre>
+            </li>
+            <li>Upon reboot, you should be greeted by the GNOME graphical login screen.</li>
+            <li>To install other lightweight GUIs like XFCE (from EPEL repository):
+                <pre><code class="language-bash">sudo dnf install epel-release -y
+sudo dnf --enablerepo=epel group install "Xfce" -y
+echo "exec /usr/bin/xfce4-session" &gt;&gt; ~/.xinitrc
+sudo systemctl set-default graphical.target
+startx # Or reboot</code></pre>
+            </li>
+        </ol>
+
+        <div class="tip">
+            <strong>CentOS: The Enterprise Workhorse!</strong>
+            <p>CentOS (and its successor CentOS Stream) provides a robust, stable, and secure foundation for server environments. Mastering its command-line tools, package management, service control, and security features like Firewalld and SELinux is crucial for any system administrator or DevOps professional. Practice regularly in a VM or cloud environment to solidify your skills.</p>
+        </div>
+    </div>
+</body>
+</html>
