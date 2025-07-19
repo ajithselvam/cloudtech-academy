@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Azure Tutorial - GUI Version</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Azure Tutorial - GUI Version</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-azure">1. What is Azure?</a></li>
+                <li><a href="#azure-global-infrastructure">2. Azure Global Infrastructure</a></li>
+                <li><a href="#getting-started-with-azure">3. Getting Started with Azure</a></li>
+                <li><a href="#resource-groups">4. Resource Groups</a></li>
+                <li><a href="#compute-services">5. Compute Services (Virtual Machines, App Services, Functions)</a></li>
+                <li><a href="#storage-services">6. Storage Services (Blob, File, Queue, Table)</a></li>
+                <li><a href="#networking-services">7. Networking Services (Virtual Network, Load Balancer, DNS)</a></li>
+                <li><a href="#database-services">8. Database Services (Azure SQL DB, Cosmos DB)</a></li>
+                <li><a href="#identity-and-security">9. Identity & Security (Azure AD, Defender for Cloud, Key Vault)</a></li>
+                <li><a href="#management-and-governance">10. Management & Governance (Azure Monitor, Azure Policy)</a></li>
+                <li><a href="#developer-tools-and-devops">11. Developer Tools & DevOps (Azure DevOps, Azure Container Registry)</a></li>
+                <li><a href="#analytics-and-ai-ml">12. Analytics & AI/ML</a></li>
+                <li><a href="#cost-management">13. Cost Management</a></li>
+                <li><a href="#best-practices">14. Best Practices (Azure Well-Architected Framework)</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-azure">1. What is Azure?</h2>
+        <p><strong>Microsoft Azure</strong> is a comprehensive suite of cloud computing services that allows you to build, deploy, and manage applications and services through Microsoft-managed data centers. It offers a wide range of services, including computing, analytics, storage, and networking, enabling businesses to scale and innovate without the need for on-premises infrastructure.</p>
+        <p>Azure supports various programming languages, tools, and frameworks, including Microsoft-specific and third-party software, making it a flexible platform for diverse workloads.</p>
+        <h3>Key Advantages of Cloud Computing (Azure):</h3>
+        <ul>
+            <li><strong>Scalability:</strong> Easily scale resources up or down based on demand.</li>
+            <li><strong>Global Reach:</strong> Deploy applications and services in data centers worldwide.</li>
+            <li><strong>Cost-Effectiveness:</strong> Pay-as-you-go pricing, reducing upfront capital expenditure.</li>
+            <li><strong>Flexibility:</strong> Supports a wide range of operating systems, programming languages, frameworks, and tools.</li>
+            <li><strong>Security:</strong> Benefits from Microsoft's robust security measures and compliance certifications.</li>
+            <li><strong>Hybrid Capabilities:</strong> Seamlessly integrates with on-premises environments.</li>
+        </ul>
+
+        <h2 id="azure-global-infrastructure">2. Azure Global Infrastructure</h2>
+        <p>Azure's global infrastructure is designed for high availability, low latency, and massive scalability.</p>
+        <ul>
+            <li><strong>Regions:</strong> Geographic areas around the world that contain one or more data centers. Each region is physically isolated and independent. Examples: `East US`, `West Europe`, `Southeast Asia`.</li>
+            <li><strong>Availability Zones (AZs):</strong> Physically separate locations within an Azure region. Each AZ has independent power, cooling, and networking, providing high availability and fault tolerance within a region.</li>
+            <li><strong>Geographies:</strong> Discrete markets of two or more regions that preserve data residency and compliance boundaries.</li>
+            <li><strong>Region Pairs:</strong> Each Azure region is paired with another region within the same geography (e.g., East US 2 and Central US). This allows for cross-region replication for disaster recovery and business continuity.</li>
+            <li><strong>Azure Edge Locations:</strong> Globally distributed network of Microsoft-managed points of presence that deliver low-latency services closer to users.</li>
+        </ul>
+        <div class="tip">
+            <strong>Region Choice:</strong> When deploying resources, select an Azure region that is geographically close to your users to minimize latency, and consider data residency requirements for compliance. You can select your current region from the dropdown menu in the top right of the Azure Portal.
+        </div>
+
+        <h2 id="getting-started-with-azure">3. Getting Started with Azure</h2>
+        <h3>A. Create an Azure Account:</h3>
+        <p>Go to <a href="https://azure.microsoft.com/en-in/free/" target="_blank">azure.microsoft.com/free/</a> and sign up for a free Azure account. You typically get free credits for 30 days and free access to popular services for 12 months. You'll need a Microsoft account and a phone number for verification, plus a credit card (for identity verification and to enable pay-as-you-go after free credits, if applicable).</p>
+
+        <h3>B. The Azure Portal:</h3>
+        <p>This is the web-based console for managing your Azure resources. This tutorial will focus on using the Portal's graphical user interface (GUI).</p>
+        <pre><code class="language-bash"># Access: portal.azure.com</code></pre>
+        <p>Upon logging in, you'll see the **Azure Portal Home** page, which provides a dashboard view and access to various services via the navigation menu or search bar.</p>
+
+        <h2 id="resource-groups">4. Resource Groups</h2>
+        <p>In Azure, a **Resource Group** is a logical container that holds related Azure resources (e.g., Virtual Machines, Storage Accounts, Virtual Networks) for an Azure solution. Resources in a resource group are managed as a single entity.</p>
+        <h3>Benefits of Resource Groups:</h3>
+        <ul>
+            <li><strong>Organization:</strong> Group related resources for easier management.</li>
+            <li><strong>Lifecycle Management:</strong> Delete all resources within a group with a single action.</li>
+            <li><strong>Access Control:</strong> Apply Azure RBAC roles to the resource group, inheriting permissions to all resources within it.</li>
+            <li><strong>Cost Management:</strong> Track costs for a group of resources.</li>
+        </ul>
+        <h3>Usage Example: Creating a Resource Group (GUI):</h3>
+        <ol>
+            <li><strong>Log in to the Azure Portal:</strong> <a href="https://portal.azure.com" target="_blank">portal.azure.com</a></li>
+            <li>In the search bar at the top, type `Resource groups` and select it from the results, or click on **Resource groups** from the Azure services section on the home page.</li>
+            <li>Click the **+ Create** button.</li>
+            <li>On the "Create a resource group" page:
+                <ul>
+                    <li><strong>Subscription:</strong> Select your Azure subscription.</li>
+                    <li><strong>Resource group name:</strong> Enter a unique name (e.g., `my-app-resource-group`).</li>
+                    <li><strong>Region:</strong> Select the Azure region where you want to deploy the resource group's metadata (e.g., `East US`).</li>
+                </ul>
+            </li>
+            <li>Click **Review + create**.</li>
+            <li>Click **Create**.</li>
+            <li>After creation, you can click "Go to resource group" to see its overview.</li>
+        </ol>
+
+        <h2 id="compute-services">5. Compute Services</h2>
+        <p>These services provide the processing power for your applications and workloads.</p>
+
+        <h3>A. Azure Virtual Machines (VMs) - GUI Usage:</h3>
+        <p>On-demand, scalable computing resources.</p>
+        <ol>
+            <li><strong>Navigate to Virtual Machines:</strong>
+                <pre><code>Azure Portal &gt; Search for "Virtual machines" &gt; Select Virtual machines</code></pre>
+            </li>
+            <li><strong>Create a VM:</strong>
+                <ul>
+                    <li>Click **+ Create** &gt; **Azure virtual machine**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select your subscription.</li>
+                            <li><strong>Resource group:</strong> Choose an existing one (e.g., `my-app-resource-group`) or click "Create new".</li>
+                            <li><strong>Virtual machine name:</strong> (e.g., `myLinuxWebServer`).</li>
+                            <li><strong>Region:</strong> Select your desired region (e.g., `East US`).</li>
+                            <li><strong>Image:</strong> Choose an OS (e.g., `Ubuntu Server 22.04 LTS`).</li>
+                            <li><strong>Size:</strong> Select a VM size (e.g., `Standard B1s` for Free Tier eligibility).</li>
+                            <li><strong>Administrator account:</strong>
+                                <ul>
+                                    <li><strong>Authentication type:</strong> `SSH public key` (recommended for Linux).</li>
+                                    <li><strong>Username:</strong> (e.g., `azureuser`).</li>
+                                    <li><strong>SSH public key source:</strong> `Generate new key pair`.</li>
+                                    <li><strong>Key pair name:</strong> (e.g., `my-ssh-key`). When you click **Review + create**, the private key will download automatically. Save it securely (`.pem` file).</li>
+                                </ul>
+                            </li>
+                            <li><strong>Inbound port rules:</strong> Check "Allow selected ports" and select `SSH (22)` and `HTTP (80)` (if you plan to run a web server).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create**.</li>
+                    <li>Click **Create**. The private key file will download.</li>
+                </ul>
+            </li>
+            <li><strong>Connecting to the VM:</strong>
+                <ul>
+                    <li>Once deployment is complete, go to the VM resource.</li>
+                    <li>Copy the **Public IP address**.</li>
+                    <li>Open your terminal and use `ssh -i /path/to/my-ssh-key.pem azureuser@<VM_Public_IP>`.</li>
+                    <li>If you allowed HTTP, you can browse to the Public IP address.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>B. Azure App Services - GUI Usage:</h3>
+        <p>A fully managed platform for building, deploying, and scaling web apps, mobile backends, and API apps.</p>
+        <ol>
+            <li><strong>Navigate to App Services:</strong>
+                <pre><code>Azure Portal &gt; Search for "App Services" &gt; Select App Services</code></pre>
+            </li>
+            <li><strong>Create an App Service:</strong>
+                <ul>
+                    <li>Click **+ Create** &gt; **Web App**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource Group:</strong> Select (e.g., `my-app-resource-group`).</li>
+                            <li><strong>Name:</strong> Enter a globally unique name (e.g., `myuniqueapp2025`).</li>
+                            <li><strong>Publish:</strong> `Code`.</li>
+                            <li><strong>Runtime stack:</strong> (e.g., `Node 18 LTS`, `.NET 8`, `Python 3.9`).</li>
+                            <li><strong>Operating System:</strong> `Linux` or `Windows`.</li>
+                            <li><strong>Region:</strong> Select.</li>
+                            <li><strong>App Service Plan:</strong> Click "Create new" or select existing. For "Sku and size", choose a pricing tier (e.g., `F1 Free`).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create**.</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Deploying Code:</strong>
+                <ul>
+                    <li>Once deployed, navigate to your App Service resource.</li>
+                    <li>In the left menu, go to **Deployment Center**.</li>
+                    <li>Choose a source (e.g., **GitHub**, **Azure Repos**, **Local Git**). Follow instructions to connect your repository and set up continuous deployment.</li>
+                    <li>Alternatively, use **FTP** or **VS Code deployment** options.</li>
+                </ul>
+            </li>
+            <li><strong>Accessing the App:</strong> On the App Service "Overview" page, click the **URL** to open your deployed application in a browser.</li>
+        </ol>
+
+        <h3>C. Azure Functions (Serverless Compute) - GUI Usage:</h3>
+        <p>Allows you to run small pieces of code (functions) in response to events.</p>
+        <ol>
+            <li><strong>Navigate to Function Apps:</strong>
+                <pre><code>Azure Portal &gt; Search for "Function App" &gt; Select Function App</code></pre>
+            </li>
+            <li><strong>Create a Function App:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource Group:</strong> Select (e.g., `my-app-resource-group`).</li>
+                            <li><strong>Function App name:</strong> Enter a globally unique name (e.g., `myhttptriggerfunc2025`).</li>
+                            <li><strong>Publish:</strong> `Code`.</li>
+                            <li><strong>Runtime stack:</strong> (e.g., `Node.js`, `Python`, `.NET`).</li>
+                            <li><strong>Version:</strong> Select runtime version.</li>
+                            <li><strong>Region:</strong> Select.</li>
+                            <li><strong>Operating System:</strong> `Linux` or `Windows`.</li>
+                            <li><strong>Hosting:</strong> Select "Storage account" (create new or select existing). Select "Plan type" (e.g., `Consumption (Serverless)`).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Create an HTTP-triggered Function:</strong>
+                <ul>
+                    <li>Once the Function App is deployed, go to its resource.</li>
+                    <li>In the left menu, go to **Functions** &gt; **+ Create**.</li>
+                    <li><strong>Development environment:</strong> `Develop in portal`.</li>
+                    <li><strong>Template:</strong> Select `HTTP trigger`.</li>
+                    <li><strong>New Function:</strong>
+                        <ul>
+                            <li><strong>Name:</strong> (e.g., `MyHttpTrigger`).</li>
+                            <li><strong>Authorization level:</strong> `Function` (requires a key) or `Anonymous` (no key needed).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Test the Function:</strong>
+                <ul>
+                    <li>Once the function is created, go to **Code + Test**.</li>
+                    <li>The default code is displayed. Click **Test/Run** (top right).</li>
+                    <li>In the "Input" tab, you can add parameters to the query string or body. Click **Run**.</li>
+                    <li>The "Output" tab will show the function's response.</li>
+                    <li>To get the public URL, click **Get Function URL**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="storage-services">6. Storage Services</h2>
+        <p>Azure offers a variety of highly available and durable storage solutions.</p>
+
+        <h3>A. Azure Blob Storage - GUI Usage:</h3>
+        <p>Object storage for massive amounts of unstructured data.</p>
+        <ol>
+            <li><strong>Navigate to Storage Accounts:</strong>
+                <pre><code>Azure Portal &gt; Search for "Storage accounts" &gt; Select Storage accounts</code></pre>
+            </li>
+            <li><strong>Create a Storage Account:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource Group:</strong> Select (e.g., `my-app-resource-group`).</li>
+                            <li><strong>Storage account name:</strong> Enter a globally unique name (e.g., `mystorageaccountgui2025`).</li>
+                            <li><strong>Region:</strong> Select.</li>
+                            <li><strong>Performance:</strong> `Standard` or `Premium`.</li>
+                            <li><strong>Redundancy:</strong> (e.g., `Locally-redundant storage (LRS)`).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Create a Container:</strong>
+                <ul>
+                    <li>Once the storage account is deployed, go to its resource.</li>
+                    <li>In the left menu, under "Data storage", click **Containers**.</li>
+                    <li>Click **+ Container**.</li>
+                    <li><strong>Name:</strong> (e.g., `myphotos`).</li>
+                    <li><strong>Public access level:</strong> `Private (no anonymous access)` (recommended for security).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Upload a Blob (File):</strong>
+                <ul>
+                    <li>Click on your newly created container.</li>
+                    <li>Click **Upload**.</li>
+                    <li>Select a file from your computer.</li>
+                    <li>Click **Upload**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>B. Azure Files - GUI Usage:</h3>
+        <p>Fully managed file shares in the cloud, accessible via SMB protocol.</p>
+        <ol>
+            <li><strong>Navigate to Storage Accounts:</strong> (Azure Files are created within Storage Accounts).
+                <pre><code>Azure Portal &gt; Storage accounts &gt; (Your Storage Account)</code></pre>
+            </li>
+            <li><strong>Create a File Share:</strong>
+                <ul>
+                    <li>In the left menu, under "Data storage", click **File shares**.</li>
+                    <li>Click **+ File share**.</li>
+                    <li><strong>Name:</strong> (e.g., `myfileshare`).</li>
+                    <li><strong>Tier:</strong> (e.g., `Transaction optimized`).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Connect to File Share:</strong> Once created, click on the file share and then **Connect** to get instructions for mounting it on Windows, Linux, or macOS.</li>
+        </ol>
+
+        <h3>C. Azure Queue Storage - GUI Usage:</h3>
+        <p>A service for storing large numbers of messages.</p>
+        <ol>
+            <li><strong>Navigate to Storage Accounts:</strong> (Queue Storage is within Storage Accounts).
+                <pre><code>Azure Portal &gt; Storage accounts &gt; (Your Storage Account)</code></pre>
+            </li>
+            <li><strong>Create a Queue:</strong>
+                <ul>
+                    <li>In the left menu, under "Data storage", click **Queues**.</li>
+                    <li>Click **+ Queue**.</li>
+                    <li><strong>Name:</strong> (e.g., `my-message-queue`).</li>
+                    <li>Click **OK**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>D. Azure Table Storage - GUI Usage:</h3>
+        <p>A NoSQL key-value store.</p>
+        <ol>
+            <li><strong>Navigate to Storage Accounts:</strong> (Table Storage is within Storage Accounts).
+                <pre><code>Azure Portal &gt; Storage accounts &gt; (Your Storage Account)</code></pre>
+            </li>
+            <li><strong>Create a Table:</strong>
+                <ul>
+                    <li>In the left menu, under "Data storage", click **Tables**.</li>
+                    <li>Click **+ Table**.</li>
+                    <li><strong>Name:</strong> (e.g., `mytabledata`).</li>
+                    <li>Click **OK**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="networking-services">7. Networking Services</h2>
+        <p>These services enable network connectivity, traffic management, and security for your Azure resources.</p>
+
+        <h3>A. Azure Virtual Network (VNet) - GUI Usage:</h3>
+        <p>A logically isolated section of Azure cloud.</p>
+        <ol>
+            <li><strong>Navigate to Virtual Networks:</strong>
+                <pre><code>Azure Portal &gt; Search for "Virtual networks" &gt; Select Virtual networks</code></pre>
+            </li>
+            <li><strong>Create a VNet:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource group:</strong> Select (e.g., `my-app-resource-group`).</li>
+                            <li><strong>Name:</strong> (e.g., `myProductionVnetGUI`).</li>
+                            <li><strong>Region:</strong> Select.</li>
+                        </ul>
+                    </li>
+                    <li><strong>IP Addresses tab:</strong>
+                        <ul>
+                            <li><strong>IPv4 address space:</strong> (e.g., `10.1.0.0/16`).</li>
+                            <li>Click **+ Add subnet**.
+                                <ul>
+                                    <li><strong>Subnet name:</strong> (e.g., `AppSubnet`).</li>
+                                    <li><strong>Address range:</strong> (e.g., `10.1.1.0/24`).</li>
+                                    <li>Click **Add**.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Network Security Groups (NSGs):</strong>
+                <ul>
+                    <li>Go to:
+                        <pre><code>Azure Portal &gt; Search for "Network security groups" &gt; Select Network security groups</code></pre>
+                    </li>
+                    <li>Click **+ Create**.</li>
+                    <li>Configure basics, then add inbound/outbound security rules.</li>
+                    <li>NSGs can be associated with subnets or individual VM network interfaces.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>B. Azure Load Balancer - GUI Usage:</h3>
+        <p>Distributes incoming network traffic across multiple backend resources.</p>
+        <ol>
+            <li><strong>Navigate to Load Balancers:</strong>
+                <pre><code>Azure Portal &gt; Search for "Load balancers" &gt; Select Load balancers</code></pre>
+            </li>
+            <li><strong>Create a Load Balancer:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource Group:</strong> Select.</li>
+                            <li><strong>Name:</strong> (e.g., `myWebAppLB`).</li>
+                            <li><strong>Region:</strong> Select.</li>
+                            <li><strong>Type:</strong> `Public` or `Internal`.</li>
+                            <li><strong>Sku:</strong> `Standard` (recommended) or `Basic`.</li>
+                        </ul>
+                    </li>
+                    <li>Configure Frontend IP configuration, Backend pools, Health probes, and Load balancing rules.</li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>C. Azure Application Gateway - GUI Usage:</h3>
+        <p>A web traffic load balancer with WAF capabilities.</p>
+        <ol>
+            <li><strong>Navigate to Application Gateways:</strong>
+                <pre><code>Azure Portal &gt; Search for "Application gateways" &gt; Select Application gateways</code></pre>
+            </li>
+            <li><strong>Create Application Gateway:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource Group:</strong> Select.</li>
+                            <li><strong>Application Gateway name:</strong> (e.g., `myAppGw`).</li>
+                            <li><strong>Region:</strong> Select.</li>
+                            <li><strong>Tier:</strong> `Standard V2` (recommended).</li>
+                            <li>Configure Virtual Network, Frontend (public/private IP), Backend pools, and Listener.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>D. Azure DNS - GUI Usage:</h3>
+        <p>A hosting service for DNS domains.</p>
+        <ol>
+            <li><strong>Navigate to DNS zones:</strong>
+                <pre><code>Azure Portal &gt; Search for "DNS zones" &gt; Select DNS zones</code></pre>
+            </li>
+            <li><strong>Create DNS Zone:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource group:</strong> Select.</li>
+                            <li><strong>Name:</strong> Enter your domain name (e.g., `mydomain.com`).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Add Record Set:</strong> Once created, open the DNS zone. Click **+ Record set** to add A, CNAME, MX, etc., records.</li>
+        </ol>
+
+        <h2 id="database-services">8. Database Services</h2>
+        <p>Azure offers a wide range of fully managed database services.</p>
+
+        <h3>A. Azure SQL Database - GUI Usage:</h3>
+        <p>A fully managed PaaS database engine.</p>
+        <ol>
+            <li><strong>Navigate to SQL Databases:</strong>
+                <pre><code>Azure Portal &gt; Search for "SQL databases" &gt; Select SQL databases</code></pre>
+            </li>
+            <li><strong>Create SQL Database:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource group:</strong> Select.</li>
+                            <li><strong>Database name:</strong> (e.g., `mywebappdb`).</li>
+                            <li><strong>Server:</strong> Click "Create new" to create a new SQL Server logical server.
+                                <ul>
+                                    <li><strong>Server name:</strong> Unique (e.g., `mysqldemoserver2025`).</li>
+                                    <li><strong>Server admin login:</strong> (e.g., `sqladmin`).</li>
+                                    <li><strong>Password:</strong> Strong password.</li>
+                                    <li><strong>Location:</strong> Same as your resource group.</li>
+                                </ul>
+                            </li>
+                            <li><strong>Want to use SQL elastic pool?:</strong> `No`.</li>
+                            <li><strong>Compute + storage:</strong> Click "Configure database" to choose pricing tier (e.g., `Basic` or `Standard S0` for testing).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Connect to DB:</strong> After deployment, go to the SQL Database resource. In the left menu, go to **Networking** to configure firewall rules (e.g., "Add your client IP") or **Query editor (preview)** to run SQL queries directly.</li>
+        </ol>
+
+        <h3>B. Azure Cosmos DB - GUI Usage:</h3>
+        <p>A globally distributed, multi-model database service.</p>
+        <ol>
+            <li><strong>Navigate to Azure Cosmos DB:</strong>
+                <pre><code>Azure Portal &gt; Search for "Azure Cosmos DB" &gt; Select Azure Cosmos DB</code></pre>
+            </li>
+            <li><strong>Create Azure Cosmos DB Account:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource group:</strong> Select.</li>
+                            <li><strong>Account name:</strong> Enter unique (e.g., `mycosmosdbaccount2025`).</li>
+                            <li><strong>API:</strong> Choose your API (e.g., `Core (SQL)`).</li>
+                            <li><strong>Location:</strong> Select.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Add Container:</strong> Once deployed, go to the Cosmos DB account. In the left menu, go to **Data Explorer** &gt; **New Container** to create database and container.</li>
+        </ol>
+
+        <h3>C. Azure Database for MySQL/PostgreSQL/MariaDB - GUI Usage:</h3>
+        <p>Fully managed services for popular open-source relational databases.</p>
+        <ol>
+            <li><strong>Navigate to relevant service:</strong>
+                <pre><code>Azure Portal &gt; Search for "Azure Database for MySQL flexible server" &gt; Select it</code></pre>
+            </li>
+            <li><strong>Create Server:</strong> Follow similar steps as Azure SQL Database, choosing your specific open-source engine.</li>
+        </ol>
+
+        <h2 id="identity-and-security">9. Identity & Security</h2>
+        <p>These services provide identity management, threat protection, and secure key/secret management.</p>
+
+        <h3>A. Azure Active Directory (Azure AD) / Microsoft Entra ID - GUI Usage:</h3>
+        <p>A cloud-based identity and access management service.</p>
+        <ol>
+            <li><strong>Navigate to Microsoft Entra ID:</strong>
+                <pre><code>Azure Portal &gt; Search for "Microsoft Entra ID" &gt; Select Microsoft Entra ID</code></pre>
+            </li>
+            <li><strong>Manage Users:</strong>
+                <ul>
+                    <li>In the left menu, go to **Users** &gt; **All users**.</li>
+                    <li>Click **+ New user** &gt; **Create new user**.</li>
+                    <li>Fill in required details (User principal name, Display name, password).</li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Manage Enterprise Applications:</strong> For managing application registrations and SSO configurations.</li>
+        </ol>
+
+        <h3>B. Microsoft Defender for Cloud - GUI Usage:</h3>
+        <p>A cloud security posture management (CSPM) and cloud workload protection platform (CWPP).</p>
+        <ol>
+            <li><strong>Navigate to Microsoft Defender for Cloud:</strong>
+                <pre><code>Azure Portal &gt; Search for "Microsoft Defender for Cloud" &gt; Select Microsoft Defender for Cloud</code></pre>
+            </li>
+            <li><strong>Enable and Explore:</strong>
+                <ul>
+                    <li>On the overview page, you'll see your **Secure score**, security recommendations, and alert dashboards.</li>
+                    <li>If it's your first time, you might need to click "Get started" to enable the service for your subscriptions.</li>
+                    <li>Explore **Recommendations** to see actionable steps to improve security.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>C. Azure Key Vault - GUI Usage:</h3>
+        <p>A cloud service for securely storing and managing secrets, encryption keys, and digital certificates.</p>
+        <ol>
+            <li><strong>Navigate to Key Vaults:</strong>
+                <pre><code>Azure Portal &gt; Search for "Key vaults" &gt; Select Key vaults</code></pre>
+            </li>
+            <li><strong>Create Key Vault:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource Group:</strong> Select.</li>
+                            <li><strong>Key Vault name:</strong> Enter unique (e.g., `myappsecrets2025`).</li>
+                            <li><strong>Region:</strong> Select.</li>
+                            <li><strong>Pricing tier:</strong> `Standard` or `Premium` (for HSM-backed keys).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Add a Secret:</strong>
+                <ul>
+                    <li>Once deployed, go to the Key Vault resource.</li>
+                    <li>In the left menu, under "Objects", click **Secrets**.</li>
+                    <li>Click **+ Generate/Import**.</li>
+                    <li><strong>Upload options:</strong> `Manual`.</li>
+                    <li><strong>Name:</strong> (e.g., `MyDbConnection`).</li>
+                            <li><strong>Value:</strong> Paste your secret value.</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Access Policies:</strong> Go to **Access policies** in the left menu to grant permissions to users or applications to access secrets, keys, or certificates.</li>
+        </ol>
+
+        <h2 id="management-and-governance">10. Management & Governance</h2>
+        <p>Services for managing, monitoring, and governing your Azure resources effectively.</p>
+
+        <h3>A. Azure Monitor - GUI Usage:</h3>
+        <p>A comprehensive solution for collecting, analyzing, and acting on telemetry.</p>
+        <ol>
+            <li><strong>Navigate to Monitor:</strong>
+                <pre><code>Azure Portal &gt; Search for "Monitor" &gt; Select Monitor</code></pre>
+            </li>
+            <li><strong>Explore Metrics:</strong>
+                <ul>
+                    <li>In the left menu, click **Metrics**.</li>
+                    <li>Select a **Scope** (Resource group, Subscription, or specific resource).</li>
+                    <li>Choose a **Metric Namespace** and **Metric** (e.g., `Virtual Machine > Percentage CPU`).</li>
+                    <li>View charts of resource performance.</li>
+                </ul>
+            </li>
+            <li><strong>Explore Logs (Log Analytics):</strong>
+                <ul>
+                    <li>In the left menu, click **Logs**.</li>
+                    <li>This opens the Log Analytics query interface where you can write KQL queries against your ingested logs. (e.g., `AzureActivity | take 10`).</li>
+                </ul>
+            </li>
+            <li><strong>Create Alerts:</strong>
+                <ul>
+                    <li>In the left menu, click **Alerts** &gt; **+ Create** &gt; **Alert rule**.</li>
+                    <li>Select a **Scope** (resource).</li>
+                    <li>Configure **Condition** (e.g., metric threshold like "CPU percentage > 90%").</li>
+                    <li>Configure **Actions** (e.g., send email, trigger Logic App).</li>
+                    <li>Click **Create alert rule**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h3>B. Azure Policy - GUI Usage:</h3>
+        <p>Helps to enforce organizational standards and to assess compliance at scale.</p>
+        <ol>
+            <li><strong>Navigate to Policy:</strong>
+                <pre><code>Azure Portal &gt; Search for "Policy" &gt; Select Policy</code></pre>
+            </li>
+            <li><strong>Explore Definitions:</strong>
+                <ul>
+                    <li>In the left menu, click **Definitions**. View built-in policy definitions (e.g., "Allowed locations").</li>
+                    <li>Click **+ Policy definition** to create a custom policy (requires JSON knowledge).</li>
+                </ul>
+            </li>
+            <li><strong>Assign Policy:</strong>
+                <ul>
+                    <li>In the left menu, click **Assignments** &gt; **+ Assign policy**.</li>
+                    <li><strong>Scope:</strong> Select the subscription or resource group to which the policy will apply.</li>
+                    <li><strong>Policy definition:</strong> Select a policy definition.</li>
+                    <li>Configure **Parameters** and **Remediation** (e.g., to automatically fix non-compliant resources).</li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Compliance Dashboard:</strong> The Policy "Overview" dashboard shows the compliance state of your resources against assigned policies.</li>
+        </ol>
+
+        <h2 id="developer-tools-and-devops">11. Developer Tools & DevOps</h2>
+        <p>Azure provides a robust set of tools for software development and DevOps practices.</p>
+
+        <h3>A. Azure DevOps - GUI Usage:</h3>
+        <p>A suite of services for the software development lifecycle.</p>
+        <ol>
+            <li><strong>Access Azure DevOps:</strong>
+                <pre><code>Go to dev.azure.com</code></pre>
+            </li>
+            <li><strong>Create an Organization:</strong>
+                <ul>
+                    <li>Sign in with your Microsoft account.</li>
+                    <li>Click **New organization**.</li>
+                    <li>Provide a name for your organization and select its hosting geography. Click **Continue**.</li>
+                </ul>
+            </li>
+            <li><strong>Create a Project:</strong>
+                <ul>
+                    <li>Once the organization is created, click **Create a project**.</li>
+                    <li><strong>Project name:</strong> (e.g., `MyAppDevOps`).</li>
+                    <li><strong>Visibility:</strong> `Public` or `Private`.</li>
+                    <li><strong>Version control:</strong> `Git`.</li>
+                    <li><strong>Work item process:</strong> `Agile` (or Scrum, Basic, CMMI).</li>
+                    <li>Click **Create project**.</li>
+                </ul>
+            </li>
+            <li><strong>Explore Services:</strong> Within your project, explore **Boards** (for agile planning), **Repos** (for Git code), **Pipelines** (for CI/CD), **Test Plans**, and **Artifacts**.</li>
+        </ol>
+
+        <h3>B. Azure Container Registry (ACR) - GUI Usage:</h3>
+        <p>A managed Docker container registry service.</p>
+        <ol>
+            <li><strong>Navigate to Container registries:</strong>
+                <pre><code>Azure Portal &gt; Search for "Container registries" &gt; Select Container registries</code></pre>
+            </li>
+            <li><strong>Create Container Registry:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource group:</strong> Select.</li>
+                            <li><strong>Registry name:</strong> Unique (e.g., `myappregistry2025`).</li>
+                            <li><strong>Location:</strong> Select.</li>
+                            <li><strong>Sku:</strong> `Basic`, `Standard`, or `Premium`.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Push/Pull Images:</strong> Instructions for pushing and pulling Docker images using `docker login` and `docker push` will be available on the registry's "Overview" page.</li>
+        </ol>
+
+        <h2 id="analytics-and-ai-ml">12. Analytics & AI/ML</h2>
+        <p>Azure offers powerful services for data analysis and artificial intelligence/machine learning.</p>
+
+        <h3>A. Azure Synapse Analytics - GUI Usage:</h3>
+        <p>An enterprise analytics service that unifies data warehousing and big data analytics.</p>
+        <ol>
+            <li><strong>Navigate to Azure Synapse Analytics:</strong>
+                <pre><code>Azure Portal &gt; Search for "Azure Synapse Analytics" &gt; Select Azure Synapse Analytics</code></pre>
+            </li>
+            <li><strong>Create Synapse Workspace:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource group:</strong> Select.</li>
+                            <li><strong>Workspace name:</strong> Unique (e.g., `mysynapseworkspace2025`).</li>
+                            <li><strong>Region:</strong> Select.</li>
+                            <li><strong>Data Lake Storage Gen2:</strong> Link an existing or create a new one.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Open Synapse Studio:</strong> Once deployed, go to the workspace and click "Open Synapse Studio" to access the web-based IDE for data engineering, warehousing, and analytics.</li>
+        </ol>
+
+        <h3>B. Azure Machine Learning - GUI Usage:</h3>
+        <p>A cloud service for the end-to-end machine learning lifecycle.</p>
+        <ol>
+            <li><strong>Navigate to Machine Learning:</strong>
+                <pre><code>Azure Portal &gt; Search for "Machine Learning" &gt; Select Machine Learning</code></pre>
+            </li>
+            <li><strong>Create Workspace:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li><strong>Basics tab:</strong>
+                        <ul>
+                            <li><strong>Subscription:</strong> Select.</li>
+                            <li><strong>Resource group:</strong> Select.</li>
+                            <li><strong>Workspace name:</strong> Unique (e.g., `mymlworkspace2025`).</li>
+                            <li><strong>Region:</strong> Select.</li>
+                            <li>Will automatically create associated storage, Key Vault, Application Insights.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Launch Studio:</strong> Once deployed, go to the workspace and click "Launch studio" to access the web-based Azure Machine Learning Studio, where you can build, train, and deploy models.</li>
+        </ol>
+
+        <h3>C. Azure AI Services (Cognitive Services) - GUI Usage:</h3>
+        <p>Pre-built AI APIs and SDKs.</p>
+        <ol>
+            <li><strong>Navigate to AI services:</strong>
+                <pre><code>Azure Portal &gt; Search for "AI services" &gt; Select AI services</code></pre>
+            </li>
+            <li><strong>Create Service:</strong>
+                <ul>
+                    <li>Click **+ Create**.</li>
+                    <li>Choose a category (e.g., `Vision`, `Speech`, `Language`, `Decision`) and then a specific service (e.g., `Computer Vision`).</li>
+                    <li>Configure basics (name, resource group, region, pricing tier).</li>
+                    <li>Click **Review + create** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Use Service:</strong> After deployment, access the service keys and endpoint URL from its "Overview" page to integrate into your applications.</li>
+        </ol>
+
+        <h2 id="cost-management">13. Cost Management</h2>
+        <p>Effectively managing costs is crucial in Azure.</p>
+        <ol>
+            <li><strong>Azure Free Account:</strong> Leverage initial credits and free services.</li>
+            <li><strong>Cost Management + Billing:</strong>
+                <pre><code>Azure Portal &gt; Navigation menu (☰) &gt; Cost Management + Billing &gt; Cost Management &gt; Cost analysis</code></pre>
+                <ul>
+                    <li>View your current and forecasted costs, filter by resource group, tag, service, etc.</li>
+                </ul>
+            </li>
+            <li><strong>Budgets:</strong>
+                <ul>
+                    <li>In Cost Management, go to **Budgets**.</li>
+                    <li>Click **+ Add**.</li>
+                    <li>Define budget scope, name, and amount. Configure **Alerts** to notify you when spending exceeds thresholds.</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Azure Advisor:</strong>
+                <pre><code>Azure Portal &gt; Search for "Advisor" &gt; Select Advisor</code></pre>
+                <ul>
+                    <li>Provides recommendations for cost optimization, as well as high availability, security, and performance.</li>
+                </ul>
+            </li>
+            <li><strong>Reserved Instances (RIs) / Azure Savings Plan:</strong>
+                <pre><code>Azure Portal &gt; Search for "Reservations" &gt; Select Reservations</code></pre>
+                <ul>
+                    <li>Explore options to purchase reserved capacity for 1 or 3 years for significant discounts.</li>
+                </ul>
+            </li>
+            <li><strong>Tagging:</strong> Apply tags (key-value pairs) to your resources to organize costs by department, project, environment. You can apply tags on the "Tags" tab when creating most resources.</li>
+        </ol>
+
+        <h2 id="best-practices">14. Best Practices (Azure Well-Architected Framework)</h2>
+        <p>The Azure Well-Architected Framework provides a set of guiding tenets that are used to improve the quality of a workload. It focuses on five pillars:</p>
+        <ul>
+            <li><strong>Cost Optimization:</strong> Manage costs to maximize the value delivered.</li>
+            <li><strong>Operational Excellence:</strong> Design operations that keep a system running in production.</li>
+            <li><strong>Performance Efficiency:</strong> Scale to meet demand and support business requirements.</li>
+            <li><strong>Reliability:</strong> Build systems that are resilient and can recover from failures.</li>
+            <li><strong>Security:</strong> Protect applications and data from threats.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Your Azure Cloud Journey with the Portal!</strong>
+            <p>The Azure Portal is your primary interface for interacting with Azure services. By following the step-by-step instructions in this tutorial and consistently experimenting with different services, you'll gain invaluable hands-on experience in building and managing cloud solutions. Remember to always explore the extensive <a href="https://learn.microsoft.com/en-us/azure/" target="_blank">official Azure documentation</a> for the most up-to-date information and new features, as well as Microsoft Learn paths and quickstarts for deeper learning.</p>
+        </div>
+    </div>
+</body>
+</html>
