@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Jamf Pro Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Jamf Pro Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-jamf-pro">1. What is Jamf Pro?</a></li>
+                <li><a href="#key-concepts-and-architecture">2. Key Concepts & Architecture</a></li>
+                <li><a href="#initial-setup">3. Initial Setup & Enrollment</a></li>
+                <li><a href="#inventory-and-reporting">4. Inventory and Reporting</a></li>
+                <li><a href="#policies">5. Policies (Software Deployment, Scripts, Settings)</a></li>
+                <li><a href="#profiles">6. Configuration Profiles (Settings Management)</a></li>
+                <li><a href="#patch-management">7. Patch Management</a></li>
+                <li><a href="#app-management">8. Application Management</a></li>
+                <li><a href="#self-service">9. Self Service</a></li>
+                <li><a href="#smart-groups-and-static-groups">10. Smart Groups & Static Groups</a></li>
+                <li><a href="#scoping">11. Scoping</a></li>
+                <li><a href="#user-initiated-enrollment-and-dep">12. User-Initiated Enrollment & Automated Device Enrollment (ADE/DEP)</a></li>
+                <li><a href="#security-and-compliance">13. Security and Compliance</a></li>
+                <li><a href="#troubleshooting-and-best-practices">14. Troubleshooting & Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-jamf-pro">1. What is Jamf Pro?</h2>
+        <p><strong>Jamf Pro</strong> is a comprehensive Enterprise Mobility Management (EMM) solution specifically designed for managing Apple devices within organizations. It allows IT administrators to deploy, secure, and manage Mac computers, iPhones, iPads, and Apple TV devices, from initial setup through their entire lifecycle.</p>
+        <p>Jamf Pro provides a unified platform to automate device enrollment, configure settings, deploy software, enforce security policies, manage inventory, and provide a self-service app store for users.</p>
+        <h3>Key Benefits:</h3>
+        <ul>
+            <li><strong>Streamlined Deployment:</strong> Automate device setup from out-of-the-box.</li>
+            <li><strong>Centralized Management:</strong> Manage thousands of devices from a single console.</li>
+            <li><strong>Enhanced Security:</strong> Enforce encryption, password policies, and deploy security updates.</li>
+            <li><strong>Application Deployment:</strong> Distribute and manage apps effortlessly.</li>
+            <li><strong>User Empowerment:</strong> Provide users with self-service options for apps and resources.</li>
+            <li><strong>Inventory & Reporting:</strong> Gain real-time insights into your device fleet.</li>
+        </ul>
+
+        <h2 id="key-concepts-and-architecture">2. Key Concepts & Architecture</h2>
+        <p>Understanding the core components and concepts is crucial for effective Jamf Pro administration.</p>
+        <h3>A. Jamf Pro Server:</h3>
+        <ul>
+            <li>The central hub for all management tasks. It can be hosted on-premise or in the cloud (Jamf Cloud).</li>
+            <li>Consists of a web application, a database (MySQL/MariaDB), and a Tomcat server.</li>
+        </ul>
+
+        <h3>B. Managed Apple Devices:</h3>
+        <ul>
+            <li>Mac computers (macOS)</li>
+            <li>iPhones and iPads (iOS/iPadOS)</li>
+            <li>Apple TV (tvOS)</li>
+        </ul>
+
+        <h3>C. Jamf Agent (for macOS):</h3>
+        <ul>
+            <li>A lightweight client-side application installed on macOS devices during enrollment.</li>
+            <li>Communicates with the Jamf Pro server to receive commands, send inventory updates, and execute policies.</li>
+        </ul>
+
+        <h3>D. Self Service:</h3>
+        <ul>
+            <li>A customizable app store-like application for end-users on managed devices.</li>
+            <li>Allows users to install approved applications, run scripts, and access IT resources without contacting support.</li>
+        </ul>
+
+        <h3>E. Apple Push Notification service (APNs):</h3>
+        <ul>
+            <li>Essential for real-time communication between the Jamf Pro server and managed devices (especially iOS/iPadOS/tvOS, and for certain macOS commands).</li>
+            <li>Enables commands like lock, wipe, install app, update OS, and check in.</li>
+        </ul>
+
+        <h3>F. Device Enrollment Program (DEP) / Automated Device Enrollment (ADE) & Apple School Manager (ASM) / Apple Business Manager (ABM):</h3>
+        <ul>
+            <li>Apple's programs for zero-touch deployment. Devices purchased directly from Apple or authorized resellers can be automatically enrolled in Jamf Pro during initial setup.</li>
+        </ul>
+
+        <h2 id="initial-setup">3. Initial Setup & Enrollment</h2>
+        <p>Before managing devices, you need to set up your Jamf Pro instance and enroll devices.</p>
+
+        <h3>A. Jamf Cloud Instance Access:</h3>
+        <ul>
+            <li>If using Jamf Cloud, you'll receive a URL (e.g., `https://yourdomain.jamfcloud.com`).</li>
+            <li>Log in with your administrator credentials.</li>
+        </ul>
+
+        <h3>B. Basic Configuration (Initial Login):</h3>
+        <ul>
+            <li><strong>Create an APNs Certificate:</strong> Crucial for device communication. Jamf Pro guides you through this process (requires an Apple ID).</li>
+            <li><strong>Connect to Apple Push Notification service:</strong> Ensure it's active.</li>
+            <li><strong>Set up Scope & Restrictions (Initial):</strong> Define basic security settings.</li>
+        </ul>
+
+        <h3>C. Device Enrollment Methods:</h3>
+        <p>How devices get managed by Jamf Pro.</p>
+        <ul>
+            <li><strong>Automated Device Enrollment (ADE / DEP):</strong> For institutionally owned devices purchased through Apple Business/School Manager.
+                <ul>
+                    <li>Devices are automatically assigned to Jamf Pro when activated.</li>
+                    <li>Offers supervised mode for full control.</li>
+                </ul>
+                <pre><code># Configuration Steps in Jamf Pro (GUI):
+1.  Settings (gear icon) &gt; Global Management &gt; Automated Device Enrollment.
+2.  Click "New" and follow prompts to connect to your Apple Business/School Manager account.
+3.  Define a "PreStage Enrollment" for device groups (e.g., "Corporate Macs").
+4.  Configure setup assistant options (e.g., skip Apple ID, Touch ID setup).</code></pre>
+            </li>
+            <li><strong>User-Initiated Enrollment:</strong> For personally owned devices (BYOD) or devices not in ADE/DEP. Users manually enroll.
+                <ul>
+                    <li>Users browse to your Jamf Pro enrollment URL (e.g., `https://yourdomain.jamfcloud.com/enroll`).</li>
+                    <li>They follow prompts to install a profile/agent.</li>
+                    <li>Can be configured for user authentication and different enrollment experiences.</li>
+                </ul>
+                <pre><code># Configuration Steps in Jamf Pro (GUI):
+1.  Settings (gear icon) &gt; Computer Management &gt; Enrollment Methods &gt; User-Initiated Enrollment.
+2.  Configure options like authentication, categories, and custom messages.
+3.  Direct users to the enrollment URL.</code></pre>
+            </li>
+            <li><strong>Jamf Imaging (macOS):</strong> For traditional imaging workflows (less common with modern macOS).</li>
+        </ul>
+
+        <h2 id="inventory-and-reporting">4. Inventory and Reporting</h2>
+        <p>Jamf Pro automatically collects detailed information about all enrolled devices, providing a powerful inventory system.</p>
+        <ul>
+            <li><strong>Collected Data:</strong> Hardware specifications (model, serial number, CPU, RAM), software installed (applications, versions), user accounts, network configuration, security status (FileVault, OS version).</li>
+            <li><strong>Viewing Inventory:</strong>
+                <ul>
+                    <li>Navigate to <strong>Computers</strong> or <strong>Mobile Devices</strong> tabs.</li>
+                    <li>Click on any device to view its detailed inventory record.</li>
+                </ul>
+            </li>
+            <li><strong>Custom Inventory Attributes:</strong> Define custom fields to collect unique data relevant to your organization.
+                <pre><code># Steps to create a Custom Extension Attribute (macOS example):
+1.  Settings (gear icon) &gt; Computer Management &gt; Extension Attributes.
+2.  Click "New" &gt; Choose "Script" input type.
+3.  Provide a display name (e.g., "Custom App Version").
+4.  Paste a shell script that outputs the desired value to stdout.
+    Example Script (to get a custom app's version):
+    &lt;pre&gt;&lt;code class="language-bash"&gt;#!/bin/bash
+if [ -f "/Applications/MyCustomApp.app/Contents/Info.plist" ]; then
+    version=$(defaults read "/Applications/MyCustomApp.app/Contents/Info.plist" CFBundleShortVersionString)
+    echo "&lt;result&gt;$version&lt;/result&gt;"
+else
+    echo "&lt;result&gt;Not Installed&lt;/result&gt;"
+fi&lt;/code&gt;&lt;/pre&gt;
+5.  Save the Extension Attribute. It will be collected during the next inventory update.</code></pre>
+            </li>
+            <li><strong>Reporting:</strong> Generate detailed reports based on inventory data.
+                <ul>
+                    <li>Go to <strong>Computers &gt; Reports</strong> or <strong>Mobile Devices &gt; Reports</strong>.</li>
+                    <li>Create new reports based on specific criteria (e.g., "All Macs with macOS Ventura," "iPads with less than 10% battery").</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="policies">5. Policies (Software Deployment, Scripts, Settings)</h2>
+        <p>Policies are the primary method for performing automated tasks on managed computers. They can deploy software, run scripts, apply settings, and more.</p>
+        <h3>A. Creating a Policy:</h3>
+        <pre><code># Navigation: Computers &gt; Policies &gt; New (+)
+
+# Key sections when creating a policy:
+1.  General:
+    -   Display Name (e.g., "Install Microsoft Office")
+    -   Category (e.g., "Software Deployment")
+    -   Trigger:
+        -   **Recurring Check-in:** Runs every 15 minutes, once a day, etc.
+        -   **Enrollment Complete:** Runs immediately after a device enrolls.
+        -   **Login/Logout:** Runs when a user logs in/out.
+        -   **Network State Change:** Runs when network status changes.
+        -   **Custom Trigger:** Triggered by `sudo jamf policy -event &lt;custom_trigger_name&gt;` (useful for scripts).
+    -   Execution Frequency: Once per computer, Once per user, Every time, Once every X days/weeks/months.
+
+2.  Packages: Add pre-uploaded software packages (.pkg, .dmg).
+    -   Action: Install.
+    -   Options: Restart required, fill user templates.
+
+3.  Scripts: Add custom shell scripts to run on devices.
+    -   Priority: Before/After/At Reboot.
+    -   Parameters: Pass variables to your scripts.
+    Example Script (in Jamf Policy):
+    &lt;pre&gt;&lt;code class="language-bash"&gt;#!/bin/bash
+# Parameter 4: Custom message from Jamf Pro policy
+MESSAGE="$4" 
+echo "Policy triggered at $(date) with message: $MESSAGE" &gt;&gt; /Library/Application Support/Jamf/Logs/policy_log.log
+/usr/bin/osascript -e 'display notification "Hello from Jamf Policy!" with title "Jamf Alert"'
+&lt;/code&gt;&lt;/pre&gt;
+
+4.  Printers: Add/remove printers.
+5.  Disk Encryption: Manage FileVault.
+6.  Maintenance: Perform disk repairs, update inventory.
+7.  User Interaction: Display messages or restart prompts.
+8.  Files and Processes: Manage files, run commands, control processes.
+9.  Restrictions: Enforce various macOS restrictions (e.g., disable camera).</code></pre>
+        <h3>B. Deploying Software (Example: Deploy Google Chrome)</h3>
+        <ol>
+            <li><strong>Package Google Chrome:</strong> Download the `.dmg` or `.pkg` installer from Google. Use Jamf Composer (macOS utility) to convert it to a `.pkg` if necessary, or simply upload the `.dmg` if Jamf supports its direct deployment.</li>
+            <li><strong>Upload Package to Jamf Distribution Point:</strong> Jamf Pro stores packages on a distribution point (cloud or on-premise).
+                <pre><code># Navigation: Settings (gear) &gt; Server Infrastructure &gt; Distribution Points &gt; Your DP &gt; Packages &gt; Upload.</code></pre>
+            </li>
+            <li><strong>Create a Policy:</strong>
+                <pre><code># Navigation: Computers &gt; Policies &gt; New (+)
+-   Display Name: Install Google Chrome
+-   Category: Software Deployment
+-   Trigger: Recurring Check-in (e.g., every day)
+-   Execution Frequency: Once per computer
+-   Packages: Add the uploaded "Google Chrome.pkg"
+-   Scope: (See "Scoping" section) Add your "All Managed Macs" Smart Group.
+-   Self Service: (Optional) Make it available in Self Service.</code></pre>
+            </li>
+            <li><strong>Test:</strong> Enroll a test device and verify Chrome is installed.</li>
+        </ol>
+
+        <h2 id="profiles">6. Configuration Profiles (Settings Management)</h2>
+        <p>Configuration Profiles are XML files (or payloads) that enforce settings on macOS, iOS, iPadOS, and tvOS devices. They are ideal for persistent, required settings.</p>
+        <h3>A. Creating a Configuration Profile:</h3>
+        <pre><code># Navigation: Computers &gt; Configuration Profiles &gt; New (+) (for macOS)
+# OR Mobile Devices &gt; Configuration Profiles &gt; New (+) (for iOS/iPadOS)
+
+# Key payloads (settings) when creating a profile:
+1.  General:
+    -   Name (e.g., "Wi-Fi Settings - Corporate Network")
+    -   Category
+    -   Level: User Level (applies to user session) or Computer/Device Level (applies to device itself, even without user login).
+
+2.  Wi-Fi: Configure Wi-Fi networks (SSID, security type, password).
+3.  Restrictions: Disable cameras, force passcode, restrict app installation.
+4.  Passcode: Enforce passcode requirements (length, complexity, age).
+5.  Web Clips: Create shortcuts to websites on the home screen.
+6.  Email: Configure email accounts.
+7.  Certificates: Deploy certificates for network access or VPN.
+8.  Privacy Preferences Policy Control (PPPC): Grant permissions to apps (e.g., screen recording, full disk access).
+9.  Custom Settings: Deploy custom plist files.</code></pre>
+        <h3>B. Deploying a Wi-Fi Profile (Example: iOS/iPadOS)</h3>
+        <ol>
+            <li><strong>Create a Configuration Profile:</strong>
+                <pre><code># Navigation: Mobile Devices &gt; Configuration Profiles &gt; New (+)
+-   Name: Corporate Wi-Fi
+-   Category: Network
+-   Level: Device Level (applies to the device)
+-   Payloads: Add "Wi-Fi" payload
+    -   SSID: Your_Corporate_WiFi_SSID
+    -   Security Type: WPA/WPA2 Enterprise (or appropriate)
+    -   Protocol: EAP-TLS (or appropriate, often requires certificates)
+    -   Auto Join: Checked</code></pre>
+            </li>
+            <li><strong>Scope:</strong> Apply to your "All Managed iPads" Smart Group.</li>
+            <li><strong>Test:</strong> Verify test iPads automatically connect to the corporate Wi-Fi.</li>
+        </ol>
+
+        <h2 id="patch-management">7. Patch Management</h2>
+        <p>Keeping macOS and third-party software updated is critical for security and stability.</p>
+        <h3>A. macOS Updates:</h3>
+        <ul>
+            <li>Jamf Pro can manage macOS major upgrades and minor updates.</li>
+            <li>Use policies to defer updates, enforce updates, or make them available via Self Service.</li>
+            <pre><code class="language-bash"># Example Policy for macOS Update:
+# Navigation: Computers &gt; Policies &gt; New (+)
+-   Display Name: Upgrade to macOS Sonoma
+-   Category: OS Updates
+-   Trigger: Manual (User-initiated via Self Service) or Recurring Check-in (for forced updates)
+-   Execution Frequency: Once per computer
+-   Payloads: Add "Operating System"
+    -   Action: Install an update
+    -   macOS Version: Latest (or specific version)
+    -   Options: Restart if needed, deferrals, force installs.
+-   Scope: Smart Group of devices eligible for Sonoma upgrade.
+-   Self Service: Make available (with icon and description).</code></pre>
+        </ul>
+        <h3>B. Third-Party App Patching:</h3>
+        <ul>
+            <li>Jamf Pro 10.27+ introduced **App Installers** for streamlined third-party app management and patching (e.g., Chrome, Firefox, Zoom). This leverages Jamf's Content Distribution Network (CDN).</li>
+            <li>For other apps, you might need custom scripts or tools like **Jamf Patch Management (for custom titles)**, or integrations with tools like AutoPkg.</li>
+            <pre><code># Example using App Installers (Jamf Pro GUI):
+1.  Computers &gt; App Installers.
+2.  Click "New" or browse available titles.
+3.  Select an app (e.g., Google Chrome).
+4.  Configure:
+    -   Deployment Type: "Install automatically" (for forced updates) or "Make available in Self Service".
+    -   Scope: Apply to relevant Smart Groups.
+5.  Jamf Pro will automatically download, deploy, and update the app when new versions are available.</code></pre>
+        </ul>
+
+        <h2 id="app-management">8. Application Management</h2>
+        <p>Deploying and managing applications is a core function.</p>
+        <ul>
+            <li><strong>Packaging Applications:</strong>
+                <ul>
+                    <li>`.pkg` files are the preferred format for macOS software deployment.</li>
+                    <li>Jamf Composer (included with Jamf Pro) helps create `.pkg` installers from `.dmg` files or by snapshotting installations.</li>
+                </ul>
+            </li>
+            <li><strong>App Store Apps (iOS/iPadOS/tvOS and macOS):</strong>
+                <ul>
+                    <li>Integrate Jamf Pro with your **Apple Business Manager (ABM)** or **Apple School Manager (ASM)** account for managed app distribution.</li>
+                    <li>Purchase apps through ABM/ASM for Volume Purchase Program (VPP) and assign them to devices or users in Jamf Pro.</li>
+                </ul>
+                <pre><code># Steps for VPP App Deployment:
+1.  Settings (gear) &gt; Global Management &gt; VPP Accounts &gt; Add your VPP token.
+2.  Apps &gt; New (+) &gt; App Store app or VPP App.
+3.  Search for the app, select it.
+4.  Configure:
+    -   Distribution Method: "Install Automatically" or "Make Available in Self Service".
+    -   App Configuration (Managed App Config): Pass specific settings to the app.
+    -   Scope: Assign to devices/users.
+    -   VPP Assignment: Choose "Assign to device" or "Assign to user".</code></pre>
+            </li>
+            <li><strong>Custom Applications (macOS):</strong> For in-house or non-App Store macOS apps, package them as `.pkg` files and deploy via Policies.</li>
+        </ul>
+
+        <h2 id="self-service">9. Self Service</h2>
+        <p>Jamf Self Service empowers end-users to install applications, run scripts, and access resources without requiring direct IT intervention.</p>
+        <ul>
+            <li><strong>Making Items Available:</strong>
+                <ul>
+                    <li>When creating a Policy or App/Profile, enable the "Self Service" tab.</li>
+                    <li>Configure an icon, description, category, and featured status.</li>
+                </ul>
+            </li>
+            <li><strong>Customizing Self Service:</strong>
+                <pre><code># Navigation: Settings (gear) &gt; Self Service (for Computers or Mobile Devices)
+-   Branding: Customize icons, banner, colors.
+-   Layout: Organize categories, featured items.
+-   Notifications: Configure push notifications for new content.</code></pre>
+            </li>
+            <li><strong>Use Cases:</strong>
+                <ul>
+                    <li>Optional software installs (e.g., specialized design software).</li>
+                    <li>Running maintenance scripts (e.g., "Clear Print Queue").</li>
+                    <li>Accessing documentation or internal web links.</li>
+                    <li>Initiating a FileVault encryption.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="smart-groups-and-static-groups">10. Smart Groups & Static Groups</h2>
+        <p>Groups are fundamental for organizing devices and users, and for scoping policies and profiles.</p>
+        <ul>
+            <li><strong>Static Groups:</strong>
+                <ul>
+                    <li>Manually populated groups. You explicitly add or remove devices/users.</li>
+                    <li>Useful for small, specific collections (e.g., "Executive Team Macs", "Pilot Program iPads").</li>
+                </ul>
+                <pre><code># Navigation: Computers &gt; Static Computer Groups &gt; New (+)
+# Or Mobile Devices &gt; Static Mobile Device Groups &gt; New (+)</code></pre>
+            </li>
+            <li><strong>Smart Groups:</strong>
+                <ul>
+                    <li>Dynamically populated groups based on criteria from device inventory.</li>
+                    <li>Automatically update as device inventory changes.</li>
+                    <li>Essential for automation (e.g., "All Macs with low disk space", "iPads without passcode enforced").</li>
+                </ul>
+                <pre><code># Navigation: Computers &gt; Smart Computer Groups &gt; New (+)
+# Or Mobile Devices &gt; Smart Mobile Device Groups &gt; New (+)
+
+# Example Smart Group Criteria (for "Macs with macOS 10.15 Catalina"):
+-   Criteria: Operating System Version
+-   Operator: is
+-   Value: 10.15.x
+
+# Example Smart Group for "Devices with App X Installed":
+-   Criteria: Application Title
+-   Operator: is
+-   Value: Microsoft Word.app
+
+# Example Smart Group for "Devices without FileVault Enabled":
+-   Criteria: FileVault 2 Status
+-   Operator: is not
+-   Value: Encrypted</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="scoping">11. Scoping</h2>
+        <p>Scoping defines which devices or users a policy, profile, or application applies to. It's done by assigning to groups.</p>
+        <ul>
+            <li><strong>General Principle:</strong>
+                <ul>
+                    <li>You include specific **groups** (Smart or Static) or **individual devices/users**.</li>
+                    <li>You can also add **exclusions** (specific groups/devices/users that should NOT receive the item).</li>
+                </ul>
+            </li>
+            <li><strong>Location within Jamf Pro:</strong> Every policy, configuration profile, and app distribution has a "Scope" tab where you configure this.</li>
+            <pre><code># Example Scope Configuration for a Policy:
+-   Targets:
+    -   Choose "All Computers" initially for broad reach, then refine.
+    -   Or choose "Specific Computer Groups" and add your "All Faculty Macs" Smart Group.
+-   Limitations: (Optional, e.g., only apply in a specific building, or to specific users).
+    -   Network Segments
+    -   Users
+    -   Buildings
+    -   Departments
+-   Exclusions: (Optional, e.g., exclude "IT Department Macs" from a general policy).
+    -   Computer Groups (Static or Smart)
+    -   Individual Computers
+    -   Users
+    -   Network Segments
+    -   Buildings
+    -   Departments</code></pre>
+        </ul>
+
+        <h2 id="user-initiated-enrollment-and-dep">12. User-Initiated Enrollment & Automated Device Enrollment (ADE/DEP)</h2>
+        <p>These are the primary methods for getting devices under Jamf Pro management.</p>
+        <ul>
+            <li><strong>User-Initiated Enrollment:</strong>
+                <ul>
+                    <li>Process: User browses to a Jamf Pro enrollment URL, authenticates (if required), and installs a profile/agent.</li>
+                    <li>Use Case: BYOD (Bring Your Own Device), small deployments, devices not purchased through Apple's programs.</li>
+                </ul>
+            </li>
+            <li><strong>Automated Device Enrollment (ADE/DEP):</strong>
+                <ul>
+                    <li>Process: Devices are pre-assigned to Jamf Pro in Apple Business/School Manager. When a user first powers on the device and connects to the internet, it automatically contacts Jamf Pro for enrollment instructions.</li>
+                    <li>Use Case: Corporate-owned devices, bulk deployments, zero-touch provisioning.</li>
+                    <li>Benefits: Enforces supervision, non-removable management profile, streamlined user experience.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="security-and-compliance">13. Security and Compliance</h2>
+        <p>Jamf Pro helps enforce security best practices and meet compliance requirements.</p>
+        <ul>
+            <li><strong>Disk Encryption (FileVault):</strong> Deploy policies to enforce FileVault encryption on macOS devices. Manage recovery keys.</li>
+            <li><strong>Passcode/Password Policies:</strong> Enforce strong passcodes on iOS/iPadOS and complex passwords on macOS.</li>
+            <li><strong>Restrictions:</strong> Use Configuration Profiles to restrict device functionality (e.g., disable camera, prevent app installation from unknown sources, disable AirDrop).</li>
+            <li><strong>Gatekeeper & XProtect:</strong> Jamf Pro integrates with macOS built-in security features.</li>
+            <li><strong>Security Updates:</strong> Manage macOS and app updates to patch vulnerabilities.</li>
+            <li><strong>Compliance Reporting:</strong> Generate reports to demonstrate compliance with internal policies or external regulations (e.g., "All devices are encrypted," "All Macs have AV installed").</li>
+            <li><strong>Remote Commands:</strong> Issue remote lock or wipe commands for lost/stolen devices.
+                <pre><code class="language-bash"># Example Remote Commands (from a device's inventory record or group action):
+-   Lock Device
+-   Wipe Device
+-   Clear Passcode
+-   Restart Device
+-   Update Inventory</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="troubleshooting-and-best-practices">14. Troubleshooting & Best Practices</h2>
+        <h3>A. Troubleshooting:</h3>
+        <ul>
+            <li><strong>Check Device Connectivity:</strong> Ensure the device can reach the Jamf Pro server.</li>
+            <li><strong>Verify APNs:</strong> Crucial for real-time commands. Check APNs certificate status in Jamf Pro.</li>
+            <li><strong>Review Logs:</strong>
+                <ul>
+                    <li><strong>Jamf Pro Server Logs:</strong> For server-side issues.</li>
+                    <li><strong>Device Logs:</strong> On macOS, check `/Library/Application Support/Jamf/Jamf.log` for agent activity.</li>
+                    <li><strong>`jamf.log` on macOS:</strong>
+                        <pre><code class="language-bash">tail -f /Library/Application\ Support/Jamf/Jamf.log</code></pre>
+                    </li>
+                    <li><strong>Console.app (macOS):</strong> For system-wide logs related to profiles, software installation.</li>
+                </ul>
+            </li>
+            <li><strong>Test Scoping:</strong> Double-check that policies/profiles are scoped correctly to the target devices/users and that no exclusions apply.</li>
+            <li><strong>`sudo jamf policy` (macOS):</strong> Manually trigger policy execution on a Mac.
+                <pre><code class="language-bash">sudo jamf policy # Runs all applicable policies
+sudo jamf policy -event &lt;custom_trigger&gt; # Triggers a specific custom policy
+sudo jamf policy -id &lt;policy_id&gt; # Runs a policy by its ID</code></pre>
+            </li>
+            <li><strong>`sudo jamf recon` (macOS):</strong> Force an inventory update from a Mac.</li>
+            <li><strong>Check Jamf Pro Server Health:</strong> Monitor server resources, database health.</li>
+        </ul>
+
+        <h3>B. Best Practices:</h3>
+        <ul>
+            <li><strong>Plan Your Deployment:</strong> Define your organizational structure, user groups, and device types before configuring Jamf Pro.</li>
+            <li><strong>Use Smart Groups Extensively:</strong> Leverage dynamic groups for automation and scalability.</li>
+            <li><strong>Modular Policies & Profiles:</strong> Break down complex tasks into smaller, focused policies/profiles (e.g., one policy for Chrome install, another for Wi-Fi settings).</li>
+            <li><strong>Test Thoroughly:</strong> Always test new policies, profiles, or packages on a small group of test devices before wide deployment.</li>
+            <li><strong>Leverage Self Service:</strong> Empower users and reduce IT workload.</li>
+            <li><strong>Automate as Much as Possible:</strong> Use triggers, execution frequencies, and smart groups to minimize manual intervention.</li>
+            <li><strong>Regularly Update Jamf Pro:</strong> Keep your Jamf Pro server and Jamf Agent up-to-date for new features, bug fixes, and security patches.</li>
+            <li><strong>Maintain Clean Inventory:</strong> Periodically review and remove stale or unmanaged devices.</li>
+            <li><strong>Document Everything:</strong> Keep clear records of your configurations, policies, and workflows.</li>
+            <li><strong>Utilize Community Resources:</strong> Jamf Nation (community.jamf.com) is an invaluable resource for support, scripts, and best practices.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Become a Jamf Pro Power User!</strong>
+            <p>Jamf Pro is a robust platform that simplifies Apple device management in complex environments. By understanding its core concepts, mastering policy and profile creation, and applying best practices, you can efficiently deploy, secure, and manage your organization's Apple fleet, providing a seamless experience for both IT and end-users.</p>
+        </div>
+    </div>
+</body>
+</html>
