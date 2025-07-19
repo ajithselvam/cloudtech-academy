@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Microsoft Sentinel Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Microsoft Sentinel Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-microsoft-sentinel">1. What is Microsoft Sentinel?</a></li>
+                <li><a href="#key-features-and-benefits">2. Key Features and Benefits</a></li>
+                <li><a href="#architecture-and-components">3. Architecture & Components</a></li>
+                <li><a href="#initial-setup-and-onboarding">4. Initial Setup & Onboarding</a></li>
+                <li><a href="#data-connectors">5. Data Connectors</a></li>
+                <li><a href="#log-analytics-workspace-and-kql">6. Log Analytics Workspace & KQL</a></li>
+                <li><a href="#analytics-rules">7. Analytics Rules (Detections)</a></li>
+                <li><a href="#incidents-and-investigation">8. Incidents & Investigation</a></li>
+                <li><a href="#hunting">9. Hunting</a></li>
+                <li><a href="#playbooks-automation-and-orchestration">10. Playbooks (Automation & Orchestration)</a></li>
+                <li><a href="#workbooks-and-dashboards">11. Workbooks & Dashboards</a></li>
+                <li><a href="#threat-intelligence">12. Threat Intelligence</a></li>
+                <li><a href="#user-entity-behavior-analytics-ueba">13. User & Entity Behavior Analytics (UEBA)</a></li>
+                <li><a href="#cost-management">14. Cost Management</a></li>
+                <li><a href="#best-practices-and-troubleshooting">15. Best Practices & Troubleshooting</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-microsoft-sentinel">1. What is Microsoft Sentinel?</h2>
+        <p><strong>Microsoft Sentinel</strong> is a scalable, cloud-native **Security Information and Event Management (SIEM)** and **Security Orchestration, Automation, and Response (SOAR)** solution. It provides intelligent security analytics and threat intelligence across an enterprise, offering a single solution for alert detection, threat visibility, proactive hunting, and threat response.</p>
+        <p>Built on top of **Azure Log Analytics**, Sentinel leverages Microsoft's vast threat intelligence, AI, and machine learning capabilities to help security operations teams efficiently protect their digital assets in both cloud and on-premises environments.</p>
+
+        <h2 id="key-features-and-benefits">2. Key Features and Benefits</h2>
+        <ul>
+            <li><strong>Collect Data at Cloud Scale:</strong> Ingests data from various sources across your enterprise (Microsoft 365, Azure services, on-premises infrastructure, other cloud providers, third-party security solutions).</li>
+            <li><strong>Detect Threats with Smart Analytics:</strong> Uses built-in rules, machine learning, and behavioral analytics to identify known and unknown threats.</li>
+            <li><strong>Investigate Threats with AI:</strong> Leverages AI to reduce alert fatigue by correlating raw alerts into actionable incidents, and provides powerful investigation graphs.</li>
+            <li><strong>Automate Response with SOAR:</strong> Built-in playbooks (Azure Logic Apps) enable automated responses to threats, accelerating remediation.</li>
+            <li><strong>Proactive Threat Hunting:</strong> Allows security analysts to proactively search for undiscovered threats using powerful query language (KQL).</li>
+            <li><strong>Cloud-Native & Scalable:</strong> Pay-as-you-go model, scales infinitely with your data ingestion needs without managing underlying infrastructure.</li>
+            <li><strong>Unified Visibility:</strong> Centralizes security data from diverse sources into a single pane of glass.</li>
+        </ul>
+
+        <h2 id="architecture-and-components">3. Architecture & Components</h2>
+        <p>Microsoft Sentinel's architecture is built on Azure services, primarily Azure Log Analytics.</p>
+        <ul>
+            <li><strong>Azure Log Analytics Workspace:</strong>
+                <ul>
+                    <li>The central **data repository** for Sentinel. All data ingested into Sentinel is stored here.</li>
+                    <li>Uses **Kusto Query Language (KQL)** for querying and analyzing log data.</li>
+                </ul>
+            </li>
+            <li><strong>Data Connectors:</strong> Mechanisms to ingest data from various sources into the Log Analytics Workspace.</li>
+            <li><strong>Analytics Rules:</strong> Define logic to detect threats by analyzing incoming data. These generate alerts and incidents.</li>
+            <li><strong>Incidents:</strong> Correlated groups of alerts that represent a potential security threat, providing a comprehensive view for investigation.</li>
+            <li><strong>Workbooks:</strong> Interactive dashboards for data visualization and custom reporting.</li>
+            <li><strong>Hunting Queries:</strong> Pre-built or custom KQL queries used by security analysts to proactively search for threats.</li>
+            <li><strong>Playbooks (Azure Logic Apps):</strong> Automated workflows triggered by Sentinel incidents or alerts to perform response actions.</li>
+            <li><strong>Threat Intelligence:</strong> Integrates with various threat intelligence feeds to enrich alerts and aid detection/hunting.</li>
+            <li><strong>User and Entity Behavior Analytics (UEBA):</strong> Identifies anomalous behavior by users and entities (hosts, applications).</li>
+        </ul>
+
+        <h2 id="initial-setup-and-onboarding">4. Initial Setup & Onboarding</h2>
+        <p>Setting up Microsoft Sentinel involves deploying it to an Azure subscription and configuring a Log Analytics Workspace.</p>
+        <h3>Prerequisites:</h3>
+        <ul>
+            <li>An Azure subscription.</li>
+            <li>Contributor permissions on the Azure subscription where Sentinel will be deployed.</li>
+            <li>Contributor and User Access Administrator permissions on the resource group where the Log Analytics Workspace resides (or Contributor on the Log Analytics Workspace and Reader on the resource group).</li>
+        </ul>
+        <h3>Steps to Onboard Microsoft Sentinel:</h3>
+        <ol>
+            <li><strong>Create/Select a Log Analytics Workspace:</strong>
+                <ul>
+                    <li>Go to Azure Portal &gt; Search for "Log Analytics workspaces" &gt; Create.</li>
+                    <li>Choose a Subscription, Resource Group, Name, Region.</li>
+                    <li>Set a pricing tier (e.g., Pay-as-you-go for testing).</li>
+                </ul>
+                <pre><code class="language-bash"># Azure CLI example to create a Log Analytics Workspace:
+az monitor log-analytics workspace create \
+  --resource-group my-sentinel-rg \
+  --workspace-name my-sentinel-workspace \
+  --location eastus</code></pre>
+            </li>
+            <li><strong>Enable Microsoft Sentinel:</strong>
+                <ul>
+                    <li>In Azure Portal &gt; Search for "Microsoft Sentinel".</li>
+                    <li>Click "Create Microsoft Sentinel".</li>
+                    <li>Select the Log Analytics workspace you created/chose.</li>
+                    <li>Click "Add".</li>
+                </ul>
+            </li>
+            <li><strong>Grant Permissions:</strong> After onboarding, assign appropriate roles for your security team members:
+                <ul>
+                    <li><strong>Microsoft Sentinel Reader:</strong> View data, incidents, workbooks.</li>
+                    <li><strong>Microsoft Sentinel Responder:</strong> Reader + manage incidents.</li>
+                    <li><strong>Microsoft Sentinel Contributor:</strong> Responder + manage analytics rules, playbooks, workbooks.</li>
+                    <li><strong>Microsoft Sentinel Automation Contributor:</strong> Required for Playbooks to act on behalf of Sentinel.</li>
+                </ul>
+                <pre><code class="language-bash"># Azure CLI example to assign a role to a user:
+az role assignment create \
+  --assignee "user@example.com" \
+  --role "Microsoft Sentinel Contributor" \
+  --scope "/subscriptions/&lt;subscription-id&gt;/resourceGroups/&lt;resource-group-name&gt;/providers/Microsoft.OperationalInsights/workspaces/&lt;workspace-name&gt;"</code></pre>
+            </li>
+        </ol>
+
+        <h2 id="data-connectors">5. Data Connectors</h2>
+        <p>Data connectors are the pipelines that ingest data from various sources into your Log Analytics Workspace for Sentinel to analyze. Sentinel has a rich set of built-in connectors.</p>
+        <h3>A. Types of Data Connectors:</h3>
+        <ul>
+            <li><strong>Azure Services:</strong> Azure Active Directory, Azure Activity, Azure Firewall, Microsoft 365 Defender, Microsoft 365 logs (Audit, SharePoint, Exchange), Azure Storage. (Typically direct integration).</li>
+            <li><strong>Microsoft Solutions:</strong> Microsoft Defender for Endpoint, Defender for Cloud Apps, Office 365. (Direct integration).</li>
+            <li><strong>External Solutions (APIs):</strong> AWS CloudTrail, Google Workspace, CrowdStrike, Zscaler. (Often uses Logic Apps or Azure Functions to pull data).</li>
+            <li><strong>Industry Standard Protocols:</strong> Syslog, Common Event Format (CEF) from firewalls, proxies, EDRs, etc. (Requires a Linux-based Log Analytics agent/forwarder).</li>
+            <li><strong>Custom Logs:</strong> For any application or system not covered by built-in connectors.</li>
+        </ul>
+        <h3>B. Connecting Data Sources (Examples):</h3>
+        <pre><code class="language-bash"># Navigation in Azure Portal: Microsoft Sentinel &gt; Data connectors
+
+# Example 1: Connecting Azure Active Directory Identity Protection
+1.  Search for "Azure Active Directory Identity Protection" connector.
+2.  Click "Open connector page".
+3.  Click "Connect". (Data should start flowing automatically).
+
+# Example 2: Connecting Microsoft 365 (Audit logs)
+1.  Search for "Microsoft 365" connector.
+2.  Click "Open connector page".
+3.  Ensure the prerequisite (Global Admin role) is met.
+4.  Check the boxes for "Exchange", "SharePoint", "Teams", "Audit logs (all activities)".
+5.  Click "Connect".
+
+# Example 3: Connecting Syslog/CEF (e.g., from a Linux server/firewall)
+1.  Search for "Syslog" or "Common Event Format (CEF)" connector.
+2.  Click "Open connector page".
+3.  Follow instructions to deploy a Linux-based Log Analytics agent (VM or container) that acts as a syslog/CEF forwarder.
+    &lt;pre&gt;&lt;code class="language-bash"&gt;# On your Linux VM (Syslog/CEF forwarder):
+# Install Log Analytics agent (details from connector page)
+# Configure rsyslog (or syslog-ng) to forward logs to the agent:
+# Example rsyslog configuration snippet (in /etc/rsyslog.d/):
+# *.* @127.0.0.1:25226;RSYSLOG_SyslogProtocol23Format # For Syslog
+# *.* @127.0.0.1:25227;RSYSLOG_FileFormat # For CEF (often a specific port/format)
+# Ensure port 25226/25227 is open locally and in firewall rules.
+&lt;/code&gt;&lt;/pre&gt;
+4.  Verify data ingestion in Log Analytics (e.g., query `Syslog | take 10`).</code></pre>
+        <div class="tip">
+            <strong>Check Data Ingestion:</strong> After connecting a data source, always verify that data is flowing into your Log Analytics workspace by running simple KQL queries (e.g., `SigninLogs | take 10` for AAD, `OfficeActivity | take 10` for M365, `CommonSecurityLog | take 10` for CEF). It can take some time for initial data to appear.
+        </div>
+
+        <h2 id="log-analytics-workspace-and-kql">6. Log Analytics Workspace & KQL</h2>
+        <p>Your Log Analytics workspace is where all your Sentinel data resides. **Kusto Query Language (KQL)** is the powerful query language used to interact with this data.</p>
+        <h3>A. Accessing Log Analytics:</h3>
+        <pre><code class="language-bash"># Navigation: Microsoft Sentinel &gt; Logs</code></pre>
+        <p>This opens the Log Analytics query interface where you can write and execute KQL queries.</p>
+        <h3>B. Basic KQL Syntax:</h3>
+        <ul>
+            <li>Queries start with a table name.</li>
+            <li>Pipes (`|`) chain operations together.</li>
+            <li>Case-sensitive for operators/functions, not for table/column names generally.</li>
+        </ul>
+        <pre><code class="language-kql"># Get the first 10 rows from SigninLogs table
+SigninLogs
+| take 10
+
+# Filter logs by a specific user and project certain columns
+SigninLogs
+| where TimeGenerated &gt; ago(1h)
+| where Identity contains "admin"
+| project TimeGenerated, Identity, IPAddress, Location, ResultType
+
+# Count sign-in attempts per IP address
+SigninLogs
+| summarize count() by IPAddress
+| order by count_ desc
+
+# Join two tables (e.g., network flow data with security events)
+AzureNetworkAnalyticsFlows
+| where TimeGenerated &gt; ago(1d)
+| where FlowStatus == "Denied"
+| join kind=inner (
+    SecurityEvent
+    | where EventID == 4625 // Failed logon on Windows
+    | project TimeGenerated, Account, IpAddress = IpAddress
+) on IpAddress
+| project TimeGenerated, Account, IpAddress, FlowStatus</code></pre>
+        <div class="tip">
+            <strong>KQL is your superpower:</strong> Invest significant time in learning KQL. It's the language you'll use for detection, hunting, and investigation in Sentinel. Practice on sample data or your own ingested logs.
+        </div>
+
+        <h2 id="analytics-rules">7. Analytics Rules (Detections)</h2>
+        <p>Analytics rules are the core of Sentinel's detection capabilities. They define logic to identify specific threats or suspicious activities in your ingested data, generating alerts and incidents.</p>
+        <h3>A. Types of Analytics Rules:</h3>
+        <ul>
+            <li><strong>Scheduled query:</strong> Runs a KQL query on a set schedule, generating an alert if conditions are met. (Most common).</li>
+            <li><strong>Microsoft incident creation rule:</strong> Automatically creates incidents from alerts generated by Microsoft security products (e.g., Defender for Endpoint).</li>
+            <li><strong>Fusion:</strong> Uses Microsoft's AI and machine learning to correlate multiple low-fidelity alerts into high-fidelity incidents.</li>
+            <li><strong>Machine learning (ML) behavior analytics:</strong> Pre-built ML models that detect anomalous behavior (e.g., impossible travel, mass data exfiltration).</li>
+            <li><strong>Microsoft security:</strong> Connects alerts from Microsoft services (e.g., Microsoft Defender for Cloud Apps).</li>
+        </ul>
+        <h3>B. Creating a Scheduled Query Rule (Example: Brute-force Detection):</h3>
+        <pre><code class="language-bash"># Navigation: Microsoft Sentinel &gt; Analytics &gt; Create &gt; Scheduled query rule
+
+# Steps to configure:
+1.  General:
+    -   Name: Brute Force Attempt from Single IP
+    -   Description: Detects multiple failed sign-in attempts from a unique IP address to different user accounts.
+    -   Severity: High
+2.  Set rule logic:
+    -   Rule query:
+        &lt;pre&gt;&lt;code class="language-kql"&gt;SigninLogs
+        | where ResultType == 50126 // Failed sign-in result code
+        | summarize FailedLogons = count() by IPAddress, bin(TimeGenerated, 5m) // Count failed logons by IP in 5 min intervals
+        | where FailedLogons &gt; 10 // Threshold for failed attempts
+        | extend AccountList = SigninLogs
+            | where ResultType == 50126 and IPAddress == IPAddress
+            | summarize make_set(Identity) by IPAddress // Get list of accounts
+        | project IPAddress, FailedLogons, AccountList, TimeGenerated
+        &lt;/code&gt;&lt;/pre&gt;
+    -   Map entities (important for investigation graph): Select appropriate entity types (e.g., IPAddress, Account).
+    -   Query scheduling: Run query every 5 minutes, Lookback data from last 5 minutes.
+    -   Alert threshold: Generate alert when number of query results is greater than 0.
+3.  Incident settings:
+    -   Enable "Create incidents from alerts triggered by this analytics rule".
+    -   Alert grouping: Group alerts into a single incident (e.g., by IP address).
+4.  Automated response: Attach a playbook to run automatically (covered later).
+5.  Review and create.</code></pre>
+        <div class="tip">
+            <strong>Fine-tuning Rules:</strong> Start with lower thresholds and adjust them as you observe the baseline behavior in your environment to minimize false positives.
+        </div>
+
+        <h2 id="incidents-and-investigation">8. Incidents & Investigation</h2>
+        <p>When analytics rules are triggered, they create **alerts**, and related alerts are automatically correlated into **incidents**. Incidents are the primary focus for security analysts.</p>
+        <h3>A. Managing Incidents:</h3>
+        <pre><code class="language-bash"># Navigation: Microsoft Sentinel &gt; Incidents</code></pre>
+        <ul>
+            <li>View incident queue, severity, status (New, Active, Closed), owner.</li>
+            <li>Assign incidents to yourself or other team members.</li>
+            <li>Change status as you progress (New &gt; Active &gt; Closed).</li>
+        </ul>
+        <h3>B. Incident Investigation:</h3>
+        <p>Click on an incident to open the full investigation details.</p>
+        <ul>
+            <li><strong>Overview:</strong> Summary, related alerts, entities, MITRE ATT&CK tactics.</li>
+            <li><strong>Alerts:</strong> List of all alerts associated with this incident.</li>
+            <li><strong>Entities:</strong> Identify all users, hosts, IP addresses, processes, etc., involved. These are crucial for the investigation graph.</li>
+            <li><strong>Investigation Graph:</strong>
+                <ul>
+                    <li>A visual representation of the incident, showing relationships between entities (users, devices, IPs) and alerts.</li>
+                    <li>Allows you to expand nodes, explore related events, and quickly uncover the attack path.</li>
+                </ul>
+            </li>
+            <li><strong>Timeline:</strong> Shows events in chronological order.</li>
+            <li><strong>Logs:</strong> Deep dive into the raw logs behind the alerts.</li>
+            <li><strong>Comments:</strong> Add notes during investigation for collaboration.</li>
+        </ul>
+        <pre><code class="language-bash"># Example Investigation Process:
+1.  Receive "Brute Force Attempt" incident.
+2.  Open incident, identify affected IPAddress and AccountList from the overview.
+3.  Click "Investigate" to open the investigation graph.
+4.  Expand the IPAddress entity: See if it's associated with other alerts (e.g., successful logins after failed ones, or connections to suspicious external IPs).
+5.  Expand the Account entity: Check for other suspicious activities from that user (e.g., attempts to access sensitive data, changes in permissions).
+6.  Query related logs: Use KQL queries to search for additional context (e.g., all activities from that IP, all activities by those users around the time of the incident).
+    &lt;pre&gt;&lt;code class="language-kql"&gt;Union SigninLogs, AzureActivity, SecurityEvent, CommonSecurityLog
+    | where TimeGenerated between (ago(2h) .. now())
+    | where IPAddress == "&lt;malicious_ip&gt;" or Account == "&lt;compromised_account&gt;"
+    | sort by TimeGenerated asc
+    &lt;/code&gt;&lt;/pre&gt;
+7.  Add comments to the incident with findings and next steps.
+8.  Change incident status to "Active" / "Resolved" / "Closed" as appropriate.</code></pre>
+
+        <h2 id="hunting">9. Hunting</h2>
+        <p>Threat hunting is the proactive search for threats that are currently undetected by existing security controls. Sentinel's Hunting capabilities empower security analysts to do this.</p>
+        <ul>
+            <li><strong>Built-in Hunting Queries:</strong> Sentinel provides a library of pre-built hunting queries, often based on known TTPs (e.g., "Powershell Empire Usage," "Unusual Azure AD Signins").</li>
+            <li><strong>Custom Hunting Queries:</strong> Write your own KQL queries to search for specific suspicious patterns unique to your environment or based on new threat intelligence.</li>
+            <pre><code class="language-bash"># Navigation: Microsoft Sentinel &gt; Hunting
+
+# Example Hunting Query: Unusual Admin Logons outside Business Hours
+&lt;pre&gt;&lt;code class="language-kql"&gt;SigninLogs
+| where Identity has_any ("admin", "root", "administrator", "svc-") // Filter for admin/service accounts
+| where TimeGenerated &gt; ago(7d)
+| extend HourOfDay = datetime_part("hour", TimeGenerated)
+| where HourOfDay &lt; 8 or HourOfDay &gt; 18 // Outside 8 AM - 6 PM business hours
+| summarize count() by Identity, IPAddress, Location, HourOfDay
+| order by count_ desc
+| join kind=leftouter (
+    IdentityInfo
+    | where GroupName has "Global Admin" or GroupName has "Admin"
+    | project UserPrincipalName
+) on $left.Identity == $right.UserPrincipalName
+| project TimeGenerated, Identity, IPAddress, Location, HourOfDay, count_
+&lt;/code&gt;&lt;/pre&gt;
+            </li>
+            <li><strong>Bookmarks:</strong> During hunting, if you find interesting events, you can "bookmark" them. This creates a record of your findings, allowing you to return to them later or create an incident from a collection of bookmarks.</li>
+        </ul>
+
+        <h2 id="playbooks-automation-and-orchestration">10. Playbooks (Automation & Orchestration)</h2>
+        <p>Playbooks are automated, scalable, and customizable workflows built using **Azure Logic Apps**. They allow Sentinel to automatically respond to alerts or incidents, performing tasks like blocking IPs, enriching data, or notifying teams.</p>
+        <h3>A. How Playbooks Work:</h3>
+        <ul>
+            <li><strong>Trigger:</strong> An Azure Logic App can be triggered by a Sentinel alert or incident.</li>
+            <li><strong>Actions:</strong> Playbooks consist of a series of actions (e.g., "Get incident details," "Send email," "Block IP in firewall," "Create Jira ticket," "Run PowerShell script in Azure Function").</li>
+            <li><strong>Connectors:</strong> Logic Apps has connectors to hundreds of services (Microsoft, third-party, custom APIs).</li>
+        </ul>
+        <h3>B. Creating a Simple Playbook (Example: Block IP on Alert):</h3>
+        <pre><code class="language-bash"># Navigation: Microsoft Sentinel &gt; Automation &gt; Playbooks &gt; Add playbook &gt; Create new playbook
+
+# Steps in Logic App Designer:
+1.  Choose a trigger: "When a Microsoft Sentinel alert is triggered".
+2.  Add an action: "Azure Firewall - Block IP address list".
+    -   You'll need to authenticate to Azure Firewall.
+    -   Specify the firewall name, resource group.
+    -   For "IP address list", use dynamic content from the alert: `AlertedEntities` (filter for IP addresses).
+3.  Add another action (optional): "Office 365 Outlook - Send an email (V2)".
+    -   Configure sender, recipient, subject (`Incident: @{triggerBody()?['properties']?['AlertDisplayName']}`), body with incident details.
+4.  Save the Logic App.
+5.  Grant permissions: Go to your Log Analytics Workspace &gt; Access Control (IAM) &gt; Add role assignment for your Playbook's Managed Identity (e.g., "Azure Firewall Contributor" if blocking IPs).
+
+# Attach Playbook to an Analytics Rule:
+1.  Go to Microsoft Sentinel &gt; Analytics rules.
+2.  Edit your "Brute Force Attempt" rule (or create a new one).
+3.  In "Automated response" tab, select your newly created playbook.
+4.  Save the rule.</code></pre>
+        <p>Now, whenever the brute-force rule triggers an alert, the playbook will automatically attempt to block the offending IP address in Azure Firewall and send a notification email.</p>
+
+        <h2 id="workbooks-and-dashboards">11. Workbooks & Dashboards</h2>
+        <p>Workbooks provide flexible and interactive canvases for data analysis and rich visualizations within Sentinel.</p>
+        <ul>
+            <li><strong>Purpose:</strong> Create custom dashboards, operational reports, or interactive security playbooks.</li>
+            <li><strong>Built-in Workbooks:</strong> Sentinel provides many out-of-the-box workbooks for various data sources (e.g., Azure AD Sign-ins, Firewall logs, Azure Activity).</li>
+            <li><strong>Creating Custom Workbooks:</strong>
+                <pre><code class="language-bash"># Navigation: Microsoft Sentinel &gt; Workbooks &gt; Add workbook
+
+# Steps:
+1.  Start with an empty template or a pre-built template.
+2.  Add "Parameters" for dynamic filtering (e.g., time range, specific IP, user).
+3.  Add "Query" steps: Write KQL queries to retrieve data.
+4.  Add "Visualizations": Choose from various charts (bar, line, pie), tables, text, or metrics.
+    Example KQL for a Workbook chart:
+    &lt;pre&gt;&lt;code class="language-kql"&gt;SigninLogs
+    | summarize count() by ResultType // Count sign-in results
+    | render piechart with (title="Sign-in Result Types")
+    &lt;/code&gt;&lt;/pre&gt;
+5.  Add "Text" or "Links" for context and navigation.
+6.  Save the workbook to a specific Azure resource group.</code></pre>
+            </li>
+            <li><strong>Pin to Dashboard:</strong> You can pin individual workbook elements or entire workbooks to an Azure Dashboard for a consolidated view with other Azure resources.</li>
+        </ul>
+
+        <h2 id="threat-intelligence">12. Threat Intelligence</h2>
+        <p>Sentinel can ingest threat intelligence feeds to enrich your data and enhance detections, hunting, and investigations.</p>
+        <ul>
+            <li><strong>Sources:</strong>
+                <ul>
+                    <li>Microsoft's built-in threat intelligence.</li>
+                    <li>Community-driven feeds (e.g., abuse.ch, MISP).</li>
+                    <li>Commercial threat intelligence platforms.</li>
+                    <li>Custom IOCs.</li>
+                </ul>
+            </li>
+            <li><strong>Ingestion Methods:</strong>
+                <ul>
+                    <li><strong>Threat Intelligence Platforms connector:</strong> For TAXII/STIX feeds.</li>
+                    <li><strong>Upload IOCs:</strong> Manually upload CSV or JSON files of indicators (IPs, domains, hashes) into the `ThreatIntelligenceIndicator` table.</li>
+                    <li><strong>Logic Apps/Azure Functions:</strong> Custom automation to pull from various sources.</li>
+                </ul>
+            </li>
+            <li><strong>Using TI in KQL:</strong>
+                <pre><code class="language-kql"># Example: Find sign-ins from known malicious IPs
+SigninLogs
+| where IPAddress in (ThreatIntelligenceIndicator | where Description == "Known Malicious IP" | project Indicator)</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="user-entity-behavior-analytics-ueba">13. User & Entity Behavior Analytics (UEBA)</h2>
+        <p>UEBA in Sentinel helps detect subtle, complex, and insider threats by identifying anomalous behavior from users and other entities (hosts, applications).</p>
+        <ul>
+            <li><strong>How it Works:</strong> Sentinel builds a baseline of normal behavior for each user/entity. Deviations from this baseline trigger alerts.</li>
+            <li><strong>Key Capabilities:</strong>
+                <ul>
+                    <li>Identifies "insider threats" (e.g., unusual data access, privilege escalation attempts).</li>
+                    <li>Detects compromised accounts (e.g., impossible travel, access to sensitive resources never accessed before).</li>
+                    <li>Correlates activities across multiple data sources related to a specific user/entity.</li>
+                </ul>
+            </li>
+            <li><strong>Configuration:</strong> UEBA is often enabled automatically with relevant data connectors (e.g., Azure Active Directory). You can configure entity mapping for analytics rules to improve UEBA's effectiveness.</li>
+        </ul>
+
+        <h2 id="cost-management">14. Cost Management</h2>
+        <p>Understanding and managing Sentinel costs is important as it's a pay-as-you-go service based primarily on data ingestion and data retention.</p>
+        <ul>
+            <li><strong>Primary Cost Driver:</strong> Data Ingestion (per GB).</li>
+            <li><strong>Other Costs:</strong> Data Retention (after first 31 days free), Analytics (some advanced features), Playbooks (Logic App consumption), Storage for UEBA/Threat Intelligence.</li>
+            <li><strong>Monitoring Costs:</strong>
+                <ul>
+                    <li>Azure Portal &gt; Cost Management + Billing.</li>
+                    <li>Log Analytics Workspace &gt; Usage and estimated costs.</li>
+                </ul>
+            </li>
+            <li><strong>Cost Optimization Strategies:</strong>
+                <ul>
+                    <li><strong>Filter data at source:</strong> Only ingest necessary logs.</li>
+                    <li><strong>Daily Cap:</strong> Set a daily ingestion cap on your Log Analytics Workspace (can impact security visibility if reached).</li>
+                    <li><strong>Retention Period:</strong> Adjust log retention to balance cost and compliance needs.</li>
+                    <li><strong>Pricing Tiers:</strong> Consider commitment tiers (e.g., 100GB/day) for predictable, high-volume ingestion.</li>
+                    <li><strong>Optimize KQL:</strong> Efficient queries reduce resource consumption.</li>
+                    <li><strong>Tune Analytics Rules:</strong> Reduce false positives that generate unnecessary alerts and data.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="best-practices-and-troubleshooting">15. Best Practices & Troubleshooting</h2>
+        <h3>A. Best Practices:</h3>
+        <ul>
+            <li><strong>Phased Deployment:</strong> Start with essential data connectors, then expand.</li>
+            <li><strong>KQL Mastery:</strong> Continuously learn and practice KQL.</li>
+            <li><strong>Tune Analytics Rules:</strong> Regularly review and fine-tune rules to minimize false positives and maximize true positives.</li>
+            <li><strong>Leverage Built-in Content:</strong> Utilize the vast library of out-of-the-box data connectors, analytics rules, workbooks, and hunting queries.</li>
+            <li><strong>Implement SOAR Playbooks:</strong> Automate repetitive tasks for faster response and reduced analyst workload.</li>
+            <li><strong>Integrate Threat Intelligence:</strong> Enrich your detections with relevant IOCs.</li>
+            <li><strong>Use Incidents Effectively:</strong> Triage, investigate, and close incidents systematically.</li>
+            <li><strong>Regular Hunting:</strong> Proactively search for threats that evade automated detections.</li>
+            <li><strong>Continuous Monitoring of Costs:</strong> Keep an eye on data ingestion and retention costs.</li>
+            <li><strong>Security Hygiene:</strong> Sentinel is powerful, but good foundational security practices (patching, MFA, least privilege) are still critical.</li>
+        </ul>
+
+        <h3>B. Troubleshooting:</h3>
+        <ul>
+            <li><strong>Data Ingestion:</strong>
+                <ul>
+                    <li>Check the Data Connectors page for "Last Data Received" status.</li>
+                    <li>Run simple `&lt;TableName&gt; | take 10` queries in Log Analytics.</li>
+                    <li>Verify agent status (if using agents).</li>
+                    <li>Check network connectivity and firewall rules.</li>
+                </ul>
+            </li>
+            <li><strong>Alerts Not Firing:</strong>
+                <ul>
+                    <li>Check the Analytics rule status (Enabled/Disabled).</li>
+                    <li>Verify the KQL query: Run it manually in Log Analytics to see if it returns results.</li>
+                    <li>Check "Query scheduling" and "Alert threshold" in the rule.</li>
+                    <li>Ensure data relevant to the rule is actually being ingested.</li>
+                </ul>
+            </li>
+            <li><strong>Playbook Issues:</strong>
+                <ul>
+                    <li>Check Logic App run history for failures.</li>
+                    <li>Verify permissions of the playbook's Managed Identity (IAM roles).</li>
+                    <li>Ensure the trigger condition is met.</li>
+                </ul>
+            </li>
+            <li><strong>Permissions:</strong> Double-check that your user account has the necessary RBAC roles for the operations you're trying to perform.</li>
+            <li><strong>Resource Health:</strong> Monitor the health and performance of your Log Analytics Workspace in Azure Monitor.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Empowering Your SOC with Microsoft Sentinel!</strong>
+            <p>Microsoft Sentinel transforms security operations by providing a cloud-native, AI-driven SIEM and SOAR solution. By mastering data ingestion, KQL querying, rule creation, incident investigation, and automation with playbooks, your security team can achieve unparalleled visibility and response capabilities, significantly enhancing your organization's cybersecurity posture.</p>
+        </div>
+    </div>
+</body>
+</html>
