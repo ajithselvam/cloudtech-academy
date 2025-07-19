@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Fedora OS Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Fedora OS Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction-to-fedora">1. Introduction to Fedora</a></li>
+                <li><a href="#fedora-editions-and-spins">2. Fedora Editions & Spins</a></li>
+                <li><a href="#installation-methods">3. Installation Methods</a></li>
+                <li><a href="#getting-started-with-gnome-desktop">4. Getting Started with GNOME Desktop (Workstation)</a></li>
+                <li><a href="#basic-terminal-commands">5. Basic Terminal Commands (CLI)</a></li>
+                <li><a href="#file-system-hierarchy">6. Linux File System Hierarchy (FHS)</a></li>
+                <li><a href="#file-permissions-and-ownership">7. File Permissions and Ownership</a></li>
+                <li><a href="#user-and-group-management">8. User and Group Management</a></li>
+                <li><a href="#package-management-dnf">9. Package Management (DNF)</a></li>
+                <li><a href="#process-management">10. Process Management</a></li>
+                <li><a href="#service-management-systemd">11. Service Management (systemd)</a></li>
+                <li><a href="#networking">12. Networking (NetworkManager, Firewalld)</a></li>
+                <li><a href="#storage-management">13. Storage Management</a></li>
+                <li><a href="#shell-scripting-basics">14. Shell Scripting Basics</a></li>
+                <li><a href="#text-editors">15. Text Editors (GUI & CLI)</a></li>
+                <li><a href="#security-best-practices">16. Security Best Practices (SELinux, Firewalld)</a></li>
+                <li><a href="#contributing-to-fedora">17. Contributing to Fedora</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction-to-fedora">1. Introduction to Fedora</h2>
+        <p><strong>Fedora Linux</strong> is a free, open-source Linux distribution developed by the Fedora Project and sponsored by Red Hat. It's known for its rapid innovation, integration of cutting-edge open-source technologies, and its role as a testing ground for features that eventually make their way into Red Hat Enterprise Linux (RHEL). Fedora is suitable for developers, system administrators, and users who want the latest Linux advancements.</p>
+        <h3>Why Choose Fedora?</h3>
+        <ul>
+            <li><strong>Cutting-Edge:</strong> Features the latest stable versions of software, kernels, and desktop environments.</li>
+            <li><strong>Innovation:</strong> Often introduces new technologies and approaches that later become industry standards.</li>
+            <li><strong>Open Source Philosophy:</strong> Strong commitment to free and open-source software.</li>
+            <li><strong>Developer Focus:</strong> Provides excellent tools and environments for software development.</li>
+            <li><strong>Community Driven:</strong> Supported by a large, vibrant, and active community.</li>
+            <li><strong>Security:</strong> Emphasizes strong security with features like SELinux enabled by default.</li>
+        </ul>
+
+        <h2 id="fedora-editions-and-spins">2. Fedora Editions & Spins</h2>
+        <p>Fedora offers different "Editions" and "Spins" tailored for specific use cases and desktop preferences.</p>
+        <h3>A. Fedora Editions:</h3>
+        <ul>
+            <li><strong>Fedora Workstation:</strong> The flagship desktop edition, featuring the latest GNOME desktop environment. Recommended for most desktop users.</li>
+            <li><strong>Fedora Server:</strong> A minimal server OS with the latest open-source server technologies.</li>
+            <li><strong>Fedora IoT:</strong> For Internet of Things and edge computing devices.</li>
+            <li><strong>Fedora Cloud:</strong> Optimized images for cloud infrastructures.</li>
+            <li><strong>Fedora CoreOS:</strong> An automatically updating, minimal operating system for running containerized workloads securely and at scale.</li>
+        </ul>
+        <h3>B. Fedora Spins:</h3>
+        <p>These are official variants of Fedora that include different desktop environments or specialized software sets.</p>
+        <ul>
+            <li><strong>KDE Plasma:</strong> Highly customizable and feature-rich desktop.</li>
+            <li><strong>XFCE:</strong> Lightweight, fast, and resource-efficient desktop.</li>
+            <li><strong>LXQt:</strong> Extremely lightweight desktop environment.</li>
+            <li><strong>Cinnamon:</strong> Provides a traditional desktop layout.</li>
+            <li><strong>MATE:</strong> A traditional desktop environment, continuation of GNOME 2.</li>
+            <li>And others, like Budgie, Sway, i3.</li>
+        </ul>
+        <h3>C. Fedora Labs:</h3>
+        <p>Specialized bundles of software for specific purposes, like Design Suite, Games, Scientific, Security Lab, or Python Classroom.</p>
+
+        <h2 id="installation-methods">3. Installation Methods</h2>
+        <p>You can install Fedora in several ways:</p>
+        <ul>
+            <li><strong>Virtual Machine (VM):</strong>
+                <ul>
+                    <li><strong>Recommended for beginners:</strong> Safest way to try Fedora without affecting your main OS.</li>
+                    <li>Download Fedora Workstation ISO from <a href="https://fedoraproject.org/workstation/download/" target="_blank">fedoraproject.org/workstation/download/</a>.</li>
+                    <li>Install a hypervisor (e.g., VirtualBox, VMware Workstation Player) on your Windows/macOS host.</li>
+                    <li>Create a new VM and install Fedora from the ISO.</li>
+                </ul>
+            </li>
+            <li><strong>Dual Boot:</strong>
+                <ul>
+                    <li>Install Fedora alongside an existing operating system (e.g., Windows).</li>
+                    <li>Allows you to choose which OS to boot into at startup. More complex, requires disk partitioning.</li>
+                </ul>
+            </li>
+            <li><strong>Live USB:</strong>
+                <ul>
+                    <li>Boot your computer directly from a USB drive.</li>
+                    <li>Allows you to try Fedora without installing it. Can be made "persistent" to save changes.</li>
+                </ul>
+            </li>
+            <li><strong>Windows Subsystem for Linux (WSL):</strong>
+                <ul>
+                    <li>While not a full Fedora installation, you can install a Fedora remix or RHEL clone via WSL for a command-line environment.</li>
+                </ul>
+                <pre><code class="language-bash"># To install an RHEL-compatible distro (like AlmaLinux or Rocky Linux) on WSL:
+wsl --install -d AlmaLinux # or RockyLinux</code></pre>
+            </li>
+            <li><strong>Cloud Instance:</strong>
+                <ul>
+                    <li>Deploy a Fedora VM on cloud providers like AWS, Azure, or Google Cloud.</li>
+                    <li>Ideal for server-side use cases, accessible via SSH.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Basic GUI Installation Steps (Virtual Machine Example - Fedora Workstation):</h3>
+        <ol>
+            <li>Boot your VM/computer from the Fedora Workstation ISO.</li>
+            <li>On the welcome screen, choose "Start Fedora-Workstation-Live 40" (or similar version).</li>
+            <li>Once the live desktop loads, click "Install to Hard Drive" icon.</li>
+            <li>Follow the graphical installer (Anaconda):
+                <ul>
+                    <li><strong>Language and Keyboard Layout:</strong> Select your preferences.</li>
+                    <li><strong>Time & Date:</strong> Set your timezone.</li>
+                    <li><strong>Installation Destination:</strong> Select your virtual disk and choose "Automatic partitioning" (safest for VMs).</li>
+                    <li><strong>Network & Host Name:</strong> Configure network (e.g., enable Ethernet), set hostname.</li>
+                    <li><strong>Root Password:</strong> Set a strong password for the `root` user.</li>
+                    <li><strong>User Creation:</strong> Create a standard user account. Check "Make this user administrator" to grant `sudo` privileges.</li>
+                </ul>
+            </li>
+            <li>Click **Begin Installation**.</li>
+            <li>After installation completes, click **Finish Installation** and **Reboot System**. Remove the ISO from the drive if prompted.</li>
+            <li>Log in with your created user account.</li>
+        </ol>
+
+        <h2 id="getting-started-with-gnome-desktop">4. Getting Started with GNOME Desktop (Workstation)</h2>
+        <p>Fedora Workstation uses the GNOME desktop environment, providing a modern and user-friendly interface.</p>
+        <ul>
+            <li><strong>Desktop:</strong> Your main workspace. Right-click for context menu (Change Background, Display Settings, Open in Terminal).</li>
+            <li><strong>Activities Overview:</strong> Click "Activities" in the top-left corner or press the <kbd>Super</kbd> (Windows) key.
+                <ul>
+                    <li>Shows all open windows and multiple virtual "Workspaces" (desktops) for organizing tasks.</li>
+                    <li>Search bar at the top for apps, files, settings, and web search.</li>
+                </ul>
+            </li>
+            <li><strong>Dash (Dock):</strong> A vertical bar on the left side (visible in Activities Overview).
+                <ul>
+                    <li>Contains frequently used applications, running applications, and the "Show Applications" (grid) button at the bottom.</li>
+                    <li>Click to launch/switch apps. Right-click for contextual menus.</li>
+                </ul>
+            </li>
+            <li><strong>Top Bar:</strong>
+                <ul>
+                    <li><strong>Activities:</strong> (as above).</li>
+                    <li><strong>Clock & Calendar:</strong> Center.</li>
+                    <li><strong>Status Icons:</strong> Top-right. Quick access to Network, Volume, Battery, User Menu (Shutdown, Restart, Lock Screen, Settings).</li>
+                </ul>
+            </li>
+            <li><strong>Files (Nautilus):</strong> Fedora's default file manager.
+                <ul>
+                    <li>Access from the Dash.</li>
+                    <li>Provides views (Icons, List), sidebar for quick access to Home, Documents, Downloads, Trash, Network, Drives.</li>
+                </ul>
+            </li>
+            <li><strong>Software Center (GNOME Software):</strong> Your graphical tool to find, install, and manage applications from Fedora's repositories and Flatpak sources.
+                <ul>
+                    <li>Access from the Dash or Activities Search. Browse categories, search for apps, install/uninstall.</li>
+                </ul>
+            </li>
+            <li><strong>Settings:</strong> Central hub for configuring your Fedora system.
+                <ul>
+                    <li>Access from the Status Icons (top-right) &gt; Gear icon, or search in Activities for "Settings".</li>
+                    <li>Sections include Network, Bluetooth, Background, Appearance, Privacy, Users, Displays, Sound, etc.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-bash"># Example: Customizing appearance via GUI
+# 1. Click on "Activities" (top-left) or press the Super key.
+# 2. Type "Settings" and open the Settings application.
+# 3. In the sidebar, click on "Appearance".
+# 4. Change "Style" (Light/Dark), "Accent color", "Icon size", etc.
+# 5. Observe changes on your desktop.</code></pre>
+
+        <h2 id="basic-terminal-commands">5. Basic Terminal Commands (CLI)</h2>
+        <p>The command-line interface (CLI) is fundamental for managing Fedora. Open a "Terminal" application (e.g., from the Dash or Activities search).</p>
+        <ul>
+            <li><strong>`pwd` (Print Working Directory):</strong> Shows your current directory.
+                <pre><code class="language-bash">pwd
+# Example Output: /home/yourusername</code></pre>
+            </li>
+            <li><strong>`ls` (List):</strong> Lists files and directories.
+                <pre><code class="language-bash">ls -l        # Long format (details: permissions, owner, size, date)
+ls -a        # List all files, including hidden ones (starting with .)
+ls -lh       # Long format, human-readable sizes (KB, MB, GB)
+ls /var/log  # List contents of a specific directory</code></pre>
+            </li>
+            <li><strong>`cd` (Change Directory):</strong> Navigates between directories.
+                <pre><code class="language-bash">cd Documents  # Move into 'Documents'
+cd ..         # Move up one directory
+cd ~          # Move to your home directory
+cd /          # Move to the root directory
+cd -          # Move to the previous directory</code></pre>
+            </li>
+            <li><strong>`mkdir` (Make Directory):</strong> Creates new directories.
+                <pre><code class="language-bash">mkdir my_new_folder
+mkdir -p projects/my_app # Creates parent directories if they don't exist</code></pre>
+            </li>
+            <li><strong>`rmdir` (Remove Directory):</strong> Deletes empty directories.
+                <pre><code class="language-bash">rmdir my_empty_folder</code></pre>
+            </li>
+            <li><strong>`touch`:</strong> Creates empty files or updates a file's timestamp.
+                <pre><code class="language-bash">touch new_document.txt
+touch script.sh</code></pre>
+            </li>
+            <li><strong>`cp` (Copy):</strong> Copies files or directories.
+                <pre><code class="language-bash">cp file1.txt file2.txt        # Copy file1.txt to file2.txt in same directory
+cp image.jpg /home/user/Pictures/ # Copy to another directory
+cp -r my_folder /backup/      # Copy a directory recursively</code></pre>
+            </li>
+            <li><strong>`mv` (Move):</strong> Moves or renames files/directories.
+                <pre><code class="language-bash">mv old_name.txt new_name.txt # Rename a file
+mv document.pdf /archive/    # Move file to /archive/</code></pre>
+            </li>
+            <li><strong>`rm` (Remove):</strong> Deletes files or directories.
+                <pre><code class="language-bash">rm unwanted_file.txt
+rm -i important_file.txt # Prompt before deleting
+rm -r my_folder          # Remove a directory and its contents recursively (USE WITH CAUTION!)
+rm -f stubborn_file.txt  # Force remove (no prompt)
+rm -rf very_critical_folder # Force remove recursively (EXTREME CAUTION: Irreversible!)</code></pre>
+            </li>
+            <li><strong>`cat` (Concatenate):</strong> Displays the content of files.
+                <pre><code class="language-bash">cat my_document.txt
+cat /etc/os-release # Show OS information</code></pre>
+            </li>
+            <li><strong>`less` / `more`:</strong> View file content page by page.
+                <pre><code class="language-bash">less /var/log/messages # Press Space to scroll, 'q' to quit</code></pre>
+            </li>
+            <li><strong>`head` / `tail`:</strong> Display beginning/end of a file.
+                <pre><code class="language-bash">head -n 5 file.txt # Show first 5 lines
+tail -n 10 file.txt # Show last 10 lines
+tail -f /var/log/audit/audit.log # Follow a log file in real-time (Ctrl+C to exit)</code></pre>
+            </li>
+            <li><strong>`echo`:</strong> Prints text to the terminal.
+                <pre><code class="language-bash">echo "Hello, Fedora!"</code></pre>
+            </li>
+            <li><strong>`man` (Manual):</strong> Displays the manual page (documentation) for a command.
+                <pre><code class="language-bash">man dnf # Press 'q' to quit</code></pre>
+            </li>
+            <li><strong>`sudo` (SuperUser Do):</strong> Executes a command with superuser (root) privileges. Required for many system administration tasks.
+                <pre><code class="language-bash">sudo dnf update # Update package lists (requires password)</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="file-system-hierarchy">6. Linux File System Hierarchy (FHS)</h2>
+        <p>Fedora, like other Linux distributions, adheres to the Filesystem Hierarchy Standard (FHS), which defines a standardized directory structure.</p>
+        <ul>
+            <li><strong>`/` (Root):</strong> The top-level directory. All other directories and files are located under it.</li>
+            <li><strong>`/bin`:</strong> (Binaries) Essential command binaries for all users.</li>
+            <li><strong>`/sbin`:</strong> (System Binaries) Essential system binaries for system administration.</li>
+            <li><strong>`/etc`:</strong> (Etcetera) Host-specific system-wide configuration files (e.g., `/etc/fstab`, `/etc/ssh/sshd_config`).</li>
+            <li><strong>`/home`:</strong> Home directories for regular users (e.g., `/home/yourusername`).</li>
+            <li><strong>`/root`:</strong> The home directory for the `root` (superuser) account.</li>
+            <li><strong>`/opt`:</strong> (Optional) Optional application software packages.</li>
+            <li><strong>`/usr`:</strong> (Unix System Resources) Read-only user utilities and applications.
+                <ul>
+                    <li>`/usr/bin`: Most user commands.</li>
+                    <li>`/usr/local`: Locally installed software.</li>
+                </ul>
+            </li>
+            <li><strong>`/var`:</strong> (Variable) Variable data files, such as log files (`/var/log`), mail queues, and temporary files.</li>
+            <li><strong>`/tmp`:</strong> (Temporary) Temporary files, usually deleted on system reboot.</li>
+            <li><strong>`/dev`:</strong> (Devices) Special device files representing hardware devices.</li>
+            <li><strong>`/proc`:</strong> (Processes) A virtual filesystem providing information about running processes and kernel state.</li>
+            <li><strong>`/sys`:</strong> (System) A virtual filesystem providing access to kernel information and device drivers.</li>
+            <li><strong>`/boot`:</strong> Contains files needed to boot the operating system.</li>
+            <li><strong>`/media`:</strong> Mount points for removable media.</li>
+            <li><strong>`/mnt`:</strong> (Mount) Temporarily mounted filesystems.</li>
+            <li><strong>`/run`:</strong> Runtime variable data.</li>
+        </ul>
+
+        <h2 id="file-permissions-and-ownership">7. File Permissions and Ownership</h2>
+        <p>Linux security relies on file permissions and ownership to control access to files and directories.</p>
+        <h3>Permissions (Read, Write, Execute):</h3>
+        <ul>
+            <li>`r` (Read): Can view content (file) or list contents (directory).</li>
+            <li>`w` (Write): Can modify/delete content (file) or create/delete/rename files within (directory).</li>
+            <li>`x` (Execute): Can run (file) or enter/traverse (directory).</li>
+        </ul>
+        <h3>Permission Categories:</h3>
+        <p>Permissions are assigned to three categories:</p>
+        <ul>
+            <li>`u` (User/Owner): The user who owns the file or directory.</li>
+            <li>`g` (Group): The group that owns the file or directory.</li>
+            <li>`o` (Others): All other users on the system.</li>
+        </ul>
+        <h3>Viewing Permissions (`ls -l`):</h3>
+        <pre><code class="language-bash">ls -l my_script.sh
+# Example Output: -rwxr-xr-- 1 yourusername yourusername 1234 Jul 19 10:00 my_script.sh</code></pre>
+        <p>Breakdown of `-rwxr-xr--`:</p>
+        <ul>
+            <li>First character (`-`): File type (`-` for regular file, `d` for directory, `l` for symbolic link).</li>
+            <li>Next 3 (`rwx`): Owner's permissions.</li>
+            <li>Next 3 (`r-x`): Group's permissions.</li>
+            <li>Last 3 (`r--`): Others' permissions.</li>
+        </ul>
+        <h3>Changing Permissions (`chmod`):</h3>
+        <p>Can use symbolic mode (r, w, x, u, g, o, a) or octal (numeric) mode.</p>
+        <ul>
+            <li><strong>Octal (Numeric) Mode:</strong> Each permission has a numeric value: `r=4`, `w=2`, `x=1`. Sum the values for each category.
+                <pre><code class="language-bash">chmod 755 my_script.sh # Owner: rwx (7), Group: r-x (5), Others: r-x (5)
+# Visual: -rwxr-xr-x
+chmod 644 my_document.txt # Owner: rw- (6), Group: r-- (4), Others: r-- (4)
+# Visual: -rw-r--r--
+chmod +x my_script.sh # Add execute permission for all (commonly used for scripts)</code></pre>
+            </li>
+        </ul>
+        <h3>Changing Ownership (`chown`, `chgrp`):</h3>
+        <p>Requires `sudo` (superuser privileges).</p>
+        <ul>
+            <li>`chown user:group file`: Change both owner and group.
+                <pre><code class="language-bash">sudo chown webadmin:webadmin /var/www/html/index.html
+sudo chown -R newuser:newgroup /opt/my_app # Recursively change for folder contents</code></pre>
+            </li>
+            <li>`chgrp group file`: Change only the group ownership.
+                <pre><code class="language-bash">sudo chgrp developers /home/shared_project</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="user-and-group-management">8. User and Group Management</h2>
+        <p>Fedora provides commands for managing user accounts and groups.</p>
+        <h3>User Accounts:</h3>
+        <ul>
+            <li><strong>`root`:</strong> The superuser, has full administrative privileges.</li>
+            <li><strong>System users:</strong> Accounts created by services/applications (UIDs 1-999).</li>
+            <li><strong>Normal users:</strong> Regular user accounts (UIDs usually 1000+).</li>
+        </ul>
+        <h3>Common Commands (requires `sudo` for management):</h3>
+        <ul>
+            <li><strong>`whoami`:</strong> Display the current username.</li>
+            <li><strong>`id`:</strong> Display user and group IDs for the current or specified user.
+                <pre><code class="language-bash">id yourusername
+# Output example: uid=1000(yourusername) gid=1000(yourusername) groups=1000(yourusername),10(wheel),27(sudo)...</code></pre>
+            </li>
+            <li><strong>`adduser`:</strong> Create a new user account. This command is a higher-level script that sets up the home directory, default group, and prompts for password/details.
+                <pre><code class="language-bash">sudo adduser newuser
+# Follow prompts for password and user information.</code></pre>
+            </li>
+            <li><strong>`useradd`:</strong> A lower-level command for creating users. Doesn't create home directory or set password by default.
+                <pre><code class="language-bash">sudo useradd -m -s /bin/bash newuser2 # -m: create home dir, -s: set shell</code></pre>
+            </li>
+            <li><strong>`passwd`:</strong> Set or change a user's password.
+                <pre><code class="language-bash">passwd          # Change your own password
+sudo passwd newuser # Set password for newuser</code></pre>
+            </li>
+            <li><strong>`usermod`:</strong> Modify user account properties.
+                <pre><code class="language-bash">sudo usermod -aG wheel newuser # Add newuser to 'wheel' group (grants sudo privileges on Fedora)
+sudo usermod -l new_name old_name # Change username (careful with this!)
+sudo usermod -d /home/customhome newuser # Change home directory</code></pre>
+            </li>
+            <li><strong>`deluser` / `userdel`:</strong> Delete a user account.
+                <pre><code class="language-bash">sudo userdel olduser # Delete user, but leave home directory
+sudo userdel -r olduser2 # Delete user and remove home directory</code></pre>
+            </li>
+        </ul>
+        <h3>Groups:</h3>
+        <p>Groups are collections of users, simplifying permission management for multiple users.</p>
+        <ul>
+            <li><strong>`groupadd`:</strong> Create a new group.
+                <pre><code class="language-bash">sudo groupadd webdevs</code></pre>
+            </li>
+            <li><strong>`groupdel`:</strong> Delete a group.
+                <pre><code class="language-bash">sudo groupdel oldgroup</code></pre>
+            </li>
+            <li><strong>`gpasswd`:</strong> Manage group members.
+                <pre><code class="language-bash">sudo gpasswd -a newuser webdevs # Add newuser to webdevs group
+sudo gpasswd -d olduser webdevs # Remove olduser from webdevs group</code></pre>
+            </li>
+            <li><strong>`groups`:</strong> List groups a user belongs to.
+                <pre><code class="language-bash">groups # List groups for current user
+groups newuser # List groups for newuser</code></pre>
+            </li>
+        </ul>
+        <h3>Configuration Files:</h3>
+        <ul>
+            <li>`/etc/passwd`: Stores user account information (username, UID, GID, home directory, shell).</li>
+            <li>`/etc/shadow`: Stores encrypted user passwords and password aging. (Root-readable only).</li>
+            <li>`/etc/group`: Stores information about groups.</li>
+            <li>`/etc/gshadow`: Stores encrypted group passwords.</li>
+            <li>`/etc/sudoers`: Defines which users/groups can run `sudo` commands (edit with `visudo`).</li>
+        </ul>
+
+        <h2 id="package-management-dnf">9. Package Management (DNF)</h2>
+        <p>Fedora uses `dnf` (Dandified YUM) as its primary package manager. It's a modern, powerful, and easy-to-use tool for installing, updating, and removing software packages and their dependencies.</p>
+        <ul>
+            <li><strong>Update package lists (synchronize repositories):</strong> Downloads the latest package information from configured repositories.
+                <pre><code class="language-bash">sudo dnf check-update # Check for available updates
+sudo dnf update       # Updates all installed packages</code></pre>
+            </li>
+            <li><strong>Install packages:</strong>
+                <pre><code class="language-bash">sudo dnf install httpd       # Install Apache HTTP Server
+sudo dnf install git nano vim # Install multiple packages</code></pre>
+            </li>
+            <li><strong>Remove packages:</strong>
+                <pre><code class="language-bash">sudo dnf remove httpd
+sudo dnf erase httpd # Same as remove</code></pre>
+            </li>
+            <li><strong>Search for packages:</strong>
+                <pre><code class="language-bash">dnf search php</code></pre>
+            </li>
+            <li><strong>Show package details:</strong>
+                <pre><code class="language-bash">dnf info httpd</code></pre>
+            </li>
+            <li><strong>List installed packages:</strong>
+                <pre><code class="language-bash">dnf list installed</code></pre>
+            </li>
+            <li><strong>List available packages:</strong>
+                <pre><code class="language-bash">dnf list available</code></pre>
+            </li>
+            <li><strong>Install software groups:</strong>
+                <pre><code class="language-bash">sudo dnf group list                # List available groups/environments
+sudo dnf groupinstall "Development Tools" # Install a group of related packages</code></pre>
+            </li>
+            <li><strong>Remove orphaned packages (autoremove):</strong>
+                <pre><code class="language-bash">sudo dnf autoremove</code></pre>
+            </li>
+            <li><strong>Clean package cache:</strong>
+                <pre><code class="language-bash">sudo dnf clean all</code></pre>
+            </li>
+        </ul>
+        <div class="tip">
+            <strong>RPM Fusion:</strong> Fedora only includes free and open-source software in its official repositories. For proprietary codecs, drivers (like Nvidia), or restricted software, you'll need to enable third-party repositories like RPM Fusion.
+            <pre><code class="language-bash">sudo dnf install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf update
+# Now you can install multimedia codecs or proprietary drivers.</code></pre>
+        </div>
+
+        <h2 id="process-management">10. Process Management</h2>
+        <p>Managing running programs and background tasks on your system.</p>
+        <ul>
+            <li><strong>`ps` (Process Status):</strong> Displays information about running processes.
+                <pre><code class="language-bash">ps aux            # Show all running processes (user, CPU, memory usage)
+ps -ef            # Show all processes in full format
+ps -p &lt;PID&gt;       # Show info for a specific Process ID</code></pre>
+            </li>
+            <li><strong>`top`:</strong> Provides a real-time, dynamic view of running processes, CPU usage, memory usage, and other system information. Press <kbd>q</kbd> to quit.
+                <pre><code class="language-bash">top</code></pre>
+            </li>
+            <li><strong>`htop`:</strong> An interactive process viewer, similar to `top` but with a more user-friendly interface. (Installable: `sudo dnf install htop`).
+                <pre><code class="language-bash">htop</code></pre>
+            </li>
+            <li><strong>`kill`:</strong> Sends a signal to a process, typically to terminate it. Needs the Process ID (PID).
+                <pre><code class="language-bash">kill &lt;PID&gt;       # Sends SIGTERM (graceful termination request)
+kill -9 &lt;PID&gt;    # Sends SIGKILL (forceful termination, cannot be ignored)</code></pre>
+            </li>
+            <li><strong>`pkill` / `killall`:</strong> Kill processes by name.
+                <pre><code class="language-bash">pkill firefox     # Kills all processes named firefox
+killall nginx     # Kills all processes named nginx</code></pre>
+            </li>
+            <li><strong>`jobs`:</strong> Lists background jobs in the current shell session.</li>
+            <li><strong>`fg` (Foreground):</strong> Brings a background job to the foreground.</li>
+            <li><strong>`bg` (Background):</strong> Sends a suspended job to the background (use <kbd>Ctrl</kbd> + <kbd>z</kbd> to suspend first).</li>
+            <li><strong>`nohup command &`:</strong> Runs a command in the background, making it immune to terminal closure.</li>
+        </ul>
+
+        <h2 id="service-management-systemd">11. Service Management (systemd)</h2>
+        <p>Fedora uses `systemd` as its init system and service manager. It controls system services (daemons) and boot processes.</p>
+        <ul>
+            <li><strong>`systemctl status &lt;service_name&gt;`:</strong> Check the status of a service.
+                <pre><code class="language-bash">systemctl status httpd.service # Check Apache status
+# Output shows Active: (running), Loaded: (enabled/disabled), etc.</code></pre>
+            </li>
+            <li><strong>`systemctl start &lt;service_name&gt;`:</strong> Start a service.
+                <pre><code class="language-bash">sudo systemctl start httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl stop &lt;service_name&gt;`:</strong> Stop a service.
+                <pre><code class="language-bash">sudo systemctl stop httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl restart &lt;service_name&gt;`:</strong> Restart a service.
+                <pre><code class="language-bash">sudo systemctl restart httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl enable &lt;service_name&gt;`:</strong> Enable a service to start automatically on boot.
+                <pre><code class="language-bash">sudo systemctl enable httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl disable &lt;service_name&gt;`:</strong> Disable a service from starting automatically on boot.
+                <pre><code class="language-bash">sudo systemctl disable httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl reload &lt;service_name&gt;`:</strong> Reload a service's configuration without full restart (if supported by the service).
+                <pre><code class="language-bash">sudo systemctl reload httpd.service</code></pre>
+            </li>
+            <li><strong>`systemctl list-units --type=service`:</strong> List all active services.</li>
+            <li><strong>`systemctl get-default`:</strong> Show the default target (boot mode: graphical or multi-user).
+                <pre><code class="language-bash">systemctl get-default # Will likely output graphical.target for Workstation</code></pre>
+            </li>
+            <li><strong>`systemctl set-default graphical.target`:</strong> Set default boot to GUI.</li>
+            <li><strong>`systemctl set-default multi-user.target`:</strong> Set default boot to CLI.</li>
+        </ul>
+
+        <h2 id="networking">12. Networking (NetworkManager, Firewalld)</h2>
+        <p>Fedora uses `NetworkManager` for network configuration and `firewalld` for firewall management.</p>
+        <ul>
+            <li><strong>`ip a` (IP Address):</strong> Displays network interface information. (Recommended over `ifconfig`).
+                <pre><code class="language-bash">ip a # Shows interfaces like lo, ens33, wlp2s0 (wireless), etc.</code></pre>
+            </li>
+            <li><strong>`ip route`:</strong> Displays the routing table.
+                <pre><code class="language-bash">ip route show</code></pre>
+            </li>
+            <li><strong>`ping`:</strong> Tests network connectivity.
+                <pre><code class="language-bash">ping google.com</code></pre>
+            </li>
+            <li><strong>`ss` (Socket Statistics):</strong> Displays network socket information (connections, listening ports). (Modern replacement for `netstat`).
+                <pre><code class="language-bash">ss -tulnp # Show TCP/UDP listening ports with process info</code></pre>
+            </li>
+            <li><strong>`nmcli` (NetworkManager CLI):</strong> Command-line tool for NetworkManager.
+                <pre><code class="language-bash">nmcli device status # Show network device status
+nmcli connection show # Show active network connections
+nmcli device wifi list # Scan for Wi-Fi networks
+nmcli device wifi connect "Your_SSID" password "Your_WiFi_Password" # Connect to Wi-Fi</code></pre>
+            </li>
+            <li><strong>Firewalld:</strong> Fedora's default dynamic firewall.
+                <pre><code class="language-bash">sudo systemctl status firewalld # Check firewall status
+sudo systemctl start firewalld   # Start firewall
+sudo systemctl enable firewalld  # Enable firewall on boot
+
+sudo firewall-cmd --permanent --add-service=http # Allow HTTP traffic permanently
+sudo firewall-cmd --permanent --add-port=8080/tcp # Allow specific port permanently
+sudo firewall-cmd --reload # Apply permanent changes immediately
+
+sudo firewall-cmd --list-all # List all active rules for the default zone</code></pre>
+            </li>
+            <li><strong>Network Configuration Files:</strong>
+                <ul>
+                    <li>`/etc/NetworkManager/system-connections/`: Contains connection profiles for NetworkManager (e.g., Wi-Fi profiles).</li>
+                    <li>`/etc/resolv.conf`: DNS resolver configuration.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="storage-management">13. Storage Management</h2>
+        <p>Managing disk space, partitions, and file systems on Fedora.</p>
+        <ul>
+            <li><strong>`df` (Disk Free):</strong> Reports file system disk space usage.
+                <pre><code class="language-bash">df -h # Human-readable output</code></pre>
+            </li>
+            <li><strong>`du` (Disk Usage):</strong> Estimates file space usage of files and directories.
+                <pre><code class="language-bash">du -sh /var/log # Summarize size of /var/log</code></pre>
+            </li>
+            <li><strong>`lsblk` (List Block Devices):</strong> Lists information about all block devices (disks, partitions).
+                <pre><code class="language-bash">lsblk</code></pre>
+            </li>
+            <li><strong>`fdisk` (Partition Disk):</strong> Command-line utility for disk partitioning. (Use with caution).
+                <pre><code class="language-bash">sudo fdisk /dev/sda # Opens interactive partitioning tool for sda</code></pre>
+            </li>
+            <li><strong>`mkfs` (Make Filesystem):</strong> Builds a Linux file system on a device.
+                <pre><code class="language-bash">sudo mkfs.ext4 /dev/sdb1 # Format partition sdb1 with ext4 filesystem</code></pre>
+            </li>
+            <li><strong>`mount` / `umount`:</strong> Mounts/unmounts a file system.
+                <pre><code class="language-bash">sudo mount /dev/sdb1 /mnt/data # Mount sdb1 to /mnt/data
+sudo umount /mnt/data # Unmount</code></pre>
+            </li>
+            <li><strong>`/etc/fstab`:</strong> Configures filesystems to be mounted automatically at boot.</li>
+            <li><strong>LVM (Logical Volume Manager):</strong> Provides a flexible way to manage disk space, allowing dynamic resizing and snapshots. (More advanced topic).
+                <pre><code class="language-bash"># Basic LVM commands (conceptual):
+sudo pvcreate /dev/sdb1       # Create Physical Volume
+sudo vgcreate myvg /dev/sdb1  # Create Volume Group
+sudo lvcreate -L 10G -n mylv myvg # Create Logical Volume
+sudo mkfs.xfs /dev/myvg/mylv  # Format LV with XFS (common on Fedora)
+sudo mount /dev/myvg/mylv /data # Mount LV</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="shell-scripting-basics">14. Shell Scripting Basics</h2>
+        <p>Automate tasks by writing a series of commands in a file. Fedora typically uses Bash as its default shell.</p>
+        <h3>A. Creating a Script:</h3>
+        <pre><code class="language-bash"># Create a file named 'fedora_status.sh'
+nano fedora_status.sh
+
+# Add the following content:
+#!/bin/bash
+# This script checks basic system status on Fedora
+
+echo "--- Fedora System Status ---"
+echo "Hostname: $(hostname)"
+echo "Kernel: $(uname -r)"
+echo "Uptime: $(uptime -p)"
+echo "Disk Free: $(df -h / | awk 'NR==2{print $4} /')" # Free space on root partition
+echo "--- End Status ---"</code></pre>
+        <h3>B. Making Executable and Running:</h3>
+        <pre><code class="language-bash">chmod +x fedora_status.sh
+./fedora_status.sh</code></pre>
+        <h3>C. Scripting Concepts:</h3>
+        <ul>
+            <li><strong>Variables:</strong> `NAME="Fedora"`, `echo "Running on $NAME"`.</li>
+            <li><strong>Input/Output:</strong> `echo`, `read`.</li>
+            <li><strong>Conditionals (`if`, `elif`, `else`):</strong> `if [[ $NUM -gt 10 ]]; then ... fi`.
+                <ul>
+                    <li>String: `==`, `!=`. Numeric: `-eq`, `-gt`, `-lt`. File: `-f`, `-d`.</li>
+                </ul>
+            </li>
+            <li><strong>Loops (`for`, `while`):</strong> `for i in {1..3}; do ... done`. `while [[ $COUNT -lt 5 ]]; do ... done`.</li>
+            <li><strong>Functions:</strong> `my_func() { echo "Inside function"; }`.</li>
+            <li><strong>Command-line Arguments:</strong> `$0`, `$1`, `$#`, `$@`.</li>
+            <li><strong>Error Handling:</strong> `set -e` (exit on error), `set -x` (debug mode).</li>
+            <li><strong>Input/Output Redirection:</strong> `>`, `>>`, `2>`.</li>
+            <li><strong>Pipes (`|`):</strong> Chain commands together.</li>
+        </ul>
+
+        <h2 id="text-editors">15. Text Editors (GUI & CLI)</h2>
+        <p>Fedora provides both graphical and command-line text editors.</p>
+        <ul>
+            <li><strong>GNOME Text Editor (GUI):</strong> Simple, user-friendly graphical text editor (default for Workstation).
+                <pre><code class="language-bash">gnome-text-editor my_document.txt &amp; # &amp; runs in background</code></pre>
+            </li>
+            <li><strong>Nano (CLI):</strong> Simple, intuitive terminal-based editor with on-screen shortcuts.
+                <pre><code class="language-bash">nano /etc/nginx/nginx.conf</code></pre>
+            </li>
+            <li><strong>Vim (CLI):</strong> Powerful, highly efficient modal editor. Steeper learning curve but very fast once mastered.
+                <pre><code class="language-bash">vim /etc/ssh/sshd_config</code></pre>
+            </li>
+            <li><strong>VS Code / Sublime Text:</strong> Popular powerful graphical code editors often installed by developers (available via Flatpak or RPM Fusion).</li>
+        </ul>
+
+        <h2 id="security-best-practices">16. Security Best Practices (SELinux, Firewalld)</h2>
+        <p>Fedora emphasizes strong security, with SELinux and Firewalld enabled by default. Proper configuration is crucial.</p>
+        <ul>
+            <li><strong>Keep System Updated:</strong> Regularly apply updates for security patches and new features.
+                <pre><code class="language-bash">sudo dnf update -y</code></pre>
+            </li>
+            <li><strong>Strong Passwords & SSH Keys:</strong> Use strong, unique passwords. Enable SSH key-based authentication and disable password authentication for SSH.</li>
+            <li><strong>Firewalld:</strong> Fedora's default dynamic firewall.
+                <ul>
+                    <li>`sudo systemctl status firewalld` # Check firewall status</li>
+                    <li>`sudo systemctl start firewalld` # Start firewall</li>
+                    <li>`sudo systemctl enable firewalld` # Enable firewall on boot</li>
+                    <li>`sudo firewall-cmd --permanent --add-service=http` # Allow HTTP traffic permanently</li>
+                    <li>`sudo firewall-cmd --permanent --add-port=8080/tcp` # Allow specific port permanently</li>
+                    <li>`sudo firewall-cmd --reload` # Apply permanent changes immediately</li>
+                    <li>`sudo firewall-cmd --list-all` # List all active rules for the default zone</li>
+                </ul>
+            </li>
+            <li><strong>SELinux (Security-Enhanced Linux):</strong> A Mandatory Access Control (MAC) security module that adds an extra layer of security by enforcing access control policies.
+                <ul>
+                    <li><strong>Modes:</strong>
+                        <ul>
+                            <li>`enforcing`: Enforces policies, denies violations. (Default and recommended).</li>
+                            <li>`permissive`: Logs policy violations but does not deny them. (Good for troubleshooting).</li>
+                            <li>`disabled`: SELinux is off. (Least secure, avoid).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Check status:</strong>
+                        <pre><code class="language-bash">sestatus</code></pre>
+                    </li>
+                    <li><strong>Change mode (temporarily):</strong>
+                        <pre><code class="language-bash">sudo setenforce 0 # Switch to Permissive
+sudo setenforce 1 # Switch to Enforcing</code></pre>
+                    </li>
+                    <li><strong>Change mode (permanently, edit config file):</strong>
+                        <pre><code class="language-bash">sudo nano /etc/selinux/config
+# Change SELINUX=enforcing to SELINUX=permissive or SELINUX=disabled
+# Reboot after changing this file for permanent effect.</code></pre>
+                    </li>
+                    <li><strong>Troubleshooting SELinux denials:</strong>
+                        <pre><code class="language-bash">sudo ausearch -c 'httpd' --raw | audit2allow -M mywebserver
+sudo semodule -i mywebserver.pp # Create and apply custom SELinux policy</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Disable Unnecessary Services:</strong> Stop and disable services you don't need to reduce the attack surface.
+                <pre><code class="language-bash">sudo systemctl disable &lt;service_name&gt;</code></pre>
+            </li>
+            <li><strong>Monitor Logs:</strong> Regularly review system logs (`/var/log/messages`, `/var/log/audit/audit.log`) or use `journalctl`.
+                <pre><code class="language-bash">sudo journalctl -f # Follow live logs
+sudo journalctl -u sshd.service # View SSH daemon logs</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="contributing-to-fedora">17. Contributing to Fedora</h2>
+        <p>Fedora is a community project, and contributions are highly encouraged. You can contribute in various ways:</p>
+        <ul>
+            <li><strong>Documentation:</strong> Improve Fedora's extensive documentation.</li>
+            <li><strong>Testing:</strong> Help test new features and releases.</li>
+            <li><strong>Bug Reporting:</strong> Report bugs to help improve the OS.</li>
+            <li><strong>Translation:</strong> Translate Fedora into different languages.</li>
+            <li><strong>Development:</strong> Contribute code to packages or Fedora-specific tools.</li>
+            <li><strong>Design/Artwork:</strong> Contribute to the desktop environment or branding.</li>
+            <li><strong>Community Support:</strong> Help other users on forums or mailing lists.</li>
+        </ul>
+        <p>Visit the <a href="https://fedoraproject.org/contribute/" target="_blank">Fedora Project Contribute page</a> to learn more.</p>
+
+        <div class="tip">
+            <strong>Fedora: The Latest and Greatest!</strong>
+            <p>Fedora is an excellent choice for users who want to experience the cutting edge of Linux. Its commitment to open source, rapid innovation, and strong security features make it a powerful platform for developers, system administrators, and enthusiasts. Embrace its fast-paced development, get comfortable with `dnf` and `systemd`, and always stay updated to get the most out of your Fedora experience.</p>
+        </div>
+    </div>
+</body>
+</html>
