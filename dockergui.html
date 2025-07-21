@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Docker Tutorial with GUI Examples (Docker Desktop Focused)</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Docker Tutorial with GUI Examples (Docker Desktop Focused)</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-docker">1. What is Docker?</a></li>
+                <li><a href="#docker-desktop-installation">2. Docker Desktop Installation</a></li>
+                <li><a href="#docker-desktop-ui-overview">3. Docker Desktop UI Overview</a></li>
+                <li><a href="#core-concepts-explained-for-gui">4. Core Concepts Explained for GUI Users</a></li>
+                <li><a href="#managing-containers-gui">5. Managing Containers (GUI)</a></li>
+                <li><a href="#managing-images-gui">6. Managing Images (GUI)</a></li>
+                <li><a href="#managing-volumes-gui">7. Managing Volumes (GUI)</a></li>
+                <li><a href="#managing-networks-gui">8. Managing Networks (GUI)</a></li>
+                <li><a href="#docker-compose-gui">9. Docker Compose (GUI & CLI)</a></li>
+                <li><a href="#docker-hub-and-registries-gui">10. Docker Hub & Registries (GUI)</a></li>
+                <li><a href="#docker-extensions">11. Docker Extensions</a></li>
+                <li><a href="#docker-desktop-settings">12. Docker Desktop Settings & Resources</a></li>
+                <li><a href="#troubleshooting-docker-desktop">13. Troubleshooting Docker Desktop</a></li>
+                <li><a href="#best-practices-with-docker-desktop">14. Best Practices with Docker Desktop</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-docker">1. What is Docker?</h2>
+        <p><strong>Docker</strong> is an open-source platform that uses OS-level virtualization to deliver software in packages called **containers**. Containers are lightweight, standalone, executable packages of software that include everything needed to run an application: code, runtime, system tools, system libraries, and settings.</p>
+        <p>The primary benefit of Docker is its ability to provide a consistent environment across different computing environments (development, testing, production). This helps eliminate "it works on my machine" problems and streamlines the entire software development lifecycle.</p>
+        <h3>Key Docker Concepts:</h3>
+        <ul>
+            <li><strong>Containerization:</strong> The technology of packaging applications and their dependencies into isolated units (containers).</li>
+            <li><strong>Images:</strong> Read-only templates used to create containers. Images are built from a set of instructions in a `Dockerfile`. Think of an image as a blueprint or a class.</li>
+            <li><strong>Containers:</strong> Runnable instances of Docker images. A container is a lightweight, isolated execution environment that shares the host OS kernel but has its own isolated filesystem, process space, and network interface. Think of a container as an object or a running process.</li>
+            <li><strong>Dockerfile:</strong> A text file containing a set of instructions that Docker uses to build an image.</li>
+            <li><strong>Docker Engine:</strong> The core Docker runtime that builds and runs containers. It includes the Docker Daemon (the background service) and the Docker CLI (command-line interface).</li>
+            <li><strong>Docker Hub:</strong> A cloud-based registry service where you can find, store, and share public and private Docker images.</li>
+        </ul>
+
+        <h2 id="docker-desktop-installation">2. Docker Desktop Installation</h2>
+        <p><strong>Docker Desktop</strong> is an easy-to-install application for Windows, macOS, and Linux that provides a straightforward GUI to manage your containers, applications, and images directly from your machine. It includes the Docker Engine, Docker CLI, Docker Compose, Kubernetes (optional), and other helpful tools.</p>
+        <h3>A. System Requirements:</h3>
+        <ul>
+            <li><strong>Windows:</strong> Windows 10 64-bit: Home or Pro version 21H2 or higher, or Enterprise or Education version 21H2 or higher. WSL 2 backend required.</li>
+            <li><strong>macOS:</strong> macOS Ventura 13 or newer. Intel or Apple Silicon chip.</li>
+            <li><strong>Linux:</strong> Modern Linux distribution with kernel 5.10+ (Ubuntu, Debian, Fedora, Arch).</li>
+        </ul>
+        <h3>B. Installation Steps:</h3>
+        <ol>
+            <li><strong>Download Docker Desktop:</strong> Go to the official Docker Desktop download page: <a href="https://docs.docker.com/desktop/install/" target="_blank">docs.docker.com/desktop/install/</a>. Download the installer for your operating system.</li>
+            <li><strong>Run the Installer:</strong>
+                <ul>
+                    <li><strong>Windows:</strong> Double-click the `.exe` installer. Follow the wizard. Ensure "Install required Windows components for WSL 2" (or "WSL 2 backend" is enabled). A restart might be required.</li>
+                    <li><strong>macOS:</strong> Double-click the `.dmg` file and drag the Docker icon to your Applications folder. Open Docker from Applications.</li>
+                    <li><strong>Linux:</strong> Follow distribution-specific instructions (e.g., download `.deb` or `.rpm` and install via package manager, then run `systemctl start docker`).</li>
+                </ul>
+            </li>
+            <li><strong>Initial Setup & Login:</strong>
+                <ul>
+                    <li>After installation, launch Docker Desktop. It might take a moment to start the Docker Engine.</li>
+                    <li>You'll typically be prompted to log in to Docker Hub (optional, but recommended for pulling/pushing images).</li>
+                    <li>Docker Desktop will show a tutorial or a dashboard indicating it's running.</li>
+                </ul>
+            </li>
+            <li><strong>Verify Installation (CLI):</strong> Open your terminal/command prompt and run:
+                <pre><code class="language-bash">docker --version
+docker compose version
+docker run hello-world # This pulls and runs a simple container to confirm functionality</code></pre>
+            </li>
+        </ol>
+
+        <h2 id="docker-desktop-ui-overview">3. Docker Desktop UI Overview</h2>
+        <p>The Docker Desktop application provides a user-friendly graphical interface to manage various Docker components.</p>
+        <p><strong>Access:</strong> Launch the Docker Desktop application from your applications menu (Windows Start Menu, macOS Applications folder, Linux App Launcher).</p>
+        <h3>Key Sections of Docker Desktop GUI:</h3>
+        <ul>
+            <li><strong>Home:</strong> A quick overview, often with tutorials and recommended images.</li>
+            <li><strong>Containers:</strong> View and manage running and stopped containers. This is your most frequent stop.</li>
+            <li><strong>Images:</strong> View and manage Docker images stored locally.</li>
+            <li><strong>Volumes:</strong> Manage Docker volumes for persistent data.</li>
+            <li><strong>Networks:</strong> View and manage Docker networks.</li>
+            <li><strong>Dev Environments:</strong> (Newer feature) Manage isolated development environments.</li>
+            <li><strong>Extensions:</strong> Discover and install Docker extensions for added functionality.</li>
+            <li><strong>Settings (Gear Icon):</strong> Configure Docker Desktop's behavior, resources, Docker Engine, Kubernetes, etc.</li>
+            <li><strong>Troubleshoot (Bug Icon):</strong> Access diagnostic tools, reset Docker Desktop.</li>
+            <li><strong>Docker Hub (Whale Icon):</strong> Connects to your Docker Hub account.</li>
+        </ul>
+
+        <h2 id="core-concepts-explained-for-gui">4. Core Concepts Explained for GUI Users</h2>
+        <p>Let's delve into the fundamental Docker concepts with a focus on how they appear and are managed in Docker Desktop.</p>
+
+        <h3>A. Images (Blueprints)</h3>
+        <p>An image is a read-only template with instructions for creating a Docker container. It packages the application code, a runtime (like Node.js or Python), libraries, environment variables, and configuration files.</p>
+        <ul>
+            <li><strong>View in Docker Desktop:</strong> Go to the **Images** tab. You'll see a list of images you've pulled or built locally.</li>
+            <li><strong>Pulling Images (GUI):</strong>
+                <ul>
+                    <li>In the **Images** tab, click **Pull**.</li>
+                    <li>Enter the image name (e.g., `nginx:latest`, `ubuntu:22.04`).</li>
+                    <li>Click **Pull**. Docker Desktop will download the image from Docker Hub.</li>
+                </ul>
+                <pre><code class="language-bash"># Equivalent CLI:
+docker pull nginx:latest</code></pre>
+            </li>
+            <li><strong>Building Images (CLI - requires Dockerfile):</strong>
+                <p>Images are built from a `Dockerfile`. Create a new folder (e.g., `my-web-app`), then create `Dockerfile` and `index.html` inside it.</p>
+                <pre><code class="language-dockerfile"># Dockerfile
+FROM nginx:latest       # Use the official Nginx image as base
+COPY index.html /usr/share/nginx/html/ # Copy your HTML file into the Nginx web root
+EXPOSE 80               # Inform Docker that the container listens on port 80
+CMD ["nginx", "-g", "daemon off;"] # Command to run Nginx when container starts</code></pre>
+                <pre><code class="language-html"># index.html
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My Docker Webpage&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello from Docker!&lt;/h1&gt;
+    &lt;p&gt;This page is served by Nginx in a container.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                <p>Open your terminal in the `my-web-app` directory and build:</p>
+                <pre><code class="language-bash">docker build -t my-custom-nginx-app . # The '.' means build from Dockerfile in current directory</code></pre>
+                <p>This newly built image will appear in the **Images** tab of Docker Desktop.</p>
+            </li>
+        </ul>
+
+        <h3>B. Containers (Running Instances)</h3>
+        <p>A container is a running instance of an image. You can start, stop, pause, restart, and delete containers.</p>
+        <ul>
+            <li><strong>View in Docker Desktop:</strong> Go to the **Containers** tab. This lists all your running and stopped containers.</li>
+            <li><strong>Creating/Running Containers (GUI):</strong>
+                <ul>
+                    <li>In the **Images** tab, hover over an image (e.g., `my-custom-nginx-app`).</li>
+                    <li>Click the **Run** button.</li>
+                    <li>A dialog will appear:
+                        <ul>
+                            <li><strong>Optional settings:</strong> You can define a **Container name** (e.g., `my-nginx-instance`).</li>
+                            <li><strong>Ports:</strong> Map a **Host port** (e.g., `8080`) to the **Container port** (`80` for Nginx). This allows you to access the web server from your host machine at `http://localhost:8080`.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Run**. The container will start and appear in the **Containers** tab.</li>
+                </ul>
+                <pre><code class="language-bash"># Equivalent CLI:
+docker run -d -p 8080:80 --name my-nginx-instance my-custom-nginx-app
+# -d: run in detached mode (background)
+# -p 8080:80: map host port 8080 to container port 80
+# --name: assign a name to the container</code></pre>
+                <p>You can now open your browser and navigate to `http://localhost:8080` to see your "Hello from Docker!" page.</p>
+            </li>
+        </ul>
+
+        <h2 id="managing-containers-gui">5. Managing Containers (GUI)</h2>
+        <p>The **Containers** tab in Docker Desktop provides a central place to control your running applications.</p>
+        <ol>
+            <li><strong>List Containers:</strong> The main view shows:
+                <ul>
+                    <li><strong>Name:</strong> The container's name.</li>
+                    <li><strong>Status:</strong> `Running`, `Exited`, `Paused`.</li>
+                    <li><strong>Ports:</strong> Mapped ports (e.g., `8080 > 80`).</li>
+                    <li><strong>Image:</strong> The image the container was created from.</li>
+                </ul>
+            </li>
+            <li><strong>Start/Stop/Restart/Pause/Delete:</strong>
+                <ul>
+                    <li>Hover over a container. Buttons for **Start**, **Stop**, **Restart**, **Pause**, **Delete** will appear.</li>
+                    <li>Click the corresponding button.</li>
+                    <li>Deleting a container removes its writable layer, but the image remains.</li>
+                </ul>
+            </li>
+            <li><strong>View Details (Click on Container Name):</strong>
+                <ul>
+                    <li><strong>Logs:</strong> View real-time logs from the container's standard output.</li>
+                    <li><strong>Inspect:</strong> See detailed JSON configuration (network, volumes, environment variables).</li>
+                    <li><strong>Stats:</strong> Monitor CPU, Memory, Disk I/O, Network I/O in real-time.</li>
+                    <li><strong>Files:</strong> Browse the container's filesystem. (Very useful for debugging!).</li>
+                    <li><strong>Terminal:</strong> Open a shell directly inside the running container (e.g., `/bin/bash` or `/bin/sh`).</li>
+                    <pre><code class="language-bash"># Equivalent CLI for terminal access:
+docker exec -it my-nginx-instance bash # or sh</code></pre>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="managing-images-gui">6. Managing Images (GUI)</h2>
+        <p>The **Images** tab allows you to manage the templates for your containers.</p>
+        <ol>
+            <li><strong>List Images:</strong> Shows downloaded and built images with their size, creation date, and tags.</li>
+            <li><strong>Run Image:</strong> Click the **Run** button next to an image to create a new container from it.</li>
+            <li><strong>Delete Image:</strong> Select an image and click the **Delete** (trash can) icon.
+                <ul>
+                    <li>You cannot delete an image if it's currently used by a running or stopped container. You must delete the container first.</li>
+                </ul>
+                <pre><code class="language-bash"># Equivalent CLI:
+docker rmi my-custom-nginx-app # Removes the image</code></pre>
+            </li>
+            <li><strong>Build Image:</strong> (As seen in section 4A, this is typically done via CLI using a `Dockerfile`).</li>
+            <li><strong>Push Image:</strong> Push your local image to Docker Hub (after logging in).
+                <ul>
+                    <li>Hover over a local image. Click the **Push to Hub** button.</li>
+                    <li>You might need to tag the image with your Docker Hub username first:
+                        <pre><code class="language-bash">docker tag my-custom-nginx-app:latest your_dockerhub_username/my-custom-nginx-app:latest</code></pre>
+                    </li>
+                    <li>Then push from CLI or GUI.</li>
+                </ul>
+                <pre><code class="language-bash"># Equivalent CLI:
+docker push your_dockerhub_username/my-custom-nginx-app:latest</code></pre>
+            </li>
+        </ol>
+
+        <h2 id="managing-volumes-gui">7. Managing Volumes (GUI)</h2>
+        <p>Volumes are the preferred mechanism for persisting data generated by and used by Docker containers. They allow data to outlive the container's lifecycle.</p>
+        <ul>
+            <li><strong>Why Volumes?</strong> When a container is deleted, its writable layer is also deleted. Volumes store data on the host machine's filesystem, managed by Docker, separate from the container.</li>
+            <li><strong>View in Docker Desktop:</strong> Go to the **Volumes** tab.</li>
+            <li><strong>Create a Volume (GUI):</strong>
+                <ul>
+                    <li>Click **Create**.</li>
+                    <li>**Name:** (e.g., `my-app-data`).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+                <pre><code class="language-bash"># Equivalent CLI:
+docker volume create my-app-data</code></pre>
+            </li>
+            <li><strong>Attaching a Volume to a Container (GUI - at run time):</strong>
+                <ul>
+                    <li>When running an image from the **Images** tab, in the "Optional settings" dialog.</li>
+                    <li>Click **Add another volume**.</li>
+                    <li><strong>Host path or name:</strong> Choose "Volume" and select your created volume (`my-app-data`).</li>
+                    <li><strong>Container path:</strong> Enter the path inside the container where the volume should be mounted (e.g., `/app/data`).</li>
+                    <li>Click **Run**.</li>
+                </ul>
+                <pre><code class="language-bash"># Equivalent CLI:
+docker run -d -p 8080:80 -v my-app-data:/app/data --name my-nginx-with-volume my-custom-nginx-app</code></pre>
+            </li>
+            <li><strong>Inspect/Delete Volumes:</strong> In the **Volumes** tab, you can inspect details or delete unused volumes. Docker Desktop also allows Browse files and folders within volumes directly from the UI.</li>
+        </ul>
+
+        <h2 id="managing-networks-gui">8. Managing Networks (GUI)</h2>
+        <p>Docker networks allow containers to communicate with each other and with the host machine. By default, Docker creates a `bridge` network.</p>
+        <ul>
+            <li><strong>View in Docker Desktop:</strong> Go to the **Networks** tab. You'll see default networks (`bridge`, `host`, `none`) and any custom networks.</li>
+            <li><strong>Creating a Custom Network (GUI):</strong>
+                <ul>
+                    <li>Click **Create**.</li>
+                    <li><strong>Name:</strong> (e.g., `my-app-network`).</li>
+                    <li>**Driver:** `bridge` (most common for single-host networks).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+                <pre><code class="language-bash"># Equivalent CLI:
+docker network create my-app-network</code></pre>
+            </li>
+            <li><strong>Connecting Containers to a Network (GUI - at run time):</strong>
+                <ul>
+                    <li>When running an image from the **Images** tab, in the "Optional settings" dialog.</li>
+                    <li>Click **Networks**.</li>
+                    <li>Select your custom network (`my-app-network`).</li>
+                    <li>Click **Run**.</li>
+                </ul>
+                <pre><code class="language-bash"># Equivalent CLI:
+docker run -d --network my-app-network --name my-app-service my-app-image</code></pre>
+            </li>
+            <li><strong>Inspect/Delete Networks:</strong> In the **Networks** tab, you can inspect details (e.g., which containers are connected) or delete unused networks.</li>
+        </ul>
+
+        <h2 id="docker-compose-gui">9. Docker Compose (GUI & CLI)</h2>
+        <p>Docker Compose is a tool for defining and running multi-container Docker applications. You define your application's services, networks, and volumes in a `compose.yaml` (or `docker-compose.yml`) file, then use a single command to bring up the entire application stack.</p>
+        <p>Docker Desktop integrates Docker Compose, allowing you to manage Compose-defined applications from the UI.</p>
+        <h3>A. Example `compose.yaml` (Simple Web App with Database):</h3>
+        <p>Create a directory (e.g., `my-compose-app`) and place the following files:</p>
+        <pre><code class="language-yaml"># compose.yaml
+version: '3.8' # Specify Compose file format version
+
+services:
+  web:
+    build: . # Build Dockerfile in current directory for this service
+    ports:
+      - "8000:80" # Map host port 8000 to container port 80
+    volumes:
+      - ./nginx-html:/usr/share/nginx/html # Mount local 'nginx-html' dir to Nginx web root
+    depends_on:
+      - db # Ensure 'db' service starts before 'web'
+    networks:
+      - app-network
+
+  db:
+    image: postgres:15-alpine # Use a PostgreSQL image
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - db_data:/var/lib/postgresql/data # Persistent volume for database data
+    networks:
+      - app-network
+
+volumes: # Define named volumes for persistence
+  db_data:
+
+networks: # Define custom bridge network
+  app-network:
+    driver: bridge</code></pre>
+        <pre><code class="language-html"># nginx-html/index.html (create 'nginx-html' directory first, then this file inside it)
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Docker Compose App&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello from Docker Compose!&lt;/h1&gt;
+    &lt;p&gt;This is a multi-service application.&lt;/p&gt;
+    &lt;p&gt;Web service talks to a PostgreSQL database.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        <pre><code class="language-dockerfile"># Dockerfile (for the 'web' service, create in 'my-compose-app' root)
+FROM nginx:latest
+COPY nginx-html/ /usr/share/nginx/html/ # Copy local html to container
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]</code></pre>
+
+        <h3>B. Running Docker Compose (CLI - from `my-compose-app` directory):</h3>
+        <pre><code class="language-bash">docker compose up -d # Builds, creates, starts, and runs services in detached mode</code></pre>
+        <p>You can then access the web app at `http://localhost:8000`.</p>
+
+        <h3>C. Managing Docker Compose Applications (GUI):</h3>
+        <ul>
+            <li>In Docker Desktop, go to the **Containers** tab.</li>
+            <li>You'll see a section labeled **Compose** (often at the top or in a sub-tab).</li>
+            <li>Your `my-compose-app` application will appear here, showing its services (`web`, `db`).</li>
+            <li>You can click on the application name (`my-compose-app`) to:
+                <ul>
+                    <li>**View Logs:** See aggregated logs from all services in the application.</li>
+                    <li>**Open in Browser:** Directly open the mapped port (e.g., `http://localhost:8000`).</li>
+                    <li>**Stop/Restart/Delete:** Control the entire application stack with one click.</li>
+                    <li>**Build/Up/Down:** Buttons to re-build images, re-create services, or stop and remove the stack.</li>
+                </ul>
+            </li>
+            <li>Click on individual services (`web`, `db`) to view their specific logs, stats, files, or open a terminal.</li>
+        </ul>
+        <h3>D. Stopping and Cleaning Up Compose App (CLI):</h3>
+        <pre><code class="language-bash">docker compose down # Stops and removes containers, networks, and default volumes
+# If you created named volumes (like 'db_data'), you might need to remove them explicitly:
+docker volume rm my-compose-app_db_data # The volume name is usually prefixed with project name</code></pre>
+
+        <h2 id="docker-hub-and-registries-gui">10. Docker Hub & Registries (GUI)</h2>
+        <p>Docker Hub is the world's largest container image registry. Docker Desktop integrates directly with it.</p>
+        <h3>A. Connecting to Docker Hub:</h3>
+        <ul>
+            <li>In Docker Desktop, click the **whale icon** (Docker Hub) in the left sidebar.</li>
+            <li>You'll be prompted to log in or create an account.</li>
+        </ul>
+        <h3>B. Exploring Docker Hub (in Docker Desktop):</h3>
+        <ul>
+            <li>Once logged in, you can browse **Official Images**, **Verified Publishers**, and your own **Repositories**.</li>
+            <li>You can search for images directly from the Docker Desktop UI.</li>
+            <li>For any image found, you can click **Pull** to download it to your local machine.</li>
+        </ul>
+        <h3>C. Managing Your Repositories (in Docker Desktop):</h3>
+        <ul>
+            <li>Go to the **Images** tab.</li>
+            <li>As seen in Section 6, you can **Push to Hub** any image you've built locally (after tagging it with your Docker Hub username).</li>
+            <li>This makes your custom images accessible to others or your CI/CD pipelines.</li>
+        </ul>
+
+        <h2 id="docker-extensions">11. Docker Extensions</h2>
+        <p>Docker Extensions enhance Docker Desktop's functionality, providing new capabilities like security scanning, Kubernetes dashboards, cloud integrations, and more, all within the Docker Desktop UI.</p>
+        <p><strong>Access:</strong> Click **Extensions** in the left sidebar of Docker Desktop.</p>
+        <ul>
+            <li><strong>Discover:</strong> Browse available extensions.</li>
+            <li><strong>Install:</strong> Click "Install" for any extension.</li>
+            <li><strong>Manage:</strong> View, enable, disable, or uninstall installed extensions.</li>
+        </ul>
+        <p>Popular examples include: Disk Usage, Resource Monitor, Vulnerability Scan (Snyk), Kubernetes Dashboard.</p>
+
+        <h2 id="docker-desktop-settings">12. Docker Desktop Settings & Resources</h2>
+        <p>The **Settings** menu (gear icon in the top right) allows extensive configuration.</p>
+        <ul>
+            <li><strong>General:</strong> Start Docker Desktop on login, enable/disable WSL 2 integration (Windows).</li>
+            <li><strong>Resources:</strong>
+                <ul>
+                    <li><strong>Advanced:</strong> Allocate CPU, memory, disk image size for the Docker Engine.</li>
+                    <li><strong>WSL Integration (Windows):</strong> Control which WSL 2 distros Docker integrates with.</li>
+                </ul>
+            </li>
+            <li><strong>Docker Engine:</strong> Configure Docker Daemon settings (e.g., registry mirrors, experimental features) via JSON.</li>
+            <li><strong>Kubernetes:</strong> Enable/disable the built-in Kubernetes cluster (if needed for local K8s development). Reset Kubernetes cluster.</li>
+            <li><strong>Updates:</strong> Manage Docker Desktop updates.</li>
+            <li><strong>Experimental Features:</strong> Enable/disable features under development.</li>
+            <li><strong>Backup & Restore:</strong> Export/import Docker Desktop settings and data.</li>
+        </ul>
+
+        <h2 id="troubleshooting-docker-desktop">13. Troubleshooting Docker Desktop</h2>
+        <p>When things don't work as expected, Docker Desktop provides several diagnostic tools.</p>
+        <p><strong>Access:</strong> Click the **Troubleshoot** icon (bug icon) in the top right of Docker Desktop.</p>
+        <ul>
+            <li><strong>Restart Docker Desktop:</strong> Often resolves minor glitches.</li>
+            <li><strong>Check Status:</strong> See if Docker Engine is running.</li>
+            <li><strong>Diagnose & Feedback:</strong> Generate a diagnostic bundle that can be shared with Docker support.</li>
+            <li><strong>Clean / Purge data:</strong>
+                <ul>
+                    <li>**Clean / Purge data:** Removes all images, containers, volumes, and networks. Use as a last resort, as it deletes all your local Docker data.</li>
+                    <li>**Reset to factory defaults:** Resets all settings to their default values.</li>
+                </ul>
+            </li>
+            <li><strong>Open logs:</strong> Access Docker Desktop's internal logs.</li>
+            <li><strong>CLI for Troubleshooting:</strong> Don't forget the power of the command line for deeper inspection:
+                <pre><code class="language-bash">docker ps -a       # Show all containers (running and stopped)
+docker images -a   # Show all images
+docker logs &lt;container_name_or_id&gt; # Get logs from a specific container
+docker inspect &lt;container_name_or_id&gt; # Get detailed info about a container/image/volume/network
+docker system prune # Remove stopped containers, unused networks, dangling images, build cache (frees disk space)
+docker volume prune # Remove unused volumes</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="best-practices-with-docker-desktop">14. Best Practices with Docker Desktop</h2>
+        <ul>
+            <li><strong>Keep Docker Desktop Updated:</strong> Regularly update to benefit from new features, bug fixes, and security patches.</li>
+            <li><strong>Understand the Basics:</strong> Even with a GUI, a fundamental understanding of Docker Images, Containers, Volumes, and Networks is essential.</li>
+            <li><strong>Use `compose.yaml` for Multi-Service Apps:</strong> Always define your multi-container applications with Docker Compose for easier management and reproducibility.</li>
+            <li><strong>Use Volumes for Persistent Data:</strong> Never rely on the container's writable layer for data you need to keep. Use named volumes or bind mounts.</li>
+            <li><strong>Optimize Dockerfiles:</strong>
+                <ul>
+                    <li>Use a `.dockerignore` file.</li>
+                    <li>Minimize layers (chain `RUN` commands).</li>
+                    <li>Use multi-stage builds for smaller images.</li>
+                    <li>Use specific image tags (e.g., `node:18-alpine`) instead of `latest`.</li>
+                </ul>
+            </li>
+            <li><strong>Resource Management:</strong> Configure Docker Desktop's allocated CPU, memory, and disk space in settings to match your development needs and host machine's capabilities.</li>
+            <li><strong>Security:</strong>
+                <ul>
+                    <li>Regularly scan images for vulnerabilities (using Docker Scout or extensions).</li>
+                    <li>Be cautious with exposing ports to `0.0.0.0`.</li>
+                </ul>
+            </li>
+            <li><strong>Cleanup Regularly:</strong> Use `docker system prune` and `docker volume prune` to free up disk space from unused Docker objects.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Docker Desktop: Your Gateway to Containerization!</strong>
+            <p>Docker Desktop simplifies the complex world of containerization, providing a powerful yet accessible platform for developers. By leveraging its intuitive GUI alongside the command line for deeper control, you can efficiently build, run, and manage containerized applications, streamlining your development workflow and ensuring consistency across environments. Happy containerizing!</p>
+        </div>
+    </div>
+</body>
+</html>
