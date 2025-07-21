@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Azure DevOps Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Azure DevOps Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-azure-devops">1. What is Azure DevOps?</a></li>
+                <li><a href="#azure-devops-services">2. Azure DevOps Services</a></li>
+                <li><a href="#getting-started-with-azure-devops">3. Getting Started with Azure DevOps</a></li>
+                <li><a href="#azure-boards-plan-and-track">4. Azure Boards (Plan & Track)</a></li>
+                <li><a href="#azure-repos-version-control">5. Azure Repos (Version Control)</a></li>
+                <li><a href="#azure-pipelines-ci-cd">6. Azure Pipelines (CI/CD)</a></li>
+                <li><a href="#azure-test-plans-testing">7. Azure Test Plans (Testing)</a></li>
+                <li><a href="#azure-artifacts-package-management">8. Azure Artifacts (Package Management)</a></li>
+                <li><a href="#azure-devops-automation-rules">9. Automation Rules (Work Items)</a></li>
+                <li><a href="#security-and-compliance">10. Security & Compliance</a></li>
+                <li><a href="#integrations">11. Integrations</a></li>
+                <li><a href="#cost-management">12. Cost Management</a></li>
+                <li><a href="#best-practices">13. Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-azure-devops">1. What is Azure DevOps?</h2>
+        <p><strong>Azure DevOps</strong> is a suite of integrated services from Microsoft that provides an end-to-end solution for the software development lifecycle. It supports teams in planning, coding, building, testing, deploying, and monitoring applications, embracing core DevOps principles like collaboration, automation, and continuous delivery.</p>
+        <p>Azure DevOps offers a centralized platform that unifies various tools and functionalities needed for modern software delivery, regardless of the programming language, platform, or cloud provider you use.</p>
+        <h3>Key Benefits:</h3>
+        <ul>
+            <li><strong>Comprehensive Suite:</strong> All essential DevOps tools under one roof.</li>
+            <li><strong>Scalability:</strong> Scales from small teams to large enterprises.</li>
+            <li><strong>Cloud-Native:</strong> Fully managed service in Azure.</li>
+            <li><strong>Language & Platform Agnostic:</strong> Supports Windows, Linux, macOS, and various programming languages (.NET, Java, Python, Node.js, etc.).</li>
+            <li><strong>Extensibility:</strong> Integrates with a vast marketplace of extensions and other services.</li>
+            <li><strong>Collaboration:</strong> Fosters teamwork and communication across development, operations, and QA.</li>
+        </ul>
+
+        <h2 id="azure-devops-services">2. Azure DevOps Services</h2>
+        <p>Azure DevOps is comprised of several distinct, yet integrated, services:</p>
+        <ul>
+            <li><strong>Azure Boards:</strong> Agile planning, tracking work items, backlogs, sprints, and dashboards.</li>
+            <li><strong>Azure Repos:</strong> Unlimited, cloud-hosted private Git repositories for source code management.</li>
+            <li><strong>Azure Pipelines:</strong> Cloud-hosted pipelines for continuous integration (CI) and continuous delivery (CD) across any platform.</li>
+            <li><strong>Azure Test Plans:</strong> Manual, exploratory, and automated test management.</li>
+            <li><strong>Azure Artifacts:</strong> Package management (NuGet, npm, Maven, Python, Universal Packages) for sharing and consuming packages.</li>
+        </ul>
+
+        <h2 id="getting-started-with-azure-devops">3. Getting Started with Azure DevOps</h2>
+        <h3>A. Create an Azure DevOps Organization:</h3>
+        <ol>
+            <li>Go to <a href="https://dev.azure.com/" target="_blank">dev.azure.com</a>.</li>
+            <li>Sign in with your Microsoft account (personal or work/school).</li>
+            <li>Click **Create new organization**.</li>
+            <li>Provide a **name** for your organization (e.g., `my-devops-org-2025`).</li>
+            <li>Choose a **hosting geography** (e.g., `South India`).</li>
+            <li>Click **Continue**.</li>
+        </ol>
+        <div class="tip">
+            **Organization URL:** Your organization will be accessible at `https://dev.azure.com/your-devops-org-2025`.
+        </div>
+        <h3>B. Create an Azure DevOps Project:</h3>
+        <p>Within an organization, you create projects to manage your work.</p>
+        <ol>
+            <li>After creating your organization, you'll be prompted to "Create a project to get started." Click **+ New project**. (Alternatively, from your organization's home page, click **+ New project** in the top right).</li>
+            <li><strong>Project name:</strong> Enter a unique name (e.g., `MyWebAppProject`).</li>
+            <li><strong>Description:</strong> (Optional) `Project for my web application development`.</li>
+            <li><strong>Visibility:</strong> Choose `Public` (anyone on the internet can view) or `Private` (only users you grant access to). For most tutorials, `Private` is fine.</li>
+            <li><strong>Advanced (Version control):</strong> `Git` (recommended) or `Team Foundation Version Control (TFVC)`.</li>
+            <li><strong>Advanced (Work item process):</strong> `Agile` (recommended), `Scrum`, `Basic`, or `CMMI`. This defines your Boards workflow.</li>
+            <li>Click **Create**.</li>
+        </ol>
+        <p>You'll be redirected to your new project's welcome page.</p>
+
+        <h2 id="azure-boards-plan-and-track">4. Azure Boards (Plan & Track)</h2>
+        <p>Azure Boards provides a rich set of agile tools to plan, track, and discuss work across your team. It integrates directly with your code repositories and pipelines.</p>
+        <h3>A. Navigate to Boards:</h3>
+        <pre><code>Azure DevOps Project &gt; Boards (left navigation menu)</code></pre>
+        <h3>B. Key Features & Usage:</h3>
+        <ul>
+            <li><strong>Work Items:</strong> Fundamental units of work. Types depend on your process (e.g., Agile: Epic, Feature, User Story, Bug, Task).
+                <ol>
+                    <li>Click **Boards** &gt; **Work Items**.</li>
+                    <li>Click **+ New Work Item** &gt; Select a type (e.g., `User Story`).</li>
+                    <li>Provide a **Title** (e.g., `As a user, I want to log in to the application`).</li>
+                    <li>Add **Description**, **Acceptance Criteria**, **Assigned To**, **Area**, **Iteration (Sprint)**.</li>
+                    <li>Click **Save & Close**.</li>
+                </ol>
+            </li>
+            <li><strong>Backlogs:</strong> Prioritized lists of work items.
+                <ol>
+                    <li>Click **Boards** &gt; **Backlogs**.</li>
+                    <li>You'll see your backlog items. Drag and drop to reorder their priority.</li>
+                    <li>You can filter by `Epics`, `Features`, `User Stories`, etc.</li>
+                </ol>
+            </li>
+            <li><strong>Sprints:</strong> Plan and track work for specific timeboxes (iterations).
+                <ol>
+                    <li>Click **Boards** &gt; **Sprints**.</li>
+                    <li>Click **Set dates** to define start/end dates for your current sprint.</li>
+                    <li>Drag items from your backlog into the sprint.</li>
+                    <li>Use the "Taskboard" view to see tasks, update their status (New, Approved, Committed, Done), and view burndown charts.</li>
+                </ol>
+            </li>
+            <li><strong>Queries:</strong> Create custom queries to find work items.
+                <ol>
+                    <li>Click **Boards** &gt; **Queries**.</li>
+                    <li>Click **+ New query**. Define criteria (e.g., `Work Item Type = 'Bug'` and `State = 'Active'`).</li>
+                    <li>Click **Run query**. Save it for reuse.</li>
+                </ol>
+            </li>
+            <li><strong>Dashboards:</strong> Create custom dashboards with widgets to visualize progress.
+                <ol>
+                    <li>Click **Dashboards**.</li>
+                    <li>Click **+ New Dashboard**.</li>
+                    <li>Add widgets (e.g., Work Item Chart, Burndown, Velocity).</li>
+                </ol>
+            </li>
+        </ul>
+        <div class="tip">
+            **Integration with GitHub:** Azure Boards can link directly to GitHub commits, pull requests, and issues, providing end-to-end traceability for your work items.
+        </div>
+
+        <h2 id="azure-repos-version-control">5. Azure Repos (Version Control)</h2>
+        <p>Azure Repos provides unlimited, free, private Git repositories. It's fully compatible with standard Git clients.</p>
+        <h3>A. Navigate to Repos:</h3>
+        <pre><code>Azure DevOps Project &gt; Repos (left navigation menu)</code></pre>
+        <h3>B. Clone/Initialize a Repository:</h3>
+        <ol>
+            <li><strong>Create a new repository:</strong>
+                <ul>
+                    <li>In the "Repos" section, from the repository dropdown, select **New repository**.</li>
+                    <li>Enter a **Repository name** (e.g., `my-web-app-git`).</li>
+                    <li>Choose **Git** as the type.</li>
+                    <li>(Optional) Initialize with a README, add a `.gitignore`.</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Clone to your local machine:</strong>
+                <ul>
+                    <li>After creation, on the "Files" tab, click **Clone**.</li>
+                    <li>Select **HTTPS** or **SSH**. For HTTPS, click "Generate Git Credentials" if using a personal access token (PAT) or use your Azure AD account.</li>
+                    <li>Copy the clone URL.</li>
+                    <li>Open your local terminal and run:
+                        <pre><code class="language-bash">git clone &lt;your_repo_clone_url&gt;
+cd &lt;your_repo_name&gt;
+echo "My first code commit!" &gt; README.md
+git add .
+git commit -m "Initial commit"
+git push origin main # Or master, depending on default branch name</code></pre>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+        <h3>C. Manage Branches & Pull Requests:</h3>
+        <ul>
+            <li><strong>Branches:</strong>
+                <ul>
+                    <li>In **Repos** &gt; **Branches**, you can see all branches.</li>
+                    <li>Apply **Branch policies** (e.g., require PRs, require code reviews, CI builds to pass) for main branches to protect code quality.</li>
+                </ul>
+            </li>
+            <li><strong>Pull Requests:</strong>
+                <ol>
+                    <li>After pushing a new branch (e.g., `feature/login`), go to **Repos** &gt; **Pull requests**.</li>
+                    <li>Click **+ New pull request**.</li>
+                    <li>Select source and target branches, provide a title and description, and add reviewers.</li>
+                    <li>Click **Create**.</li>
+                </ol>
+            </li>
+        </ul>
+
+        <h2 id="azure-pipelines-ci-cd">6. Azure Pipelines (CI/CD)</h2>
+        <p>Azure Pipelines enables continuous integration (CI) and continuous delivery (CD) for any language, platform, and cloud. You can define pipelines using YAML or the Classic editor.</p>
+        <h3>A. Navigate to Pipelines:</h3>
+        <pre><code>Azure DevOps Project &gt; Pipelines (left navigation menu)</code></pre>
+        <h3>B. Create a New Pipeline (YAML - Recommended):</h3>
+        <p>This example sets up a simple CI pipeline for a Node.js application.</p>
+        <ol>
+            <li>Click **Pipelines** &gt; **+ New pipeline**.</li>
+            <li><strong>Where is your code?:</strong> Select your source control (e.g., `Azure Repos Git`).</li>
+            <li>Select your repository (e.g., `my-web-app-git`).</li>
+            <li><strong>Configure:</strong> Choose a template (e.g., `Node.js`).</li>
+            <li>An `azure-pipelines.yml` file will be generated in an inline editor. This is your pipeline definition.</li>
+            <li><strong>Example `azure-pipelines.yml` for Node.js CI:</strong>
+                <pre><code class="language-yaml"># azure-pipelines.yml
+# Trigger the pipeline on changes to the 'main' branch
+trigger:
+- main
+
+# Define the environment where the pipeline will run
+pool:
+  vmImage: 'ubuntu-latest' # Use a Microsoft-hosted agent (e.g., Ubuntu, Windows, macOS)
+
+# Variables (optional, for reusable values or secrets)
+variables:
+  npm_config_cache: $(Pipeline.Workspace)/.npm # Cache npm packages
+
+# Steps define the tasks that the pipeline will execute
+steps:
+- task: NodeTool@0 # Install Node.js
+  displayName: 'Install Node.js'
+  inputs:
+    versionSpec: '18.x' # Specify Node.js version
+
+- script: | # Run npm install
+    npm install
+  displayName: 'Install Dependencies'
+
+- script: | # Run tests
+    npm test
+  displayName: 'Run Unit Tests'
+  # Set --coverage or --ci for detailed test results reporting
+
+- script: | # Build the application (e.g., for production deployment later)
+    npm run build
+  displayName: 'Build Application'
+
+- task: PublishBuildArtifacts@1 # Publish build artifacts for subsequent stages/releases
+  displayName: 'Publish Build Artifacts'
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)' # Default path where artifacts are placed
+    artifactName: 'drop' # Name of the artifact (e.g., 'drop' or 'dist')</code></pre>
+            </li>
+            <li>Click **Save and run**. Add a commit message and click **Save and run** again.</li>
+        </ol>
+        <h3>C. Monitor Pipeline Runs:</h3>
+        <ul>
+            <li>After running, you'll see the pipeline execution. Click on a specific run to view its details.</li>
+            <li>Click on individual **Jobs** and **Tasks** to view their console output logs for debugging.</li>
+            <li>The "Summary" tab shows overall status, linked commits, and published artifacts.</li>
+        </ul>
+        <h3>D. Create a New Release Pipeline (Classic Editor - for CD/Deployment):</h3>
+        <p>While YAML is preferred for builds, release pipelines are often managed with the Classic editor for stage-based deployments.</p>
+        <ol>
+            <li>Click **Pipelines** &gt; **Releases** &gt; **+ New pipeline**.</li>
+            <li>Select an empty template or a predefined one.</li>
+            <li><strong>Artifacts:</strong>
+                <ul>
+                    <li>Click **+ Add an artifact**.</li>
+                    <li>**Source type:** `Build`.</li>
+                    <li>**Project:** Select your current project.</li>
+                    <li>**Source (build pipeline):** Select the CI pipeline you created earlier.</li>
+                    <li>Click **Add**.</li>
+                </ul>
+            </li>
+            <li><strong>Stages:</strong>
+                <ul>
+                    <li>Click **+ Add a stage** &gt; **Empty job**.</li>
+                    <li>Rename the stage (e.g., `Deploy to Staging`).</li>
+                    <li>Click **1 job, 0 task** link within the stage.</li>
+                    <li>Add tasks (e.g., `Azure App Service Deploy`, `SSH`, `Azure CLI`). Configure them to deploy your artifact to the staging environment.</li>
+                    <li>Add a new stage for "Deploy to Production", and add a "Pre-deployment approval" for manual gates.</li>
+                </ul>
+            </li>
+            <li>Click **Save** and then **Create release** to manually trigger a release.</li>
+        </ol>
+
+        <h2 id="azure-test-plans-testing">7. Azure Test Plans (Testing)</h2>
+        <p>Azure Test Plans provides comprehensive manual, exploratory, and automated test management capabilities.</p>
+        <h3>A. Navigate to Test Plans:</h3>
+        <pre><code>Azure DevOps Project &gt; Test Plans (left navigation menu)</code></pre>
+        <h3>B. Create a Test Plan:</h3>
+        <ol>
+            <li>Click **Test Plans** &gt; **+ New Test Plan**.</li>
+            <li>Provide a **Name** (e.g., `Sprint X - Feature A Testing`).</li>
+            <li>Set **Area path** and **Iteration** (sprint). Click **Create**.</li>
+        </ol>
+        <h3>C. Add Test Suites and Test Cases:</h3>
+        <ol>
+            <li>In your Test Plan, click **+ New Suite** to organize tests (e.g., `User Login Test Suite`).</li>
+            <li>Within a test suite, click **+ New Test Case**.
+                <ul>
+                    <li>Provide a **Title** (e.g., `Verify user can log in with valid credentials`).</li>
+                    <li>Add **Test Steps** (e.g., `1. Navigate to login page. 2. Enter username. 3. Enter password. 4. Click login button`).</li>
+                    <li>Provide **Expected Result** for each step.</li>
+                    <li>Link to a **Work Item** (e.g., a User Story).</li>
+                    <li>Click **Save & Close**.</li>
+                </ul>
+            </li>
+        </ol>
+        <h3>D. Run Manual Tests:</h3>
+        <ol>
+            <li>Select your test case(s) in the Test Plan.</li>
+            <li>Click **Run** &gt; **Run for web application**. This opens the Azure Test Runner.</li>
+            <li>Manually execute steps, mark them as **Pass/Fail**, add **Comments**, and capture **Screenshots**.</li>
+            <li>If a step fails, you can **Create bug** directly from the Test Runner. The bug will be pre-populated with steps to reproduce and screenshots.</li>
+            <li>Click **Save and close** when done testing.</li>
+        </ol>
+        <h3>E. Automated Test Results:</h3>
+        <p>For automated tests run in Azure Pipelines, ensure your build task publishes test results in a supported format (e.g., JUnit, VSTest). These results will automatically appear under **Pipelines &gt; Test Plans &gt; Runs**. You can link automated tests to work items as well.</p>
+        <pre><code class="language-yaml"># Example: Publish JUnit test results in Azure Pipelines
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/test-results.xml' # Path to your test results file
+    # Merge test results with work items based on test case ID or title</code></pre>
+
+        <h2 id="azure-artifacts-package-management">8. Azure Artifacts (Package Management)</h2>
+        <p>Azure Artifacts allows developers to publish and consume various types of packages (NuGet, npm, Maven, Python, Universal Packages) from feeds. It provides secure, private feeds and can act as a proxy for public registries.</p>
+        <h3>A. Navigate to Artifacts:</h3>
+        <pre><code>Azure DevOps Project &gt; Artifacts (left navigation menu)</code></pre>
+        <h3>B. Create a Feed:</h3>
+        <ol>
+            <li>Click **+ Create Feed**.</li>
+            <li><strong>Name:</strong> (e.g., `my-private-feed`).</li>
+            <li><strong>Visibility:</strong> `Organization` or `Project`.</li>
+            <li><strong>Upstream sources:</strong> Enable if you want to proxy public registries (e.g., `npmjs.com`, `nuget.org`).</li>
+            <li>Click **Create**.</li>
+        </ol>
+        <h3>C. Publish/Consume Packages:</h3>
+        <ol>
+            <li><strong>Connect to feed:</strong> Click **Connect to feed** on your feed's page. Select your package type (e.g., `npm`, `NuGet`). Instructions will be provided to configure your local client (e.g., `.npmrc` file, NuGet sources).</li>
+            <li><strong>Publishing (e.g., npm package from Azure Pipelines):</strong>
+                <pre><code class="language-yaml"># Example Azure Pipelines task to publish an npm package
+- task: Npm@1
+  displayName: 'Publish npm package'
+  inputs:
+    command: 'publish'
+    publishRegistry: 'AzureArtifacts' # Use Azure Artifacts feed
+    # Add other inputs like `package_json_path` if needed</code></pre>
+            </li>
+            <li><strong>Consuming (e.g., npm package):</strong> After configuring your local npm client to use your Azure Artifacts feed, you can use `npm install <package-name>` to install packages from your private feed.</li>
+        </ol>
+
+        <h2 id="azure-devops-automation-rules">9. Automation Rules (Work Items)</h2>
+        <p>Azure Boards allows you to define automation rules for work item state transitions. This helps enforce workflow and reduce manual updates.</p>
+        <h3>A. Navigate to Team Settings:</h3>
+        <pre><code>Azure DevOps Project &gt; Boards &gt; Backlogs &gt; Configure team settings (gear icon)</code></pre>
+        <h3>B. Set Automation Rules:</h3>
+        <ol>
+            <li>Go to the **Automation rules** tab (or **Process** &gt; **Backlogs** in older versions).</li>
+            <li>You'll see options to automate state transitions for parent work items based on their children.
+                <ul>
+                    <li>Check "Automate the state of parent work items" for stories, features, or epics.</li>
+                    <li>Configure rules like:
+                        <ul>
+                            <li>"When all children are set to Done, set the parent to Done."</li>
+                            <li>"When a child is activated (e.g., set to In Progress), activate the parent."</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>Click **Save**.</li>
+        </ol>
+        <div class="tip">
+            **Example Scenario:** If you have a User Story, and you create several Tasks under it. When all Tasks for that User Story are marked as "Done", this automation rule can automatically set the User Story's status to "Done" as well, improving backlog accuracy.
+        </div>
+
+        <h2 id="security-and-compliance">10. Security & Compliance</h2>
+        <p>Azure DevOps provides robust security features to protect your code, pipelines, and data.</p>
+        <h3>A. User & Group Management (Permissions):</h3>
+        <ol>
+            <li><strong>Navigate to Organization Settings:</strong>
+                <pre><code>Azure DevOps Organization Home &gt; Organization settings (bottom left) &gt; Permissions</code></pre>
+            </li>
+            <li><strong>Manage Groups:</strong>
+                <ul>
+                    <li>Azure DevOps uses built-in groups (e.g., Project Administrators, Contributors, Readers) and can integrate with Microsoft Entra ID (Azure AD) groups.</li>
+                    <li>Assign users to appropriate groups with the principle of least privilege.</li>
+                </ul>
+            </li>
+            <li><strong>Manage Permissions:</strong>
+                <ul>
+                    <li>You can set permissions at the organization, project, repository, pipeline, or work item level.</li>
+                    <li>Example: To set repository permissions: **Project settings (bottom left) &gt; Repos &gt; Repositories**. Select a repo, go to **Security** tab.</li>
+                </ul>
+            </li>
+        </ol>
+        <h3>B. Secure Pipeline Variables & Secrets:</h3>
+        <p>Never hardcode sensitive information (API keys, passwords) directly in your YAML pipelines.</p>
+        <ol>
+            <li><strong>Variable Groups:</strong> Store reusable sets of variables, including secrets.
+                <ul>
+                    <li>**Navigate:**
+                        <pre><code>Azure DevOps Project &gt; Pipelines &gt; Library</code></pre>
+                    </li>
+                    <li>Click **+ Variable group**.</li>
+                    <li>**Name:** (e.g., `MySecrets`).</li>
+                    <li>Add variables and check "Keep this value secret" for sensitive data.</li>
+                    <li>**Link to Azure Key Vault:** You can also link a variable group directly to an Azure Key Vault to pull secrets dynamically.</li>
+                </ul>
+            </li>
+            <li><strong>Using in Pipelines:</strong>
+                <pre><code class="language-yaml"># azure-pipelines.yml
+variables:
+- group: MySecrets # Link the variable group
+
+steps:
+- script: |
+    echo "Connecting to service..."
+    echo "API Key: $(MyApiKey)" # Use $(VariableName) syntax for variables/secrets
+  displayName: 'Use Secret'</code></pre>
+                <div class="warning">
+                    **Caution:** Secrets are masked in logs, but `echo`ing them directly in scripts should be avoided in production. Use them directly in tasks or pass securely.
+                </div>
+            </li>
+        </ol>
+        <h3>C. Advanced Security for Azure DevOps:</h3>
+        <p>Integrates GitHub Advanced Security features for proactive security scanning.</p>
+        <ul>
+            <li><strong>Secret Scanning:</strong> Detects exposed secrets (credentials, API keys) in code.</li>
+            <li><strong>Dependency Scanning:</strong> Identifies known vulnerabilities in open-source dependencies.</li>
+            <li><strong>Code Scanning:</strong> Uses CodeQL static analysis to find code-level vulnerabilities (e.g., SQL injection, XSS).</li>
+        </ul>
+        <ol>
+            <li><strong>Enable Advanced Security:</strong>
+                <ul>
+                    <li>**Navigate:**
+                        <pre><code>Azure DevOps Project &gt; Project settings &gt; Repos &gt; Repositories</code></pre>
+                    </li>
+                    <li>Select a repository. Go to **Settings** &gt; **Advanced Security**.</li>
+                    <li>Toggle **Enable Advanced Security** on.</li>
+                </ul>
+            </li>
+            <li><strong>Integrate into Pipelines:</strong> Advanced Security tasks can be added to your CI pipelines to run scans automatically. Findings appear in the **Advanced Security** section of your repository.</li>
+        </ol>
+        <h3>D. Branch Policies:</h3>
+        <p>Enforce quality gates on important branches (e.g., `main`).</p>
+        <ol>
+            <li><strong>Navigate:</strong>
+                <pre><code>Azure DevOps Project &gt; Repos &gt; Branches</code></pre>
+            </li>
+            <li>Right-click on the `main` branch (or other protected branch) &gt; **Branch policies**.</li>
+            <li>Enable policies like:
+                <ul>
+                    <li>**Require a minimum number of reviewers.**</li>
+                    <li>**Require successful build validation.** (Link your CI pipeline).</li>
+                    <li>**Require linked work items.**</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="integrations">11. Integrations</h2>
+        <p>Azure DevOps offers extensive integration capabilities with Microsoft services, third-party tools, and custom applications.</p>
+        <ul>
+            <li><strong>Microsoft Services:</strong> Azure Boards, Repos, Pipelines seamlessly integrate with other Azure services like Azure App Service, Azure Kubernetes Service (AKS), Azure Functions, Azure Key Vault, Azure Monitor, Microsoft Teams.</li>
+            <li><strong>GitHub:</strong> Deep integration for source code, pull requests, and GitHub Actions.</li>
+            <li><strong>Jira:</strong> Link Azure Boards work items to Jira issues.</li>
+            <li><strong>Slack/Microsoft Teams:</strong> Notifications from pipelines, work item updates.</li>
+            <li><strong>SonarQube:</strong> Static code analysis integration.</li>
+            <li><strong>ServiceNow:</strong> Incident management integration.</li>
+            <li><strong>Extensions Marketplace:</strong> Azure DevOps has a vast marketplace of extensions for additional integrations and functionalities.
+                <pre><code>Azure DevOps Organization Home &gt; Organization settings &gt; Extensions</code></pre>
+            </li>
+        </ul>
+        <h3>Usage Example: Integrating Azure Pipelines with Azure Key Vault (GUI & YAML):</h3>
+        <p>This allows your pipelines to securely fetch secrets from Azure Key Vault.</p>
+        <ol>
+            <li><strong>Create an Azure Key Vault:</strong> (See Azure tutorial if needed). Store a secret (e.g., `MyDbConnectionString`).</li>
+            <li><strong>Create a Service Connection:</strong> This allows Azure DevOps to authenticate to Azure.
+                <ul>
+                    <li>**Navigate:**
+                        <pre><code>Azure DevOps Project &gt; Project settings &gt; Service connections</code></pre>
+                    </li>
+                    <li>Click **+ New service connection**.</li>
+                    <li>Select `Azure Resource Manager` &gt; `Service principal (automatic)`.</li>
+                    <li>Select your **Subscription** and **Resource Group**.</li>
+                    <li>**Service connection name:** (e.g., `AzureForPipelines`).</li>
+                    <li>Check "Grant access permission to all pipelines."</li>
+                    <li>Click **Save**.</li>
+                </ul>
+            </li>
+            <li><strong>Link Key Vault to Variable Group:</strong>
+                <ul>
+                    <li>**Navigate:**
+                        <pre><code>Azure DevOps Project &gt; Pipelines &gt; Library</code></pre>
+                    </li>
+                    <li>Click **+ Variable group**.</li>
+                    <li>**Name:** (e.g., `AppSecretsFromKV`).</li>
+                    <li>Check "Link secrets from an Azure key vault as variables."</li>
+                    <li>Select your **Azure subscription** (the service connection you created).</li>
+                    <li>Select your **Key Vault**.</li>
+                    <li>Click **+ Add** and select the secrets you want to expose as variables.</li>
+                    <li>Click **Save**.</li>
+                </ul>
+            </li>
+            <li><strong>Use in Pipeline YAML:</strong>
+                <pre><code class="language-yaml"># azure-pipelines.yml
+variables:
+- group: AppSecretsFromKV # Link the variable group
+
+steps:
+- script: |
+    echo "Using database connection string: $(MyDbConnectionString)" # The secret name from Key Vault
+  displayName: 'Access Key Vault Secret'</code></pre>
+            </li>
+        </ol>
+
+        <h2 id="cost-management">12. Cost Management</h2>
+        <p>Azure DevOps is generally free for up to 5 users (basic plan), with costs primarily coming from additional users, hosted CI/CD minutes beyond free tiers, and advanced features.</p>
+        <ul>
+            <li><strong>Pricing Model:</strong>
+                <ul>
+                    <li>**Users:** First 5 Basic users are free. Additional Basic users are charged monthly. Stakeholders are free (limited access).</li>
+                    <li>**Azure Pipelines:** Free hosted CI/CD minutes per month (e.g., 1,800 minutes for Microsoft-hosted agents). Additional minutes are charged. Self-hosted agents are free (you pay for the underlying infrastructure).</li>
+                    <li>**Azure Artifacts:** Free storage (e.g., 2 GB). Additional storage is charged.</li>
+                    <li>**Azure Test Plans:** Charged per user per month.</li>
+                </ul>
+            </li>
+            <li><strong>Monitor Usage:</strong>
+                <pre><code>Azure DevOps Organization Home &gt; Organization settings &gt; Usage</code></pre>
+                <ul>
+                    <li>View consumed pipeline minutes, artifact storage, and other usage metrics.</li>
+                </ul>
+            </li>
+            <li><strong>Billing:</strong>
+                <pre><code>Azure DevOps Organization Home &gt; Organization settings &gt; Billing</code></pre>
+                <ul>
+                    <li>Link your Azure subscription for billing.</li>
+                    <li>Manage paid users and features.</li>
+                </ul>
+            </li>
+            <li><strong>Cost Optimization Strategies:</strong>
+                <ul>
+                    <li><strong>Utilize free tiers:</strong> Maximize free users and pipeline minutes.</li>
+                    <li><strong>Self-hosted agents:</strong> For high pipeline usage, deploy your own agents on VMs or containers to avoid hosted minutes costs (you pay for the VM/container infrastructure).</li>
+                    <li><strong>Optimize pipeline runs:</strong> Make pipelines efficient to reduce consumed minutes.</li>
+                    <li><strong>Manage artifact storage:</strong> Regularly clean up old artifacts.</li>
+                    <li><strong>Review user access:</strong> Remove inactive users or downgrade them to Stakeholder if appropriate.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="best-practices">13. Best Practices</h2>
+        <ul>
+            <li><strong>Start with a Project Template:</strong> Use `Agile` or `Scrum` process templates for a good starting point.</li>
+            <li><strong>Branch Policies:</strong> Implement strict branch policies (e.g., requiring pull requests, successful builds, minimum reviewers) on your main branches.</li>
+            <li><strong>YAML Pipelines:</strong> Favor YAML pipelines for CI/CD as they are version-controlled, auditable, and easier to manage across multiple projects.</li>
+            <li><strong>Modularize Pipelines:</strong> Break down complex pipelines into reusable templates for stages, jobs, and steps.</li>
+            <li><strong>Secure Secrets:</strong> Always use Variable Groups (linked to Azure Key Vault) for secrets, never hardcode them.</li>
+            <li><strong>Use Service Connections:</strong> Manage connections to external services (Azure, GitHub, etc.) securely via Service Connections.</li>
+            <li><strong>Automated Testing:</strong> Integrate unit, integration, and UI tests into your CI pipelines. Publish test results for visibility.</li>
+            <li><strong>Automate Deployments:</strong> Use release pipelines (classic or multi-stage YAML) for automated deployments to environments.</li>
+            <li><strong>Leverage Built-in Analytics:</strong> Use Boards dashboards and Pipeline analytics to gain insights into your team's performance and pipeline efficiency.</li>
+            <li><strong>Implement DevSecOps:</strong> Integrate security scanning tools (e.g., Azure DevOps Advanced Security) into your pipelines.</li>
+            <li><strong>Monitor Pipeline Health:</strong> Regularly review pipeline logs and dashboards.</li>
+            <li><strong>Consistent Naming Conventions:</strong> For projects, repositories, pipelines, and variable groups.</li>
+            <li><strong>Clean Up Old Builds/Artifacts:</strong> Configure retention policies for pipeline runs and artifacts to manage storage costs.</li>
+            <li><strong>Use the Marketplace:</strong> Explore the Azure DevOps Marketplace for extensions that enhance functionality.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Azure DevOps: Your Unified DevOps Platform!</strong>
+            <p>Azure DevOps provides a powerful, integrated, and cloud-native platform for implementing DevOps practices from end-to-end. By mastering its core services—Boards, Repos, Pipelines, Test Plans, and Artifacts—and applying best practices, your team can achieve faster, more reliable, and more secure software delivery, driving continuous value for your organization.</p>
+        </div>
+    </div>
+</body>
+</html>
