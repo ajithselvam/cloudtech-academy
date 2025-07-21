@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete GCP DevOps Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete GCP DevOps Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-gcp-devops">1. What is GCP DevOps?</a></li>
+                <li><a href="#gcp-devops-pillars">2. GCP DevOps Pillars</a></li>
+                <li><a href="#getting-started-with-gcp">3. Getting Started with GCP</a></li>
+                <li><a href="#resource-hierarchy-and-iam">4. Resource Hierarchy & IAM</a></li>
+                <li><a href="#version-control-cloud-source-repositories">5. Version Control (Cloud Source Repositories)</a></li>
+                <li><a href="#continuous-integration-cloud-build">6. Continuous Integration (Cloud Build)</a></li>
+                <li><a href="#artifact-management-artifact-registry">7. Artifact Management (Artifact Registry)</a></li>
+                <li><a href="#container-orchestration-gke">8. Container Orchestration (Google Kubernetes Engine - GKE)</a></li>
+                <li><a href="#serverless-cloud-run-cloud-functions">9. Serverless (Cloud Run, Cloud Functions)</a></li>
+                <li><a href="#continuous-delivery-cloud-deploy">10. Continuous Delivery (Cloud Deploy)</a></li>
+                <li><a href="#infrastructure-as-code-cloud-deployment-manager">11. Infrastructure as Code (Cloud Deployment Manager)</a></li>
+                <li><a href="#monitoring-and-logging-cloud-operations">12. Monitoring & Logging (Cloud Monitoring, Cloud Logging)</a></li>
+                <li><a href="#security-cloud-armor-security-command-center">13. Security (Cloud Armor, Security Command Center)</a></li>
+                <li><a href="#cost-management-and-optimization">14. Cost Management & Optimization</a></li>
+                <li><a href="#best-practices">15. Best Practices (GCP Well-Architected Framework)</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-gcp-devops">1. What is GCP DevOps?</h2>
+        <p><strong>GCP DevOps</strong> refers to the practice of leveraging Google Cloud Platform (GCP) services and tools to implement DevOps methodologies. DevOps is a cultural and operational shift that aims to unify software development and IT operations, emphasizing automation, collaboration, and continuous improvement across the entire software delivery lifecycle.</p>
+        <p>GCP offers a comprehensive, integrated suite of services that are inherently designed for DevOps workflows, from code commit to deployment, monitoring, and operations.</p>
+        <h3>Key Goals of GCP DevOps:</h3>
+        <ul>
+            <li><strong>Accelerated Delivery:</strong> Automate processes to release software faster and more frequently.</li>
+            <li><strong>Improved Reliability:</strong> Ensure consistent, reproducible environments and robust deployments.</li>
+            <li><strong>Enhanced Visibility:</strong> Gain deep insights into application and infrastructure performance.</li>
+            <li><strong>Scalability:</strong> Leverage Google's global infrastructure for highly scalable applications.</li>
+            <li><strong>Cost Efficiency:</strong> Optimize resource utilization with flexible, pay-as-you-go cloud infrastructure.</li>
+        </ul>
+
+        <h2 id="gcp-devops-pillars">2. GCP DevOps Pillars</h2>
+        <p>GCP's approach to DevOps aligns with industry best practices, focusing on key areas:</p>
+        <ul>
+            <li><strong>Continuous Integration (CI):</strong> Automating the build and testing of code changes. (Cloud Source Repositories, Cloud Build)</li>
+            <li><strong>Continuous Delivery (CD):</strong> Automating the release process, ensuring software can be reliably released at any time. (Cloud Build, Cloud Deploy, GKE, Cloud Run, App Engine, Cloud Functions)</li>
+            <li><strong>Infrastructure as Code (IaC):</strong> Provisioning and managing infrastructure using code. (Cloud Deployment Manager, Terraform, Cloud Development Kit - CDK)</li>
+            <li><strong>Monitoring and Logging:</strong> Comprehensive observability into application and infrastructure health. (Cloud Monitoring, Cloud Logging, Cloud Trace, Error Reporting)</li>
+            <li><strong>Containerization & Orchestration:</strong> Packaging applications in containers and managing their lifecycle. (Container Registry/Artifact Registry, GKE, Cloud Run)</li>
+            <li><strong>Security:</strong> Integrating security throughout the development and operations lifecycle (DevSecOps). (Cloud IAM, Cloud Armor, Security Command Center, Binary Authorization)</li>
+            <li><strong>Collaboration:</strong> Facilitating communication and shared responsibility across teams.</li>
+        </ul>
+        <div class="tip">
+            <strong>Getting Started:</strong> To follow this tutorial, you'll need a Google Cloud account. Many services fall under the <a href="https://cloud.google.com/free/" target="_blank">GCP Free Tier</a>, making it ideal for learning. Always remember to clean up resources after practice to avoid unexpected costs.
+        </div>
+
+        <h2 id="getting-started-with-gcp">3. Getting Started with GCP</h2>
+        <h3>A. Create a Google Cloud Account:</h3>
+        <p>Go to <a href="https://cloud.google.com/free/" target="_blank">cloud.google.com/free/</a> to sign up for a free Google Cloud account. New customers typically receive $300 in free credits for 90 days and free usage limits for certain products.</p>
+        <div class="warning">
+            <strong>Security Best Practice:</strong> After creating your account, immediately set up **Multi-Factor Authentication (MFA)** for your Google account. Understand <a href="https://cloud.google.com/docs/security/shared-responsibility" target="_blank">Google's Shared Responsibility Model</a>.
+        </div>
+        <h3>B. The Google Cloud Console:</h3>
+        <p>This is the web-based graphical user interface (GUI) for managing your GCP projects and resources. This tutorial will focus on using the Console GUI.</p>
+        <pre><code class="language-bash"># Access: console.cloud.google.com</code></pre>
+        <p>Upon logging in, you'll see the **Google Cloud Console Dashboard**, providing an overview of your active projects, resources, and billing information.</p>
+        <h3>C. Cloud Shell:</h3>
+        <p>An interactive, browser-accessible shell environment within the Console, pre-installed with the `gcloud` CLI and other development tools. Useful for executing quick commands without local setup.</p>
+        <pre><code class="language-bash"># Access: Click the Cloud Shell icon (top right of Console).</code></pre>
+
+        <h2 id="resource-hierarchy-and-iam">4. Resource Hierarchy & IAM</h2>
+        <p>GCP organizes your resources hierarchically. **Cloud IAM (Identity and Access Management)** controls who has what access to these resources.</p>
+        <ul>
+            <li><strong>Organization:</strong> The root (for G Suite/Cloud Identity users).</li>
+            <li><strong>Folders:</strong> Group projects.</li>
+            <li><strong>Projects:</strong> The fundamental billing and resource container. All GCP resources belong to a project.</li>
+            <li><strong>Resources:</strong> The specific GCP services (VMs, storage buckets, etc.).</li>
+        </ul>
+        <h3>Cloud IAM - GUI Usage:</h3>
+        <ol>
+            <li><strong>Navigate to IAM:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; IAM & Admin &gt; IAM</code></pre>
+            </li>
+            <li><strong>Granting Permissions:</strong>
+                <ul>
+                    <li>Click **+ GRANT ACCESS**.</li>
+                    <li>In the "New principals" field, enter the email of the user/service account.</li>
+                    <li>In the "Select a role" dropdown, search for and select the desired **Predefined Role** (e.g., `Compute Instance Admin`, `Storage Object Viewer`) or a **Custom Role**.</li>
+                    <li>Click **SAVE**.</li>
+                </ul>
+            </li>
+            <li><strong>Creating a Service Account:</strong> Used by applications/services to authenticate to GCP.
+                <ul>
+                    <li>Go to:
+                        <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; IAM & Admin &gt; Service Accounts</code></pre>
+                    </li>
+                    <li>Click **+ CREATE SERVICE ACCOUNT**.</li>
+                    <li>Follow the wizard to provide details and assign roles.</li>
+                    <li>To create a JSON key for the service account (for non-GCP hosted apps): Click the service account, go to **KEYS** tab &gt; **ADD KEY > Create new key** &gt; **JSON**. Store securely.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="version-control-cloud-source-repositories">5. Version Control (Cloud Source Repositories)</h2>
+        <p><strong>Cloud Source Repositories</strong> provides private Git repositories hosted on Google Cloud. It integrates seamlessly with other GCP services.</p>
+        <div class="warning">
+            **Note on Cloud Source Repositories:** As of June 17, 2024, Cloud Source Repositories is not available to new customers. Existing users are unaffected. For new projects, use GitHub, GitLab, or Bitbucket. This tutorial will assume you use an external Git repo for CI/CD, but the steps for connecting Cloud Source Repositories would be similar.
+        </div>
+        <h3>Usage Example: Connecting an External Repository (e.g., GitHub) for CI/CD:</h3>
+        <ol>
+            <li><strong>Navigate to Cloud Source Repositories:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Cloud Source Repositories</code></pre>
+            </li>
+            <li><strong>Connect Repository:</strong>
+                <ul>
+                    <li>Click **Add repository**.</li>
+                    <li>Choose **Connect external repository** (e.g., `Connect GitHub repository`).</li>
+                    <li>Follow the authentication and selection process for your GitHub organization and repository.</li>
+                    <li>Click **CONNECT**.</li>
+                </ul>
+            </li>
+            <li><strong>Browse Code:</strong> Once connected, you can view your repository's files directly in the Console.</li>
+            <li><strong>For Pipeline Integration:</strong> This connected repository will now be available as a source in Cloud Build.</li>
+        </ol>
+
+        <h2 id="continuous-integration-cloud-build">6. Continuous Integration (Cloud Build)</h2>
+        <p><strong>Cloud Build</strong> is a fully managed CI service that executes your builds on Google Cloud infrastructure. It can import source code, execute build steps (compile, test, package), and produce artifacts.</p>
+        <h3>Usage Example: Create a Cloud Build Trigger for CI (GUI):</h3>
+        <p>This example sets up a CI pipeline for a Node.js application, triggered by Git pushes. Assume your app code and a `cloudbuild.yaml` file are in your connected Git repository.</p>
+        <pre><code class="language-yaml"># cloudbuild.yaml (for a Node.js project)
+steps:
+- name: 'gcr.io/cloud-builders/npm' # Use official npm builder image
+  args: ['install'] # Install dependencies
+  dir: 'app/' # Assuming your Node.js app is in an 'app' directory
+
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['test'] # Run tests
+  dir: 'app/'
+
+- name: 'gcr.io/cloud-builders/npm'
+  args: ['run', 'build'] # Run your build script (e.g., webpack)
+  dir: 'app/'
+
+- name: 'gcr.io/cloud-builders/docker' # Use official Docker builder
+  args: ['build', '-t', 'europe-west1-docker.pkg.dev/$PROJECT_ID/my-app-repo/my-nodejs-app:$COMMIT_SHA', 'app/'] # Build Docker image
+  # Build a Docker image and tag it with project ID, repository, and commit SHA
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'europe-west1-docker.pkg.dev/$PROJECT_ID/my-app-repo/my-nodejs-app:$COMMIT_SHA'] # Push to Artifact Registry
+images:
+- 'europe-west1-docker.pkg.dev/$PROJECT_ID/my-app-repo/my-nodejs-app:$COMMIT_SHA' # Declare the final image artifact</code></pre>
+        <ol>
+            <li><strong>Enable Cloud Build API:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; APIs & Services &gt; Enabled APIs & Services &gt; Search for "Cloud Build API" &gt; Enable</code></pre>
+            </li>
+            <li><strong>Navigate to Cloud Build:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; CI/CD &gt; Cloud Build</code></pre>
+            </li>
+            <li><strong>Create Trigger:</strong>
+                <ul>
+                    <li>In the left pane, click **Triggers** &gt; **+ CREATE TRIGGER**.</li>
+                    <li><strong>Name:</strong> (e.g., `my-app-ci-trigger`).</li>
+                    <li><strong>Region:</strong> Select a region (e.g., `europe-west1`).</li>
+                    <li><strong>Event:</strong> `Push to a branch`.</li>
+                    <li><strong>Source:</strong>
+                        <ul>
+                            <li><strong>Repository:</strong> Select your connected GitHub/GitLab/Cloud Source Repository.</li>
+                            <li><strong>Branch:</strong> `^main$` (or `^master$`).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Build configuration:</strong>
+                        <ul>
+                            <li><strong>Type:</strong> `Cloud Build configuration file (yaml or json)`.</li>
+                            <li><strong>Location:</strong> `/cloudbuild.yaml` (default, assuming file is in root).</li>
+                        </ul>
+                    </li>
+                    <li>Click **CREATE**.</li>
+                </ul>
+            </li>
+            <li><strong>Trigger a Build:</strong>
+                <ul>
+                    <li>Perform a `git push` to your connected repository's `main` branch.</li>
+                    <li>Alternatively, from the "Triggers" page, click **Run** button next to your trigger.</li>
+                </ul>
+            </li>
+            <li><strong>Monitor Builds:</strong>
+                <ul>
+                    <li>In the left pane, click **History**. You'll see your build runs.</li>
+                    <li>Click on a build ID to view detailed logs, build steps, and artifacts.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="artifact-management-artifact-registry">7. Artifact Management (Artifact Registry)</h2>
+        <p><strong>Artifact Registry</strong> is a universal package manager for all your build artifacts (Docker images, Maven, npm, Python packages, etc.). It replaces Container Registry for Docker images and provides a single place for all package types.</p>
+        <h3>Usage Example: Create a Docker Repository in Artifact Registry (GUI):</h3>
+        <ol>
+            <li><strong>Enable Artifact Registry API:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; APIs & Services &gt; Enabled APIs & Services &gt; Search for "Artifact Registry API" &gt; Enable</code></pre>
+            </li>
+            <li><strong>Navigate to Artifact Registry:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; CI/CD &gt; Artifact Registry</code></pre>
+            </li>
+            <li><strong>Create Repository:</strong>
+                <ul>
+                    <li>Click **+ CREATE REPOSITORY**.</li>
+                    <li><strong>Name:</strong> (e.g., `my-app-repo`).</li>
+                    <li><strong>Format:</strong> `Docker`.</li>
+                    <li><strong>Mode:</strong> `Standard`.</li>
+                    <li><strong>Location Type:</strong> `Region` &gt; select your region (e.g., `europe-west1`).</li>
+                    <li>Click **CREATE**.</li>
+                </ul>
+            </li>
+            <li><strong>Push/Pull Images:</strong>
+                <ul>
+                    <li>Click on your created repository name.</li>
+                    <li>Click **SETUP INSTRUCTIONS**. Follow the instructions for your client (Docker, npm, Maven etc.) to authenticate and push/pull.
+                        <pre><code class="language-bash"># Example Docker authentication for europe-west1:
+gcloud auth configure-docker europe-west1-docker.pkg.dev
+
+# Example Docker Push (after building an image locally):
+docker tag my-app:1.0 europe-west1-docker.pkg.dev/&lt;YOUR_PROJECT_ID&gt;/my-app-repo/my-app:1.0
+docker push europe-west1-docker.pkg.dev/&lt;YOUR_PROJECT_ID&gt;/my-app-repo/my-app:1.0</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Integration with Cloud Build:</strong> As seen in the `cloudbuild.yaml` example, Cloud Build automatically authenticates and pushes/pulls images from Artifact Registry.</li>
+        </ol>
+
+        <h2 id="container-orchestration-gke">8. Container Orchestration (Google Kubernetes Engine - GKE)</h2>
+        <p><strong>Google Kubernetes Engine (GKE)</strong> is a managed environment for deploying, managing, and scaling containerized applications using Kubernetes. It automates cluster management tasks, allowing you to focus on your applications.</p>
+        <h3>Usage Example: Create a GKE Cluster & Deploy a Simple App (GUI):</h3>
+        <ol>
+            <li><strong>Enable Kubernetes Engine API:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; APIs & Services &gt; Enabled APIs & Services &gt; Search for "Kubernetes Engine API" &gt; Enable</code></pre>
+            </li>
+            <li><strong>Navigate to Kubernetes Engine:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Kubernetes Engine &gt; Clusters</code></pre>
+            </li>
+            <li><strong>Create a Cluster:</strong>
+                <ul>
+                    <li>Click **+ CREATE CLUSTER**.</li>
+                    <li><strong>Choose a deployment mode:</strong>
+                        <ul>
+                            <li>`Autopilot`: Recommended for simplicity and managed node provisioning (fully serverless Kubernetes).</li>
+                            <li>`Standard`: Provides more control over nodes.</li>
+                        </ul>
+                    </li>
+                    <li>For this example, choose **Standard cluster**.</li>
+                    <li><strong>Cluster name:</strong> (e.g., `my-gke-cluster`).</li>
+                    <li><strong>Location type:</strong> `Regional` or `Zonal`. Choose a **Region** (e.g., `us-central1`).</li>
+                    <li>**Node pools:** Default settings are usually fine for testing (`e2-medium` machine type, 3 nodes).</li>
+                    <li>Click **CREATE**. (Cluster creation can take 5-10 minutes).</li>
+                </ul>
+            </li>
+            <li><strong>Connect to Cluster & Deploy an Application:</strong>
+                <ul>
+                    <li>Once the cluster status is "Running," click on its name.</li>
+                    <li>Click **CONNECT** in the top bar.</li>
+                    <li>Select "Connect with Cloud Shell" and click **RUN IN CLOUD SHELL**. This will open Cloud Shell and automatically configure `kubectl` to your cluster.</li>
+                    <li><strong>Deploy Nginx (in Cloud Shell):</strong>
+                        <pre><code class="language-bash"># Create an Nginx deployment and service (using default Docker Hub image)
+kubectl create deployment nginx --image=nginx:latest
+kubectl expose deployment nginx --type=LoadBalancer --port=80
+
+# Check deployment and service status
+kubectl get deployments
+kubectl get services
+# Wait for the external IP address to be assigned to 'nginx' service.</code></pre>
+                    </li>
+                    <li>Access your Nginx app by navigating to the external IP address in your browser.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="serverless-cloud-run-cloud-functions">9. Serverless (Cloud Run, Cloud Functions)</h2>
+        <p>GCP offers powerful serverless compute options, allowing you to run code without managing servers.</p>
+        <h3>A. Cloud Run - GUI Usage:</h3>
+        <p>Fully managed serverless platform for running containerized applications. Scales automatically from zero to millions of requests.</p>
+        <ol>
+            <li><strong>Navigate to Cloud Run:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Serverless &gt; Cloud Run</code></pre>
+            </li>
+            <li><strong>Create Service:</strong>
+                <ul>
+                    <li>Click **+ CREATE SERVICE**.</li>
+                    <li><strong>Deployment platform:</strong> `Deploy a new revision from an existing container image`.</li>
+                    <li><strong>Container image URL:</strong> Provide the path to your Docker image in Artifact Registry (e.g., `europe-west1-docker.pkg.dev/&lt;YOUR_PROJECT_ID&gt;/my-app-repo/my-nodejs-app:latest`).</li>
+                    <li><strong>Service name:</strong> (e.g., `my-cloud-run-service`).</li>
+                    <li><strong>Region:</strong> Select.</li>
+                    <li>**Authentication:** Choose "Allow unauthenticated invocations" for public web apps.</li>
+                    <li>Click **CREATE**.</li>
+                </ul>
+            </li>
+            <li><strong>Test:</strong> Once deployed, the service URL will be provided. Access this URL in your browser.</li>
+        </ol>
+        <h3>B. Cloud Functions - GUI Usage:</h3>
+        <p>Event-driven serverless FaaS (Functions as a Service) for running small, single-purpose functions in response to events.</p>
+        <ol>
+            <li><strong>Navigate to Cloud Functions:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Serverless &gt; Cloud Functions</code></pre>
+            </li>
+            <li><strong>Create Function:</strong>
+                <ul>
+                    <li>Click **+ CREATE FUNCTION**.</li>
+                    <li><strong>Environment:</strong> `2nd generation` (recommended for new functions).</li>
+                    <li><strong>Function name:</strong> (e.g., `my-http-trigger`).</li>
+                    <li><strong>Region:</strong> (e.g., `us-central1`).</li>
+                    <li><strong>Trigger type:</strong> `HTTP`. Check "Allow unauthenticated invocations".</li>
+                    <li><strong>Runtime:</strong> (e.g., `Python 3.9`).</li>
+                    <li><strong>Entry point:</strong> `hello_http` (the name of your function in the code).</li>
+                    <li>In the "Source code" editor, paste your function logic (e.g., Python code from prior Python tutorial).</li>
+                    <li>Click **DEPLOY**.</li>
+                </ul>
+            </li>
+            <li><strong>Test:</strong> Once deployed, click on the function &gt; **TESTING** tab. You can manually test or get the "Triggering URL" to test via browser/curl.</li>
+        </ol>
+
+        <h2 id="continuous-delivery-cloud-deploy">10. Continuous Delivery (Cloud Deploy)</h2>
+        <p><strong>Cloud Deploy</strong> is a fully managed service that automates delivery to a series of target environments (e.g., dev, staging, prod) for GKE, Cloud Run, and App Engine.</p>
+        <h3>Usage Example: Create a Cloud Deploy Pipeline (GUI):</h3>
+        <p>This example will create a simple pipeline to deploy to a GKE cluster.</p>
+        <ol>
+            <li><strong>Enable Cloud Deploy API:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; APIs & Services &gt; Enabled APIs & Services &gt; Search for "Cloud Deploy API" &gt; Enable</code></pre>
+            </li>
+            <li><strong>Navigate to Cloud Deploy:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; CI/CD &gt; Cloud Deploy</code></pre>
+            </li>
+            <li><strong>Create Delivery Pipeline:</strong>
+                <ul>
+                    <li>Click **+ CREATE DELIVERY PIPELINE**.</li>
+                    <li><strong>Pipeline name:</strong> (e.g., `my-app-delivery`).</li>
+                    <li><strong>Description:</strong> (Optional).</li>
+                    <li>Click **CREATE**.</li>
+                </ul>
+            </li>
+            <li><strong>Configure Targets (Environments):</strong>
+                <ul>
+                    <li>On the pipeline details page, click **ADD TARGET**.</li>
+                    <li><strong>Target name:</strong> (e.g., `staging-gke`).</li>
+                    <li><strong>Target type:</strong> `Google Kubernetes Engine`.</li>
+                    <li><strong>GKE Cluster:</strong> Select your `my-gke-cluster`.</li>
+                    <li>Click **CREATE**.</li>
+                    <li>Repeat for `prod-gke` target, potentially adding a "requires approval" option.</li>
+                </ul>
+            </li>
+            <li><strong>Create Release (to deploy your image):</strong>
+                <ul>
+                    <li>On the pipeline overview, click **CREATE RELEASE**.</li>
+                    <li><strong>Name:</strong> (e.g., `release-1.0.0`).</li>
+                    <li><strong>Source:</strong> "Container image" (e.g., `europe-west1-docker.pkg.dev/&lt;YOUR_PROJECT_ID&gt;/my-app-repo/my-nodejs-app:latest`).</li>
+                    <li>Click **CREATE**.</li>
+                    <li>Cloud Deploy will create a release and begin deploying to the first target (e.g., `staging-gke`). You can then manually promote it to `prod-gke` (if approval is configured).</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="infrastructure-as-code-cloud-deployment-manager">11. Infrastructure as Code (Cloud Deployment Manager)</h2>
+        <p><strong>Cloud Deployment Manager</strong> is GCP's native IaC service for provisioning and managing Google Cloud resources. It uses declarative configuration written in YAML or Python templates.</p>
+        <h3>Usage Example: Create an EC2-like VM with Deployment Manager (GUI):</h3>
+        <p>This will create a VM, its network interface, public IP, and firewall rules.</p>
+        <ol>
+            <li><strong>Enable Deployment Manager API:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; APIs & Services &gt; Enabled APIs & Services &gt; Search for "Cloud Deployment Manager V2 API" &gt; Enable</code></pre>
+            </li>
+            <li><strong>Navigate to Deployment Manager:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; CI/CD &gt; Deployment Manager</code></pre>
+            </li>
+            <li><strong>Create Deployment:</strong>
+                <ul>
+                    <li>Click **+ CREATE DEPLOYMENT**.</li>
+                    <li><strong>Name:</strong> (e.g., `my-devops-vm-deployment`).</li>
+                    <li><strong>Specify your configuration:</strong> Choose "Upload your configuration" and select a YAML or JSON template file.</li>
+                    <li><strong>Example `vm_template.yaml` (from your local machine, then upload):</strong>
+                        <pre><code class="language-yaml"># vm_template.yaml
+resources:
+- name: my-web-instance
+  type: compute.v1.instance
+  properties:
+    zone: us-central1-a
+    machineType: zones/us-central1-a/machineTypes/e2-micro
+    disks:
+    - deviceName: boot
+      type: PERSISTENT
+      boot: true
+      autoDelete: true
+      initializeParams:
+        sourceImage: projects/debian-cloud/global/images/family/debian-11
+    networkInterfaces:
+    - network: global/networks/default
+      accessConfigs:
+      - name: External NAT
+        type: ONE_TO_ONE_NAT
+    metadata:
+      items:
+      - key: startup-script
+        value: |
+          #!/bin/bash
+          sudo apt update
+          sudo apt install -y nginx
+          sudo systemctl start nginx
+          sudo systemctl enable nginx
+          echo "Hello from Deployment Manager!" | sudo tee /var/www/html/index.html
+- name: allow-http
+  type: compute.v1.firewall
+  properties:
+    network: global/networks/default
+    allowed:
+    - IPProtocol: tcp
+      ports: ["80"]
+    sourceRanges: ["0.0.0.0/0"]
+    targetTags: ["http-server"]
+- name: set-http-tag
+  type: compute.v1.instance-set-tags
+  properties:
+    instance: $(ref.my-web-instance.selfLink)
+    tags:
+      items:
+      - http-server</code></pre>
+                    </li>
+                    <li>Click **DEPLOY**.</li>
+                </ul>
+            </li>
+            <li><strong>Monitor & Delete:</strong> Monitor deployment status. Once "Deployed," find your VM in Compute Engine and get its IP. To delete all resources created by this deployment, select it and click **DELETE**.</li>
+        </ol>
+
+        <h2 id="monitoring-and-logging-cloud-operations">12. Monitoring & Logging (Cloud Monitoring, Cloud Logging)</h2>
+        <p><strong>Google Cloud's operations suite (formerly Stackdriver)</strong> provides comprehensive monitoring, logging, and diagnostics for your applications and infrastructure.</p>
+        <h3>A. Cloud Monitoring - GUI Usage:</h3>
+        <p>Collects metrics, events, and metadata to provide visibility into performance and health.</p>
+        <ol>
+            <li><strong>Navigate to Monitoring:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Operations &gt; Monitoring</code></pre>
+            </li>
+            <li><strong>Explore Dashboards:</strong>
+                <ul>
+                    <li>View pre-built dashboards (e.g., "VM Instances," "GKE Cluster") or create custom ones.</li>
+                    <li>Click **+ CREATE DASHBOARD**. Add various widgets (charts, gauges, text) using metrics (e.g., `VM Instance > CPU utilization`, `Kubernetes Pod > CPU usage`).</li>
+                </ul>
+            </li>
+            <li><strong>Create Alerts:</strong>
+                <ul>
+                    <li>In the left pane, click **Alerting** &gt; **+ CREATE POLICY**.</li>
+                    <li>**Select a metric:** (e.g., `VM Instance > CPU utilization`).</li>
+                    <li>Define **Trigger condition** (e.g., Average CPU > 80% for 5 minutes).</li>
+                    <li>**Notification channels:** Configure email, Slack, PagerDuty, etc.</li>
+                    <li>Click **CREATE POLICY**.</li>
+                </ul>
+            </li>
+        </ol>
+        <h3>B. Cloud Logging - GUI Usage:</h3>
+        <p>A fully managed service that collects, stores, and analyzes logs from all your GCP resources, as well as on-premises and hybrid cloud environments.</p>
+        <ol>
+            <li><strong>Navigate to Logging:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Operations &gt; Logging &gt; Logs Explorer</code></pre>
+            </li>
+            <li><strong>Explore Logs:</strong>
+                <ul>
+                    <li>Use the "Query builder" to filter logs by resource type, log name, severity, etc.</li>
+                    <li>Apply time range filters.</li>
+                    <li>View log entries and expand them for detailed JSON.</li>
+                    <li>Click "Stream logs" to see new logs in real-time.</li>
+                </ul>
+            </li>
+            <li><strong>Create Log Sinks:</strong> Export logs to BigQuery, Cloud Storage, or Pub/Sub for long-term storage or further analysis.</li>
+        </ol>
+
+        <h2 id="security-cloud-armor-security-command-center">13. Security (Cloud Armor, Security Command Center)</h2>
+        <p>Integrating security throughout the DevOps lifecycle (DevSecOps) on GCP.</p>
+        <h3>A. Cloud Armor (DDoS Protection & WAF) - GUI Usage:</h3>
+        <p>Provides DDoS protection and Web Application Firewall (WAF) capabilities for applications behind Cloud Load Balancing.</p>
+        <ol>
+            <li><strong>Navigate to Cloud Armor:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Network Security &gt; Cloud Armor</code></pre>
+            </li>
+            <li><strong>Create Security Policy:</strong>
+                <ul>
+                    <li>Click **+ CREATE POLICY**.</li>
+                    <li>**Name:** (e.g., `my-web-app-waf`).</li>
+                    <li>**Default rule action:** `Allow`.</li>
+                    <li>Click **NEXT STEP**.</li>
+                    <li>**Add rules:** Click **ADD RULE**.
+                        <ul>
+                            <li><strong>Mode:</strong> `Advanced mode` for WAF rules.</li>
+                            <li><strong>Match:</strong> Use preconfigured WAF rules (e.g., `evaluatePreconfiguredWaf('sqli-stable')` for SQL injection).</li>
+                            <li><strong>Action:</strong> `Deny` (e.g., `403 Forbidden`).</li>
+                        </ul>
+                    </li>
+                    <li>Click **DONE** &gt; **CREATE POLICY**.</li>
+                </ul>
+            </li>
+            <li><strong>Apply Policy to Target:</strong>
+                <ul>
+                    <li>In the policy details, go to the **Targets** tab.</li>
+                    <li>Click **APPLY POLICY TO NEW TARGET**. Select your HTTP(S) Load Balancer or backend service.</li>
+                </ul>
+            </li>
+        </ol>
+        <h3>B. Security Command Center - GUI Usage:</h3>
+        <p>A centralized security and risk management platform for GCP, aggregating findings from various GCP security services.</p>
+        <ol>
+            <li><strong>Navigate to Security Command Center:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Security &gt; Security Command Center</code></pre>
+            </li>
+            <li><strong>Enable and Explore:</strong> Follow the prompts to enable SCC for your organization/project. Explore the "Overview," "Vulnerabilities," and "Threats" dashboards for security posture and findings.</li>
+        </ol>
+        <h3>C. Binary Authorization (for GKE/Cloud Run):</h3>
+        <p>A deploy-time security control that ensures only trusted container images are deployed on GKE or Cloud Run.</p>
+        <ol>
+            <li><strong>Enable Binary Authorization API:</strong> (As with other APIs).</li>
+            <li><strong>Navigate to Binary Authorization:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Security &gt; Binary Authorization</code></pre>
+            </li>
+            <li><strong>Configure Policy:</strong> Define rules (e.g., require images to be signed by a specific Cloud Build pipeline) and apply them to specific clusters or projects.</li>
+        </ol>
+
+        <h2 id="cost-management-and-optimization">14. Cost Management & Optimization</h2>
+        <p>DevOps practices on GCP contribute to cost optimization through automation and efficient resource usage.</p>
+        <ol>
+            <li><strong>Cloud Billing Reports:</strong>
+                <pre><code>Google Cloud Console &gt; Navigation menu (☰) &gt; Billing &gt; Reports</code></pre>
+                <ul>
+                    <li>View detailed cost reports, filter by project, service, SKU, region, and custom labels.</li>
+                </ul>
+            </li>
+            <li><strong>Budgets & Alerts:</strong>
+                <ul>
+                    <li>In the Billing section, go to **Budgets & alerts** &gt; **+ CREATE BUDGET**.</li>
+                    <li>Define a budget name, time range, scope (project, services), and amount.</li>
+                    <li>Configure **Thresholds** to trigger email notifications when spending reaches a certain percentage of the budget.</li>
+                </ul>
+            </li>
+            <li><strong>Cost Optimization Recommendations:</strong>
+                <ul>
+                    <li>Navigate to **Cloud Advisor** (Navigation menu &gt; Tools &gt; Advisor) &gt; **Cost recommendations**.</li>
+                    <li>Receive personalized recommendations to reduce costs (e.g., right-size VMs, delete idle resources).</li>
+                </ul>
+            </li>
+            <li><strong>Leverage Free Tier & Sustained Use Discounts (SUDs):</strong> Use free services and benefit from automatic discounts for long-running Compute Engine VMs.</li>
+            <li><strong>Committed Use Discounts (CUDs):</strong> For predictable workloads, commit to resource usage for 1 or 3 years for significant savings.</li>
+            <li><strong>Preemptible VMs:</strong> Low-cost, short-lived Compute Engine instances ideal for fault-tolerant CI/CD jobs or batch processing.</li>
+            <li><strong>Lifecycle Management (Cloud Storage):</strong> Automatically transition data to cheaper storage classes (Nearline, Coldline, Archive) or delete it based on age.</li>
+            <li><strong>Tagging & Labels:</strong> Apply labels to resources to categorize and track costs by project, team, environment.</li>
+        </ol>
+
+        <h2 id="best-practices">15. Best Practices (GCP Well-Architected Framework)</h2>
+        <p>The <a href="https://cloud.google.com/architecture/framework" target="_blank">Google Cloud Well-Architected Framework</a> provides guidance for building secure, reliable, efficient, and cost-effective workloads. It aligns well with DevOps principles.</p>
+        <ul>
+            <li><strong>Operational Excellence:</strong> Automate everything (Cloud Build, Cloud Deploy, Cloud Functions), implement robust monitoring and alerting (Cloud Monitoring, Cloud Logging).</li>
+            <li><strong>Security:</strong> Implement strong IAM policies, leverage network security (VPC Firewall, Cloud Armor), enable continuous security monitoring (Security Command Center), and use Binary Authorization for container trust.</li>
+            <li><strong>Reliability:</strong> Design for redundancy (multi-zone/multi-region deployments), utilize managed services with built-in high availability (GKE, Cloud SQL, Cloud Spanner).</li>
+            <li><strong>Performance Efficiency:</strong> Choose appropriate compute types (VMs, serverless, GKE), scale resources automatically, leverage global load balancing and CDN.</li>
+            <li><strong>Cost Optimization:</strong> Monitor costs, use appropriate pricing models (per-second billing, SUDs, CUDs, Spot VMs), and implement automated resource lifecycle management.</li>
+            <li><strong>Sustainability:</strong> Maximize utilization of managed services and optimize resource usage to minimize environmental impact.</li>
+        </ul>
+        <h3>GCP DevOps Specific Best Practices:</h3>
+        <ul>
+            <li><strong>Pipeline as Code:</strong> Define your CI/CD pipelines in `cloudbuild.yaml` (or other config files) and version control them.</li>
+            <li><strong>Unified Artifact Management:</strong> Use Artifact Registry as your single source for all package types.</li>
+            <li><strong>Container-First Approach:</strong> Embrace Docker and Kubernetes (GKE) or serverless containers (Cloud Run) for consistent environments.</li>
+            <li><strong>Managed Services:</strong> Leverage GCP's fully managed services (GKE, Cloud SQL, Cloud Functions, Cloud Deploy) to offload operational overhead.</li>
+            <li><strong>Shift Left Security:</strong> Integrate security scanning (Cloud Build, Binary Authorization) early in your CI/CD pipeline.</li>
+            <li><strong>Observability is Key:</strong> Implement comprehensive logging, monitoring, and tracing with Cloud Logging, Cloud Monitoring, and Cloud Trace.</li>
+            <li><strong>Infrastructure as Code:</strong> Use Cloud Deployment Manager or Terraform to manage your infrastructure consistently.</li>
+            <li><strong>Automated Testing:</strong> Integrate automated unit, integration, and end-to-end tests into your Cloud Build/Cloud Deploy pipeline stages.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Your GCP DevOps Journey: Innovation at Scale!</strong>
+            <p>GCP offers a cutting-edge and integrated platform for implementing modern DevOps practices. By understanding its core services, mastering their GUI-based usage, and applying the recommended best practices, you can build highly automated, scalable, secure, and reliable software delivery pipelines. Continuous hands-on practice, combined with a deep dive into GCP documentation and the Well-Architected Framework, will accelerate your journey to becoming a proficient GCP DevOps engineer.</p>
+        </div>
+    </div>
+</body>
+</html>
