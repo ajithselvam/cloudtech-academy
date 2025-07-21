@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Jenkins Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Jenkins Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-jenkins">1. What is Jenkins?</a></li>
+                <li><a href="#installation">2. Installation</a></li>
+                <li><a href="#jenkins-ui-basics">3. Jenkins UI Basics</a></li>
+                <li><a href="#freestyle-projects">4. Freestyle Projects</a></li>
+                <li><a href="#jenkins-pipelines">5. Jenkins Pipelines (Declarative & Scripted)</a></li>
+                <li><a href="#multibranch-pipelines">6. Multibranch Pipelines</a></li>
+                <li><a href="#jenkins-plugins">7. Jenkins Plugins</a></li>
+                <li><a href="#agents-and-distributed-builds">8. Agents and Distributed Builds</a></li>
+                <li><a href="#credentials-management">9. Credentials Management</a></li>
+                <li><a href="#environment-variables">10. Environment Variables</a></li>
+                <li><a href="#shared-libraries">11. Shared Libraries</a></li>
+                <li><a href="#ci-cd-integration">12. CI/CD Integration Examples</a></li>
+                <li><a href="#jenkins-security">13. Jenkins Security</a></li>
+                <li><a href="#best-practices">14. Best Practices</a></li>
+                <li><a href="#troubleshooting">15. Troubleshooting</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-jenkins">1. What is Jenkins?</h2>
+        <p><strong>Jenkins</strong> is an open-source automation server that helps automate parts of the software development process, including building, testing, and deploying applications. It is widely used for implementing Continuous Integration (CI) and Continuous Delivery (CD) workflows, often referred to as CI/CD pipelines.</p>
+        <p>Jenkins makes it easier for developers to integrate code changes frequently and automatically test them, reducing integration problems and allowing for faster delivery of high-quality software.</p>
+        <h3>Key Benefits:</h3>
+        <ul>
+            <li><strong>Continuous Integration:</strong> Automates the merge and test of code changes.</li>
+            <li><strong>Continuous Delivery/Deployment:</strong> Automates the release process to various environments.</li>
+            <li><strong>Extensibility:</strong> Over a thousand plugins available to integrate with virtually any tool or service.</li>
+            <li><strong>Open Source:</strong> Free to use and supported by a large, active community.</li>
+            <li><strong>Distributed Builds:</strong> Can distribute workloads across multiple machines (agents).</li>
+        </ul>
+
+        <h2 id="installation">2. Installation</h2>
+        <p>Jenkins requires Java (OpenJDK 11 or 17 recommended). The installation process varies slightly depending on your operating system. Below are common methods:</p>
+        <h3>A. Recommended: Docker</h3>
+        <p>This is often the quickest and cleanest way to get Jenkins running for development or testing.</p>
+        <pre><code class="language-bash"># Pull the Jenkins LTS image
+docker pull jenkins/jenkins:lts
+
+# Create a Docker volume to persist Jenkins data
+docker volume create jenkins_home
+
+# Run Jenkins container on port 8080 (web UI) and 50000 (agent communication)
+docker run -d -p 8080:8080 -p 50000:50000 \
+  --name jenkins-server \
+  --restart=on-failure \
+  -v jenkins_home:/var/jenkins_home \
+  jenkins/jenkins:lts</code></pre>
+        <p>After a few minutes, Jenkins will be accessible in your browser at `http://localhost:8080`.</p>
+
+        <h3>B. Ubuntu/Debian</h3>
+        <p>Install Java first, then add the Jenkins repository and install.</p>
+        <pre><code class="language-bash"># 1. Install Java Development Kit (JDK)
+sudo apt update
+sudo apt install -y openjdk-17-jdk
+
+# 2. Add Jenkins repository key
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins-keyring.asc
+
+# 3. Add Jenkins repository to your sources list
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/" | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+# 4. Update apt cache and install Jenkins
+sudo apt update
+sudo apt install -y jenkins
+
+# 5. Check Jenkins service status (should be running)
+sudo systemctl status jenkins
+# Output: active (running)
+
+# 6. Adjust firewall (if UFW is active)
+sudo ufw allow 8080 # Allow HTTP access to Jenkins
+sudo ufw enable
+sudo ufw status</code></pre>
+
+        <h3>C. CentOS/RHEL/Fedora</h3>
+        <pre><code class="language-bash"># 1. Install Java Development Kit (JDK)
+sudo dnf install -y java-17-openjdk-devel
+
+# 2. Add Jenkins repository
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+# 3. Install Jenkins
+sudo dnf install -y jenkins
+
+# 4. Start and enable Jenkins service
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+
+# 5. Adjust firewall (if Firewalld is active)
+sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp
+sudo firewall-cmd --reload</code></pre>
+        <div class="tip">
+            After installation, Jenkins will be accessible at `http://<your_server_ip_or_hostname>:8080`.
+        </div>
+
+        <h2 id="jenkins-ui-basics">3. Jenkins UI Basics</h2>
+        <p>When you first access Jenkins, you'll go through a setup wizard.</p>
+        <h3>A. Unlock Jenkins:</h3>
+        <p>The first screen requires an administrator password. Retrieve it from your server's initial admin password file.</p>
+        <pre><code class="language-bash"># For Docker:
+docker logs jenkins-server # Look for the password in the logs
+
+# For Linux installations:
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword</code></pre>
+        <p>Paste the password and click **Continue**.</p>
+        <h3>B. Install Plugins:</h3>
+        <p>Choose "Install suggested plugins." This will install common plugins for SCM (Git), Pipelines, build tools, etc.</p>
+        <h3>C. Create First Admin User:</h3>
+        <p>Create your Jenkins administrator account. Remember these credentials!</p>
+        <h3>D. Jenkins Dashboard:</h3>
+        <p>After setup, you'll land on the Jenkins dashboard. Key elements:</p>
+        <ul>
+            <li><strong>New Item:</strong> Create new jobs/projects.</li>
+            <li><strong>People:</strong> Manage Jenkins users.</li>
+            <li><strong>Build History:</strong> View past build runs.</li>
+            <li><strong>Manage Jenkins:</strong> Global settings, plugins, security, nodes.</li>
+            <li><strong>My Views:</strong> Customize your dashboard view.</li>
+        </ul>
+
+        <h2 id="freestyle-projects">4. Freestyle Projects</h2>
+        <p>Freestyle projects are the simplest job type in Jenkins, configured entirely through the graphical user interface. They are great for straightforward tasks like compiling code, running simple scripts, or executing basic tests.</p>
+        <h3>A. Create a Freestyle Project:</h3>
+        <ol>
+            <li>From the Jenkins dashboard, click **New Item** in the left menu.</li>
+            <li>Enter an **Item name** (e.g., `MyFirstFreestyleJob`).</li>
+            <li>Select **Freestyle project**.</li>
+            <li>Click **OK**.</li>
+        </ol>
+        <h3>B. Configure the Project:</h3>
+        <p>You'll be directed to the project configuration page.</p>
+        <ol>
+            <li><strong>General:</strong>
+                <ul>
+                    <li>Add a **Description** (e.g., "A simple job to print a message.").</li>
+                    <li>(Optional) **Discard old builds:** Configure build retention.</li>
+                </ul>
+            </li>
+            <li><strong>Source Code Management (SCM):</strong>
+                <ul>
+                    <li>Select `None` for a simple script, or `Git` if you want to pull code from a repository.</li>
+                    <li>If Git: Provide **Repository URL** (e.g., `https://github.com/jenkins-docs/simple-java-maven-app.git`) and **Credentials** (if private repo).</li>
+                    <li>**Branches to build:** (e.g., `main` or `*/master`).</li>
+                </ul>
+            </li>
+            <li><strong>Build Triggers:</strong> Define when the job should run.
+                <ul>
+                    <li>**Build periodically:** Schedule builds (e.g., `H/15 * * * *` for every 15 minutes).</li>
+                    <li>**Poll SCM:** Check the SCM for changes at intervals (e.g., `H/5 * * * *` for every 5 minutes).</li>
+                    <li>**GitHub hook trigger for GITScm polling:** Trigger builds when changes are pushed to GitHub (requires webhook setup in GitHub).</li>
+                </ul>
+            </li>
+            <li><strong>Build Steps:</strong> Define the actions to perform.
+                <ul>
+                    <li>Click **Add build step**.</li>
+                    <li>Select **Execute shell** (for Linux/macOS agent) or **Execute Windows batch command** (for Windows agent).</li>
+                    <li>Paste your commands:
+                        <pre><code class="language-bash"># For Linux/macOS
+echo "Hello from Jenkins Freestyle Job!"
+echo "Current directory: $(pwd)"
+ls -lh</code></pre>
+                        <pre><code class="language-batch"># For Windows
+echo Hello from Jenkins Freestyle Job!
+echo Current directory: %CD%
+dir</code></pre>
+                    </li>
+                    <li>(For Java/Maven/Gradle projects, you'd choose "Invoke Maven top-level targets" or "Invoke Gradle script").</li>
+                </ul>
+            </li>
+            <li><strong>Post-build Actions:</strong> Actions after the build completes.
+                <ul>
+                    <li>Click **Add post-build action**.</li>
+                    <li>**Archive the artifacts:** Save build outputs (e.g., `target/*.jar`).</li>
+                    <li>**E-mail Notification:** Send notifications based on build status.</li>
+                </ul>
+            </li>
+            <li>Click **Save**.</li>
+        </ol>
+        <h3>C. Run the Build:</h3>
+        <p>From the project dashboard, click **Build Now** in the left menu.</p>
+        <h3>D. View Results:</h3>
+        <ul>
+            <li>In the "Build History" section, click on the build number (e.g., `#1`).</li>
+            <li>Click **Console Output** to view the logs of the build process.</li>
+        </ul>
+
+        <h2 id="jenkins-pipelines">5. Jenkins Pipelines (Declarative & Scripted)</h2>
+        <p>Jenkins Pipelines are a suite of plugins that support implementing and integrating continuous delivery pipelines into Jenkins. "Pipeline as Code" allows you to define your entire CI/CD process in a `Jenkinsfile` (a Groovy script) stored in your source code repository.</p>
+        <p>This provides version control for your pipeline, making it auditable, reproducible, and easily shared.</p>
+        <h3>A. Declarative Pipeline:</h3>
+        <p>A more recent and structured syntax, easier to learn and read. It's defined within a `pipeline { ... }` block using predefined sections like `agent`, `stages`, `steps`, `post`, `options`, `parameters`, `environment`, `buildTriggers`.</p>
+        <h3>B. Scripted Pipeline:</h3>
+        <p>The original Pipeline syntax, based entirely on Groovy. Offers greater flexibility and control for complex or dynamic workflows, but requires more Groovy programming knowledge.</p>
+        <h3>C. Example: Simple Declarative Pipeline (`Jenkinsfile`):</h3>
+        <p>Create a file named `Jenkinsfile` at the root of your Git repository.</p>
+        <pre><code class="language-groovy">// Jenkinsfile (Declarative Pipeline)
+pipeline {
+    // Defines where the entire pipeline will run. 'any' means on any available agent.
+    agent any 
+
+    // Define environment variables accessible throughout the pipeline
+    environment {
+        // Build Number (built-in Jenkins variable)
+        BUILD_ID = "${env.BUILD_NUMBER}" 
+        // Custom variable
+        APP_NAME = "MyWebApp"
+    }
+
+    // Define parameters that can be passed to the pipeline
+    parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
+        booleanParam(name: 'RUN_TESTS', defaultValue: true, description: 'Whether to run tests')
+    }
+
+    // Options for the pipeline
+    options {
+        // Discard old builds: keep a max of 5 builds and 3 days of artifacts
+        buildDiscarder(logRotator(numToKeepStr: '5', artifactNumToKeepStr: '3')) 
+        timestamps() // Add timestamps to console output
+    }
+
+    stages {
+        stage('Checkout Code') { // First stage: Get code from SCM
+            steps {
+                echo "Checking out code for ${params.BRANCH_NAME}..."
+                // Use a Git SCM checkout, assuming 'github.com/your-org/your-repo.git'
+                // You'll need to configure Git credentials in Jenkins if your repo is private
+                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/your-org/your-repo.git'
+            }
+        }
+
+        stage('Build') { // Second stage: Build the application (e.g., a Maven project)
+            steps {
+                echo "Building ${APP_NAME} build ${BUILD_ID}..."
+                // This assumes Maven is configured in Jenkins under "Manage Jenkins > Tools"
+                // and a pom.xml exists in your repo
+                sh 'mvn clean install -DskipTests' 
+            }
+            // Post-build actions specific to this stage (e.g., if build fails)
+            post {
+                always {
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true // Archive JAR file
+                }
+                failure {
+                    echo 'Build failed! Check console output.'
+                }
+            }
+        }
+
+        stage('Test') { // Third stage: Run tests (conditional execution)
+            when {
+                expression { params.RUN_TESTS == true } // Only run if RUN_TESTS parameter is true
+            }
+            steps {
+                echo "Running tests..."
+                sh 'mvn test' // Run Maven tests
+                // Publish JUnit test results (requires JUnit plugin)
+                junit '**/target/surefire-reports/*.xml' 
+            }
+            post {
+                unstable {
+                    echo 'Tests had failures or skipped tests!'
+                }
+                failure {
+                    echo 'Tests failed!'
+                }
+            }
+        }
+
+        stage('Deploy Staging') { // Fourth stage: Deploy to a staging environment
+            steps {
+                echo "Deploying to staging environment..."
+                // Example: Copy artifact to a remote server via SSH (requires SSH Agent plugin and credentials)
+                // sshagent(['your-ssh-credential-id']) {
+                //     sh "scp target/*.jar user@staging-server:/var/www/html/app.jar"
+                // }
+                sh 'echo "Deployment to staging simulated."'
+            }
+        }
+
+        stage('Approval for Production') { // Optional stage for manual approval
+            input {
+                message "Proceed to production deployment?"
+                ok "Deploy to Production"
+                submitter "admin,devops" // Specific users or groups who can approve
+            }
+            steps {
+                echo "Approval received. Proceeding to production."
+            }
+        }
+
+        stage('Deploy Production') { // Final stage: Deploy to production (conditional on approval)
+            when {
+                expression { previousStageStatus('Approval for Production') == 'SUCCESS' } // Only if approval stage passed
+            }
+            steps {
+                echo "Deploying to production environment..."
+                sh 'echo "Deployment to production simulated."'
+            }
+            post {
+                success {
+                    echo 'Deployment to Production successful!'
+                    // Send email notification (requires Email Extension Plugin)
+                    mail to: 'devops-team@example.com', \
+                         subject: "Jenkins Pipeline: ${APP_NAME} Build ${BUILD_ID} - Production Deployment SUCCESS", \
+                         body: "Build ${BUILD_ID} of ${APP_NAME} successfully deployed to production."
+                }
+                failure {
+                    echo 'Deployment to Production FAILED!'
+                    mail to: 'devops-team@example.com', \
+                         subject: "Jenkins Pipeline: ${APP_NAME} Build ${BUILD_ID} - Production Deployment FAILED", \
+                         body: "Build ${BUILD_ID} of ${APP_NAME} FAILED deployment to production. Check: ${env.BUILD_URL}"
+                }
+            }
+        }
+    }
+    // Post-build actions for the entire pipeline
+    post {
+        always {
+            echo 'Pipeline finished!'
+        }
+        cleanedUp {
+            echo 'Cleaning up workspace...'
+            // Clean workspace (requires Workspace Cleanup Plugin)
+            deleteDir() 
+        }
+    }
+}
+</code></pre>
+        <h3>D. Create a Pipeline Job in Jenkins:</h3>
+        <ol>
+            <li>From the Jenkins dashboard, click **New Item**.</li>
+            <li>Enter an **Item name** (e.g., `MyDeclarativePipeline`).</li>
+            <li>Select **Pipeline**.</li>
+            <li>Click **OK**.</li>
+            <li>On the configuration page, scroll down to the **Pipeline** section.</li>
+            <li><strong>Definition:</strong> Choose `Pipeline script from SCM`.</li>
+            <li><strong>SCM:</strong> Select `Git`.</li>
+            <li><strong>Repository URL:</strong> Paste your Git repository URL (e.g., `https://github.com/your-org/your-repo.git`).</li>
+            <li><strong>Credentials:</strong> Select your Git credentials (if the repo is private).</li>
+            <li><strong>Branches to build:</strong> (e.g., `*/main`).</li>
+            <li><strong>Script Path:</strong> Enter `Jenkinsfile` (assuming your file is named that and in the root of your repo).</li>
+            <li>Click **Save**.</li>
+        </ol>
+        <h3>E. Run the Pipeline:</h3>
+        <p>From the project dashboard, click **Build Now**. You'll see the stages execute in the "Stage View" or "Blue Ocean" interface (if installed).</p>
+
+        <h2 id="multibranch-pipelines">6. Multibranch Pipelines</h2>
+        <p>A Multibranch Pipeline project automatically discovers, manages, and executes Pipelines for branches containing a `Jenkinsfile` within a repository. It's ideal for projects with multiple development branches (feature branches, hotfix branches, etc.).</p>
+        <h3>A. Create a Multibranch Pipeline:</h3>
+        <ol>
+            <li>From the Jenkins dashboard, click **New Item**.</li>
+            <li>Enter an **Item name** (e.g., `MyMultiBranchApp`).</li>
+            <li>Select **Multibranch Pipeline**.</li>
+            <li>Click **OK**.</li>
+        </ol>
+        <h3>B. Configure the Project:</h3>
+        <ol>
+            <li><strong>Branch Sources:</strong>
+                <ul>
+                    <li>Click **Add source** &gt; **Git**.</li>
+                    <li><strong>Project Repository:</strong> Provide your Git repository URL.</li>
+                    <li><strong>Credentials:</strong> Select (if private repo).</li>
+                    <li>(Optional) Configure "Discover branches" or "Discover pull requests" strategies.</li>
+                </ul>
+            </li>
+            <li><strong>Build Configuration:</strong>
+                <ul>
+                    <li><strong>Mode:</strong> `By Jenkinsfile`.</li>
+                    <li><strong>Script Path:</strong> Enter `Jenkinsfile` (default).</li>
+                </ul>
+            </li>
+            <li>Click **Save**.</li>
+        </ol>
+        <h3>C. Usage:</h3>
+        <ul>
+            <li>Jenkins will automatically scan the repository for branches containing a `Jenkinsfile`.</li>
+            <li>For each detected branch, it will create a sub-job and run the pipeline defined in that branch's `Jenkinsfile`.</li>
+            <li>When new branches are pushed or existing branches are updated, Jenkins detects them and triggers builds.</li>
+            <li>When branches are deleted, Jenkins removes their corresponding jobs (after a configurable retention period).</li>
+        </ul>
+        <div class="tip">
+            Each branch can have a slightly different `Jenkinsfile` allowing for customized pipelines based on the branch's purpose (e.g., a `dev` branch might have extra static analysis steps).
+        </div>
+
+        <h2 id="jenkins-plugins">7. Jenkins Plugins</h2>
+        <p>Plugins are the backbone of Jenkins' extensibility, allowing it to integrate with almost any build tool, SCM, cloud provider, or reporting system.</p>
+        <h3>A. Manage Plugins:</h3>
+        <ol>
+            <li>From the Jenkins dashboard, go to **Manage Jenkins** &gt; **Plugins**.</li>
+            <li><strong>Updates:</strong> Shows available updates for installed plugins.</li>
+            <li><strong>Available plugins:</strong> Search and select plugins you want to install. Click **Install without restart** or **Download now and install after restart**.</li>
+            <li><strong>Installed plugins:</strong> View currently installed plugins, enable/disable, uninstall.</li>
+        </ol>
+        <h3>B. Essential Plugins for CI/CD:</h3>
+        <ul>
+            <li><strong>Git Plugin:</strong> For integration with Git repositories. (Usually installed by default).</li>
+            <li><strong>Pipeline Plugin:</strong> Core functionality for Jenkins Pipelines. (Usually installed by default).</li>
+            <li><strong>Pipeline: Stage View Plugin:</strong> Provides the visual "Stage View" for Pipelines.</li>
+            <li><strong>JUnit Plugin:</strong> Publish JUnit test results.</li>
+            <li><strong>Pipeline: Nodes and Processes Plugin:</strong> For managing agents in Pipelines.</li>
+            <li><strong>SSH Agent Plugin:</strong> For using SSH credentials in Pipelines.</li>
+            <li><strong>Blue Ocean:</strong> (Though maintenance has ceased for new features, still widely used for its UI) A modern, user-friendly UI for Jenkins Pipelines. (Install via Plugin Manager).</li>
+        </ul>
+        <pre><code class="language-bash"># Example: Installing a plugin from the CLI (if allowed by Jenkins security)
+java -jar jenkins-cli.jar -s http://localhost:8080/ -webcli install-plugin blueocean</code></pre>
+
+        <h2 id="agents-and-distributed-builds">8. Agents and Distributed Builds</h2>
+        <p>Jenkins allows you to offload build workloads from the main Jenkins controller to separate machines called "agents" (formerly "slaves"). This is crucial for scalability, isolating build environments, and performing builds on different operating systems.</p>
+        <h3>A. Jenkins Architecture:</h3>
+        <ul>
+            <li><strong>Controller (Master):</strong> The main Jenkins server that orchestrates builds, manages agents, stores configurations, and provides the UI.</li>
+            <li><strong>Agent (Slave):</strong> A machine (physical, VM, container) that connects to the controller and executes build jobs.</li>
+        </ul>
+        <h3>B. Add a Jenkins Agent (GUI - via SSH):</h3>
+        <ol>
+            <li><strong>Prepare Agent Machine:</strong>
+                <ul>
+                    <li>Install Java (matching the controller's version or compatible).</li>
+                    <li>Ensure SSH server is running.</li>
+                    <li>Create a dedicated user for Jenkins (e.g., `jenkins_agent`).</li>
+                </ul>
+            </li>
+            <li><strong>Create an SSH Key Pair for Jenkins (on the controller or locally):</strong>
+                <pre><code class="language-bash">ssh-keygen -t rsa -b 4096 -C "jenkins-agent-key" -f ~/.ssh/jenkins-agent-key -q -N ""</code></pre>
+                <p>Copy the public key (`~/.ssh/jenkins-agent-key.pub`) to the agent machine's `~/.ssh/authorized_keys` file for the `jenkins_agent` user.</p>
+            </li>
+            <li><strong>Add SSH Credentials to Jenkins:</strong>
+                <ul>
+                    <li>From Jenkins dashboard, go to **Manage Jenkins** &gt; **Credentials** &gt; **System** &gt; **Global credentials (unrestricted)**.</li>
+                    <li>Click **+ Add Credentials**.</li>
+                    <li><strong>Kind:</strong> `SSH Username with private key`.</li>
+                    <li><strong>Scope:</strong> `Global`.</li>
+                    <li><strong>ID:</strong> (e.g., `jenkins-agent-ssh-key`).</li>
+                    <li><strong>Username:</strong> `jenkins_agent` (or your agent user).</li>
+                    <li><strong>Private Key:</strong> Select `Enter directly` and paste the content of your `~/.ssh/jenkins-agent-key` (the private key).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Configure New Node (Agent) in Jenkins:</strong>
+                <ul>
+                    <li>From Jenkins dashboard, go to **Manage Jenkins** &gt; **Nodes**.</li>
+                    <li>Click **New Node** in the left menu.</li>
+                    <li><strong>Node name:</strong> (e.g., `my-linux-agent`).</li>
+                    <li>Select **Permanent Agent**. Click **Create**.</li>
+                    <li><strong>Configure Node Details:</strong>
+                        <ul>
+                            <li><strong>Name:</strong> `my-linux-agent`.</li>
+                            <li><strong>Description:</strong> (Optional).</li>
+                            <li><strong># of executors:</strong> (e.g., `2` - number of parallel jobs this agent can run).</li>
+                            <li><strong>Remote root directory:</strong> `/home/jenkins_agent/workspace` (or `/var/jenkins_home/workspace`).</li>
+                            <li><strong>Labels:</strong> (e.g., `linux build-server`). Used to target jobs to specific agents.</li>
+                            <li><strong>Launch method:</strong> `Launch agents via SSH`.</li>
+                            <li><strong>Host:</strong> IP address or hostname of your agent machine.</li>
+                            <li><strong>Credentials:</strong> Select the SSH credential ID you created (e.g., `jenkins-agent-ssh-key`).</li>
+                            <li><strong>Host Key Verification Strategy:</strong> For testing, choose `Non verifying Verification Strategy`. For production, use `Known hosts file` or `Manually provided key`.</li>
+                            <li>Click **Save**.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Verify Agent Connection:</strong> The agent should attempt to connect and its status should turn green (online).</li>
+        </ol>
+        <h3>C. Assigning Jobs to Agents:</h3>
+        <ul>
+            <li><strong>Freestyle Project:</strong> In job configuration, check "Restrict where this project can be run" and enter the `Label` you defined for your agent (e.g., `linux`).</li>
+            <li><strong>Pipeline Project:</strong> Use the `agent` directive in your `Jenkinsfile`:
+                <pre><code class="language-groovy">pipeline {
+    agent { label 'linux' } // Run the entire pipeline on 'linux' labeled agents
+    // ... or for a specific stage:
+    stages {
+        stage('Run on Linux Agent') {
+            agent { label 'linux' }
+            steps {
+                sh 'echo "Running on Linux agent: $NODE_NAME"'
+            }
+        }
+    }
+}</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="credentials-management">9. Credentials Management</h2>
+        <p>Jenkins securely stores various types of credentials (usernames/passwords, SSH keys, secret text, Kubernetes secrets) to prevent them from being hardcoded in jobs or scripts.</p>
+        <h3>A. Add Credentials:</h3>
+        <ol>
+            <li>From Jenkins dashboard, go to **Manage Jenkins** &gt; **Credentials** &gt; **System** &gt; **Global credentials (unrestricted)**.</li>
+            <li>Click **+ Add Credentials**.</li>
+            <li><strong>Kind:</strong> Select the type (e.g., `Username with password`, `Secret text`, `SSH Username with private key`).</li>
+            <li>Fill in details (ID, description, actual credential data).</li>
+            <li>Click **Create**.</li>
+        </ol>
+        <h3>B. Using Credentials in Pipelines:</h3>
+        <p>The `withCredentials` step is used to access credentials securely within a Pipeline.</p>
+        <pre><code class="language-groovy">pipeline {
+    agent any
+    stages {
+        stage('Login to Docker Registry') {
+            steps {
+                // Assuming you have a "Username with password" credential with ID 'docker-hub-creds'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD} registry.hub.docker.com"
+                }
+            }
+        }
+        stage('Deploy via SSH') {
+            steps {
+                // Assuming you have an "SSH Username with private key" credential with ID 'deploy-ssh-key'
+                sshagent(['deploy-ssh-key']) {
+                    sh "scp -o StrictHostKeyChecking=no target/my-app.jar user@remoteserver:/var/www/html/"
+                }
+            }
+        }
+        stage('Use a Secret Text') {
+            steps {
+                // Assuming you have a "Secret text" credential with ID 'my-api-key'
+                withCredentials([string(credentialsId: 'my-api-key', variable: 'API_KEY')]) {
+                    sh "curl -H \"Authorization: Bearer ${API_KEY}\" https://api.example.com/data"
+                }
+            }
+        }
+    }
+}</code></pre>
+
+        <h2 id="environment-variables">10. Environment Variables</h2>
+        <p>Environment variables allow you to pass dynamic values and configurations to your Jenkins jobs and pipelines.</p>
+        <h3>A. Built-in Environment Variables:</h3>
+        <p>Jenkins provides many predefined variables automatically (e.g., `BUILD_NUMBER`, `JOB_NAME`, `WORKSPACE`, `BUILD_URL`).</p>
+        <pre><code class="language-groovy">pipeline {
+    agent any
+    stages {
+        stage('Show Env Vars') {
+            steps {
+                echo "Build Number: ${env.BUILD_NUMBER}"
+                echo "Job Name: ${env.JOB_NAME}"
+                echo "Workspace: ${env.WORKSPACE}"
+                echo "Build URL: ${env.BUILD_URL}"
+                sh 'printenv' // Prints all environment variables in shell
+            }
+        }
+    }
+}</code></pre>
+        <h3>B. Global Environment Variables:</h3>
+        <p>Accessible across all jobs and pipelines within a Jenkins instance.</p>
+        <ol>
+            <li>From Jenkins dashboard, go to **Manage Jenkins** &gt; **System**.</li>
+            <li>Scroll down to **Global properties** section.</li>
+            <li>Check "Environment variables".</li>
+            <li>Click **Add** and define `Name` and `Value` (e.g., `GLOBAL_VAR_MESSAGE`, `This is a global message`).</li>
+            <li>Click **Save**.</li>
+            <li>Now `echo "${env.GLOBAL_VAR_MESSAGE}"` will work in any pipeline.</li>
+        </ol>
+        <h3>C. Local/Stage-level Environment Variables (in Pipeline):</h3>
+        <p>Defined within an `environment` block in a Declarative Pipeline, scoped to that pipeline or stage.</p>
+        <pre><code class="language-groovy">pipeline {
+    agent any
+    // Pipeline-level environment variable
+    environment {
+        APP_VERSION = "1.0.0" 
+    }
+    stages {
+        stage('Stage 1') {
+            steps {
+                echo "App Version (from pipeline env): ${env.APP_VERSION}"
+            }
+        }
+        stage('Stage 2') {
+            // Stage-level environment variable (overrides pipeline-level if name is same)
+            environment {
+                BUILD_TYPE = "Production" 
+            }
+            steps {
+                echo "App Version: ${env.APP_VERSION}"
+                echo "Build Type: ${env.BUILD_TYPE}"
+            }
+        }
+    }
+}</code></pre>
+
+        <h2 id="shared-libraries">11. Shared Libraries</h2>
+        <p>Shared Libraries allow you to define reusable pieces of Pipeline code (e.g., common functions, steps, or utility scripts) in an external Git repository. This promotes code reuse and maintains a clean `Jenkinsfile`.</p>
+        <h3>A. Shared Library Structure (in Git repository):</h3>
+        <pre><code>/my-jenkins-shared-lib
+├── vars/
+│   └── myCustomStep.groovy
+│   └── commonUtils.groovy
+├── src/
+│   └── com/
+│       └── example/
+│           └── MyHelper.groovy
+├── resources/
+│   └── config.json
+└── Jenkinsfile (optional, for testing the library itself)</code></pre>
+        <ul>
+            <li>`vars/`: Contains global variables or functions. Each `.groovy` file in `vars/` is exposed as a global function (e.g., `myCustomStep()` from `myCustomStep.groovy`).</li>
+            <li>`src/`: Contains classes that can be imported and used (e.g., `com.example.MyHelper`).</li>
+            <li>`resources/`: For non-Groovy files (e.g., configuration files) that can be loaded into the pipeline.</li>
+        </ul>
+        <h3>B. Example: `myCustomStep.groovy` in `vars/`</h3>
+        <pre><code class="language-groovy">// vars/myCustomStep.groovy
+def call(String message = 'Default message') {
+    echo "--- Custom Step Started ---"
+    echo "Message: ${message}"
+    // Perform some common actions, e.g., deploy an artifact, run security scan
+    echo "--- Custom Step Finished ---"
+}</code></pre>
+        <h3>C. Configure Shared Library in Jenkins:</h3>
+        <ol>
+            <li>Push your shared library Git repository (e.g., `https://github.com/your-org/my-jenkins-shared-lib.git`).</li>
+            <li>From Jenkins dashboard, go to **Manage Jenkins** &gt; **System**.</li>
+            <li>Scroll down to **Global Pipeline Libraries** (or "Global Shared Libraries").</li>
+            <li>Click **+ Add**.
+                <ul>
+                    <li><strong>Name:</strong> (e.g., `my-shared-lib`).</li>
+                    <li><strong>Default version:</strong> `main` (or a specific branch/tag).</li>
+                    <li><strong>Retrieval Method:</strong> `Git`.</li>
+                    <li><strong>Project Repository:</strong> Paste the Git URL.</li>
+                    <li><strong>Credentials:</strong> Select (if private).</li>
+                </ul>
+            </li>
+            <li>Click **Save**.</li>
+        </ol>
+        <h3>D. Use Shared Library in Pipeline:</h3>
+        <pre><code class="language-groovy">@Library('my-shared-lib') _ // Load the shared library (the '_' is conventional)
+
+pipeline {
+    agent any
+    stages {
+        stage('Example Stage') {
+            steps {
+                myCustomStep 'Hello from the pipeline!' // Call the global function
+                myCustomStep() // Call with default message
+
+                script {
+                    // Access a class from src/
+                    // def helper = new com.example.MyHelper()
+                    // helper.doSomething()
+                }
+            }
+        }
+    }
+}</code></pre>
+
+        <h2 id="ci-cd-integration">12. CI/CD Integration Examples</h2>
+        <p>Jenkins plays a central role in automating CI/CD workflows by integrating with various tools.</p>
+        <h3>A. Git/GitHub/GitLab Integration:</h3>
+        <ul>
+            <li><strong>SCM Polling:</strong> Jenkins periodically checks the Git repository for changes.</li>
+            <li><strong>Webhooks:</strong> Recommended. Git hosting services (GitHub, GitLab, Bitbucket) can send real-time notifications to Jenkins when code is pushed, triggering builds instantly.
+                <pre><code class="language-bash"># Example GitHub Webhook Payload URL:
+http://your_jenkins_url:8080/github-webhook/
+# Ensure your Jenkins URL is accessible from GitHub.</code></pre>
+            </li>
+            <li><strong>Credentials:</strong> Jenkins uses stored credentials to access private repositories.</li>
+        </ul>
+        <h3>B. Build Tools (Maven, Gradle, npm):</h3>
+        <ul>
+            <li>Jenkins integrates directly or via shell commands to run your build processes.</li>
+            <pre><code class="language-groovy">stage('Build Node.js App') {
+    steps {
+        sh 'npm install'
+        sh 'npm run build'
+    }
+}</code></pre>
+            <pre><code class="language-groovy">stage('Build Java Maven App') {
+    tools {
+        // Define Maven tool name as configured in Manage Jenkins > Tools
+        maven 'Maven 3.8.6' 
+    }
+    steps {
+        sh 'mvn clean package -DskipTests'
+    }
+}</code></pre>
+        </ul>
+        <h3>C. Testing Frameworks (JUnit, Jest, Selenium):</h3>
+        <ul>
+            <li>Jenkins can execute tests and publish results for reporting.</li>
+            <pre><code class="language-groovy">stage('Run Unit Tests') {
+    steps {
+        sh 'npm test' // Or 'mvn test'
+        junit '**/test-results/*.xml' // Publish JUnit results
+    }
+}</code></pre>
+            <pre><code class="language-groovy">stage('Run UI Tests (Selenium)') {
+    agent { label 'chrome-agent' } // Run on a specific agent with Chrome/Selenium setup
+    steps {
+        sh 'python3 -m pytest ui_tests/'
+        // ... possibly capture screenshots or video on failure
+    }
+}</code></pre>
+        </ul>
+        <h3>D. Containerization (Docker):</h3>
+        <ul>
+            <li>Jenkins can build Docker images, push them to registries, and deploy containers.</li>
+            <pre><code class="language-groovy">pipeline {
+    agent { docker { image 'maven:3.8.6-openjdk-17' } } // Use Maven container for build
+    stages {
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("my-app:${env.BUILD_NUMBER}")
+                    docker.withRegistry('https://registry.hub.docker.com', 'docker-hub-creds') {
+                        docker.image("my-app:${env.BUILD_NUMBER}").push()
+                    }
+                }
+            }
+        }
+    }
+}</code></pre>
+        </ul>
+        <h3>E. Deployment Targets (SSH, Kubernetes, Cloud Providers):</h3>
+        <ul>
+            <li>Jenkins can deploy to remote servers via SSH, Kubernetes clusters, or cloud services.</li>
+            <pre><code class="language-groovy">stage('Deploy to Kubernetes') {
+    steps {
+        // Assumes kubectl is configured on the agent
+        sh "kubectl apply -f k8s/deployment.yaml"
+        sh "kubectl set image deployment/my-app my-app=my-registry/my-app:${env.BUILD_NUMBER}"
+    }
+}</code></pre>
+        </ul>
+
+        <h2 id="jenkins-security">13. Jenkins Security</h2>
+        <p>Securing your Jenkins instance is paramount, as it can have access to sensitive credentials and infrastructure.</p>
+        <ul>
+            <li><strong>Enable Security:</strong> Security is enabled by default in modern Jenkins. Do NOT disable it.</li>
+            <li><strong>User Authentication:</strong>
+                <ul>
+                    <li>Use Jenkins's built-in user database or integrate with external systems (LDAP, Active Directory, OAuth with GitHub/Google).</li>
+                    <li>Enforce strong passwords.</li>
+                </ul>
+            </li>
+            <li><strong>Authorization (Role-Based Access Control - RBAC):</strong>
+                <ul>
+                    <li>Use "Matrix-based security" (built-in) or the Role-based Authorization Strategy plugin.</li>
+                    <li>Grant users/groups only the necessary permissions (least privilege).</li>
+                </ul>
+            </li>
+            <li><strong>Agent Security:</strong>
+                <ul>
+                    <li>Agents should run with minimal privileges.</li>
+                    <li>Use SSH for agent connections.</li>
+                    <li>Isolate agents (e.g., in Docker containers or dedicated VMs).</li>
+                </ul>
+            </li>
+            <li><strong>Credential Management:</strong> Use Jenkins's built-in Credentials Manager (as covered in Section 9).</li>
+            <li><strong>Plugin Security:</strong>
+                <ul>
+                    <li>Only install necessary plugins.</li>
+                    <li>Keep plugins updated.</li>
+                    <li>Be aware of security advisories for plugins.</li>
+                </ul>
+            </li>
+            <li><strong>Controller Security:</strong>
+                <ul>
+                    <li>Keep Jenkins controller updated.</li>
+                    <li>Run Jenkins on a dedicated server with a firewall (only exposing 8080 and 50000).</li>
+                    <li>Use HTTPS for the Jenkins UI (requires reverse proxy like Nginx/Apache).</li>
+                    <li>Limit access to the `/manage` page.</li>
+                </ul>
+            </li>
+            <li><strong>Backup Regularly:</strong> Back up your Jenkins Home directory (`/var/jenkins_home` or Docker volume) regularly.</li>
+            <li><strong>Audit Logs:</strong> Monitor Jenkins system and security logs.</li>
+        </ul>
+
+        <h2 id="best-practices">14. Best Practices</h2>
+        <ul>
+            <li><strong>Pipeline as Code:</strong> Always define your pipelines in a `Jenkinsfile` and store it in SCM.</li>
+            <li><strong>Declarative over Scripted (for most cases):</strong> Use Declarative Pipeline for its readability and structure, reserving Scripted for complex, dynamic logic.</li>
+            <li><strong>Modular Pipelines with Shared Libraries:</strong> Break down complex logic into reusable functions/steps in Shared Libraries.</li>
+            <li><strong>Use Agents:</strong> Distribute builds across agents to improve performance, provide isolated environments, and enhance security.</li>
+            <li><strong>Leverage Credentials Plugin:</strong> Never hardcode sensitive information.</li>
+            <li><strong>Optimize Builds:</strong>
+                <ul>
+                    <li>Parallelize stages/steps.</li>
+                    <li>Cache dependencies (e.g., Maven local repository, npm cache).</li>
+                    <li>Clean up workspace after builds.</li>
+                </ul>
+            </li>
+            <li><strong>Automate Testing:</strong> Integrate unit, integration, and end-to-end tests into your pipeline.</li>
+            <li><strong>Notify Stakeholders:</strong> Configure notifications (email, Slack) for build status.</li>
+            <li><strong>Monitor Jenkins Health:</strong> Keep an eye on system resources, build queues, and agent status.</li>
+            <li><strong>Keep Jenkins and Plugins Updated:</strong> Essential for security, bug fixes, and new features.</li>
+            <li><strong>Implement Security Best Practices:</strong> Strong authentication, granular authorization, and secure agent configuration.</li>
+            <li><strong>Version Control Jenkins Configuration:</strong> Use the JCasC (Configuration as Code) plugin to manage global Jenkins settings as code.</li>
+        </ul>
+
+        <h2 id="troubleshooting">15. Troubleshooting</h2>
+        <ul>
+            <li><strong>Build Failures:</strong>
+                <ul>
+                    <li>Always check the **Console Output** for the failed build. This is the primary source of error information.</li>
+                    <li>Look for stack traces, error messages from your build tools (Maven, npm), or script execution errors.</li>
+                </ul>
+            </li>
+            <li><strong>Agent Offline:</strong>
+                <ul>
+                    <li>Go to **Manage Jenkins** &gt; **Nodes**. Check the agent's status and its launch log.</li>
+                    <li>Verify network connectivity between controller and agent.</li>
+                    <li>Ensure Java is installed and configured correctly on the agent.</li>
+                    <li>Check SSH connection (firewall, credentials, SSH server on agent).</li>
+                </ul>
+            </li>
+            <li><strong>Plugin Issues:</strong>
+                <ul>
+                    <li>Check **Manage Jenkins** &gt; **Plugins** for updates or conflicts.</li>
+                    <li>Sometimes, an update to Jenkins core or another plugin can break a specific plugin.</li>
+                    <li>Restarting Jenkins (`sudo systemctl restart jenkins` or `docker restart jenkins-server`) can sometimes resolve plugin issues.</li>
+                </ul>
+            </li>
+            <li><strong>Pipeline Syntax Errors:</strong>
+                <ul>
+                    <li>Use the **Pipeline Syntax** snippet generator (Project &gt; Pipeline &gt; Pipeline Syntax) to generate correct step syntax.</li>
+                    <li>Use the "Declarative Pipeline Linter" (e.g., `http://localhost:8080/pipeline-syntax/lint`) to validate your `Jenkinsfile`.</li>
+                </ul>
+            </li>
+            <li><strong>Resource Exhaustion:</strong>
+                <ul>
+                    <li>If builds are slow or fail consistently, check CPU/memory usage on your Jenkins controller and agents (e.g., with `top`, `htop`).</li>
+                    <li>Consider adding more executors, more agents, or upgrading hardware.</li>
+                </ul>
+            </li>
+            <li><strong>Permissions Denied:</strong>
+                <ul>
+                    <li>Check file permissions on the agent's workspace.</li>
+                    <li>Verify IAM roles/permissions for any cloud integrations.</li>
+                    <li>Ensure correct Jenkins user permissions (e.g., "admin" vs. "developer" roles).</li>
+                </ul>
+            </li>
+            <li><strong>Jenkins Logs:</strong>
+                <ul>
+                    <li>Access Jenkins system logs for deeper insights:
+                        <pre><code class="language-bash"># For Linux installation:
+sudo cat /var/log/jenkins/jenkins.log
+# For Docker:
+docker logs jenkins-server</code></pre>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="tip">
+            <strong>Automate with Jenkins!</strong>
+            <p>Jenkins is a powerful tool at the heart of modern DevOps practices. By understanding its core functionalities, mastering Pipeline as Code, and leveraging its vast plugin ecosystem, you can build robust, automated CI/CD pipelines that streamline your software delivery process and enhance your team's productivity. Continuous learning and active participation in the Jenkins community will further deepen your expertise.</p>
+        </div>
+    </div>
+</body>
+</html>
