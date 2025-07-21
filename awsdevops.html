@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete AWS DevOps Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete AWS DevOps Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-aws-devops">1. What is AWS DevOps?</a></li>
+                <li><a href="#aws-devops-pillars">2. AWS DevOps Pillars</a></li>
+                <li><a href="#getting-started-with-aws">3. Getting Started with AWS</a></li>
+                <li><a href="#version-control-codecommit">4. Version Control (AWS CodeCommit)</a></li>
+                <li><a href="#continuous-integration-codebuild">5. Continuous Integration (AWS CodeBuild)</a></li>
+                <li><a href="#continuous-delivery-codedeploy">6. Continuous Delivery (AWS CodeDeploy)</a></li>
+                <li><a href="#ci-cd-orchestration-codepipeline">7. CI/CD Orchestration (AWS CodePipeline)</a></li>
+                <li><a href="#infrastructure-as-code-cloudformation">8. Infrastructure as Code (AWS CloudFormation)</a></li>
+                <li><a href="#containerization-and-orchestration">9. Containerization & Orchestration (ECR, ECS, EKS)</a></li>
+                <li><a href="#serverless-lambda-api-gateway">10. Serverless (AWS Lambda, API Gateway)</a></li>
+                <li><a href="#configuration-management-ssm">11. Configuration Management (AWS Systems Manager)</a></li>
+                <li><a href="#monitoring-logging-and-observability">12. Monitoring, Logging, & Observability (CloudWatch, X-Ray)</a></li>
+                <li><a href="#security-and-compliance">13. Security & Compliance (Security Hub, Config)</a></li>
+                <li><a href="#cost-management-and-optimization">14. Cost Management & Optimization (Cost Explorer)</a></li>
+                <li><a href="#best-practices">15. Best Practices (AWS Well-Architected Framework)</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-aws-devops">1. What is AWS DevOps?</h2>
+        <p><strong>AWS DevOps</strong> refers to the practice of leveraging Amazon Web Services (AWS) tools and services to implement DevOps methodologies. DevOps is a set of cultural philosophies, practices, and tools that increases an organization's ability to deliver applications and services at high velocity. AWS provides a rich suite of purpose-built services that simplify, automate, and scale various stages of the DevOps lifecycle, from code commit to deployment, monitoring, and operations.</p>
+        <p>By using AWS for DevOps, organizations can achieve:</p>
+        <ul>
+            <li><strong>Faster Release Cycles:</strong> Automate manual tasks and accelerate development workflows.</li>
+            <li><strong>Improved Reliability:</strong> Ensure consistent environments and robust deployments.</li>
+            <li><strong>Enhanced Collaboration:</strong> Break down silos between development and operations teams.</li>
+            <li><strong>Cost Efficiency:</strong> Optimize resource utilization with flexible cloud infrastructure.</li>
+            <li><strong>Scalability:</strong> Easily scale applications and infrastructure to meet demand.</li>
+        </ul>
+
+        <h2 id="aws-devops-pillars">2. AWS DevOps Pillars</h2>
+        <p>AWS's approach to DevOps is built around several key pillars, which align with the general DevOps principles:</p>
+        <ul>
+            <li><strong>Continuous Integration (CI):</strong> Automating the merge and test of code changes. (AWS CodeCommit, CodeBuild, CodePipeline)</li>
+            <li><strong>Continuous Delivery (CD):</strong> Automating the release process, ensuring software can be reliably released at any time. (AWS CodeDeploy, CodePipeline)</li>
+            <li><strong>Microservices:</strong> Architecting applications as loosely coupled services. (AWS Lambda, ECS, EKS)</li>
+            <li><strong>Infrastructure as Code (IaC):</strong> Provisioning and managing infrastructure using code. (AWS CloudFormation, AWS CDK)</li>
+            <li><strong>Monitoring and Logging:</strong> Gaining deep visibility into application and infrastructure performance. (Amazon CloudWatch, AWS X-Ray, Amazon Kinesis)</li>
+            <li><strong>Communication and Collaboration:</strong> Fostering teamwork across the software delivery lifecycle. (Integrations with third-party tools)</li>
+        </ul>
+        <div class="tip">
+            <strong>Getting Started:</strong> To follow this tutorial, you'll need an AWS account. Many of the services mentioned fall under the <a href="https://aws.amazon.com/free/" target="_blank">AWS Free Tier</a>, making it ideal for learning. Always remember to clean up resources after practice to avoid unexpected costs.
+        </div>
+
+        <h2 id="getting-started-with-aws">3. Getting Started with AWS</h2>
+        <h3>A. Create an AWS Account:</h3>
+        <p>Go to <a href="https://aws.amazon.com/" target="_blank">aws.amazon.com</a> and click "Create an AWS Account."</p>
+        <div class="warning">
+            <strong>Security Best Practice:</strong> After creating your account, immediately set up **Multi-Factor Authentication (MFA)** for your root account and create an **IAM user** with administrative privileges for daily use. Avoid using the root account for routine tasks.
+            <p><strong>Steps to set up MFA for root user (GUI):</strong> Log in to AWS Console as root &gt; Click your account name &gt; **Security credentials** &gt; Under "Multi-factor authentication (MFA)", click **Activate MFA** &gt; Choose **Authenticator app** &gt; Follow on-screen instructions.</p>
+        </div>
+        <h3>B. The AWS Management Console:</h3>
+        <p>This is the web-based interface for managing your AWS resources. This tutorial will primarily use the Console GUI.</p>
+        <pre><code class="language-bash"># Access: https://aws.amazon.com/console/</code></pre>
+        <p>Upon logging in, you'll see the **AWS Management Console Home** page. Use the search bar to quickly find services.</p>
+
+        <h2 id="version-control-codecommit">4. Version Control (AWS CodeCommit)</h2>
+        <p><strong>AWS CodeCommit</strong> is a fully managed source control service that hosts secure Git-based repositories. It eliminates the need to operate your own source control system and scales seamlessly.</p>
+        <h3>Usage Example: Create a CodeCommit Repository (GUI):</h3>
+        <ol>
+            <li><strong>Navigate to CodeCommit:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CodeCommit" &gt; Select CodeCommit under Services</code></pre>
+            </li>
+            <li><strong>Create a Repository:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Repositories** &gt; **Create repository**.</li>
+                    <li><strong>Repository name:</strong> Enter a unique name (e.g., `my-devops-app-repo`).</li>
+                    <li><strong>Description:</strong> (Optional) `Source code for my demo application.`</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Clone and Push Code:</strong>
+                <ul>
+                    <li>After creation, you'll see instructions to connect. Click **Clone URL** and select `HTTPS Git credentials` or `SSH`.</li>
+                    <li>Follow the instructions to set up Git credentials (IAM users can generate HTTPS Git credentials) or SSH keys.</li>
+                    <li><strong>Example commands (after setting up credentials):</strong>
+                        <pre><code class="language-bash">git clone https://git-codecommit.us-east-1.amazonaws.com/v1/repos/my-devops-app-repo
+cd my-devops-app-repo
+echo "Hello from AWS DevOps!" &gt; README.md
+git add .
+git commit -m "Initial commit"
+git push origin main # Push to 'main' branch</code></pre>
+                    </li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="continuous-integration-codebuild">5. Continuous Integration (AWS CodeBuild)</h2>
+        <p><strong>AWS CodeBuild</strong> is a fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy. You don't need to provision or scale build servers.</p>
+        <h3>Usage Example: Create a CodeBuild Project (GUI):</h3>
+        <p>This example assumes you have a sample application (e.g., a simple Node.js app with `package.json` and a `buildspec.yml` in its root) in your CodeCommit repository.</p>
+        <pre><code class="language-yaml"># buildspec.yml (example for a Node.js project)
+version: 0.2
+phases:
+  install:
+    commands:
+      - echo "Installing dependencies..."
+      - npm install
+  build:
+    commands:
+      - echo "Running tests..."
+      - npm test
+      - echo "Building application..."
+      - npm run build
+  post_build:
+    commands:
+      - echo "Build complete. Archiving artifacts..."
+artifacts:
+  files:
+    - '**/*' # Archive all files from the build output directory (e.g., 'dist/', 'build/')
+  discard-paths: no</code></pre>
+        <ol>
+            <li><strong>Navigate to CodeBuild:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CodeBuild" &gt; Select CodeBuild under Services</code></pre>
+            </li>
+            <li><strong>Create Build Project:</strong>
+                <ul>
+                    <li>Click **Create build project**.</li>
+                    <li><strong>Project configuration:</strong>
+                        <ul>
+                            <li><strong>Project name:</strong> (e.g., `my-app-build-project`).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Source:</strong>
+                        <ul>
+                            <li><strong>Source provider:</strong> `AWS CodeCommit`.</li>
+                            <li><strong>Repository:</strong> Select your `my-devops-app-repo`.</li>
+                            <li><strong>Branch:</strong> `main` (or the branch with your code).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Environment:</strong>
+                        <ul>
+                            <li><strong>Managed image:</strong> `Operating system` (e.g., `Ubuntu`), `Runtime(s)` (e.g., `Standard`), `Image` (e.g., `aws/codebuild/standard:5.0`).</li>
+                            <li><strong>Service role:</strong> Select "New service role" (CodeBuild will create one with necessary permissions).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Buildspec:</strong>
+                        <ul>
+                            <li>Select "Use a buildspec file".</li>
+                            <li><strong>Buildspec name:</strong> `buildspec.yml` (default, assuming file is in root).</li>
+                        </ul>
+                    </li>
+                    <li>(Optional) Configure artifacts, logs, batch configuration.</li>
+                    <li>Click **Create build project**.</li>
+                </ul>
+            </li>
+            <li><strong>Start a Build:</strong>
+                <ul>
+                    <li>On the project's detail page, click **Start build**.</li>
+                    <li>You can monitor the build status, phases, and view detailed build logs.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="continuous-delivery-codedeploy">6. Continuous Delivery (AWS CodeDeploy)</h2>
+        <p><strong>AWS CodeDeploy</strong> automates code deployments to any instance, including Amazon EC2 instances, AWS Fargate, AWS Lambda, and on-premises servers. It makes it easier to rapidly release new features, helps avoid downtime during deployment, and handles the complexity of updating applications.</p>
+        <h3>Usage Example: Deploy to EC2 (GUI):</h3>
+        <p>This assumes you have an EC2 instance running (e.g., `t2.micro` Amazon Linux) with the CodeDeploy agent installed and configured. Your application code (e.g., a simple `index.html`) and an `appspec.yml` file should be in your CodeCommit repo.</p>
+        <pre><code class="language-yaml"># appspec.yml (example for an EC2 deployment)
+version: 0.0
+os: linux
+files:
+  - source: /index.html       # Path in the application revision bundle
+    destination: /var/www/html # Destination path on the EC2 instance
+permissions:
+  - object: /var/www/html
+    pattern: "**"
+    owner: root
+    group: root
+hooks:
+  BeforeInstall: # Script to run before installing application files
+    - location: scripts/install_dependencies.sh # Assume a script in 'scripts' folder
+      timeout: 300
+      runas: root
+  AfterInstall: # Script to run after installing application files
+    - location: scripts/start_server.sh
+      timeout: 300
+      runas: root</code></pre>
+        <p>And create a `scripts` folder with `install_dependencies.sh` (e.g., `sudo yum install -y httpd`) and `start_server.sh` (e.g., `sudo systemctl start httpd && sudo systemctl enable httpd`).</p>
+        <ol>
+            <li><strong>Prepare IAM Role for CodeDeploy:</strong>
+                <ul>
+                    <li><strong>Service Role:</strong> CodeDeploy needs an IAM service role that allows it to access EC2 instances.
+                        <pre><code>AWS Console &gt; IAM &gt; Roles &gt; Create role &gt; AWS service &gt; CodeDeploy &gt; CodeDeploy. Click "Next" &gt; Create role.</code></pre>
+                    </li>
+                    <li><strong>EC2 Instance Profile Role:</strong> EC2 instances need a role to communicate with CodeDeploy.
+                        <pre><code>AWS Console &gt; IAM &gt; Roles &gt; Create role &gt; AWS service &gt; EC2 &gt; Attach policy `AmazonEC2RoleforAWSCodeDeploy` &gt; Create role. Attach this role to your EC2 instance.</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Navigate to CodeDeploy:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CodeDeploy" &gt; Select CodeDeploy under Services</code></pre>
+            </li>
+            <li><strong>Create Application:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Applications** &gt; **Create application**.</li>
+                    <li><strong>Application name:</strong> (e.g., `MyWebApp`).</li>
+                    <li><strong>Compute platform:</strong> `EC2/On-premises`.</li>
+                    <li>Click **Create application**.</li>
+                </ul>
+            </li>
+            <li><strong>Create Deployment Group:</strong>
+                <ul>
+                    <li>On the application's page, click **Create deployment group**.</li>
+                    <li><strong>Deployment group name:</strong> (e.g., `ProductionWebServers`).</li>
+                    <li><strong>Service role:</strong> Select the CodeDeploy service role you created.</li>
+                    <li><strong>Deployment type:</strong> `In-place`.</li>
+                    <li><strong>Environment configuration:</strong> Select `Amazon EC2 instances`. Use tags (e.g., `Name: CodeDeployDemo`) to identify your EC2 instance(s).</li>
+                    <li><strong>Deployment settings:</strong> Choose a deployment configuration (e.g., `CodeDeployDefault.AllAtOnce`).</li>
+                    <li>(Optional) Disable Load Balancer, configure Rollbacks.</li>
+                    <li>Click **Create deployment group**.</li>
+                </ul>
+            </li>
+            <li><strong>Create Deployment:</strong>
+                <ul>
+                    <li>On the deployment group's page, click **Create deployment**.</li>
+                    <li><strong>Revision type:</strong> `GitHub` (if your source is there) or `Amazon S3` (if CodeBuild puts output here) or `CodeCommit`. For this example, choose `CodeCommit`.</li>
+                    <li><strong>Repository name:</strong> Select `my-devops-app-repo`.</li>
+                    <li><strong>Commit ID:</strong> Select the latest commit ID for your application code.</li>
+                    <li>Click **Create deployment**.</li>
+                    <li>Monitor the deployment status in the CodeDeploy console.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="ci-cd-orchestration-codepipeline">7. CI/CD Orchestration (AWS CodePipeline)</h2>
+        <p><strong>AWS CodePipeline</strong> is a fully managed continuous delivery service that automates your release pipelines for fast and reliable application and infrastructure updates. It orchestrates the entire workflow from source code changes through build, test, and deployment.</p>
+        <h3>Usage Example: Create a Complete CI/CD Pipeline (GUI):</h3>
+        <p>This example connects CodeCommit (source) &gt; CodeBuild (build/test) &gt; CodeDeploy (deploy to EC2). Ensure you have a CodeCommit repo, a CodeBuild project, and a CodeDeploy application/deployment group configured as per previous sections.</p>
+        <ol>
+            <li><strong>Navigate to CodePipeline:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CodePipeline" &gt; Select CodePipeline under Services</code></pre>
+            </li>
+            <li><strong>Create Pipeline:</strong>
+                <ul>
+                    <li>Click **Create pipeline**.</li>
+                    <li><strong>Choose pipeline settings:</strong>
+                        <ul>
+                            <li><strong>Pipeline name:</strong> (e.g., `MyWebApp-CICD-Pipeline`).</li>
+                            <li><strong>Service role:</strong> Select "New service role" (CodePipeline will create one with necessary permissions).</li>
+                            <li>(Optional) Advanced settings.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Next**.</li>
+                    <li><strong>Source stage:</strong>
+                        <ul>
+                            <li><strong>Source provider:</strong> `AWS CodeCommit`.</li>
+                            <li><strong>Repository name:</strong> Select `my-devops-app-repo`.</li>
+                            <li><strong>Branch name:</strong> `main`.</li>
+                            <li><strong>Change detection options:</strong> `AWS CodePipeline` (recommended).</li>
+                            <li><strong>Output artifact format:</strong> `CodePipeline default`.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Next**.</li>
+                    <li><strong>Build stage:</strong>
+                        <ul>
+                            <li><strong>Build provider:</strong> `AWS CodeBuild`.</li>
+                            <li><strong>Project name:</strong> Select `my-app-build-project`.</li>
+                            <li><strong>Build type:</strong> `Single build`.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Next**.</li>
+                    <li><strong>Deploy stage:</strong>
+                        <ul>
+                            <li><strong>Deploy provider:</strong> `AWS CodeDeploy`.</li>
+                            <li><strong>Application name:</strong> Select `MyWebApp`.</li>
+                            <li><strong>Deployment group:</strong> Select `ProductionWebServers`.</li>
+                        </ul>
+                    </li>
+                    <li>Click **Next**.</li>
+                    <li><strong>Review:</strong> Review your pipeline configuration.</li>
+                    <li>Click **Create pipeline**.</li>
+                </ul>
+            </li>
+            <li><strong>Monitor Pipeline Execution:</strong>
+                <ul>
+                    <li>The pipeline will automatically start its first execution.</li>
+                    <li>Monitor the status of each stage in the CodePipeline console.</li>
+                    <li>Click on a stage to see details or link to CodeBuild/CodeDeploy logs.</li>
+                </ul>
+            </li>
+            <li><strong>Triggering the Pipeline:</strong> Any new `git push` to your CodeCommit repository's `main` branch will automatically trigger this pipeline.</li>
+        </ol>
+
+        <h2 id="infrastructure-as-code-cloudformation">8. Infrastructure as Code (AWS CloudFormation)</h2>
+        <p><strong>AWS CloudFormation</strong> allows you to model your entire AWS infrastructure (e.g., EC2 instances, VPCs, databases, load balancers) as code using JSON or YAML templates. It automates the provisioning and updating of resources in a predictable manner.</p>
+        <h3>Usage Example: Create an EC2 Web Server with CloudFormation (GUI):</h3>
+        <p>Create a file named `webserver-template.yaml` locally:</p>
+        <pre><code class="language-yaml"># webserver-template.yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Creates an EC2 instance with a security group for a web server.
+
+Parameters:
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t2.micro
+    AllowedValues: [t2.micro, t2.small, t2.medium]
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access
+    Type: AWS::EC2::KeyPair::KeyName
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value&lt;AWS::EC2::Image.Id&gt;'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+
+Resources:
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH and HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0 # WARNING: Restrict to your IP in production!
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0 # WARNING: Restrict as needed in production!
+      Tags:
+        - Key: Name
+          Value: WebServerSG
+
+  WebServerInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      SecurityGroupIds:
+        - !GetAtt WebServerSecurityGroup.GroupId
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          sudo yum update -y
+          sudo yum install -y httpd
+          sudo systemctl start httpd
+          sudo systemctl enable httpd
+          echo "<h1>Hello from CloudFormation!</h1>" | sudo tee /var/www/html/index.html
+      Tags:
+        - Key: Name
+          Value: CloudFormationWebServer
+
+Outputs:
+  WebServerPublicDNS:
+    Description: Public DNS name of the web server
+    Value: !GetAtt WebServerInstance.PublicDnsName
+  WebServerPublicIP:
+    Description: Public IP address of the web server
+    Value: !GetAtt WebServerInstance.PublicIp</code></pre>
+        <ol>
+            <li><strong>Navigate to CloudFormation:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CloudFormation" &gt; Select CloudFormation under Services</code></pre>
+            </li>
+            <li><strong>Create Stack:</strong>
+                <ul>
+                    <li>Click **Create stack** &gt; **With new resources (standard)**.</li>
+                    <li><strong>Specify template:</strong> Choose "Upload a template file" and upload your `webserver-template.yaml`.</li>
+                    <li>Click **Next**.</li>
+                    <li><strong>Specify stack details:</strong>
+                        <ul>
+                            <li><strong>Stack name:</strong> (e.g., `MyWebServerStack`).</li>
+                            <li><strong>Parameters:</strong> Provide values for `InstanceType` (e.g., `t2.micro`) and `KeyName` (select your existing EC2 key pair).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Next**.</li>
+                    <li><strong>Configure stack options:</strong> (Optional, e.g., tags, IAM role). Click **Next**.</li>
+                    <li><strong>Review:</strong> Review details. Check "I acknowledge that AWS CloudFormation might create IAM resources." (This template implicitly uses IAM for service roles, though not explicit IAM resources directly).</li>
+                    <li>Click **Submit**.</li>
+                </ul>
+            </li>
+            <li><strong>Monitor & Delete:</strong>
+                <ul>
+                    <li>Monitor the stack status. Once "CREATE_COMPLETE", go to the "Outputs" tab to find the Public IP/DNS.</li>
+                    <li>To delete all resources, select the stack and click **Delete**.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="containerization-and-orchestration">9. Containerization & Orchestration</h2>
+        <p>AWS provides services for building, storing, and running containerized applications.</p>
+        <h3>A. Amazon ECR (Elastic Container Registry) - GUI Usage:</h3>
+        <p>A fully managed Docker container registry that makes it easy to store, manage, share, and deploy your container images.</p>
+        <ol>
+            <li><strong>Navigate to ECR:</strong>
+                <pre><code>AWS Management Console &gt; Search for "ECR" &gt; Select Elastic Container Registry under Services</code></pre>
+            </li>
+            <li><strong>Create Repository:</strong>
+                <ul>
+                    <li>Click **Create repository**.</li>
+                    <li><strong>Visibility settings:</strong> `Private`.</li>
+                    <li><strong>Repository name:</strong> (e.g., `my-app-images`).</li>
+                    <li>Click **Create repository**.</li>
+                </ul>
+            </li>
+            <li><strong>Push Image:</strong> After creation, click on your repository name &gt; **View push commands**. Follow the instructions to tag and push your local Docker images (e.g., `my-node-app:1.0` from earlier Docker section) to ECR.</li>
+        </ol>
+        <h3>B. Amazon ECS (Elastic Container Service) & AWS Fargate - GUI Usage:</h3>
+        <p>A fully managed container orchestration service that makes it easy to run, stop, and manage Docker containers. AWS Fargate is a serverless compute engine for ECS that removes the need to provision and manage servers.</p>
+        <ol>
+            <li><strong>Navigate to ECS:</strong>
+                <pre><code>AWS Management Console &gt; Search for "ECS" &gt; Select Elastic Container Service under Services</code></pre>
+            </li>
+            <li><strong>Create Cluster:</strong>
+                <ul>
+                    <li>In the left pane, click **Clusters** &gt; **Create Cluster**.</li>
+                    <li>Select **Fargate (Serverless)**.</li>
+                    <li>**Cluster name:** (e.g., `my-fargate-cluster`).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Create Task Definition:</strong>
+                <ul>
+                    <li>In the left pane, click **Task Definitions** &gt; **Create new task definition**.</li>
+                    <li><strong>Launch type compatibility:</strong> `Fargate`. Click **Next Step**.</li>
+                    <li><strong>Task Definition Name:</strong> (e.g., `my-app-task`).</li>
+                    <li><strong>Task Role:</strong> Select "Create new role".</li>
+                    <li><strong>Task execution role:</strong> Select "Create new role".</li>
+                    <li><strong>Task memory & CPU:</strong> Select appropriate values (e.g., `0.5GB`, `0.25 vCPU`).</li>
+                    <li><strong>Add container:</strong>
+                        <ul>
+                            <li><strong>Container name:</strong> (e.g., `my-web-container`).</li>
+                            <li><strong>Image:</strong> Enter the ECR image URI (e.g., `&lt;YOUR_ACCOUNT_ID&gt;.dkr.ecr.us-east-1.amazonaws.com/my-app-images:latest`).</li>
+                            <li><strong>Port mappings:</strong> (e.g., `80` TCP).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Add** &gt; **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Create Service (Deploy Task):</strong>
+                <ul>
+                    <li>In the left pane, click **Clusters**. Select `my-fargate-cluster`.</li>
+                    <li>On the "Services" tab, click **Create**.</li>
+                    <li><strong>Launch type:</strong> `Fargate`.</li>
+                    <li><strong>Task Definition:</strong> Select `my-app-task`.</li>
+                    <li><strong>Service name:</strong> (e.g., `my-app-service`).</li>
+                    <li><strong>Number of desired tasks:</strong> (e.g., `1`).</li>
+                    <li><strong>Networking:</strong> Select your VPC, subnets. Choose to assign a **Public IP** if public access is needed.</li>
+                    <li>Click **Create Service**.</li>
+                </ul>
+            </li>
+            <li><strong>Access:</strong> Once the service is running, find its public IP or integrate with an Application Load Balancer.</li>
+        </ol>
+
+        <h3>C. Amazon EKS (Elastic Kubernetes Service) - GUI Usage:</h3>
+        <p>A fully managed Kubernetes service that makes it easy to run Kubernetes on AWS.</p>
+        <ol>
+            <li><strong>Navigate to EKS:</strong>
+                <pre><code>AWS Management Console &gt; Search for "EKS" &gt; Select Amazon Elastic Kubernetes Service under Services</code></pre>
+            </li>
+            <li><strong>Create Cluster:</strong>
+                <ul>
+                    <li>Click **Add cluster** &gt; **Create**.</li>
+                    <li><strong>Configure cluster:</strong>
+                        <ul>
+                            <li><strong>Name:</strong> (e.g., `my-eks-cluster`).</li>
+                            <li><strong>Kubernetes version:</strong> Select a version.</li>
+                            <li><strong>Cluster service role:</strong> Select "Create an IAM role for this cluster".</li>
+                            <li>Configure networking (VPC, subnets, security groups).</li>
+                        </ul>
+                    </li>
+                    <li>Click **Create**. (Cluster creation can take 10-15 minutes).</li>
+                </ul>
+            </li>
+            <li><strong>Add Node Group:</strong>
+                <ul>
+                    <li>Once the cluster is created, go to the cluster detail page &gt; **Compute** tab &gt; **Add node group**.</li>
+                    <li>Configure name, instance type, desired size, scaling.</li>
+                    <li>This creates EC2 instances that will run your Kubernetes pods.</li>
+                </ul>
+            </li>
+            <li><strong>Deploy Application:</strong> After the cluster and node group are ready, you typically use `kubectl` (configured locally or via CloudShell) to deploy your Kubernetes manifests (Deployments, Services, etc.).</li>
+        </ol>
+
+        <h2 id="serverless-lambda-api-gateway">10. Serverless (AWS Lambda, API Gateway)</h2>
+        <p>AWS offers powerful serverless compute and API management services.</p>
+        <h3>A. AWS Lambda - GUI Usage:</h3>
+        <p>Runs code without provisioning or managing servers. You pay only for the compute time consumed.</p>
+        <ol>
+            <li><strong>Navigate to Lambda:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Lambda" &gt; Select Lambda under Services</code></pre>
+            </li>
+            <li><strong>Create Function:</strong>
+                <ul>
+                    <li>Click **Create function**.</li>
+                    <li>Choose **Author from scratch**.</li>
+                    <li><strong>Function name:</strong> (e.g., `MyHelloWorldLambda`).</li>
+                    <li><strong>Runtime:</strong> (e.g., `Python 3.9`, `Node.js 18`).</li>
+                    <li><strong>Architecture:</strong> `x86_64` (default).</li>
+                    <li><strong>Permissions:</strong> Select "Create a new role with basic Lambda permissions" (allows logging to CloudWatch).</li>
+                    <li>Click **Create function**.</li>
+                </ul>
+            </li>
+            <li><strong>Write Code:</strong>
+                <ul>
+                    <li>In the "Code" tab, use the inline code editor to write or paste your function code.
+                        <pre><code class="language-python"># For Python
+import json
+
+def lambda_handler(event, context):
+    return {
+        'statusCode': 200,
+        'body': json.dumps('Hello from Lambda!')
+    }</code></pre>
+                    </li>
+                    <li>Click **Deploy**.</li>
+                </ul>
+            </li>
+            <li><strong>Test:</strong>
+                <ul>
+                    <li>Click the **Test** tab.</li>
+                    <li>Configure a test event (e.g., select `hello-world` template).</li>
+                    <li>Click **Test**. View the execution results and logs.</li>
+                </ul>
+            </li>
+        </ol>
+        <h3>B. Amazon API Gateway - GUI Usage:</h3>
+        <p>A fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale.</p>
+        <ol>
+            <li><strong>Navigate to API Gateway:</strong>
+                <pre><code>AWS Management Console &gt; Search for "API Gateway" &gt; Select API Gateway under Services</code></pre>
+            </li>
+            <li><strong>Create API:</strong>
+                <ul>
+                    <li>Click **Build** under "REST API".</li>
+                    <li>Choose "New API".</li>
+                    <li><strong>API name:</strong> (e.g., `MyLambdaAPI`).</li>
+                    <li>Click **Create API**.</li>
+                </ul>
+            </li>
+            <li><strong>Create Method & Integrate with Lambda:</strong>
+                <ul>
+                    <li>Click **Actions** &gt; **Create Method** (e.g., `GET`).</li>
+                    <li><strong>Integration type:</strong> `Lambda Function`.</li>
+                    <li><strong>Lambda Function:</strong> Enter your Lambda function name (e.g., `MyHelloWorldLambda`).</li>
+                    <li>Click **Save**. When prompted, click **OK** to grant API Gateway permissions to invoke your Lambda function.</li>
+                </ul>
+            </li>
+            <li><strong>Deploy API:</strong>
+                <ul>
+                    <li>Click **Actions** &gt; **Deploy API**.</li>
+                    <li><strong>Deployment stage:</strong> `[New Stage]`.</li>
+                    <li><strong>Stage name:</strong> (e.g., `prod` or `dev`).</li>
+                    <li>Click **Deploy**.</li>
+                </ul>
+            </li>
+            <li><strong>Test:</strong> The "Stage Editor" page will display the **Invoke URL**. Access this URL in your browser to test your Lambda function via API Gateway.</li>
+        </ol>
+
+        <h2 id="configuration-management-ssm">11. Configuration Management (AWS Systems Manager)</h2>
+        <p><strong>AWS Systems Manager (SSM)</strong> gives you visibility and control over your AWS infrastructure. It helps automate operational tasks like patching, running commands, and managing configurations across EC2 instances and on-premises servers.</p>
+        <h3>Usage Example: Run Command on EC2 Instance (GUI):</h3>
+        <p>This assumes you have an EC2 instance with the SSM Agent installed (default on Amazon Linux 2, Ubuntu Server, Windows Server) and an IAM instance profile attached that grants `AmazonSSMManagedInstanceCore` permissions.</p>
+        <ol>
+            <li><strong>Navigate to Systems Manager:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Systems Manager" &gt; Select Systems Manager under Services</code></pre>
+            </li>
+            <li><strong>Run Command:</strong>
+                <ul>
+                    <li>In the left navigation pane, under "Node Management", click **Run Command**.</li>
+                    <li>Click **Run command**.</li>
+                    <li><strong>Command document:</strong> Search for and select `AWS-RunShellScript` (for Linux) or `AWS-RunPowerShellScript` (for Windows).</li>
+                    <li><strong>Commands:</strong> In the "Command parameters" section, enter a shell command (e.g., `ls -l /tmp`).</li>
+                    <li><strong>Targets:</strong> Select your EC2 instance(s).</li>
+                    <li>(Optional) Configure output to S3/CloudWatch Logs.</li>
+                    <li>Click **Run**.</li>
+                </ul>
+            </li>
+            <li><strong>View Results:</strong> Monitor the command status. Once "Success," click on the **Command ID** and then the **Output** tab to see the command's results.</li>
+        </ol>
+        <div class="tip">
+            <strong>Other SSM Features:</strong> Explore **Patch Manager** for automated OS patching, **Session Manager** for secure shell access without SSH keys, and **Parameter Store** for centralized configuration management.
+        </div>
+
+        <h2 id="monitoring-logging-and-observability">12. Monitoring, Logging, & Observability</h2>
+        <p>Crucial for understanding application performance, infrastructure health, and troubleshooting issues in a DevOps environment.</p>
+        <h3>A. Amazon CloudWatch - GUI Usage:</h3>
+        <p>Monitors your AWS resources and the applications you run on AWS in real-time. Collects metrics, logs, and sets alarms.</p>
+        <ol>
+            <li><strong>Navigate to CloudWatch:</strong>
+                <pre><code>AWS Management Console &gt; Search for "CloudWatch" &gt; Select CloudWatch under Services</code></pre>
+            </li>
+            <li><strong>Explore Metrics:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Metrics** &gt; **All metrics**.</li>
+                    <li>Explore metrics by AWS service (e.g., `EC2 > Per-Instance Metrics` to see CPU Utilization, Network In/Out for your VMs).</li>
+                </ul>
+            </li>
+            <li><strong>Create Alarms:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Alarms** &gt; **Create alarm**.</li>
+                    <li><strong>Select metric:</strong> Choose a metric (e.g., `EC2 > CPU Utilization` for a specific instance).</li>
+                    <li><strong>Specify metric and conditions:</strong> Define a **Threshold type** (e.g., `Static`) and a **Threshold value** (e.g., `&gt; 80%`).</li>
+                    <li><strong>Configure actions:</strong> Choose what happens when the alarm state is reached (e.g., `Send a notification to an SNS topic`).</li>
+                    <li>Click **Create alarm**.</li>
+                </ul>
+            </li>
+            <li><strong>View Logs:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Logs** &gt; **Log groups**.</li>
+                    <li>Explore log groups created by Lambda, CodeBuild, or EC2 instances (if CloudWatch agent is installed).</li>
+                </ul>
+            </li>
+        </ol>
+        <h3>B. AWS X-Ray - GUI Usage:</h3>
+        <p>Helps developers analyze and debug distributed applications, such as those built using microservices. It provides an end-to-end view of requests as they travel through your application.</p>
+        <ol>
+            <li><strong>Navigate to X-Ray:</strong>
+                <pre><code>AWS Management Console &gt; Search for "X-Ray" &gt; Select AWS X-Ray under Services</code></pre>
+            </li>
+            <li><strong>Explore Service Map:</strong> After enabling X-Ray in your application (requires SDK integration), the Service Map will visually represent the components of your application and the connections between them, highlighting latency and errors.</li>
+            <li><strong>Traces:</strong> View detailed request traces, showing how much time is spent in each service or component.</li>
+        </ol>
+
+        <h2 id="security-and-compliance">13. Security & Compliance</h2>
+        <p>Integrating security throughout the DevOps lifecycle (DevSecOps) is critical.</p>
+        <h3>A. AWS Security Hub - GUI Usage:</h3>
+        <p>Provides a comprehensive view of your security alerts and security posture across your AWS accounts, aggregating findings from various AWS security services and partner products.</p>
+        <ol>
+            <li><strong>Navigate to Security Hub:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Security Hub" &gt; Select Security Hub under Services</code></pre>
+            </li>
+            <li><strong>Enable Security Hub:</strong>
+                <ul>
+                    <li>Click **Go to Security Hub**.</li>
+                    <li>Choose your regions and select desired security standards (e.g., AWS Foundational Security Best Practices).</li>
+                    <li>Click **Enable Security Hub**.</li>
+                </ul>
+            </li>
+            <li><strong>Review Findings:</strong> The "Summary" and "Findings" dashboards will display security findings from integrated services.</li>
+        </ol>
+        <h3>B. AWS Config - GUI Usage:</h3>
+        <p>Provides a detailed view of the configuration of AWS resources in your account. It continuously monitors and records AWS resource configurations and allows you to automate the evaluation of recorded configurations against desired configurations.</p>
+        <ol>
+            <li><strong>Navigate to Config:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Config" &gt; Select AWS Config under Services</code></pre>
+            </li>
+            <li><strong>Get Started:</strong>
+                <ul>
+                    <li>Click **Get started**.</li>
+                    <li>Choose "Record all resources" (recommended for full visibility).</li>
+                    <li>Select "AWS Config service-linked role" or create a new one.</li>
+                    <li>Click **Continue**.</li>
+                </ul>
+            </li>
+            <li><strong>Add Rules:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Rules** &gt; **Add rule**.</li>
+                    <li>Search for managed rules (e.g., `s3-bucket-public-read-prohibited`, `ec2-instance-no-public-ip`).</li>
+                    <li>Select the rule, configure parameters, and choose scope.</li>
+                    <li>Click **Add rule**.</li>
+                </ul>
+            </li>
+            <li><strong>Monitor Compliance:</strong> The AWS Config dashboard shows the compliance status of your resources against the configured rules.</li>
+        </ol>
+
+        <h2 id="cost-management-and-optimization">14. Cost Management & Optimization</h2>
+        <p>DevOps practices aim to optimize costs by right-sizing resources and automating cleanup.</p>
+        <h3>A. AWS Cost Explorer - GUI Usage:</h3>
+        <p>Helps you visualize, understand, and manage your AWS costs and usage over time.</p>
+        <ol>
+            <li><strong>Navigate to Cost Explorer:</strong>
+                <pre><code>AWS Management Console &gt; Search for "Cost Explorer" &gt; Select Cost Explorer under Services</code></pre>
+            </li>
+            <li><strong>Launch Cost Explorer:</strong> Click **Launch Cost Explorer**.</li>
+            <li><strong>Explore Reports:</strong>
+                <ul>
+                    <li>View default reports (e.g., "Monthly costs by service").</li>
+                    <li>Apply filters (e.g., by Service, Region, Tag) and group by different dimensions (e.g., `Service`, `Usage type`, `Tag`).</li>
+                </ul>
+            </li>
+            <li><strong>Budgets:</strong>
+                <ul>
+                    <li>In the left navigation pane, click **Budgets** &gt; **Create budget**.</li>
+                    <li>Choose budget type (e.g., `Cost budget`). Define your budget amount and period.</li>
+                    <li>Configure **Alerts** to notify you when actual or forecasted costs exceed thresholds.</li>
+                </ul>
+            </li>
+        </ol>
+        <h3>B. Cost Optimization Strategies (DevOps Context):</h3>
+        <ul>
+            <li><strong>Right-Sizing:</strong> Monitor resource utilization with CloudWatch and adjust EC2 instance types, RDS sizes, etc., to match actual needs.</li>
+            <li><strong>Automated Cleanup:</strong> Use Lambda functions, Systems Manager, or CloudFormation to automatically terminate unused resources (e.g., dev/test environments after hours).</li>
+            <li><strong>Spot Instances:</strong> For fault-tolerant CI/CD jobs or batch processing, use EC2 Spot Instances for significant savings.</li>
+            <li><strong>Serverless (Lambda, Fargate, S3):</strong> Pay only for consumption, often more cost-effective for intermittent workloads.</li>
+            <li><strong>Lifecycle Policies (S3):</strong> Transition old S3 data to cheaper storage classes (Glacier) or delete it automatically.</li>
+        </ul>
+
+        <h2 id="best-practices">15. Best Practices (AWS Well-Architected Framework)</h2>
+        <p>The <a href="https://aws.amazon.com/architecture/well-architected/" target="_blank">AWS Well-Architected Framework</a> provides guidance for designing and operating reliable, secure, efficient, and cost-effective systems in the cloud. It's built around six pillars:</p>
+        <ul>
+            <li><strong>Operational Excellence:</strong> Automate changes, respond to events, define standards.</li>
+            <li><strong>Security:</strong> Protect data and systems, manage user permissions, detect security events.</li>
+            <li><strong>Reliability:</strong> Design for recovery from failure, automatically recover, scale horizontally.</li>
+            <li><strong>Performance Efficiency:</strong> Use computing resources efficiently, select right resource types, monitor performance.</li>
+            <li><strong>Cost Optimization:</strong> Avoid unnecessary costs, select right resources, scale to meet needs without overspending.</li>
+            <li><strong>Sustainability:</strong> Minimize environmental impacts by maximizing utilization and reducing resource needs.</li>
+        </ul>
+        <h3>DevOps Specific Best Practices on AWS:</h3>
+        <ul>
+            <li><strong>Automate Everything:</strong> Use AWS Code* services to automate CI/CD, CloudFormation for IaC, Lambda for event-driven automation.</li>
+            <li><strong>Implement Pipelines:</strong> Use CodePipeline as the central orchestrator for your CI/CD workflows.</li>
+            <li><strong>Version Control All the Things:</strong> Store application code (CodeCommit), infrastructure definitions (CloudFormation), and pipeline definitions (CodePipeline) in Git.</li>
+            <li><strong>Monitor and Alarm:</strong> Use CloudWatch for comprehensive monitoring, logging, and alarming. Integrate with external tools if needed.</li>
+            <li><strong>Shift Security Left:</strong> Integrate security tools (e.g., CodeGuru, Inspector, Security Hub, WAF) into your pipeline stages.</li>
+            <li><strong>Containerize Applications:</strong> Use Docker with ECR, ECS, or EKS for consistent and scalable deployments.</li>
+            <li><strong>Adopt Serverless:</strong> Leverage Lambda and API Gateway for event-driven architectures to reduce operational overhead.</li>
+            <li><strong>Implement Continuous Testing:</strong> Integrate automated unit, integration, and E2E tests into CodeBuild/CodePipeline stages.</li>
+            <li><strong>Enable Telemetry and Tracing:</strong> Use X-Ray for distributed tracing to identify performance bottlenecks.</li>
+            <li><strong>Practice Blameless Post-Mortems:</strong> Learn from incidents and improve processes.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Your AWS DevOps Journey Awaits!</strong>
+            <p>AWS provides a robust and integrated platform to implement comprehensive DevOps practices. By understanding these services and their GUI-based usage, you can build efficient, scalable, and resilient software delivery pipelines. Consistent hands-on practice, combined with a deep dive into AWS documentation and the Well-Architected Framework, will accelerate your journey to becoming a proficient AWS DevOps engineer.</p>
+        </div>
+    </div>
+</body>
+</html>
