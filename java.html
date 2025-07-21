@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Java Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Java Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction-to-java">1. Introduction to Java</a></li>
+                <li><a href="#java-development-environment">2. Java Development Environment (JDK)</a></li>
+                <li><a href="#hello-world-program">3. Hello World Program</a></li>
+                <li><a href="#java-basics-syntax-comments">4. Java Basics (Syntax, Comments)</a></li>
+                <li><a href="#data-types-and-variables">5. Data Types & Variables</a></li>
+                <li><a href="#operators">6. Operators</a></li>
+                <li><a href="#control-flow-conditionals-loops">7. Control Flow (Conditionals & Loops)</a></li>
+                <li><a href="#methods">8. Methods (Functions)</a></li>
+                <li><a href="#object-oriented-programming-oop">9. Object-Oriented Programming (OOP)</a></li>
+                <li><a href="#arrays">10. Arrays</a></li>
+                <li><a href="#strings">11. Strings</a></li>
+                <li><a href="#inheritance-polymorphism">12. Inheritance & Polymorphism</a></li>
+                <li><a href="#abstraction-and-interfaces">13. Abstraction & Interfaces</a></li>
+                <li><a href="#exception-handling">14. Exception Handling</a></li>
+                <li><a href="#collections-framework">15. Collections Framework</a></li>
+                <li><a href="#file-io">16. File I/O</a></li>
+                <li><a href="#multithreading">17. Multithreading</a></li>
+                <li><a href="#generics">18. Generics</a></li>
+                <li><a href="#lambda-expressions-streams-api">19. Lambda Expressions & Streams API (Java 8+)</a></li>
+                <li><a href="#java-modules">20. Java Modules (Java 9+)</a></li>
+                <li><a href="#packaging-and-build-tools">21. Packaging & Build Tools</a></li>
+                <li><a href="#best-practices">22. Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction-to-java">1. Introduction to Java</h2>
+        <p><strong>Java</strong> is a high-level, class-based, object-oriented programming language that is designed to have as few implementation dependencies as possible. It is a general-purpose programming language intended to let application developers <q>write once, run anywhere</q> (WORA), meaning that compiled Java code can run on all platforms that support Java without the need for recompilation.</p>
+        <p>Java is one of the most popular programming languages, widely used for:</p>
+        <ul>
+            <li>Enterprise-level applications (e.g., Spring Boot)</li>
+            <li>Android mobile applications</li>
+            <li>Big data processing</li>
+            <li>Web applications (backend)</li>
+            <li>Embedded systems</li>
+            <li>Scientific applications</li>
+        </ul>
+        <h3>Key Features of Java:</h3>
+        <ul>
+            <li><strong>Object-Oriented:</strong> Everything in Java is an object (with a few primitive exceptions).</li>
+            <li><strong>Platform-Independent:</strong> Achieved through the Java Virtual Machine (JVM).</li>
+            <li><strong>Simple:</strong> Designed to be easy to learn and use.</li>
+            <li><strong>Secure:</strong> Robust security features.</li>
+            <li><strong>Robust:</strong> Strong memory management and exception handling.</li>
+            <li><strong>Multithreaded:</strong> Supports concurrent execution.</li>
+            <li><strong>High Performance:</strong> Achieved through JIT (Just-In-Time) compilers.</li>
+            <li><strong>Distributed:</strong> Designed for building distributed applications.</li>
+        </ul>
+        <div class="tip">
+            <strong>Tip for Practice:</strong> To compile and run Java code, you'll need a Java Development Kit (JDK). Use an IDE like IntelliJ IDEA, Eclipse, or VS Code for a better development experience.
+        </div>
+
+        <h2 id="java-development-environment">2. Java Development Environment (JDK)</h2>
+        <p>To write, compile, and run Java programs, you need a **Java Development Kit (JDK)**. The JDK includes the Java Runtime Environment (JRE), a compiler (<code>javac</code>), and other development tools.</p>
+        <h3>A. Install JDK:</h3>
+        <p>You can download JDK from Oracle or OpenJDK distributions like Adoptium (Temurin).</p>
+        <ol>
+            <li>Go to <a href="https://adoptium.net/temurin/releases/" target="_blank">adoptium.net/temurin/releases/</a> (recommended for OpenJDK).</li>
+            <li>Download the LTS (Long Term Support) version (e.g., JDK 17 or JDK 21) for your operating system.</li>
+            <li>Follow the installation wizard.</li>
+        </ol>
+        <h3>B. Set up Environment Variables:</h3>
+        <p>After installation, you might need to set the `JAVA_HOME` environment variable and add Java's `bin` directory to your system's `PATH` variable.</p>
+        <ul>
+            <li><strong>Windows:</strong>
+                <ul>
+                    <li>Right-click "This PC" &gt; Properties &gt; Advanced system settings &gt; Environment Variables.</li>
+                    <li>Under "System variables," add a new variable:
+                        <ul>
+                            <li>Variable name: `JAVA_HOME`</li>
+                            <li>Variable value: `C:\Program Files\Java\jdk-17` (or your JDK path)</li>
+                        </ul>
+                    </li>
+                    <li>Edit the `Path` variable: Add `%JAVA_HOME%\bin` to the list.</li>
+                </ul>
+            </li>
+            <li><strong>Linux/macOS:</strong>
+                <pre><code class="language-bash"># Open ~/.bashrc, ~/.zshrc, or ~/.profile
+nano ~/.bashrc
+
+# Add these lines (replace with your actual JDK path):
+export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64" # Linux example
+# export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" # macOS example
+export PATH="$JAVA_HOME/bin:$PATH"
+
+# Apply changes:
+source ~/.bashrc # or ~/.zshrc, ~/.profile</code></pre>
+            </li>
+        </ul>
+        <h3>C. Verify Installation:</h3>
+        <p>Open your terminal/command prompt and run:</p>
+        <pre><code class="language-bash">java -version
+javac -version</code></pre>
+        <p>You should see the installed JDK versions.</p>
+
+        <h2 id="hello-world-program">3. Hello World Program</h2>
+        <p>The classic first program.</p>
+        <h3>A. Create the File:</h3>
+        <p>Create a file named `HelloWorld.java` using any text editor.</p>
+        <pre><code class="language-java">// HelloWorld.java
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Hello, World!"); // Prints "Hello, World!" to the console
+    }
+}</code></pre>
+        <h3>B. Compile the Program:</h3>
+        <p>Open your terminal/command prompt, navigate to the directory where you saved `HelloWorld.java`, and run the Java compiler:</p>
+        <pre><code class="language-bash">javac HelloWorld.java</code></pre>
+        <p>If compilation is successful, a `HelloWorld.class` file will be created in the same directory. This is the bytecode, which the JVM understands.</p>
+        <h3>C. Run the Program:</h3>
+        <pre><code class="language-bash">java HelloWorld</code></pre>
+        <p><strong>Expected Output:</strong></p>
+        <pre><code class="language-text">Hello, World!</code></pre>
+
+        <h2 id="java-basics-syntax-comments">4. Java Basics (Syntax, Comments)</h2>
+        <h3>A. Basic Syntax Rules:</h3>
+        <ul>
+            <li><strong>Case-Sensitivity:</strong> Java is case-sensitive (`myVar` is different from `myvar`).</li>
+            <li><strong>Class Names:</strong> Start with an uppercase letter (e.g., `MyClass`).</li>
+            <li><strong>Method Names:</strong> Start with a lowercase letter (e.g., `myMethod`).</li>
+            <li><strong>Program File Name:</strong> Must match the public class name (e.g., `MyClass.java` must contain `public class MyClass`).</li>
+            <li><strong>Statements:</strong> End with a semicolon (`;`).</li>
+            <li><strong>Code Blocks:</strong> Enclosed in curly braces (`{ }`).</li>
+            <li><strong>Keywords:</strong> Reserved words (`public`, `class`, `static`, `void`, `int`, etc.) have special meanings.</li>
+        </ul>
+        <h3>B. Comments:</h3>
+        <p>Used to explain code and make it more readable. Ignored by the compiler.</p>
+        <ul>
+            <li><strong>Single-line comment:</strong> Starts with `//`.
+                <pre><code class="language-java">int x = 10; // This is a single-line comment</code></pre>
+            </li>
+            <li><strong>Multi-line comment:</strong> Starts with `/*` and ends with `*/`.
+                <pre><code class="language-java">/*
+ * This is a multi-line comment.
+ * It can span across multiple lines.
+ */
+int y = 20;</code></pre>
+            </li>
+            <li><strong>Documentation comment (Javadoc):</strong> Starts with `/**` and ends with `*/`. Used to generate API documentation.
+                <pre><code class="language-java">/**
+ * This method calculates the sum of two numbers.
+ * @param a The first number.
+ * @param b The second number.
+ * @return The sum of a and b.
+ */
+public int add(int a, int b) {
+    return a + b;
+}</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="data-types-and-variables">5. Data Types & Variables</h2>
+        <p>Variables are containers for storing data values. Java is a strongly-typed language, meaning you must declare the type of a variable before using it.</p>
+        <h3>A. Primitive Data Types:</h3>
+        <p>Store simple values directly in memory.</p>
+        <ul>
+            <li><strong>`byte`:</strong> 8-bit integer (-128 to 127)</li>
+            <li><strong>`short`:</strong> 16-bit integer</li>
+            <li><strong>`int`:</strong> 32-bit integer (most common for whole numbers)</li>
+            <li><strong>`long`:</strong> 64-bit integer (for very large whole numbers)</li>
+            <li><strong>`float`:</strong> 32-bit floating-point number (single precision, append `f` or `F`)</li>
+            <li><strong>`double`:</strong> 64-bit floating-point number (double precision, most common for decimals)</li>
+            <li><strong>`boolean`:</strong> `true` or `false`</li>
+            <li><strong>`char`:</strong> 16-bit Unicode character (single character in single quotes)</li>
+        </ul>
+        <pre><code class="language-java">int age = 30;
+double price = 19.99;
+boolean isActive = true;
+char initial = 'J';
+long population = 8000000000L; // 'L' suffix for long literal
+float temperature = 98.6f; // 'f' suffix for float literal</code></pre>
+        <h3>B. Non-Primitive Data Types (Reference Types):</h3>
+        <p>Store references (memory addresses) to objects. Includes `String`, Arrays, Classes, Interfaces.</p>
+        <ul>
+            <li><strong>`String`:</strong> A sequence of characters (enclosed in double quotes).</li>
+            <li><strong>Arrays:</strong> Ordered collections of elements of the same type.</li>
+            <li><strong>Classes/Objects:</strong> Instances of user-defined classes.</li>
+        </ul>
+        <pre><code class="language-java">String name = "John Doe";
+int[] numbers = {1, 2, 3}; // Array of integers
+Date today = new Date(); // Object of Date class</code></pre>
+        <h3>C. Variable Declaration & Initialization:</h3>
+        <pre><code class="language-java">int quantity; // Declaration
+quantity = 100; // Initialization
+
+String city = "New York"; // Declaration and Initialization
+
+final double PI = 3.14159; // 'final' keyword makes a variable a constant (cannot be changed)
+// PI = 3.14; // Error: Cannot assign a value to a final variable</code></pre>
+        <h3>D. Type Casting:</h3>
+        <p>Converting one data type to another.</p>
+        <ul>
+            <li><strong>Widening (Automatic):</strong> Smaller type to larger type.
+                <pre><code class="language-java">int myInt = 9;
+double myDouble = myInt; // myDouble is now 9.0</code></pre>
+            </li>
+            <li><strong>Narrowing (Manual/Explicit):</strong> Larger type to smaller type. May result in data loss.
+                <pre><code class="language-java">double myDouble = 9.78;
+int myInt = (int) myDouble; // myInt is now 9 (decimal part is truncated)</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="operators">6. Operators</h2>
+        <p>Symbols that perform operations on variables and values.</p>
+        <ul>
+            <li><strong>Arithmetic Operators:</strong> `+`, `-`, `*`, `/`, `%` (modulus), `++` (increment), `--` (decrement).
+                <pre><code class="language-java">int a = 10, b = 3;
+System.out.println(a + b); // 13
+System.out.println(a / b); // 3 (integer division)
+System.out.println(a % b); // 1 (remainder)
+a++; // a is now 11</code></pre>
+            </li>
+            <li><strong>Assignment Operators:</strong> `=`, `+=`, `-=`, `*=`, `/=`, `%=`.
+                <pre><code class="language-java">int x = 5;
+x += 3; // x is now 8 (equivalent to x = x + 3)</code></pre>
+            </li>
+            <li><strong>Comparison Operators:</strong> `==` (equal to), `!=` (not equal to), `&gt;`, `&lt;`, `&gt;=`, `&lt;=`. Return `boolean` values.
+                <pre><code class="language-java">System.out.println(10 &gt; 5); // true
+System.out.println(7 == 7); // true</code></pre>
+            </li>
+            <li><strong>Logical Operators:</strong> `&amp;&amp;` (AND), `||` (OR), `!` (NOT). Work with boolean expressions.
+                <pre><code class="language-java">boolean isAdult = true;
+boolean hasLicense = false;
+System.out.println(isAdult &amp;&amp; hasLicense); // false
+System.out.println(isAdult || hasLicense); // true
+System.out.println(!isAdult); // false</code></pre>
+            </li>
+            <li><strong>Bitwise Operators:</strong> `&amp;` (AND), `|` (OR), `^` (XOR), `~` (NOT), `&lt;&lt;` (left shift), `&gt;&gt;` (right shift), `&gt;&gt;&gt;` (unsigned right shift). (For manipulating individual bits).</li>
+            <li><strong>Ternary (Conditional) Operator:</strong> `condition ? expression1 : expression2`. (Shorthand for simple if-else).
+                <pre><code class="language-java">int score = 75;
+String result = (score &gt;= 60) ? "Pass" : "Fail";
+System.out.println(result); // Pass</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="control-flow-conditionals-loops">7. Control Flow (Conditionals & Loops)</h2>
+        <p>Control flow statements dictate the order in which instructions are executed.</p>
+
+        <h3>A. Conditionals:</h3>
+        <ul>
+            <li><strong>`if`, `else if`, `else`:</strong> Execute different code blocks based on conditions.
+                <pre><code class="language-java">int temperature = 25;
+if (temperature &gt; 30) {
+    System.out.println("It's hot!");
+} else if (temperature &gt; 20) { // Condition if first 'if' is false
+    System.out.println("It's warm.");
+} else { // Executed if all preceding conditions are false
+    System.out.println("It's cool.");
+}</code></pre>
+            </li>
+            <li><strong>`switch`:</strong> Selects one of many code blocks to be executed.
+                <pre><code class="language-java">String day = "Monday";
+switch (day) {
+    case "Monday":
+        System.out.println("Start of the week.");
+        break; // Important! Exits the switch block
+    case "Friday":
+        System.out.println("Almost weekend!");
+        break;
+    default: // Optional, executed if no case matches
+        System.out.println("Mid-week.");
+}</code></pre>
+            </li>
+        </ul>
+
+        <h3>B. Loops:</h3>
+        <ul>
+            <li><strong>`for` loop:</strong> Repeats a block of code a specific number of times.
+                <pre><code class="language-java">for (int i = 0; i &lt; 5; i++) {
+    System.out.println("Count: " + i);
+}</code></pre>
+            </li>
+            <li><strong>`for-each` loop (Enhanced for loop):</strong> Iterates over elements of an array or collection.
+                <pre><code class="language-java">String[] fruits = {"apple", "banana", "cherry"};
+for (String fruit : fruits) {
+    System.out.println("I like " + fruit);
+}</code></pre>
+            </li>
+            <li><strong>`while` loop:</strong> Repeats a block of code as long as a condition is true.
+                <pre><code class="language-java">int count = 0;
+while (count &lt; 3) {
+    System.out.println("Loop " + count);
+    count++;
+}</code></pre>
+            </li>
+            <li><strong>`do-while` loop:</strong> Similar to `while`, but guarantees the code block executes at least once.
+                <pre><code class="language-java">int i = 0;
+do {
+    System.out.println("Do-while loop: " + i);
+    i++;
+} while (i &lt; 2);</code></pre>
+            </li>
+            <li><strong>`break` and `continue`:</strong>
+                <ul>
+                    <li>`break`: Exits the loop entirely.</li>
+                    <li>`continue`: Skips the current iteration and moves to the next.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="methods">8. Methods (Functions)</h2>
+        <p>Methods are blocks of code that perform a specific task. They are defined within classes.</p>
+        <ul>
+            <li><strong>Declaration:</strong>
+                <pre><code class="language-java">public static void main(String[] args) { ... } // Example: main method
+public int addNumbers(int a, int b) { // Method named addNumbers, returns an int
+    return a + b;
+}
+public void printMessage(String message) { // Method named printMessage, returns nothing (void)
+    System.out.println(message);
+}</code></pre>
+            </li>
+            <li><strong>Calling a Method:</strong>
+                <pre><code class="language-java">public class MyCalculator {
+    public static void main(String[] args) {
+        MyCalculator calc = new MyCalculator(); // Create an object to call non-static methods
+        int sum = calc.addNumbers(10, 5); // Call addNumbers method
+        System.out.println("Sum: " + sum); // Output: Sum: 15
+
+        calc.printMessage("Hello from a method!"); // Call printMessage method
+    }
+
+    public int addNumbers(int a, int b) {
+        return a + b;
+    }
+
+    public void printMessage(String message) {
+        System.out.println(message);
+    }
+}</code></pre>
+            </li>
+            <li><strong>`static` keyword:</strong> A `static` method belongs to the class itself, not to an object of the class. You can call static methods without creating an object (e.g., `Math.max(10, 20)`). The `main` method must be static.</li>
+            <li><strong>`void` keyword:</strong> Indicates that the method does not return a value.</li>
+        </ul>
+
+        <h2 id="object-oriented-programming-oop">9. Object-Oriented Programming (OOP)</h2>
+        <p>Java is built on OOP principles: Encapsulation, Inheritance, Polymorphism, Abstraction.</p>
+        <h3>A. Classes and Objects:</h3>
+        <ul>
+            <li><strong>Class:</strong> A blueprint or template for creating objects. It defines properties (fields/attributes) and behaviors (methods).
+                <pre><code class="language-java">// Define a class 'Car'
+public class Car {
+    // Fields (attributes)
+    String make;
+    String model;
+    int year;
+
+    // Constructor: A special method called when an object is created
+    public Car(String make, String model, int year) {
+        this.make = make; // 'this' refers to the current object's instance variable
+        this.model = model;
+        this.year = year;
+    }
+
+    // Method (behavior)
+    public void start() {
+        System.out.println(make + " " + model + " starting...");
+    }
+
+    public void displayInfo() {
+        System.out.println("Make: " + make + ", Model: " + model + ", Year: " + year);
+    }
+}</code></pre>
+            </li>
+            <li><strong>Object:</strong> An instance of a class.
+                <pre><code class="language-java">public class Main {
+    public static void main(String[] args) {
+        // Create objects (instances) of the Car class
+        Car myCar = new Car("Toyota", "Camry", 2020); // Calls the constructor
+        Car anotherCar = new Car("Honda", "Civic", 2022);
+
+        // Access fields and call methods on objects
+        myCar.start();         // Output: Toyota Camry starting...
+        myCar.displayInfo();   // Output: Make: Toyota, Model: Camry, Year: 2020
+
+        anotherCar.displayInfo(); // Output: Make: Honda, Model: Civic, Year: 2022
+    }
+}</code></pre>
+            </li>
+        </ul>
+        <h3>B. Encapsulation:</h3>
+        <p>Bundling data (fields) and methods that operate on the data within a single unit (class), and restricting direct access to some of the component's internals (using access modifiers).</p>
+        <ul>
+            <li>Achieved using `private` access modifier for fields and `public` getter/setter methods.
+                <pre><code class="language-java">public class Student {
+    private String name; // private field
+    private int age;
+
+    public Student(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Getter method
+    public String getName() {
+        return name;
+    }
+
+    // Setter method
+    public void setAge(int age) {
+        if (age &gt; 0) { // Add validation
+            this.age = age;
+        } else {
+            System.out.println("Age cannot be negative.");
+        }
+    }
+}</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="arrays">10. Arrays</h2>
+        <p>Arrays are fixed-size, ordered collections of elements of the same data type.</p>
+        <ul>
+            <li><strong>Declaration & Initialization:</strong>
+                <pre><code class="language-java">int[] numbers; // Declaration
+numbers = new int[5]; // Initialization (creates an array of 5 integers, all initialized to 0)
+
+String[] names = new String[3]; // Array of 3 Strings, initialized to null
+
+// Declare, create, and initialize in one line:
+int[] scores = {90, 85, 92, 78};
+String[] colors = {"Red", "Green", "Blue"};</code></pre>
+            </li>
+            <li><strong>Accessing Elements:</strong> Arrays are zero-indexed.
+                <pre><code class="language-java">System.out.println(scores[0]); // Output: 90 (first element)
+scores[3] = 80; // Change value of fourth element
+System.out.println(scores.length); // Output: 4 (number of elements)</code></pre>
+            </li>
+            <li><strong>Iterating Arrays:</strong>
+                <pre><code class="language-java">for (int i = 0; i &lt; scores.length; i++) {
+    System.out.println("Score at index " + i + ": " + scores[i]);
+}
+
+// Using for-each loop (enhanced for loop):
+for (int score : scores) {
+    System.out.println("Score: " + score);
+}</code></pre>
+            </li>
+            <li><strong>Multidimensional Arrays:</strong> Arrays of arrays.
+                <pre><code class="language-java">int[][] matrix = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9} };
+System.out.println(matrix[0][1]); // Output: 2 (element at row 0, column 1)</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="strings">11. Strings</h2>
+        <p>In Java, strings are objects (not primitive types) representing sequences of characters. They are immutable (cannot be changed after creation).</p>
+        <ul>
+            <li><strong>Declaration:</strong>
+                <pre><code class="language-java">String greeting = "Hello";
+String message = new String("World");</code></pre>
+            </li>
+            <li><strong>Common String Methods:</strong>
+                <pre><code class="language-java">String s1 = "Java";
+String s2 = "Programming";
+String s3 = "     Hello World     ";
+
+System.out.println(s1.length()); // 4
+System.out.println(s1.concat(s2)); // JavaProgramming (or s1 + s2)
+System.out.println(s1.equals("java")); // false (case-sensitive)
+System.out.println(s1.equalsIgnoreCase("java")); // true
+System.out.println(s1.substring(1)); // ava
+System.out.println(s2.charAt(0)); // P
+System.out.println(s3.trim()); // "Hello World" (removes leading/trailing whitespace)
+System.out.println(s1.indexOf("a")); // 1 (first occurrence)
+System.out.println(s1.contains("va")); // true
+System.out.println(s1.replace("a", "o")); // Jova</code></pre>
+            </li>
+            <li><strong>String Immutability:</strong> Operations like `concat`, `replace`, `substring` do not modify the original string; they return a new string.
+                <pre><code class="language-java">String original = "abc";
+String newString = original.concat("def");
+System.out.println(original); // abc (original remains unchanged)
+System.out.println(newString); // abcdef</code></pre>
+            </li>
+            <li><strong>`StringBuilder` / `StringBuffer`:</strong> Used for mutable strings when frequent modifications are needed, for better performance. `StringBuffer` is thread-safe.
+                <pre><code class="language-java">StringBuilder sb = new StringBuilder("Start");
+sb.append(" and ").append("End");
+System.out.println(sb.toString()); // Start and End
+sb.insert(5, "Middle ");
+System.out.println(sb.toString()); // Start Middle and End</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="inheritance-polymorphism">12. Inheritance & Polymorphism</h2>
+        <h3>A. Inheritance:</h3>
+        <p>Allows a class (subclass/child) to inherit properties and methods from another class (superclass/parent).</p>
+        <ul>
+            <li>Uses the `extends` keyword.</li>
+            <li>Promotes code reusability.</li>
+            <li>A subclass can override (provide its own implementation for) methods inherited from its superclass.</li>
+            <li>`super` keyword: Used to refer to the immediate parent class constructor or members.</li>
+        </ul>
+        <pre><code class="language-java">class Animal { // Superclass
+    String name;
+
+    public Animal(String name) {
+        this.name = name;
+    }
+
+    public void makeSound() {
+        System.out.println("Animal makes a sound");
+    }
+}
+
+class Dog extends Animal { // Subclass
+    public Dog(String name) {
+        super(name); // Call parent class constructor
+    }
+
+    @Override // Annotation indicating method overrides a superclass method
+    public void makeSound() {
+        System.out.println(name + " barks!");
+    }
+
+    public void fetch() {
+        System.out.println(name + " is fetching.");
+    }
+}
+
+public class InheritanceDemo {
+    public static void main(String[] args) {
+        Animal myAnimal = new Animal("Generic");
+        Dog myDog = new Dog("Buddy");
+
+        myAnimal.makeSound(); // Output: Animal makes a sound
+        myDog.makeSound();    // Output: Buddy barks! (Overridden method)
+        myDog.fetch();        // Output: Buddy is fetching.
+    }
+}</code></pre>
+        <h3>B. Polymorphism:</h3>
+        <p>Means "many forms." It allows objects of different classes to be treated as objects of a common superclass. The actual method called depends on the object's runtime type.</p>
+        <ul>
+            <li>Achieved through method overriding and interface implementation.</li>
+        </ul>
+        <pre><code class="language-java">class Cat extends Animal {
+    public Cat(String name) {
+        super(name);
+    }
+
+    @Override
+    public void makeSound() {
+        System.out.println(name + " meows!");
+    }
+}
+
+public class PolymorphismDemo {
+    public static void main(String[] args) {
+        Animal myAnimal1 = new Dog("Lucy"); // Animal reference, Dog object
+        Animal myAnimal2 = new Cat("Whiskers"); // Animal reference, Cat object
+        Animal myAnimal3 = new Animal("Leo");
+
+        myAnimal1.makeSound(); // Output: Lucy barks! (Runtime polymorphism)
+        myAnimal2.makeSound(); // Output: Whiskers meows!
+        myAnimal3.makeSound(); // Output: Leo makes a sound
+    }
+}</code></pre>
+
+        <h2 id="abstraction-and-interfaces">13. Abstraction & Interfaces</h2>
+        <h3>A. Abstraction:</h3>
+        <p>Hiding the complex implementation details and showing only the essential features of an object. Achieved using abstract classes and interfaces.</p>
+        <ul>
+            <li><strong>Abstract Class:</strong>
+                <ul>
+                    <li>Declared with the `abstract` keyword.</li>
+                    <li>Cannot be instantiated (you cannot create objects of an abstract class).</li>
+                    <li>Can have abstract methods (methods declared without an implementation) and concrete methods.</li>
+                    <li>Subclasses must provide implementations for all inherited abstract methods, unless they are also abstract.</li>
+                </ul>
+            </li>
+        </ul>
+        <pre><code class="language-java">abstract class Shape { // Abstract class
+    String color;
+
+    public Shape(String color) {
+        this.color = color;
+    }
+
+    // Abstract method (no body)
+    public abstract double getArea();
+
+    // Concrete method
+    public String getColor() {
+        return color;
+    }
+}
+
+class Circle extends Shape {
+    double radius;
+
+    public Circle(String color, double radius) {
+        super(color);
+        this.radius = radius;
+    }
+
+    @Override
+    public double getArea() { // Implementation for abstract method
+        return Math.PI * radius * radius;
+    }
+}
+
+class Rectangle extends Shape {
+    double length;
+    double width;
+
+    public Rectangle(String color, double length, double width) {
+        super(color);
+        this.length = length;
+        this.width = width;
+    }
+
+    @Override
+    public double getArea() { // Implementation for abstract method
+        return length * width;
+    }
+}
+
+public class AbstractionDemo {
+    public static void main(String[] args) {
+        Shape circle = new Circle("Red", 5.0);
+        Shape rectangle = new Rectangle("Blue", 4.0, 6.0);
+
+        System.out.println("Circle Area: " + circle.getArea());       // Output: Circle Area: 78.53...
+        System.out.println("Rectangle Area: " + rectangle.getArea()); // Output: Rectangle Area: 24.0
+        System.out.println("Circle Color: " + circle.getColor());     // Output: Circle Color: Red
+    }
+}</code></pre>
+        <h3>B. Interfaces:</h3>
+        <p>A blueprint of a class. It defines a contract specifying methods that implementing classes must provide. A class can implement multiple interfaces.</p>
+        <ul>
+            <li>Declared with the `interface` keyword.</li>
+            <li>Can only contain abstract methods (until Java 8, where `default` and `static` methods were introduced).</li>
+            <li>Fields in an interface are implicitly `public static final`.</li>
+            <li>A class `implements` an interface.</li>
+        </ul>
+        <pre><code class="language-java">interface Playable { // Interface
+    void play(); // Abstract method (implicitly public abstract)
+    void pause();
+    default void stop() { // Default method (Java 8+)
+        System.out.println("Stopped playback.");
+    }
+}
+
+class MusicPlayer implements Playable {
+    @Override
+    public void play() {
+        System.out.println("Playing music...");
+    }
+
+    @Override
+    public void pause() {
+        System.out.println("Music paused.");
+    }
+}
+
+class VideoPlayer implements Playable {
+    @Override
+    public void play() {
+        System.out.println("Playing video...");
+    }
+
+    @Override
+    public void pause() {
+        System.out.println("Video paused.");
+    }
+}
+
+public class InterfaceDemo {
+    public static void main(String[] args) {
+        Playable music = new MusicPlayer();
+        Playable video = new VideoPlayer();
+
+        music.play();  // Output: Playing music...
+        music.pause(); // Output: Music paused.
+        music.stop();  // Output: Stopped playback.
+
+        video.play();  // Output: Playing video...
+        video.stop();  // Output: Stopped playback.
+    }
+}</code></pre>
+
+        <h2 id="exception-handling">14. Exception Handling</h2>
+        <p>A mechanism to handle runtime errors (exceptions) that might occur during program execution, preventing the program from crashing.</p>
+        <ul>
+            <li><strong>`try`:</strong> Contains the code that might throw an exception.</li>
+            <li><strong>`catch`:</strong> Catches and handles the exception if one occurs in the `try` block.</li>
+            <li><strong>`finally`:</strong> (Optional) Code in this block always executes, regardless of whether an exception occurred or was caught.</li>
+            <li><strong>`throw`:</strong> Used to explicitly throw an exception.</li>
+            <li><strong>`throws`:</strong> Used in a method signature to indicate that the method might throw a certain type of exception.</li>
+        </ul>
+        <pre><code class="language-java">public class ExceptionHandlingDemo {
+    public static void main(String[] args) {
+        // Example 1: ArithmeticException
+        try {
+            int result = 10 / 0; // This will throw an ArithmeticException
+            System.out.println("Result: " + result); // This line will not execute
+        } catch (ArithmeticException e) {
+            System.err.println("Error: Cannot divide by zero. " + e.getMessage());
+        } finally {
+            System.out.println("Arithmetic operation attempted.");
+        }
+
+        // Example 2: NullPointerException
+        String str = null;
+        try {
+            System.out.println(str.length()); // This will throw a NullPointerException
+        } catch (NullPointerException e) {
+            System.err.println("Error: String is null. " + e.getMessage());
+        }
+
+        // Example 3: Custom Exception (throws keyword)
+        try {
+            validateAge(5); // This will throw an IllegalArgumentException
+        } catch (IllegalArgumentException e) {
+            System.err.println("Validation Error: " + e.getMessage());
+        }
+    }
+
+    // Method that declares it might throw an IllegalArgumentException
+    public static void validateAge(int age) throws IllegalArgumentException {
+        if (age &lt; 18) {
+            throw new IllegalArgumentException("Age must be 18 or older.");
+        }
+        System.out.println("Age is valid.");
+    }
+}</code></pre>
+        <p><strong>Checked vs. Unchecked Exceptions:</strong>
+            <ul>
+                <li><strong>Checked Exceptions:</strong> Must be handled (either with `try-catch` or declared with `throws` in method signature). E.g., `IOException`, `SQLException`.</li>
+                <li><strong>Unchecked Exceptions (Runtime Exceptions):</strong> Do not need to be explicitly handled, but it's good practice to prevent them. E.g., `NullPointerException`, `ArithmeticException`.</li>
+            </ul>
+        </p>
+
+        <h2 id="collections-framework">15. Collections Framework</h2>
+        <p>A set of interfaces and classes that provide a unified architecture for representing and manipulating collections of objects.</p>
+        <ul>
+            <li><strong>Interfaces:</strong> `List`, `Set`, `Map`, `Queue`.</li>
+            <li><strong>Classes:</strong> `ArrayList`, `LinkedList`, `HashSet`, `TreeSet`, `HashMap`, `TreeMap`, `ArrayDeque`, `PriorityQueue`.</li>
+        </ul>
+        <h3>Common Collection Types:</h3>
+        <ul>
+            <li><strong>`List` (Ordered, allows duplicates):</strong>
+                <ul>
+                    <li>`ArrayList`: Resizable array, good for fast random access.</li>
+                    <li>`LinkedList`: Doubly linked list, good for fast insertions/deletions at ends.</li>
+                </ul>
+                <pre><code class="language-java">import java.util.ArrayList;
+import java.util.List;
+
+List&lt;String&gt; fruits = new ArrayList&lt;&gt;();
+fruits.add("Apple");
+fruits.add("Banana");
+fruits.add("Apple"); // Duplicates allowed
+System.out.println(fruits); // [Apple, Banana, Apple]
+System.out.println(fruits.get(1)); // Banana
+fruits.remove("Apple"); // Removes first "Apple"
+System.out.println(fruits); // [Banana, Apple]</code></pre>
+            </li>
+            <li><strong>`Set` (Unordered, no duplicates):</strong>
+                <ul>
+                    <li>`HashSet`: Uses hash tables, fast for add/remove/contains.</li>
+                    <li>`TreeSet`: Stores elements in a sorted order.</li>
+                </ul>
+                <pre><code class="language-java">import java.util.HashSet;
+import java.util.Set;
+
+Set&lt;String&gt; uniqueColors = new HashSet&lt;&gt;();
+uniqueColors.add("Red");
+uniqueColors.add("Green");
+uniqueColors.add("Red"); // Duplicate, ignored
+System.out.println(uniqueColors); // [Red, Green] (order not guaranteed)</code></pre>
+            </li>
+            <li><strong>`Map` (Key-value pairs, unique keys):</strong>
+                <ul>
+                    <li>`HashMap`: Uses hash tables, fast for put/get.</li>
+                    <li>`TreeMap`: Stores entries in a sorted order by key.</li>
+                </ul>
+                <pre><code class="language-java">import java.util.HashMap;
+import java.util.Map;
+
+Map&lt;String, Integer&gt; ages = new HashMap&lt;&gt;();
+ages.put("Alice", 30);
+ages.put("Bob", 25);
+ages.put("Alice", 31); // Overwrites previous value for "Alice"
+System.out.println(ages.get("Alice")); // 31
+System.out.println(ages.keySet()); // [Alice, Bob]
+System.out.println(ages.values()); // [31, 25]</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="file-io">16. File I/O (Input/Output)</h2>
+        <p>Reading from and writing to files.</p>
+        <ul>
+            <li><strong>`java.io` package:</strong> Provides classes for input and output operations.</li>
+            <li><strong>`File` class:</strong> Represents a file or directory path.</li>
+            <li><strong>`FileReader`/`FileWriter`:</strong> For character-based data.</li>
+            <li><strong>`BufferedReader`/`BufferedWriter`:</strong> For efficient character-based I/O (buffered).</li>
+            <li><strong>`FileInputStream`/`FileOutputStream`:</strong> For byte-based data.</li>
+            <li><strong>`Scanner`:</strong> For reading input from various sources, including files.</li>
+            <li><strong>`PrintWriter`:</strong> For writing formatted text to files.</li>
+        </ul>
+        <h3>Example: Writing to a file:</h3>
+        <pre><code class="language-java">import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class FileWriteDemo {
+    public static void main(String[] args) {
+        String filename = "output.txt";
+        try (PrintWriter writer = new PrintWriter(new FileWriter(filename))) {
+            writer.println("This is the first line.");
+            writer.println("This is the second line.");
+            System.out.println("Data written to " + filename);
+        } catch (IOException e) {
+            System.err.println("Error writing to file: " + e.getMessage());
+        }
+    }
+}</code></pre>
+        <h3>Example: Reading from a file:</h3>
+        <pre><code class="language-java">import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class FileReadDemo {
+    public static void main(String[] args) {
+        String filename = "output.txt"; // Assuming output.txt exists from previous example
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            System.out.println("Reading from " + filename + ":");
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading from file: " + e.getMessage());
+        }
+    }
+}</code></pre>
+        <p><strong>`try-with-resources` (Java 7+):</strong> The `try (resource-declaration)` statement automatically closes resources (like `writer` or `reader`) when the `try` block exits, even if an exception occurs. This is the recommended way.</p>
+
+        <h2 id="multithreading">17. Multithreading</h2>
+        <p>Java supports multithreading, allowing multiple parts of a program to execute concurrently, improving performance for certain tasks.</p>
+        <ul>
+            <li><strong>Thread:</strong> A lightweight sub-process.</li>
+            <li><strong>Creating Threads:</strong>
+                <ul>
+                    <li><strong>Extend `Thread` class:</strong>
+                        <pre><code class="language-java">class MyThread extends Thread {
+    public void run() { // Contains the code that will be executed in the new thread
+        for (int i = 0; i &lt; 3; i++) {
+            System.out.println("Thread 1: " + i);
+            try { Thread.sleep(100); } catch (InterruptedException e) { }
+        }
+    }
+}</code></pre>
+                    </li>
+                    <li><strong>Implement `Runnable` interface (Recommended):</strong> More flexible as a class can implement multiple interfaces.
+                        <pre><code class="language-java">class MyRunnable implements Runnable {
+    public void run() {
+        for (int i = 0; i &lt; 3; i++) {
+            System.out.println("Thread 2: " + i);
+            try { Thread.sleep(100); } catch (InterruptedException e) { }
+        }
+    }
+}</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Starting Threads:</strong>
+                <pre><code class="language-java">public class ThreadDemo {
+    public static void main(String[] args) {
+        // Start thread by extending Thread class
+        MyThread thread1 = new MyThread();
+        thread1.start(); // Calls the run() method in a new thread
+
+        // Start thread by implementing Runnable interface
+        Thread thread2 = new Thread(new MyRunnable());
+        thread2.start(); // Calls the run() method of MyRunnable in a new thread
+
+        System.out.println("Main thread finished.");
+    }
+}</code></pre>
+            </li>
+            <li><strong>Synchronization:</strong> To prevent data inconsistencies when multiple threads access shared resources, use `synchronized` keyword or `java.util.concurrent` package.</li>
+            <li><strong>Thread Pool (Executors):</strong> For managing a large number of threads efficiently.
+                <pre><code class="language-java">import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+// ... MyRunnable class ...
+public class ThreadPoolDemo {
+    public static void main(String[] args) {
+        ExecutorService executor = Executors.newFixedThreadPool(2); // Create a thread pool of 2 threads
+        executor.submit(new MyRunnable()); // Submit tasks to the pool
+        executor.submit(new MyRunnable());
+        executor.shutdown(); // Shuts down the executor when tasks are complete
+    }
+}</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="generics">18. Generics</h2>
+        <p>Generics enable you to write classes, interfaces, and methods that operate on types that are specified as parameters at creation time. This provides type safety and avoids type casting.</p>
+        <pre><code class="language-java">import java.util.ArrayList;
+import java.util.List;
+
+public class GenericsDemo {
+    public static void main(String[] args) {
+        // Using Generics with List (type-safe)
+        List&lt;String&gt; stringList = new ArrayList&lt;&gt;();
+        stringList.add("Hello");
+        stringList.add("World");
+        // stringList.add(123); // Compile-time error: cannot add an Integer to a List&lt;String&gt;
+
+        String s = stringList.get(0); // No casting needed
+
+        // Creating a custom generic class
+        Box&lt;Integer&gt; integerBox = new Box&lt;&gt;();
+        integerBox.set(123);
+        System.out.println("Integer in box: " + integerBox.get());
+
+        Box&lt;String&gt; stringBox = new Box&lt;&gt;();
+        stringBox.set("Generic String");
+        System.out.println("String in box: " + stringBox.get());
+    }
+}
+
+// Custom Generic Class
+class Box&lt;T&gt; { // 'T' is a type parameter
+    private T t; // 't' is of type T
+
+    public void set(T t) {
+        this.t = t;
+    }
+
+    public T get() {
+        return t;
+    }
+}</code></pre>
+
+        <h2 id="lambda-expressions-streams-api">19. Lambda Expressions & Streams API (Java 8+)</h2>
+        <p>Introduced in Java 8, these features simplify writing functional-style code.</p>
+        <h3>A. Lambda Expressions:</h3>
+        <p>Provide a concise way to represent an anonymous function (a function without a name).</p>
+        <ul>
+            <li>Used for implementing "functional interfaces" (interfaces with a single abstract method).</li>
+        </ul>
+        <pre><code class="language-java">interface MyFunctionalInterface {
+    void performAction(String s);
+}
+
+public class LambdaDemo {
+    public static void main(String[] args) {
+        // Using an anonymous inner class (pre-Java 8)
+        MyFunctionalInterface oldWay = new MyFunctionalInterface() {
+            @Override
+            public void performAction(String s) {
+                System.out.println("Old way: " + s);
+            }
+        };
+        oldWay.performAction("Hello");
+
+        // Using a Lambda expression (Java 8+)
+        MyFunctionalInterface lambdaWay = (s) -&gt; System.out.println("Lambda way: " + s);
+        lambdaWay.performAction("World");
+
+        // More complex lambda for a Comparator (used for sorting)
+        List&lt;Integer&gt; numbers = Arrays.asList(5, 2, 8, 1);
+        numbers.sort((a, b) -&gt; a.compareTo(b)); // Sorts ascending
+        System.out.println("Sorted: " + numbers); // Output: Sorted: [1, 2, 5, 8]
+    }
+}</code></pre>
+        <h3>B. Streams API:</h3>
+        <p>A sequence of elements from a source that supports aggregate operations (map, filter, reduce, collect) that can be executed sequentially or in parallel.</p>
+        <ul>
+            <li>Provides a functional way to process collections of data.</li>
+        </ul>
+        <pre><code class="language-java">import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class StreamAPIDemo {
+    public static void main(String[] args) {
+        List&lt;String&gt; names = Arrays.asList("Alice", "Bob", "Anna", "Charlie", "Andrew");
+
+        // Filter names starting with 'A' and convert to uppercase
+        List&lt;String&gt; filteredAndUppercaseNames = names.stream() // Create a stream
+            .filter(name -&gt; name.startsWith("A"))             // Filter elements
+            .map(String::toUpperCase)                         // Transform elements (method reference)
+            .collect(Collectors.toList());                    // Collect results into a List
+
+        System.out.println(filteredAndUppercaseNames); // Output: [ALICE, ANNA, ANDREW]
+
+        // Count names with more than 4 letters
+        long count = names.stream()
+            .filter(name -&gt; name.length() &gt; 4)
+            .count();
+        System.out.println("Names longer than 4 letters: " + count); // Output: 3
+
+        // Find the first name starting with 'B'
+        names.stream()
+            .filter(name -&gt; name.startsWith("B"))
+            .findFirst()
+            .ifPresent(name -&gt; System.out.println("First 'B' name: " + name)); // Output: First 'B' name: Bob
+    }
+}</code></pre>
+
+        <h2 id="java-modules">20. Java Modules (Java 9+)</h2>
+        <p>Introduced in Java 9, the Java Platform Module System (JPMS), or Project Jigsaw, aims to make the Java platform more scalable, secure, and easier to maintain. It breaks down the monolithic JDK into a set of modules.</p>
+        <ul>
+            <li><strong>Modularity:</strong> Applications can declare their dependencies on specific modules, leading to smaller, more robust runtime images.</li>
+            <li><strong>Strong Encapsulation:</strong> Modules explicitly define what packages they `exports` (make public) and what modules they `requires` (depend on).</li>
+            <li><strong>Reliable Configuration:</strong> Ensures all necessary modules are present at compile time and runtime.</li>
+        </ul>
+        <h3>Example: Simple Modular Application</h3>
+        <p>Project Structure:</p>
+        <pre><code>myproject/
+├── com.example.app/
+│   ├── module-info.java
+│   └── com/example/app/
+│       └── Main.java
+└── com.example.utils/
+    ├── module-info.java
+    └── com/example/utils/
+        └── StringUtils.java</code></pre>
+        <pre><code class="language-java">// com.example.utils/module-info.java
+module com.example.utils {
+    exports com.example.utils; // Export the package
+}</code></pre>
+        <pre><code class="language-java">// com.example.utils/com/example/utils/StringUtils.java
+package com.example.utils;
+
+public class StringUtils {
+    public static String capitalize(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+        return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
+    }
+}</code></pre>
+        <pre><code class="language-java">// com.example.app/module-info.java
+module com.example.app {
+    requires com.example.utils; // Declare dependency on utils module
+}</code></pre>
+        <pre><code class="language-java">// com.example.app/com/example/app/Main.java
+package com.example.app;
+
+import com.example.utils.StringUtils; // Import class from required module
+
+public class Main {
+    public static void main(String[] args) {
+        String name = "java";
+        String capitalizedName = StringUtils.capitalize(name);
+        System.out.println("Capitalized name: " + capitalizedName); // Output: Capitalized name: Java
+    }
+}</code></pre>
+        <h3>Compile and Run (from `myproject` directory):</h3>
+        <pre><code class="language-bash"># Compile utils module
+javac -d out/com.example.utils com.example.utils/module-info.java com.example.utils/com/example/utils/StringUtils.java
+
+# Compile app module (requires utils module)
+javac -d out/com.example.app --module-path out/com.example.utils com.example.app/module-info.java com.example.app/com/example/app/Main.java
+
+# Run the application
+java --module-path out/com.example.utils:out/com.example.app -m com.example.app/com.example.app.Main</code></pre>
+
+        <h2 id="packaging-and-build-tools">21. Packaging & Build Tools</h2>
+        <p>For real-world Java projects, build automation tools are indispensable.</p>
+        <ul>
+            <li><strong>Maven:</strong> A widely used build automation tool and project management tool. It's XML-based and relies on a Project Object Model (`pom.xml`).
+                <ul>
+                    <li>Manages project dependencies, compilation, testing, packaging (JAR/WAR/EAR), reporting.</li>
+                </ul>
+                <pre><code class="language-xml"># pom.xml (example snippet)
+&lt;project&gt;
+  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+  &lt;groupId&gt;com.example&lt;/groupId&gt;
+  &lt;artifactId&gt;my-java-app&lt;/artifactId&gt;
+  &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;junit&lt;/groupId&gt;
+      &lt;artifactId&gt;junit&lt;/artifactId&gt;
+      &lt;version&gt;4.13.2&lt;/version&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;
+  &lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+        &lt;version&gt;3.8.1&lt;/version&gt;
+        &lt;configuration&gt;
+          &lt;source&gt;17&lt;/source&gt;
+          &lt;target&gt;17&lt;/target&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+  &lt;/build&gt;
+&lt;/project&gt;</code></pre>
+                <pre><code class="language-bash"># Common Maven commands:
+mvn compile     # Compile source code
+mvn test        # Run tests
+mvn package     # Compile, test, and package into JAR/WAR
+mvn clean       # Remove generated files
+mvn install     # Install package into local Maven repository</code></pre>
+            </li>
+            <li><strong>Gradle:</strong> A more flexible and powerful build automation tool, based on Groovy or Kotlin DSL (Domain Specific Language).
+                <ul>
+                    <li>Popular in Android development and larger enterprise projects.</li>
+                </ul>
+                <pre><code class="language-groovy"># build.gradle (example snippet for a Java project)
+plugins {
+    id 'java'
+}
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+repositories {
+    mavenCentral()
+}
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+test {
+    useJUnitPlatform()
+}</code></pre>
+                <pre><code class="language-bash"># Common Gradle commands:
+gradle build # Build, test, and package
+gradle test  # Run tests
+gradle clean # Clean build directory</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="best-practices">22. Best Practices</h2>
+        <ul>
+            <li><strong>Follow Java Coding Conventions:</strong> Adhere to standard naming conventions (CamelCase for classes, camelCase for methods/variables, ALL_CAPS for constants).</li>
+            <li><strong>Use Meaningful Names:</strong> Give variables, methods, and classes descriptive names.</li>
+            <li><strong>Encapsulate Data:</strong> Use `private` fields and `public` getters/setters.</li>
+            <li><strong>Favor Composition Over Inheritance:</strong> While inheritance is powerful, prefer composition for building complex objects where possible, for better flexibility.</li>
+            <li><strong>Handle Exceptions Gracefully:</strong> Don't just catch and ignore exceptions. Log them, provide meaningful error messages, or re-throw if necessary.</li>
+            <li><strong>Use `try-with-resources`:</strong> For I/O operations to ensure resources are properly closed.</li>
+            <li><strong>Leverage the Collections Framework:</strong> Use appropriate collection types (`List`, `Set`, `Map`) for your data structures.</li>
+            <li><strong>Write Unit Tests:</strong> Use frameworks like JUnit to write automated tests for your code.</li>
+            <li><strong>Use Build Tools:</strong> Always use Maven or Gradle for dependency management and build automation.</li>
+            <li><strong>Code Readability:</strong> Write clear, concise code. Use comments where necessary but let code be self-documenting.</li>
+            <li><strong>Understand Generics:</strong> Use generics for type safety and code reusability with collections.</li>
+            <li><strong>Adopt Java 8+ Features:</strong> Utilize Lambda expressions and Streams API for more concise and functional-style code.</li>
+            <li><strong>Stay Updated:</strong> Keep up with new Java versions and features.</li>
+            <li><strong>Performance:</strong> Be mindful of performance-critical sections of your code, especially in loops and I/O operations.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>The Vast World of Java!</strong>
+            <p>This tutorial covers the fundamentals of Java programming. Java's ecosystem is vast, with numerous frameworks (Spring, Hibernate), testing tools, and deployment options. Mastering these core concepts will provide a strong foundation for building robust, scalable, and high-performance applications across various domains, from enterprise systems to Android mobile apps. The journey to becoming a proficient Java developer involves continuous learning and hands-on practice!</p>
+        </div>
+    </div>
+</body>
+</html>
