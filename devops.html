@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete DevOps Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete DevOps Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-devops">1. What is DevOps?</a></li>
+                <li><a href="#devops-principles-and-culture">2. DevOps Principles & Culture (CALMS)</a></li>
+                <li><a href="#devops-lifecycle">3. DevOps Lifecycle</a></li>
+                <li><a href="#version-control">4. Version Control (Git)</a></li>
+                <li><a href="#continuous-integration">5. Continuous Integration (CI)</a></li>
+                <li><a href="#continuous-delivery-and-deployment">6. Continuous Delivery & Deployment (CD)</a></li>
+                <li><a href="#infrastructure-as-code">7. Infrastructure as Code (IaC)</a></li>
+                <li><a href="#containerization">8. Containerization (Docker)</a></li>
+                <li><a href="#container-orchestration">9. Container Orchestration (Kubernetes)</a></li>
+                <li><a href="#configuration-management">10. Configuration Management (Ansible, Puppet, Chef)</a></li>
+                <li><a href="#monitoring-and-logging">11. Monitoring & Logging</a></li>
+                <li><a href="#cloud-platforms">12. Cloud Platforms (AWS, Azure, GCP)</a></li>
+                <li><a href="#security-devsecops">13. Security (DevSecOps)</a></li>
+                <li><a href="#testing-in-devops">14. Testing in DevOps</a></li>
+                <li><a href="#best-practices">15. Best Practices</a></li>
+                <li><a href="#devops-tools-ecosystem">16. DevOps Tools Ecosystem (Summary)</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-devops">1. What is DevOps?</h2>
+        <p><strong>DevOps</strong> is a set of practices that combines software development (Dev) and IT operations (Ops). It aims to shorten the systems development life cycle and provide continuous delivery with high software quality. DevOps is a cultural and professional movement that stresses communication, collaboration, integration, and automation to improve the flow of work between software developers and IT operations professionals.</p>
+        <p>The core idea is to break down the silos between these traditionally separate teams, allowing for faster, more reliable software releases and a more efficient overall development process.</p>
+        <h3>Key Goals of DevOps:</h3>
+        <ul>
+            <li><strong>Increased Deployment Frequency:</strong> Release software faster and more often.</li>
+            <li><strong>Lower Failure Rate of New Releases:</strong> Improve quality and stability.</li>
+            <li><strong>Faster Mean Time To Recovery (MTTR):</strong> Quickly recover from failures.</li>
+            <li><strong>Shorter Lead Time Between Fixes:</strong> Address issues promptly.</li>
+            <li><strong>Improved Collaboration and Communication:</strong> Foster a shared understanding and responsibility across teams.</li>
+            <li><strong>Automation of Repetitive Tasks:</strong> Reduce manual effort and human error.</li>
+        </ul>
+
+        <h2 id="devops-principles-and-culture">2. DevOps Principles & Culture (CALMS)</h2>
+        <p>The success of DevOps is driven by its cultural principles, often summarized by the CALMS acronym:</p>
+        <ul>
+            <li><strong>C - Culture:</strong>
+                <ul>
+                    <li>Collaboration, communication, and shared responsibility between Dev and Ops.</li>
+                    <li>Blameless post-mortems: Focus on systemic improvements, not individual blame.</li>
+                    <li>Embrace failure as a learning opportunity.</li>
+                </ul>
+            </li>
+            <li><strong>A - Automation:</strong>
+                <ul>
+                    <li>Automate every possible aspect of the software delivery pipeline (build, test, deploy, provision).</li>
+                    <li>Reduces manual effort, human error, and speeds up processes.</li>
+                </ul>
+            </li>
+            <li><strong>L - Lean:</strong>
+                <ul>
+                    <li>Eliminate waste from the software delivery process.</li>
+                    <li>Focus on delivering value quickly and efficiently.</li>
+                    <li>Continuous improvement cycles.</li>
+                </ul>
+            </li>
+            <li><strong>M - Measurement:</strong>
+                <ul>
+                    <li>Monitor and measure everything: application performance, infrastructure health, deployment frequency, lead time, MTTR.</li>
+                    <li>Use data to identify bottlenecks and drive continuous improvement.</li>
+                </ul>
+            </li>
+            <li><strong>S - Sharing:</strong>
+                <ul>
+                    <li>Share knowledge, tools, and best practices across teams.</li>
+                    <li>Create common goals and a shared understanding of the entire system.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="devops-lifecycle">3. DevOps Lifecycle</h2>
+        <p>The DevOps lifecycle is a continuous loop, representing the iterative process of software delivery.</p>
+        <ol>
+            <li><strong>Plan:</strong>
+                <ul>
+                    <li>Define features, requirements, and project scope.</li>
+                    <li>Tools: Jira, Azure Boards, Trello.</li>
+                </ul>
+            </li>
+            <li><strong>Code:</strong>
+                <ul>
+                    <li>Develop application code.</li>
+                    <li>Tools: Git, GitHub, GitLab, Bitbucket, Azure Repos, VS Code.</li>
+                </ul>
+            </li>
+            <li><strong>Build:</strong>
+                <ul>
+                    <li>Compile source code, run unit tests, package artifacts.</li>
+                    <li>Tools: Maven, Gradle, npm, Webpack, Jenkins, GitLab CI, Azure Pipelines, AWS CodeBuild.</li>
+                </ul>
+            </li>
+            <li><strong>Test:</strong>
+                <ul>
+                    <li>Automated testing (unit, integration, end-to-end, performance, security).</li>
+                    <li>Tools: JUnit, Selenium, Jest, Cypress, JMeter, SonarQube.</li>
+                </ul>
+            </li>
+            <li><strong>Release:</strong>
+                <ul>
+                    <li>Prepare application for deployment.</li>
+                    <li>Tools: Jenkins, GitLab CI, Azure Pipelines, Spinnaker, Octopus Deploy.</li>
+                </ul>
+            </li>
+            <li><strong>Deploy:</strong>
+                <ul>
+                    <li>Deploy applications to various environments (dev, staging, production).</li>
+                    <li>Tools: Jenkins, GitLab CI, Azure Pipelines, Kubernetes, Docker, Ansible, Terraform.</li>
+                </ul>
+            </li>
+            <li><strong>Operate:</strong>
+                <ul>
+                    <li>Manage and maintain the deployed application in production.</li>
+                    <li>Tools: Kubernetes, Docker, Cloud Platforms (AWS, Azure, GCP).</li>
+                </ul>
+            </li>
+            <li><strong>Monitor:</strong>
+                <ul>
+                    <li>Monitor application performance, infrastructure health, and user experience.</li>
+                    <li>Gather feedback and identify issues for the next iteration.</li>
+                    <li>Tools: Prometheus, Grafana, ELK Stack, Splunk, Datadog, CloudWatch, Azure Monitor, Google Cloud Monitoring.</li>
+                </ul>
+            </li>
+        </ol>
+
+        <h2 id="version-control">4. Version Control (Git)</h2>
+        <p><strong>Version Control Systems (VCS)</strong> are essential for managing changes to code, configuration files, and documentation. **Git** is the most widely used distributed VCS.</p>
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>Repository:</strong> The project's central storage where all changes are tracked.</li>
+            <li><strong>Commit:</strong> A snapshot of your changes at a specific point in time.</li>
+            <li><strong>Branch:</strong> A separate line of development, allowing multiple people to work on different features simultaneously.</li>
+            <li><strong>Merge/Rebase:</strong> Combining changes from different branches.</li>
+            <li><strong>Pull Request (PR) / Merge Request (MR):</strong> A mechanism for reviewing code changes before merging them into a main branch.</li>
+        </ul>
+        <h3>Usage Example: Basic Git Workflow:</h3>
+        <pre><code class="language-bash"># 1. Initialize a new Git repository
+git init my_devops_project
+cd my_devops_project
+
+# 2. Create a file
+echo "Hello, DevOps!" > README.md
+
+# 3. Add file(s) to the staging area
+git add README.md
+
+# 4. Commit changes
+git commit -m "Initial commit: Add README file"
+
+# 5. Create a new branch for a feature
+git checkout -b feature/new-dashboard
+
+# 6. Make changes on the new branch
+echo "Dashboard feature coming soon." >> README.md
+git add README.md
+git commit -m "Add dashboard placeholder"
+
+# 7. Switch back to the main branch
+git checkout main
+
+# 8. Merge the feature branch into main
+git merge feature/new-dashboard
+
+# 9. (Optional) Delete the feature branch
+git branch -d feature/new-dashboard
+
+# 10. Connect to a remote repository (e.g., GitHub, GitLab, Azure Repos)
+git remote add origin https://github.com/youruser/my_devops_project.git
+
+# 11. Push changes to the remote repository
+git push -u origin main</code></pre>
+        <div class="tip">
+            <strong>GitHub/GitLab/Bitbucket:</strong> These are popular web-based platforms for hosting Git repositories, providing collaboration features like Pull Requests, issue tracking, and integrated CI/CD.
+        </div>
+
+        <h2 id="continuous-integration">5. Continuous Integration (CI)</h2>
+        <p><strong>Continuous Integration (CI)</strong> is a development practice where developers regularly merge their code changes into a central repository, after which automated builds and tests are run. The goal is to detect integration errors early and frequently.</p>
+        <h3>Key Aspects of CI:</h3>
+        <ul>
+            <li><strong>Automated Builds:</strong> Compile code, resolve dependencies, and create executable artifacts.</li>
+            <li><strong>Automated Testing:</strong> Run unit tests, integration tests, and sometimes static analysis.</li>
+            <li><strong>Frequent Commits:</strong> Developers commit small code changes often.</li>
+            <li><strong>Fast Feedback:</strong> Quickly notify developers about build or test failures.</li>
+        </ul>
+        <h3>Common CI Tools:</h3>
+        <ul>
+            <li><strong>Jenkins:</strong> Open-source automation server (highly extensible via plugins).</li>
+            <li><strong>GitLab CI/CD:</strong> Built directly into GitLab, leveraging `.gitlab-ci.yml`.</li>
+            <li><strong>Azure Pipelines:</strong> Part of Azure DevOps, supports various languages and platforms.</li>
+            <li><strong>GitHub Actions:</strong> CI/CD workflows built directly into GitHub repositories.</li>
+            <li><strong>CircleCI, Travis CI, Bitbucket Pipelines:</strong> Other popular cloud-based CI services.</li>
+        </ul>
+        <h3>Usage Example: Simple CI with Jenkins (Declarative Pipeline):</h3>
+        <p>The `Jenkinsfile` is committed to the root of your Git repository.</p>
+        <pre><code class="language-groovy">// Jenkinsfile
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/your-org/your-repo.git' // Replace with your repository
+            }
+        }
+        stage('Build') {
+            steps {
+                // Example for a Node.js project
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+        stage('Test') {
+            steps {
+                // Example for Node.js (Jest)
+                sh 'npm test'
+                // Publish test results (requires JUnit plugin in Jenkins)
+                junit '**/test-results/*.xml' 
+            }
+        }
+        stage('Archive Artifacts') {
+            steps {
+                // Example for Node.js build output
+                archiveArtifacts artifacts: 'dist/**/*', fingerprint: true 
+            }
+        }
+    }
+    post {
+        always {
+            echo "CI pipeline finished for build ${env.BUILD_NUMBER}"
+        }
+        failure {
+            echo "CI pipeline failed!"
+            // mail to: 'devs@example.com', subject: 'CI Build Failed!'
+        }
+    }
+}</code></pre>
+        <p><strong>In Jenkins:</strong> Create a new "Pipeline" item, configure it to pull the `Jenkinsfile` from your Git repository, and set up a "SCM Poll" or "GitHub hook trigger" for automatic builds on push.</p>
+
+        <h2 id="continuous-delivery-and-deployment">6. Continuous Delivery & Deployment (CD)</h2>
+        <p><strong>Continuous Delivery (CD)</strong> is a software engineering approach where teams produce software in short cycles, ensuring that the software can be reliably released at any time. It's an extension of CI, adding automated release and deployment steps.</p>
+        <p><strong>Continuous Deployment (CD)</strong> is a further step where every change that passes all automated tests is automatically deployed to production. This requires a high degree of confidence in your automated testing and infrastructure.</p>
+        <h3>Key Aspects of CD:</h3>
+        <ul>
+            <li><strong>Automated Release:</strong> Package and version your application.</li>
+            <li><strong>Automated Deployment:</strong> Deploy to various environments (Dev, QA, Staging, Production).</li>
+            <li><strong>Automated Environment Provisioning:</strong> Create infrastructure on demand.</li>
+            <li><strong>Quality Gates:</strong> Manual approvals (for CDelivery) or automated checks (for CDeployment) before advancing to next environment.</li>
+        </ul>
+        <h3>Common CD Tools:</h3>
+        <ul>
+            <li><strong>Jenkins:</strong> With plugins for various deployment targets.</li>
+            <li><strong>Spinnaker:</strong> Open-source, multi-cloud continuous delivery platform.</li>
+            <li><strong>Argo CD:</strong> Declarative GitOps continuous delivery for Kubernetes.</li>
+            <li><strong>Octopus Deploy:</strong> Commercial automated deployment server.</li>
+            <li><strong>Cloud-native services:</strong> AWS CodeDeploy, Azure Pipelines, Google Cloud Deploy.</li>
+        </ul>
+        <h3>Usage Example: Extending the CI Pipeline for CD:</h3>
+        <pre><code class="language-groovy">// Jenkinsfile (Continuous Delivery Pipeline)
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') { /* ... same as CI ... */ }
+        stage('Build') { /* ... same as CI ... */ }
+        stage('Test') { /* ... same as CI ... */ }
+        stage('Archive Artifacts') { /* ... same as CI ... */ }
+
+        stage('Deploy to Staging') {
+            steps {
+                echo "Deploying application to staging environment..."
+                // Example: Deploy to a server via SSH (requires SSH Agent plugin and credentials)
+                // sshagent(['your-ssh-credential-id']) {
+                //     sh "scp -o StrictHostKeyChecking=no target/*.jar user@staging-server:/var/www/html/app.jar"
+                // }
+                sh 'echo "Deployment to staging simulated."'
+            }
+        }
+
+        stage('Manual Approval for Production') { // Manual gate for Continuous Delivery
+            steps {
+                input {
+                    message "Deployment to staging complete. Proceed to production?"
+                    ok "Deploy to Production"
+                    submitter "devops-team,qa-lead" // Users/groups who can approve
+                }
+            }
+        }
+
+        stage('Deploy to Production') { // Only runs after manual approval
+            steps {
+                echo "Deploying application to production environment..."
+                sh 'echo "Deployment to production simulated."'
+            }
+            post {
+                success {
+                    echo 'Production Deployment successful!'
+                }
+                failure {
+                    echo 'Production Deployment FAILED!'
+                }
+            }
+        }
+    }
+    post { /* ... cleanup and notifications ... */ }
+}</code></pre>
+
+        <h2 id="infrastructure-as-code">7. Infrastructure as Code (IaC)</h2>
+        <p><strong>Infrastructure as Code (IaC)</strong> is the practice of managing and provisioning computing infrastructure (e.g., networks, virtual machines, load balancers) using configuration files rather than manual hardware configuration or interactive configuration tools.</p>
+        <h3>Key Benefits:</h3>
+        <ul>
+            <li><strong>Consistency:</strong> Ensures environments are identical across dev, staging, and production.</li>
+            <li><strong>Automation:</strong> Eliminates manual provisioning.</li>
+            <li><strong>Version Control:</strong> Infrastructure definitions can be versioned, reviewed, and audited like application code.</li>
+            <li><strong>Reproducibility:</strong> Easily recreate environments.</li>
+            <li><strong>Cost Savings:</strong> Efficient resource provisioning and de-provisioning.</li>
+        </ul>
+        <h3>Common IaC Tools:</h3>
+        <ul>
+            <li><strong>Terraform:</strong> HashiCorp's open-source IaC tool that allows you to define and provision infrastructure across various cloud providers (AWS, Azure, GCP) and on-premises using HCL (HashiCorp Configuration Language). (Declarative)</li>
+            <li><strong>AWS CloudFormation:</strong> AWS's native IaC service for provisioning and managing AWS resources using JSON or YAML templates. (Declarative)</li>
+            <li><strong>Azure Resource Manager (ARM) Templates:</strong> Azure's native IaC service using JSON templates. (Declarative)</li>
+            <li><strong>Google Cloud Deployment Manager:</strong> GCP's native IaC service using YAML or Python templates. (Declarative)</li>
+            <li><strong>Pulumi:</strong> Allows IaC using general-purpose programming languages (Python, TypeScript, Go, C#).</li>
+        </ul>
+        <h3>Usage Example: Simple EC2 Instance with Terraform:</h3>
+        <p>Create a file named `main.tf` in a new directory.</p>
+        <pre><code class="language-hcl"># main.tf
+# Configure the AWS provider
+provider "aws" {
+  region = "us-east-1" # N. Virginia
+}
+
+# Create a VPC
+resource "aws_vpc" "my_vpc" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "my-devops-vpc"
+  }
+}
+
+# Create a public subnet
+resource "aws_subnet" "public_subnet" {
+  vpc_id                  = aws_vpc.my_vpc.id
+  cidr_block              = "10.0.1.0/24"
+  availability_zone       = "us-east-1a"
+  map_public_ip_on_launch = true
+  tags = {
+    Name = "my-devops-public-subnet"
+  }
+}
+
+# Create an Internet Gateway
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.my_vpc.id
+  tags = {
+    Name = "my-devops-igw"
+  }
+}
+
+# Create a route table for public subnet
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.my_vpc.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+  tags = {
+    Name = "my-devops-public-rt"
+  }
+}
+
+# Associate public route table with public subnet
+resource "aws_route_table_association" "public_rt_assoc" {
+  subnet_id      = aws_subnet.public_subnet.id
+  route_table_id = aws_route_table.public_route_table.id
+}
+
+# Create a security group to allow SSH and HTTP traffic
+resource "aws_security_group" "web_ssh_sg" {
+  name        = "web_ssh_sg"
+  description = "Allow web and SSH traffic"
+  vpc_id      = aws_vpc.my_vpc.id
+
+  ingress {
+    description = "SSH from anywhere"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "HTTP from anywhere"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1" # All protocols
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "my-devops-web-ssh-sg"
+  }
+}
+
+# Create an EC2 instance
+resource "aws_instance" "web_server" {
+  ami           = "ami-0abcdef1234567890" # Replace with a valid Amazon Linux 2 AMI for us-east-1
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.public_subnet.id
+  security_groups = [aws_security_group.web_ssh_sg.id]
+  key_name      = "your-ssh-key-name" # Replace with your existing SSH key pair name
+  user_data     = &lt;&lt;-EOF
+              #!/bin/bash
+              sudo yum update -y
+              sudo yum install -y httpd
+              sudo systemctl start httpd
+              sudo systemctl enable httpd
+              echo "Hello from Terraform!" | sudo tee /var/www/html/index.html
+              EOF
+
+  tags = {
+    Name = "MyTerraformWebServer"
+  }
+}
+
+# Output the public IP address of the web server
+output "web_server_public_ip" {
+  value = aws_instance.web_server.public_ip
+}</code></pre>
+        <p><strong>Execute Terraform:</strong></p>
+        <pre><code class="language-bash">terraform init     # Initialize Terraform in the directory
+terraform plan     # Show what changes will be made (plan)
+terraform apply    # Apply the changes to create resources (type 'yes' to confirm)
+terraform destroy  # Delete all resources defined in the configuration (type 'yes' to confirm)</code></pre>
+        <div class="warning">
+            <strong>Caution:</strong> When using IaC tools like Terraform, `terraform apply` creates real cloud resources that incur costs. Always run `terraform plan` first to understand the impact, and `terraform destroy` to clean up resources when done with learning.
+        </div>
+
+        <h2 id="containerization">8. Containerization (Docker)</h2>
+        <p><strong>Containerization</strong> packages an application and all its dependencies into a single, isolated unit that can run consistently across different environments.</p>
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>Docker:</strong> The most popular containerization platform.</li>
+            <li><strong>Dockerfile:</strong> A text file containing instructions to build a Docker image.</li>
+            <li><strong>Image:</strong> A read-only template used to create containers.</li>
+            <li><strong>Container:</strong> A runnable instance of a Docker image.</li>
+            <li><strong>Docker Compose:</strong> Tool for defining and running multi-container Docker applications.</li>
+        </ul>
+        <h3>Usage Example: Dockerizing a Simple Node.js App:</h3>
+        <p>Create a directory (e.g., `my-node-app`) with these files:</p>
+        <pre><code class="language-javascript"># my-node-app/app.js
+const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+  res.send('Hello from Dockerized Node.js App!');
+});
+
+app.listen(port, () => {
+  console.log(`App listening at http://localhost:${port}`);
+});</code></pre>
+        <pre><code class="language-json"># my-node-app/package.json
+{
+  "name": "my-node-app",
+  "version": "1.0.0",
+  "description": "A simple Node.js app",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}</code></pre>
+        <pre><code class="language-dockerfile"># my-node-app/Dockerfile
+FROM node:18-alpine                  # Base image with Node.js
+WORKDIR /app                       # Set working directory inside container
+COPY package*.json ./              # Copy package.json and package-lock.json
+RUN npm install                    # Install Node.js dependencies
+COPY . .                           # Copy the rest of the application code
+EXPOSE 3000                        # Expose port 3000
+CMD ["npm", "start"]               # Command to run the application</code></pre>
+        <pre><code class="language-bash"># Build the Docker image (from my-node-app directory)
+docker build -t my-node-app:1.0 .
+
+# Run the Docker container, mapping host port 80 to container port 3000
+docker run -d -p 80:3000 --name node-web-app my-node-app:1.0
+
+# Access the app in your browser: http://localhost/</code></pre>
+        <p><strong>Docker Compose Example (`compose.yaml`):</strong></p>
+        <pre><code class="language-yaml"># my-node-app/compose.yaml
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - "80:3000"
+    volumes:
+      - ./app.js:/app/app.js # Mount app.js for hot-reloading in dev
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge</code></pre>
+        <pre><code class="language-bash"># Run with Docker Compose (from my-node-app directory)
+docker compose up -d
+
+# Access the app at http://localhost/</code></pre>
+
+        <h2 id="container-orchestration">9. Container Orchestration (Kubernetes)</h2>
+        <p><strong>Container Orchestration</strong> automates the deployment, scaling, networking, and management of containerized applications.</p>
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>Kubernetes (K8s):</strong> The leading open-source container orchestration platform.</li>
+            <li><strong>Cluster:</strong> A set of worker machines (nodes) that run containerized applications.</li>
+            <li><strong>Pods:</strong> The smallest deployable units in Kubernetes, encapsulating one or more containers.</li>
+            <li><strong>Deployments:</strong> Manages the desired state of your pods.</li>
+            <li><strong>Services:</strong> Define logical sets of Pods and a policy by which to access them (e.g., load balancing).</li>
+            <li><strong>Ingress:</strong> Manages external access to services within a cluster.</li>
+        </ul>
+        <h3>Usage Example: Deploying a simple Nginx app on Kubernetes (using `kubectl`):</h3>
+        <p>This assumes you have a Kubernetes cluster running (e.g., Minikube, Docker Desktop Kubernetes, GKE, EKS, AKS) and `kubectl` configured.</p>
+        <p>Create a file named `nginx-deployment.yaml`:</p>
+        <pre><code class="language-yaml"># nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3 # Desired number of Nginx instances
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest # Use official Nginx image
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer # Exposes the service externally (Cloud provider specific)
+                     # For Minikube/Docker Desktop, use NodePort instead if LoadBalancer isn't available
+                     # type: NodePort</code></pre>
+        <pre><code class="language-bash"># Apply the deployment and service
+kubectl apply -f nginx-deployment.yaml
+
+# Check deployment status
+kubectl get deployment nginx-deployment
+kubectl get pods -l app=nginx
+
+# Get service status and external IP/port
+kubectl get service nginx-service
+# If type is LoadBalancer, wait for EXTERNAL-IP to be assigned.
+# If type is NodePort, use 'minikube service nginx-service --url' or similar to get URL.
+
+# Access Nginx via the assigned external IP/Port in your browser.
+
+# Delete the deployment and service
+kubectl delete -f nginx-deployment.yaml</code></pre>
+
+        <h2 id="configuration-management">10. Configuration Management (Ansible, Puppet, Chef)</h2>
+        <p><strong>Configuration Management</strong> automates the consistent setup, management, and deployment of software and configurations on multiple servers. It ensures that systems are configured to a desired state.</p>
+        <h3>Key Benefits:</h3>
+        <ul>
+            <li><strong>Consistency:</strong> Prevents configuration drift.</li>
+            <li><strong>Reproducibility:</strong> Easily rebuild environments.</li>
+            <li><strong>Efficiency:</strong> Automates repetitive tasks across many servers.</li>
+            <li><strong>Auditing:</strong> Track configuration changes.</li>
+        </ul>
+        <h3>Common Tools:</h3>
+        <ul>
+            <li><strong>Ansible:</strong> Agentless, uses SSH. Simple YAML syntax for playbooks. (Imperative and Declarative)</li>
+            <li><strong>Puppet:</strong> Agent-based. Uses its own declarative language (DSL).</li>
+            <li><strong>Chef:</strong> Agent-based. Uses Ruby DSL for cookbooks.</li>
+        </ul>
+        <h3>Usage Example: Simple Web Server Setup with Ansible:</h3>
+        <p>This assumes Ansible is installed on your control machine and SSH access to target servers.</p>
+        <p>Create `inventory.ini`:</p>
+        <pre><code class="language-ini"># inventory.ini
+[webservers]
+web1 ansible_host=your_web_server_ip_1
+web2 ansible_host=your_web_server_ip_2
+# Add ansible_user=your_ssh_user if different from current user
+# Add ansible_ssh_private_key_file=/path/to/your/key.pem if using SSH keys</code></pre>
+        <p>Create `apache_playbook.yaml`:</p>
+        <pre><code class="language-yaml"># apache_playbook.yaml
+---
+- name: Configure Apache Web Server
+  hosts: webservers # Apply to hosts in the 'webservers' group from inventory
+  become: yes       # Run tasks with sudo/root privileges
+
+  tasks:
+    - name: Ensure Apache (httpd) is installed
+      ansible.builtin.yum: # For Red Hat-based systems (CentOS, Fedora)
+        name: httpd
+        state: present
+      # For Debian-based (Ubuntu): use 'ansible.builtin.apt' instead
+      # ansible.builtin.apt:
+      #   name: apache2
+      #   state: present
+
+    - name: Ensure Apache service is running and enabled on boot
+      ansible.builtin.systemd:
+        name: httpd # or apache2 for Ubuntu
+        state: started
+        enabled: yes
+
+    - name: Create index.html for web server
+      ansible.builtin.copy:
+        content: "Hello from Ansible on {{ inventory_hostname }}!" # Use Jinja2 templating
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Ensure firewalld allows HTTP service (Fedora/CentOS)
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+      # For Ubuntu (ufw):
+      # community.general.ufw:
+      #   rule: allow
+      #   name: http
+      #   state: enabled
+
+    - name: Reload firewalld to apply changes
+      ansible.builtin.systemd:
+        name: firewalld
+        state: reloaded
+      # For Ubuntu (ufw):
+      # community.general.ufw:
+      #   state: reloaded</code></pre>
+        <pre><code class="language-bash"># Run the playbook
+ansible-playbook -i inventory.ini apache_playbook.yaml</code></pre>
+
+        <h2 id="monitoring-and-logging">11. Monitoring & Logging</h2>
+        <p>Essential for understanding application performance, infrastructure health, and troubleshooting issues in a DevOps environment.</p>
+        <h3>Key Concepts:</h3>
+        <ul>
+            <li><strong>Monitoring:</strong> Collecting metrics (CPU, memory, network, application response times) and visualizing them.</li>
+            <li><strong>Logging:</strong> Collecting and centralizing application and system logs for analysis and debugging.</li>
+            <li><strong>Alerting:</strong> Notifying teams when predefined thresholds are breached or anomalies are detected.</li>
+        </ul>
+        <h3>Common Tools:</h3>
+        <ul>
+            <li><strong>Monitoring:</strong>
+                <ul>
+                    <li><strong>Prometheus:</strong> Open-source monitoring system with a flexible query language (PromQL).</li>
+                    <li><strong>Grafana:</strong> Open-source platform for data visualization and dashboards (often used with Prometheus).</li>
+                    <li><strong>Cloud-native:</strong> AWS CloudWatch, Azure Monitor, Google Cloud Monitoring.</li>
+                    <li><strong>Commercial:</strong> Datadog, New Relic, Dynatrace.</li>
+                </ul>
+            </li>
+            <li><strong>Logging:</strong>
+                <ul>
+                    <li><strong>ELK Stack (Elasticsearch, Logstash, Kibana):</strong> Popular open-source solution for log aggregation, processing, and visualization.</li>
+                    <li><strong>Splunk:</strong> Powerful commercial platform for machine data.</li>
+                    <li><strong>Cloud-native:</strong> AWS CloudWatch Logs, Azure Monitor Logs (Log Analytics), Google Cloud Logging.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>Usage Example: Basic Monitoring with Prometheus & Grafana (Conceptual):</h3>
+        <p><strong>Prometheus Configuration (`prometheus.yml`):</strong></p>
+        <pre><code class="language-yaml"># prometheus.yml
+global:
+  scrape_interval: 15s # How frequently to scrape targets
+scrape_configs:
+  - job_name: 'node_exporter' # Monitoring a Linux server
+    static_configs:
+      - targets: ['your_linux_server_ip:9100'] # node_exporter runs on 9100
+  - job_name: 'cadvisor' # Monitoring Docker containers
+    static_configs:
+      - targets: ['your_docker_host_ip:8080'] # cadvisor runs on 8080</code></pre>
+        <p><strong>Grafana Dashboard:</strong>
+            <ul>
+                <li>Install Grafana and access its web UI (typically `http://localhost:3000`).</li>
+                <li>Add Prometheus as a data source.</li>
+                <li>Import pre-built dashboards (e.g., Node Exporter Full Dashboard from grafana.com/grafana/dashboards) or create custom panels using PromQL queries.</li>
+            </ul>
+            <pre><code class="language-promql"># Example PromQL query in Grafana:
+node_cpu_seconds_total{mode="idle"} # Idle CPU time
+container_memory_usage_bytes{name="my-app-container"} # Memory usage of a container</code></pre>
+        </p>
+
+        <h2 id="cloud-platforms">12. Cloud Platforms (AWS, Azure, GCP)</h2>
+        <p>DevOps practices are heavily intertwined with cloud computing, leveraging cloud services for scalability, flexibility, and automation.</p>
+        <ul>
+            <li><strong>AWS (Amazon Web Services):</strong> EC2, S3, RDS, Lambda, VPC, CloudFormation, CodePipeline, CloudWatch.</li>
+            <li><strong>Azure (Microsoft Azure):</strong> Virtual Machines, Blob Storage, Azure SQL Database, Azure Functions, Azure DevOps, ARM Templates, Azure Monitor.</li>
+            <li><strong>GCP (Google Cloud Platform):</strong> Compute Engine, Cloud Storage, Cloud SQL, Cloud Functions, GKE, Cloud Build, BigQuery, Cloud Monitoring.</li>
+        </ul>
+        <p>Each cloud provider offers its own suite of services that map to various stages of the DevOps lifecycle. A common DevOps approach involves building cloud-agnostic applications (e.g., using Docker/Kubernetes) or leveraging specific cloud provider's managed services.</p>
+
+        <h2 id="security-devsecops">13. Security (DevSecOps)</h2>
+        <p><strong>DevSecOps</strong> integrates security practices into every stage of the DevOps pipeline, shifting security "left" (earlier in the development cycle) to identify and address vulnerabilities proactively.</p>
+        <h3>Key Principles:</h3>
+        <ul>
+            <li><strong>Security as Code:</strong> Define security policies and configurations in code.</li>
+            <li><strong>Automated Security Testing:</strong> Integrate security checks into CI/CD.</li>
+            <li><strong>Continuous Monitoring & Feedback:</strong> Monitor for security vulnerabilities and threats in production.</li>
+            <li><strong>Collaboration:</strong> Developers, operations, and security teams work together.</li>
+        </ul>
+        <h3>Examples of DevSecOps Practices:</h3>
+        <ul>
+            <li><strong>Static Application Security Testing (SAST):</strong> Analyze source code for vulnerabilities without running it. (Tools: SonarQube, Bandit for Python).</li>
+            <li><strong>Dynamic Application Security Testing (DAST):</strong> Test applications in their running state for vulnerabilities. (Tools: OWASP ZAP, Burp Suite).</li>
+            <li><strong>Software Composition Analysis (SCA):</strong> Identify vulnerabilities in open-source components/libraries. (Tools: Snyk, OWASP Dependency-Check).</li>
+            <li><strong>Container Security Scanning:</strong> Scan Docker images for vulnerabilities. (Tools: Trivy, Clair, Docker Scout).</li>
+            <li><strong>Infrastructure as Code (IaC) Scanning:</strong> Scan Terraform, CloudFormation templates for misconfigurations before deployment. (Tools: Checkov, Terrascan).</li>
+            <li><strong>Runtime Security Monitoring:</strong> Use SIEM/XDR solutions (e.g., Splunk, Microsoft Sentinel, CrowdStrike) to detect threats in production.</li>
+        </ul>
+        <h3>Usage Example: Container Image Scanning in CI Pipeline:</h3>
+        <pre><code class="language-groovy">// Jenkinsfile (DevSecOps stage)
+pipeline {
+    agent any
+    stages {
+        // ... previous stages (Checkout, Build) ...
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    docker.build("my-app:${env.BUILD_NUMBER}")
+                }
+            }
+        }
+
+        stage('Scan Docker Image') {
+            steps {
+                // Assuming Trivy is installed on the agent or used in a Docker container
+                echo "Scanning Docker image for vulnerabilities..."
+                sh "trivy image --severity HIGH,CRITICAL my-app:${env.BUILD_NUMBER}"
+                // Fail the build if critical vulnerabilities are found
+                // sh "trivy image --exit-code 1 --severity HIGH,CRITICAL my-app:${env.BUILD_NUMBER}" 
+            }
+            post {
+                failure {
+                    echo 'Image scan found critical vulnerabilities!'
+                    // mail to: 'security-team@example.com', subject: 'Container Vulnerability Alert!'
+                }
+            }
+        }
+        // ... subsequent stages (Deploy) ...
+    }
+}</code></pre>
+
+        <h2 id="testing-in-devops">14. Testing in DevOps</h2>
+        <p>Testing in DevOps is continuous, automated, and integrated throughout the pipeline, rather than being a separate phase at the end.</p>
+        <ul>
+            <li><strong>Unit Tests:</strong> Test individual components/functions. (Run by developers, integrated into CI builds).</li>
+            <li><strong>Integration Tests:</strong> Test interactions between integrated modules or services.</li>
+            <li><strong>API Tests:</strong> Test REST/SOAP APIs directly. (Tools: Postman, Newman, Rest-Assured).</li>
+            <li><strong>UI/End-to-End (E2E) Tests:</strong> Simulate user interactions with the full application UI. (Tools: Selenium, Cypress, Playwright).</li>
+            <li><strong>Performance/Load Tests:</strong> Assess application performance under stress. (Tools: JMeter, LoadRunner, K6).</li>
+            <li><strong>Security Tests:</strong> (Covered in DevSecOps).</li>
+            <li><strong>Acceptance Tests:</strong> Verify the system meets business requirements (often automated, sometimes with BDD frameworks).</li>
+        </ul>
+        <h3>Usage Example: Running API Tests in CI/CD:</h3>
+        <pre><code class="language-groovy">// Jenkinsfile (API Testing stage)
+pipeline {
+    agent any
+    stages {
+        // ... previous stages (Build, Deploy to Dev/Test Environment) ...
+
+        stage('Run API Tests') {
+            steps {
+                echo "Running automated API tests..."
+                // Assuming you have a Newman (Postman CLI) collection
+                // and a 'api_tests.json' Postman collection in your repo
+                sh 'npm install -g newman # Ensure Newman is installed on agent'
+                sh 'newman run api_tests.json -e dev_env.json -r cli,junit --reporter-junit-export api-test-results.xml'
+                junit '**/api-test-results.xml' // Publish results
+            }
+            post {
+                failure {
+                    echo 'API tests failed!'
+                }
+            }
+        }
+        // ... subsequent stages ...
+    }
+}</code></pre>
+
+        <h2 id="best-practices">15. Best Practices</h2>
+        <ul>
+            <li><strong>Start Small & Iterate:</strong> Don't try to automate everything at once. Start with a simple CI pipeline, then gradually add more automation.</li>
+            <li><strong>Automate Everything Possible:</strong> From code commit to deployment, monitoring, and even infrastructure provisioning.</li>
+            <li><strong>Version Control Everything:</strong> Code, configurations, infrastructure definitions (IaC), pipeline scripts.</li>
+            <li><strong>Test Early and Often:</strong> Shift left. Integrate automated testing at every stage of the pipeline.</li>
+            <li><strong>Monitor Everything:</strong> Collect metrics and logs from applications and infrastructure. Use alerts to detect issues quickly.</li>
+            <li><strong>Implement Feedback Loops:</strong> Ensure fast feedback to developers about issues. Use metrics to improve processes.</li>
+            <li><strong>Embrace a DevOps Culture:</strong> Foster collaboration, communication, and shared responsibility between development, operations, and security teams.</li>
+            <li><strong>Immutable Infrastructure:</strong> Build new servers with every deployment rather than updating existing ones.</li>
+            <li><strong>Use Containers:</strong> Docker and Kubernetes provide consistent environments and simplify deployment.</li>
+            <li><strong>Security First (DevSecOps):</strong> Integrate security into every phase of the SDLC.</li>
+            <li><strong>Infrastructure as Code:</strong> Manage your infrastructure definitions in version control.</li>
+            <li><strong>Blameless Post-mortems:</strong> When failures occur, focus on identifying systemic issues and improving processes, not on blaming individuals.</li>
+            <li><strong>Small, Frequent Releases:</strong> Deliver value to users more often and with less risk.</li>
+            <li><strong>Cloud-Native Services:</strong> Leverage managed services from cloud providers (AWS, Azure, GCP) where appropriate to reduce operational overhead.</li>
+        </ul>
+
+        <h2 id="devops-tools-ecosystem">16. DevOps Tools Ecosystem (Summary)</h2>
+        <p>The DevOps landscape is vast and constantly evolving. Here's a summary of key tool categories and popular examples:</p>
+        <ul>
+            <li><strong>Version Control:</strong> Git, GitHub, GitLab, Bitbucket, Azure Repos.</li>
+            <li><strong>CI/CD Automation:</strong> Jenkins, GitLab CI/CD, Azure Pipelines, GitHub Actions, CircleCI, Travis CI, Spinnaker, Argo CD, Drone CI.</li>
+            <li><strong>Infrastructure as Code (IaC):</strong> Terraform, AWS CloudFormation, Azure ARM Templates, Google Cloud Deployment Manager, Pulumi.</li>
+            <li><strong>Configuration Management:</strong> Ansible, Puppet, Chef, SaltStack.</li>
+            <li><strong>Containerization:</strong> Docker.</li>
+            <li><strong>Container Orchestration:</strong> Kubernetes, Docker Swarm, Amazon ECS, Azure Kubernetes Service (AKS), Google Kubernetes Engine (GKE), Amazon Elastic Kubernetes Service (EKS).</li>
+            <li><strong>Monitoring & Logging:</strong> Prometheus, Grafana, ELK Stack (Elasticsearch, Logstash, Kibana), Splunk, Datadog, New Relic, Nagios, Zabbix, AWS CloudWatch, Azure Monitor, Google Cloud Monitoring.</li>
+            <li><strong>Cloud Platforms:</strong> AWS, Microsoft Azure, Google Cloud Platform.</li>
+            <li><strong>Testing:</strong> Selenium, Jest, JUnit, pytest, Cypress, Playwright, JMeter, K6, SonarQube, OWASP ZAP, Snyk.</li>
+            <li><strong>Artifact Management:</strong> Nexus, Artifactory, Azure Artifacts.</li>
+            <li><strong>Collaboration:</strong> Slack, Microsoft Teams, Jira, Confluence.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>The DevOps Journey: Continuous Improvement!</strong>
+            <p>DevOps is more than just tools; it's a fundamental shift in how organizations approach software delivery. By embracing its principles and leveraging automation across the entire lifecycle, teams can achieve unprecedented speed, quality, and reliability. This tutorial provides a strong foundation. The real learning comes from hands-on practice, building pipelines, experimenting with tools, and continuously optimizing your processes.</p>
+        </div>
+    </div>
+</body>
+</html>
