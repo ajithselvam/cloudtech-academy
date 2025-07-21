@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Python Tutorial with Usage Examples</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Python Tutorial with Usage Examples</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction-to-python">1. Introduction to Python</a></li>
+                <li><a href="#installing-python">2. Installing Python</a></li>
+                <li><a href="#hello-world">3. Hello World Program</a></li>
+                <li><a href="#python-basics-syntax-comments">4. Python Basics (Syntax, Comments, Indentation)</a></li>
+                <li><a href="#variables-and-data-types">5. Variables & Data Types</a></li>
+                <li><a href="#operators">6. Operators</a></li>
+                <li><a href="#control-flow-conditionals-loops">7. Control Flow (Conditionals & Loops)</a></li>
+                <li><a href="#functions">8. Functions</a></li>
+                <li><a href="#lists-tuples-sets-dictionaries">9. Data Structures (Lists, Tuples, Sets, Dictionaries)</a></li>
+                <li><a href="#strings">10. Strings</a></li>
+                <li><a href="#object-oriented-programming-oop">11. Object-Oriented Programming (OOP)</a></li>
+                <li><a href="#modules-and-packages">12. Modules & Packages</a></li>
+                <li><a href="#file-io">13. File I/O</a></li>
+                <li><a href="#exception-handling">14. Exception Handling</a></li>
+                <li><a href="#virtual-environments">15. Virtual Environments</a></li>
+                <li><a href="#comprehensions">16. Comprehensions (List, Dictionary, Set)</a></li>
+                <li><a href="#iterators-and-generators">17. Iterators & Generators</a></li>
+                <li><a href="#decorators">18. Decorators</a></li>
+                <li><a href="#advanced-functions-and-args">19. Advanced Functions (*args, **kwargs)</a></li>
+                <li><a href="#regular-expressions">20. Regular Expressions</a></li>
+                <li><a href="#working-with-json">21. Working with JSON</a></li>
+                <li><a href="#web-development-frameworks">22. Web Development Frameworks (Flask, Django)</a></li>
+                <li><a href="#data-science-and-ml-libraries">23. Data Science & ML Libraries (NumPy, Pandas, Scikit-learn)</a></li>
+                <li><a href="#best-practices">24. Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction-to-python">1. Introduction to Python</h2>
+        <p><strong>Python</strong> is a high-level, interpreted, general-purpose programming language. Created by Guido van Rossum and first released in 1991, Python's design philosophy emphasizes code readability with its notable use of significant indentation.</p>
+        <p>Python is known for its simplicity, versatility, and vast ecosystem of libraries, making it popular for:</p>
+        <ul>
+            <li>Web Development (Django, Flask)</li>
+            <li>Data Science & Machine Learning (NumPy, Pandas, Scikit-learn, TensorFlow, PyTorch)</li>
+            <li>Automation & Scripting</li>
+            <li>Artificial Intelligence</li>
+            <li>Game Development</li>
+            <li>Desktop Applications (PyQt, Tkinter)</li>
+            <li>Network Programming</li>
+            <li>Cybersecurity tools</li>
+        </ul>
+        <h3>Key Features of Python:</h3>
+        <ul>
+            <li><strong>Simple & Readable:</strong> Clean syntax, easy to learn and write.</li>
+            <li><strong>Interpreted:</strong> Code is executed line by line, no separate compilation step.</li>
+            <li><strong>High-Level:</strong> Abstracts away low-level memory management.</li>
+            <li><strong>Object-Oriented:</strong> Supports OOP concepts.</li>
+            <li><strong>Dynamically Typed:</strong> Variable types are determined at runtime.</li>
+            <li><strong>Extensible:</strong> Can be extended with modules written in C/C++.</li>
+            <li><strong>Portable:</strong> Runs on various platforms (Windows, macOS, Linux, etc.).</li>
+            <li><strong>Vast Standard Library:</strong> Comprehensive modules for common tasks.</li>
+        </ul>
+        <div class="tip">
+            <strong>Tip for Practice:</strong> Open a terminal or command prompt and type `python` (or `python3`) to enter the interactive Python interpreter. You can type Python code directly there to experiment! For longer examples, use a code editor (VS Code, PyCharm).
+        </div>
+
+        <h2 id="installing-python">2. Installing Python</h2>
+        <p>Python 3 is the current and recommended version. Python 2 is deprecated and should not be used for new projects.</p>
+        <h3>A. Check if Python is Installed:</h3>
+        <p>Open your terminal/command prompt and type:</p>
+        <pre><code class="language-bash">python3 --version
+# Output example: Python 3.9.7</code></pre>
+        <p>If you see a version starting with 3, you're good. If not, or if it shows Python 2.x, proceed with installation.</p>
+        <h3>B. Installation Methods:</h3>
+        <ul>
+            <li><strong>Windows:</strong>
+                <ol>
+                    <li>Download the installer from <a href="https://www.python.org/downloads/windows/" target="_blank">python.org/downloads/windows/</a>.</li>
+                    <li>Run the installer. **Important:** Check "Add python.exe to PATH" during installation.</li>
+                </ol>
+            </li>
+            <li><strong>macOS:</strong>
+                <ol>
+                    <li>Python 3 is often pre-installed or easily installable. You can also use Homebrew.
+                        <pre><code class="language-bash">brew install python@3.9 # Or latest stable version</code></pre>
+                    </li>
+                </ol>
+            </li>
+            <li><strong>Linux (Ubuntu/Debian-based):</strong>
+                <pre><code class="language-bash">sudo apt update
+sudo apt install python3 python3-pip</code></pre>
+            </li>
+            <li><strong>Linux (Fedora/CentOS-based):</strong>
+                <pre><code class="language-bash">sudo dnf install python3 python3-pip</code></pre>
+            </li>
+        </ul>
+        <h3>C. Using `pip` (Python Package Installer):</h3>
+        <p>`pip` is the standard package manager for Python, used to install external libraries.</p>
+        <pre><code class="language-bash">pip3 install numpy      # Install the NumPy library
+pip3 install pandas requests # Install multiple libraries
+pip3 list               # List installed packages
+pip3 uninstall numpy    # Uninstall a package</code></pre>
+
+        <h2 id="hello-world">3. Hello World Program</h2>
+        <p>The classic first program in Python.</p>
+        <h3>A. Create the File:</h3>
+        <p>Create a file named `hello.py` using any text editor.</p>
+        <pre><code class="language-python"># hello.py
+print("Hello, World!") # Prints "Hello, World!" to the console</code></pre>
+        <h3>B. Run the Program:</h3>
+        <p>Open your terminal/command prompt, navigate to the directory where you saved `hello.py`, and run:</p>
+        <pre><code class="language-bash">python3 hello.py</code></pre>
+        <p><strong>Expected Output:</strong></p>
+        <pre><code class="language-text">Hello, World!</code></pre>
+
+        <h2 id="python-basics-syntax-comments">4. Python Basics (Syntax, Comments, Indentation)</h2>
+        <h3>A. Indentation (Crucial!):</h3>
+        <p>Python uses **indentation** to define code blocks (e.g., within `if` statements, loops, functions, classes), unlike other languages that use curly braces `{}`. Consistent indentation (usually 4 spaces) is mandatory.</p>
+        <pre><code class="language-python"># Correct indentation
+if True:
+    print("This line is indented by 4 spaces.")
+    print("This is also part of the 'if' block.")
+else:
+    print("This is part of the 'else' block.")
+print("This line is outside the 'if/else' block.")</code></pre>
+        <pre><code class="language-python"># Incorrect indentation (will cause an IndentationError)
+if True:
+    print("This is fine.")
+  print("This line has inconsistent indentation and will error.")</code></pre>
+        <h3>B. Comments:</h3>
+        <p>Used to explain code. Ignored by the interpreter.</p>
+        <ul>
+            <li><strong>Single-line comment:</strong> Starts with `#`.
+                <pre><code class="language-python">x = 10 # This is a single-line comment</code></pre>
+            </li>
+            <li><strong>Multi-line comment (Docstrings or multi-line strings):</strong>
+                <pre><code class="language-python">"""
+This is a multi-line comment,
+also known as a docstring if placed at the start
+of a module, function, class, or method.
+"""
+y = 20</code></pre>
+            </li>
+        </ul>
+        <h3>C. Statements & Lines:</h3>
+        <ul>
+            <li>Each statement typically ends on a new line. No semicolons (`;`) are usually needed unless you put multiple statements on one line (which is generally discouraged).</li>
+            <pre><code class="language-python"># Multiple statements on one line (discouraged)
+a = 1; b = 2; print(a + b)</code></pre>
+            <li>Use a backslash (`\`) to continue a statement on the next line.
+                <pre><code class="language-python">long_message = "This is a very long string that " \
+               "needs to be broken into multiple lines for readability."
+print(long_message)</code></pre>
+        </ul>
+
+        <h2 id="variables-and-data-types">5. Variables & Data Types</h2>
+        <p>Variables are containers for storing data. Python is dynamically typed, meaning you don't declare the type of a variable; the interpreter infers it at runtime.</p>
+        <h3>A. Variable Assignment:</h3>
+        <pre><code class="language-python">name = "Alice"     # String
+age = 30           # Integer
+height = 1.75      # Float
+is_student = True  # Boolean
+
+# Reassigning changes type
+age = "thirty" # Now 'age' is a string</code></pre>
+        <h3>B. Built-in Data Types:</h3>
+        <ul>
+            <li><strong>Numeric:</strong> `int`, `float`, `complex`.
+                <pre><code class="language-python">num_int = 10
+num_float = 3.14
+num_complex = 2 + 3j # Complex number</code></pre>
+            </li>
+            <li><strong>Text Type:</strong> `str`.
+                <pre><code class="language-python">my_string = "Hello, Python!"</code></pre>
+            </li>
+            <li><strong>Boolean Type:</strong> `bool`.
+                <pre><code class="language-python">is_active = True
+is_empty = False</code></pre>
+            </li>
+            <li><strong>Sequence Types:</strong> `list`, `tuple`, `range`.
+                <pre><code class="language-python">my_list = [1, "apple", True] # List (mutable, ordered)
+my_tuple = (1, "apple", True) # Tuple (immutable, ordered)</code></pre>
+            </li>
+            <li><strong>Mapping Type:</strong> `dict`.
+                <pre><code class="language-python">my_dict = {"name": "Bob", "age": 25} # Dictionary (key-value pairs)</code></pre>
+            </li>
+            <li><strong>Set Types:</strong> `set`, `frozenset`.
+                <pre><code class="language-python">my_set = {1, 2, 3, 2} # Set (unordered, unique elements) - will be {1, 2, 3}</code></pre>
+            </li>
+            <li><strong>None Type:</strong> `None`. Represents the absence of a value.
+                <pre><code class="language-python">no_value = None</code></pre>
+            </li>
+        </ul>
+        <h3>C. Checking Type:</h3>
+        <pre><code class="language-python">print(type(name)) # &lt;class 'str'&gt;
+print(type(age))  # &lt;class 'int'&gt;</code></pre>
+
+        <h2 id="operators">6. Operators</h2>
+        <p>Symbols that perform operations on values and variables.</p>
+        <ul>
+            <li><strong>Arithmetic Operators:</strong> `+`, `-`, `*`, `/` (float division), `//` (integer division), `%` (modulus), `**` (exponentiation).
+                <pre><code class="language-python">print(10 + 3)  # 13
+print(10 / 3)  # 3.333...
+print(10 // 3) # 3
+print(10 % 3)  # 1
+print(2 ** 3)  # 8 (2 to the power of 3)</code></pre>
+            </li>
+            <li><strong>Assignment Operators:</strong> `=`, `+=`, `-=`, `*=`, `/=`, `%=`, `**=`, `//=`.
+                <pre><code class="language-python">x = 5
+x += 3 # x is now 8 (equivalent to x = x + 3)</code></pre>
+            </li>
+            <li><strong>Comparison Operators:</strong> `==` (equal to), `!=` (not equal to), `&gt;`, `&lt;`, `&gt;=`, `&lt;=`. Return `True` or `False`.
+                <pre><code class="language-python">print(10 &gt; 5)  # True
+print(7 == 7)  # True
+print(5 != 5)  # False</code></pre>
+            </li>
+            <li><strong>Logical Operators:</strong> `and`, `or`, `not`. Work with boolean expressions.
+                <pre><code class="language-python">is_adult = True
+has_license = False
+print(is_adult and has_license) # False
+print(is_adult or has_license)  # True
+print(not is_adult)             # False</code></pre>
+            </li>
+            <li><strong>Identity Operators:</strong> `is`, `is not`. Check if two variables point to the same object in memory.
+                <pre><code class="language-python">a = [1, 2]
+b = [1, 2]
+c = a
+print(a is b)  # False (different objects, even if values are same)
+print(a is c)  # True (same object)</code></pre>
+            </li>
+            <li><strong>Membership Operators:</strong> `in`, `not in`. Check if a value is present in a sequence (list, tuple, string, set, dictionary keys).
+                <pre><code class="language-python">my_list = [1, 2, 3]
+print(2 in my_list)      # True
+print("a" in "apple")    # True
+my_dict = {"name": "Bob"}
+print("name" in my_dict) # True (checks keys)</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="control-flow-conditionals-loops">7. Control Flow (Conditionals & Loops)</h2>
+        <p>Control flow statements dictate the order in which instructions are executed.</p>
+
+        <h3>A. Conditionals (`if`, `elif`, `else`):</h3>
+        <pre><code class="language-python">temperature = 25
+if temperature > 30:
+    print("It's hot!")
+elif temperature > 20: # 'elif' is short for 'else if'
+    print("It's warm.")
+else:
+    print("It's cool.")
+# Output: It's warm.</code></pre>
+        <p><strong>Ternary Operator (Conditional Expression):</strong> (Shorthand for simple if-else).</p>
+        <pre><code class="language-python">score = 75
+result = "Pass" if score >= 60 else "Fail"
+print(result) # Output: Pass</code></pre>
+
+        <h3>B. Loops:</h3>
+        <ul>
+            <li><strong>`for` loop:</strong> Iterates over a sequence (list, tuple, string, range, etc.).
+                <pre><code class="language-python"># Iterate over a list
+fruits = ["apple", "banana", "cherry"]
+for fruit in fruits:
+    print(f"I like {fruit}")
+
+# Iterate using range()
+for i in range(5): # 0, 1, 2, 3, 4
+    print(f"Count: {i}")
+
+# Iterate with index (using enumerate)
+for index, fruit in enumerate(fruits):
+    print(f"Index {index}: {fruit}")</code></pre>
+            </li>
+            <li><strong>`while` loop:</strong> Repeats a block of code as long as a condition is true.
+                <pre><code class="language-python">count = 0
+while count < 3:
+    print(f"Loop {count}")
+    count += 1
+# Output:
+# Loop 0
+# Loop 1
+# Loop 2</code></pre>
+            </li>
+            <li><strong>`break` and `continue`:</strong>
+                <ul>
+                    <li>`break`: Exits the loop entirely.</li>
+                    <li>`continue`: Skips the rest of the current iteration and moves to the next.</li>
+                </ul>
+                <pre><code class="language-python">for i in range(5):
+    if i == 2:
+        continue # Skip 2
+    if i == 4:
+        break    # Exit loop at 4
+    print(i)
+# Output:
+# 0
+# 1
+# 3</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="functions">8. Functions</h2>
+        <p>Functions are reusable blocks of code that perform a specific task. Defined using the `def` keyword.</p>
+        <ul>
+            <li><strong>Defining a Function:</strong>
+                <pre><code class="language-python">def greet(name):
+    """This function greets the given name."""
+    print(f"Hello, {name}!")
+
+def add_numbers(a, b):
+    """This function returns the sum of two numbers."""
+    return a + b</code></pre>
+            </li>
+            <li><strong>Calling a Function:</strong>
+                <pre><code class="language-python">greet("Alice") # Output: Hello, Alice!
+sum_result = add_numbers(10, 5)
+print(f"Sum: {sum_result}") # Output: Sum: 15</code></pre>
+            </li>
+            <li><strong>Default Parameters:</strong> Assign default values to parameters.
+                <pre><code class="language-python">def say_hello(name="Guest"):
+    print(f"Hello, {name}!")
+
+say_hello()         # Output: Hello, Guest!
+say_hello("Bob")    # Output: Hello, Bob!</code></pre>
+            </li>
+            <li><strong>Keyword Arguments:</strong> Pass arguments by name, allowing for flexible order.
+                <pre><code class="language-python">def describe_pet(animal_type, pet_name):
+    print(f"I have a {animal_type} named {pet_name}.")
+
+describe_pet(pet_name="Buddy", animal_type="dog") # Order doesn't matter</code></pre>
+            </li>
+            <li><strong>Lambda Functions (Anonymous Functions):</strong> Small, single-expression functions.
+                <pre><code class="language-python">add = lambda x, y: x + y
+print(add(2, 3)) # Output: 5
+
+# Often used with higher-order functions like map(), filter(), sorted()
+numbers = [1, 5, 2, 8]
+squared_numbers = list(map(lambda x: x * x, numbers))
+print(squared_numbers) # Output: [1, 25, 4, 64]</code></pre>
+            </li>
+        </ul>
+
+        <h2 id="lists-tuples-sets-dictionaries">9. Data Structures (Lists, Tuples, Sets, Dictionaries)</h2>
+        <p>Python offers powerful built-in data structures.</p>
+        <h3>A. Lists (`list`):</h3>
+        <p>Ordered, mutable (changeable) collections. Enclosed in square brackets `[]`.</p>
+        <pre><code class="language-python">my_list = [10, "hello", 3.14, True]
+print(my_list[0])    # 10 (access by index, 0-based)
+print(my_list[-1])   # True (last element)
+my_list[1] = "world" # Modify
+my_list.append(False) # Add to end
+my_list.insert(1, "new_item") # Insert at specific index
+my_list.remove("hello") # Remove by value
+print(my_list) # [10, 'new_item', 3.14, True, False]
+print(len(my_list)) # 5
+# Slicing:
+print(my_list[1:3]) # ['new_item', 3.14] (elements from index 1 up to (but not including) 3)
+print(my_list[:2])  # [10, 'new_item'] (from start to index 2)
+print(my_list[2:])  # [3.14, True, False] (from index 2 to end)</code></pre>
+        <h3>B. Tuples (`tuple`):</h3>
+        <p>Ordered, immutable (unchangeable) collections. Enclosed in parentheses `()`.</p>
+        <pre><code class="language-python">my_tuple = (1, "two", 3.0)
+# my_tuple[0] = 5 # Error: Tuples are immutable
+print(my_tuple[1]) # two
+print(my_tuple.count(1)) # Count occurrences of 1
+print(my_tuple.index("two")) # Get index of "two"</code></pre>
+        <h3>C. Sets (`set`):</h3>
+        <p>Unordered, mutable collections of unique elements. Enclosed in curly braces `{}` (or `set()` for empty set).</p>
+        <pre><code class="language-python">my_set = {1, 2, 3, 2, 4} # Duplicate '2' is ignored
+print(my_set) # {1, 2, 3, 4} (order may vary)
+my_set.add(5)
+my_set.remove(1)
+print(my_set) # {2, 3, 4, 5}
+# Set operations:
+set1 = {1, 2, 3}
+set2 = {3, 4, 5}
+print(set1.union(set2))        # {1, 2, 3, 4, 5}
+print(set1.intersection(set2)) # {3}
+print(set1.difference(set2))   # {1, 2}</code></pre>
+        <h3>D. Dictionaries (`dict`):</h3>
+        <p>Unordered, mutable collections of key-value pairs. Keys must be unique and immutable (strings, numbers, tuples). Enclosed in curly braces `{}`.</p>
+        <pre><code class="language-python">my_dict = {"name": "Alice", "age": 30, "city": "New York"}
+print(my_dict["name"])    # Alice (access by key)
+my_dict["age"] = 31       # Modify value
+my_dict["country"] = "USA" # Add new key-value pair
+del my_dict["city"]       # Delete by key
+print(my_dict)            # {'name': 'Alice', 'age': 31, 'country': 'USA'}
+print(my_dict.keys())     # dict_keys(['name', 'age', 'country'])
+print(my_dict.values())   # dict_values(['Alice', 31, 'USA'])
+print(my_dict.items())    # dict_items([('name', 'Alice'), ('age', 31), ('country', 'USA')])
+
+# Iterate through a dictionary
+for key, value in my_dict.items():
+    print(f"{key}: {value}")</code></pre>
+
+        <h2 id="strings">10. Strings</h2>
+        <p>Strings are sequences of characters. They are immutable (cannot be changed after creation).</p>
+        <h3>A. Creation:</h3>
+        <pre><code class="language-python">str1 = "Hello, Python"
+str2 = 'Another string'
+str3 = """This is a
+multi-line string"""</code></pre>
+        <h3>B. Concatenation:</h3>
+        <pre><code class="language-python">full_name = "John" + " " + "Doe" # John Doe
+message = "Count: " + str(10) # Convert number to string for concatenation</code></pre>
+        <h3>C. String Formatting:</h3>
+        <ul>
+            <li><strong>f-strings (Formatted String Literals - Python 3.6+):</strong> Recommended.
+                <pre><code class="language-python">name = "Alice"
+age = 30
+print(f"My name is {name} and I am {age} years old.")</code></pre>
+            </li>
+            <li><strong>`.format()` method:</strong>
+                <pre><code class="language-python">print("My name is {} and I am {} years old.".format(name, age))</code></pre>
+            </li>
+            <li><strong>Old style (%) formatting:</strong> (Discouraged for new code).
+                <pre><code class="language-python">print("My name is %s and I am %d years old." % (name, age))</code></pre>
+            </li>
+        </ul>
+        <h3>D. Common String Methods:</h3>
+        <pre><code class="language-python">text = "python programming"
+print(text.upper())           # PYTHON PROGRAMMING
+print(text.capitalize())      # Python programming
+print(text.title())           # Python Programming
+print(text.replace("python", "Java")) # Java programming
+print(text.split(" "))        # ['python', 'programming']
+print("  hello  ".strip())    # "hello" (removes whitespace)
+print(text.startswith("py"))  # True
+print(text.endswith("ing"))   # True
+print("abc".join(["1", "2"])) # 1abc2</code></pre>
+        <h3>E. String Slicing:</h3>
+        <pre><code class="language-python">s = "abcdefg"
+print(s[0])    # a (first character)
+print(s[1:4])  # bcd (from index 1 up to but not including 4)
+print(s[:3])   # abc (from start to index 3)
+print(s[4:])   # efg (from index 4 to end)
+print(s[::2])  # aceg (every 2nd character)
+print(s[::-1]) # gfedcba (reverse string)</code></pre>
+
+        <h2 id="object-oriented-programming-oop">11. Object-Oriented Programming (OOP)</h2>
+        <p>Python fully supports object-oriented programming (OOP) paradigms. OOP allows you to structure your programs around "objects" rather than actions and data rather than logic.</p>
+        <h3>A. Classes and Objects:</h3>
+        <ul>
+            <li><strong>Class:</strong> A blueprint or template for creating objects. It defines properties (attributes) and behaviors (methods).</li>
+            <li><strong>Object:</strong> An instance of a class.</li>
+        </ul>
+        <pre><code class="language-python"># Define a class 'Car'
+class Car:
+    # Class attribute (shared by all instances)
+    wheels = 4
+
+    # Constructor method: Called when a new object is created
+    def __init__(self, make, model, year):
+        # Instance attributes (unique to each object)
+        self.make = make
+        self.model = model
+        self.year = year
+        self.is_running = False
+
+    # Instance method (behavior)
+    def start(self):
+        if not self.is_running:
+            self.is_running = True
+            print(f"{self.make} {self.model} starting...")
+        else:
+            print(f"{self.make} {self.model} is already running.")
+
+    def stop(self):
+        if self.is_running:
+            self.is_running = False
+            print(f"{self.make} {self.model} stopping.")
+        else:
+            print(f"{self.make} {self.model} is already stopped.")
+
+    def display_info(self):
+        print(f"Make: {self.make}, Model: {self.model}, Year: {self.year}, Running: {self.is_running}")
+
+# Create objects (instances) of the Car class
+my_car = Car("Toyota", "Camry", 2020) # Calls the __init__ constructor
+another_car = Car("Honda", "Civic", 2022)
+
+# Access attributes and call methods on objects
+print(f"My car has {my_car.wheels} wheels.") # Access class attribute
+my_car.start()          # Output: Toyota Camry starting...
+my_car.display_info()   # Output: Make: Toyota, Model: Camry, Year: 2020, Running: True
+
+another_car.start()
+another_car.stop()
+another_car.display_info()</code></pre>
+        <h3>B. Inheritance:</h3>
+        <p>Allows a class (child/subclass) to inherit attributes and methods from another class (parent/superclass).</p>
+        <pre><code class="language-python">class ElectricCar(Car): # ElectricCar inherits from Car
+    def __init__(self, make, model, year, battery_size_kwh):
+        super().__init__(make, model, year) # Call parent class constructor
+        self.battery_size_kwh = battery_size_kwh
+
+    def charge(self):
+        print(f"{self.make} {self.model} is charging its {self.battery_size_kwh} kWh battery.")
+
+    # Override a parent method
+    def start(self):
+        print(f"Electric {self.make} {self.model} silently powering on...")
+        self.is_running = True
+
+my_ev = ElectricCar("Tesla", "Model 3", 2023, 75)
+my_ev.display_info() # Inherited from Car
+my_ev.start()        # Overridden method
+my_ev.charge()       # New method specific to ElectricCar</code></pre>
+        <h3>C. Polymorphism:</h3>
+        <p>Means "many forms." Allows objects of different classes to be treated as objects of a common superclass, or respond to the same method call in different ways.</p>
+        <pre><code class="language-python">def start_any_car(car_object):
+    car_object.start() # Calls the start() method specific to the object's class
+
+start_any_car(my_car) # Calls Car's start()
+start_any_car(my_ev)  # Calls ElectricCar's start() (polymorphism)</code></pre>
+        <h3>D. Encapsulation (via Naming Conventions):</h3>
+        <p>Bundling data and methods within a class. Python doesn't have strict `private` keywords like Java, but uses conventions:</p>
+        <ul>
+            <li>`_attribute`: (Single underscore prefix) Suggests to other developers that this is an internal attribute and should not be accessed directly (weak internal use indicator).</li>
+            <li>`__attribute`: (Double underscore prefix) Name mangling occurs, making it harder (but not impossible) to access directly. Primarily used to avoid name clashes in inheritance.</li>
+        </ul>
+        <pre><code class="language-python">class Account:
+    def __init__(self, balance):
+        self._balance = balance # Weakly private, convention
+        self.__account_number = "12345" # Name mangled
+
+    def get_balance(self):
+        return self._balance
+
+# Accessing
+acc = Account(100)
+print(acc.get_balance()) # 100
+# print(acc.__account_number) # Error: AttributeError
+# print(acc._Account__account_number) # Can still be accessed, but discouraged</code></pre>
+
+        <h2 id="modules-and-packages">12. Modules & Packages</h2>
+        <p>Python allows you to organize code into reusable files (modules) and directories of modules (packages).</p>
+        <h3>A. Modules:</h3>
+        <p>A module is simply a Python file (`.py`) containing Python code (functions, classes, variables).</p>
+        <pre><code class="language-python"># my_math.py
+PI = 3.14159
+
+def add(a, b):
+    return a + b
+
+def subtract(a, b):
+    return a - b</code></pre>
+        <pre><code class="language-python"># main.py
+import my_math # Import the entire module
+from my_math import add, PI # Import specific items
+
+print(my_math.PI)      # Access through module name
+print(my_math.add(5, 3))
+
+print(PI)              # Access directly
+print(add(10, 4))</code></pre>
+        <h3>B. Packages:</h3>
+        <p>A package is a directory containing Python modules and an `__init__.py` file (even if empty, it signifies the directory is a Python package). Packages allow hierarchical organization of modules.</p>
+        <pre><code>my_project/
+├── main.py
+├── calculations/
+│   ├── __init__.py
+│   ├── basic.py
+│   └── advanced.py
+└── data/
+    └── __init__.py
+    └── loader.py</code></pre>
+        <pre><code class="language-python"># calculations/basic.py
+def add(a, b):
+    return a + b</code></pre>
+        <pre><code class="language-python"># calculations/advanced.py
+def power(base, exp):
+    return base ** exp</code></pre>
+        <pre><code class="language-python"># main.py
+from calculations import basic
+from calculations.advanced import power
+
+print(basic.add(10, 20))    # Output: 30
+print(power(2, 3))          # Output: 8</code></pre>
+        <div class="tip">
+            **Importing from `__init__.py`:** You can also import modules or functions directly into a package's `__init__.py` file to simplify imports (e.g., `from . import basic` in `calculations/__init__.py`, then `from calculations import add` in `main.py`).
+        </div>
+
+        <h2 id="file-io">13. File I/O (Input/Output)</h2>
+        <p>Reading from and writing to files.</p>
+        <h3>A. Reading from a file:</h3>
+        <pre><code class="language-python"># Example: Read entire file
+try:
+    with open("my_document.txt", "r") as file:
+        content = file.read()
+        print("File content:\n", content)
+except FileNotFoundError:
+    print("Error: my_document.txt not found.")
+
+# Example: Read line by line
+try:
+    with open("my_document.txt", "r") as file:
+        for line in file:
+            print("Line:", line.strip()) # .strip() removes newline characters
+except FileNotFoundError:
+    print("Error: my_document.txt not found.")</code></pre>
+        <h3>B. Writing to a file:</h3>
+        <pre><code class="language-python"># Overwrite file: "w" mode
+with open("new_output.txt", "w") as file:
+    file.write("This is the first line.\n")
+    file.write("This is the second line.\n")
+print("Content written to new_output.txt (overwritten).")
+
+# Append to file: "a" mode
+with open("new_output.txt", "a") as file:
+    file.write("This line is appended.\n")
+print("Content appended to new_output.txt.")</code></pre>
+        <div class="tip">
+            **`with open(...)` (Context Manager):** This is the recommended way to handle files. It ensures that the file is automatically closed, even if errors occur.
+            <br>
+            **File Modes:**
+            <ul>
+                <li>`"r"`: Read (default).</li>
+                <li>`"w"`: Write (overwrites existing file or creates new).</li>
+                <li>`"a"`: Append (adds to end of file or creates new).</li>
+                <li>`"x"`: Exclusive creation (fails if file already exists).</li>
+                <li>`"b"`: Binary mode (e.g., `"rb"`, `"wb"` for images).</li>
+                <li>`"+"`: Update (read and write, e.g., `"r+"`, `"w+"`).</li>
+            </ul>
+        </div>
+
+        <h2 id="exception-handling">14. Exception Handling</h2>
+        <p>Mechanism to handle runtime errors (exceptions) gracefully, preventing the program from crashing.</p>
+        <ul>
+            <li><strong>`try`:</strong> Contains code that might raise an exception.</li>
+            <li><strong>`except`:</strong> Catches and handles specific exceptions.</li>
+            <li><strong>`else`:</strong> (Optional) Code in this block executes if no exception occurs in the `try` block.</li>
+            <li><strong>`finally`:</strong> (Optional) Code in this block always executes, regardless of whether an exception occurred or was handled.</li>
+        </ul>
+        <pre><code class="language-python">try:
+    num1 = int(input("Enter a number: "))
+    num2 = int(input("Enter another number: "))
+    result = num1 / num2
+    print(f"Result: {result}")
+except ValueError:
+    print("Invalid input! Please enter a valid number.")
+except ZeroDivisionError:
+    print("Error: Cannot divide by zero.")
+except Exception as e: # Catch any other unexpected exceptions
+    print(f"An unexpected error occurred: {e}")
+else:
+    print("Division successful.")
+finally:
+    print("Execution of the division attempt is complete.")</code></pre>
+        <p><strong>Raising Custom Exceptions:</strong></p>
+        <pre><code class="language-python">class CustomError(Exception):
+    "Raised when a specific custom error condition occurs"
+    pass
+
+def validate_age(age):
+    if age &lt; 0:
+        raise ValueError("Age cannot be negative.")
+    if age &lt; 18:
+        raise CustomError("User must be 18 or older.")
+    print("Age is valid.")
+
+try:
+    validate_age(15)
+except ValueError as ve:
+    print(f"Validation Error (ValueError): {ve}")
+except CustomError as ce:
+    print(f"Validation Error (CustomError): {ce}")</code></pre>
+
+        <h2 id="virtual-environments">15. Virtual Environments</h2>
+        <p>Virtual environments create isolated Python installations for your projects. This prevents dependency conflicts between different projects.</p>
+        <ul>
+            <li><strong>Why use them?</strong> If Project A needs `requests==2.20.0` and Project B needs `requests==2.30.0`, virtual environments allow both to coexist on your system without issues.</li>
+            <li><strong>Recommended Tool:</strong> `venv` (built-in module since Python 3.3).</li>
+        </ul>
+        <h3>Usage:</h3>
+        <pre><code class="language-bash"># 1. Create a project directory
+mkdir my_python_project
+cd my_python_project
+
+# 2. Create a virtual environment (named 'venv' is common)
+python3 -m venv venv
+
+# 3. Activate the virtual environment
+# On Linux/macOS:
+source venv/bin/activate
+# On Windows (cmd.exe):
+venv\Scripts\activate.bat
+# On Windows (PowerShell):
+venv\Scripts\Activate.ps1
+
+# 4. (After activation) Install packages within the virtual environment
+pip install Flask requests pandas
+
+# 5. (Optional) Deactivate the virtual environment when done
+deactivate
+
+# To re-activate later, just run step 3 again from the project directory.</code></pre>
+        <p>When the virtual environment is activated, your terminal prompt usually changes (e.g., `(venv) my_python_project $`). Any `pip install` commands will install packages into this isolated environment.</p>
+
+        <h2 id="comprehensions">16. Comprehensions (List, Dictionary, Set)</h2>
+        <p>Provide a concise way to create lists, dictionaries, or sets based on existing iterables.</p>
+        <h3>A. List Comprehensions:</h3>
+        <pre><code class="language-python"># Basic list comprehension: [expression for item in iterable]
+squares = [x**2 for x in range(10)]
+print(squares) # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+
+# With a condition: [expression for item in iterable if condition]
+even_squares = [x**2 for x in range(10) if x % 2 == 0]
+print(even_squares) # [0, 4, 16, 36, 64]
+
+# Nested comprehension:
+matrix = [[1, 2], [3, 4]]
+flat_list = [num for row in matrix for num in row]
+print(flat_list) # [1, 2, 3, 4]</code></pre>
+        <h3>B. Dictionary Comprehensions:</h3>
+        <pre><code class="language-python"># {key_expression: value_expression for item in iterable}
+sq_dict = {x: x**2 for x in range(5)}
+print(sq_dict) # {0: 0, 1: 1, 2: 4, 3: 9, 4: 16}
+
+# With conditions:
+even_dict = {x: x**2 for x in range(10) if x % 2 == 0}
+print(even_dict) # {0: 0, 2: 4, 4: 16, 6: 36, 8: 64}</code></pre>
+        <h3>C. Set Comprehensions:</h3>
+        <pre><code class="language-python"># {expression for item in iterable}
+unique_chars = {char for char in "hello world" if char.isalpha()}
+print(unique_chars) # {'h', 'e', 'l', 'o', 'w', 'r', 'd'} (order not guaranteed)</code></pre>
+
+        <h2 id="iterators-and-generators">17. Iterators & Generators</h2>
+        <h3>A. Iterators:</h3>
+        <p>An object that represents a stream of data. It has a `__iter__()` method (returns the iterator itself) and a `__next__()` method (returns the next item in the sequence). Many built-in types (lists, tuples, strings) are iterable.</p>
+        <pre><code class="language-python">my_list = [1, 2, 3]
+my_iterator = iter(my_list) # Get an iterator from an iterable
+
+print(next(my_iterator)) # 1
+print(next(my_iterator)) # 2
+print(next(my_iterator)) # 3
+# print(next(my_iterator)) # Raises StopIteration Error</code></pre>
+        <h3>B. Generators:</h3>
+        <p>Functions that return an iterator. They are defined like normal functions but use the `yield` keyword instead of `return` to produce a sequence of values. Generators produce values on-the-fly (lazy evaluation), saving memory.</p>
+        <pre><code class="language-python">def countdown(n):
+    print("Starting countdown...")
+    while n > 0:
+        yield n # Yields a value, pauses execution, resumes from here next time
+        n -= 1
+    print("Countdown finished!")
+
+# Create a generator object
+counter = countdown(3)
+
+print(next(counter)) # Output: Starting countdown... \n 3
+print(next(counter)) # Output: 2
+print(next(counter)) # Output: 1
+# print(next(counter)) # Output: Countdown finished! \n StopIteration Error</code></pre>
+        <p>Generators are ideal for handling large datasets that don't fit into memory.</p>
+
+        <h2 id="decorators">18. Decorators</h2>
+        <p>Decorators are a powerful way to modify or enhance the behavior of functions or methods without permanently altering their code. They are essentially functions that take another function as an argument and return a new (decorated) function.</p>
+        <ul>
+            <li>Syntax: Use the `@decorator_name` syntax above the function definition.</li>
+        </ul>
+        <pre><code class="language-python">def my_decorator(func):
+    def wrapper(*args, **kwargs):
+        print(f"--- Calling {func.__name__} ---")
+        result = func(*args, **kwargs) # Call the original function
+        print(f"--- Finished {func.__name__} ---")
+        return result
+    return wrapper
+
+@my_decorator # This is equivalent to: say_hello = my_decorator(say_hello)
+def say_hello(name):
+    print(f"Hello, {name}!")
+
+@my_decorator
+def calculate_sum(a, b):
+    print(f"Calculating sum of {a} and {b}")
+    return a + b
+
+say_hello("Alice")
+# Output:
+# --- Calling say_hello ---
+# Hello, Alice!
+# --- Finished say_hello ---
+
+sum_result = calculate_sum(10, 20)
+print(f"Sum result: {sum_result}")
+# Output:
+# --- Calling calculate_sum ---
+# Calculating sum of 10 and 20
+# --- Finished calculate_sum ---
+# Sum result: 30</code></pre>
+        <div class="tip">
+            **Common Use Cases for Decorators:** Logging, timing function execution, authentication/authorization checks, caching, rate limiting.
+        </div>
+
+        <h2 id="advanced-functions-and-args">19. Advanced Functions (*args, **kwargs)</h2>
+        <p>These special syntaxes allow functions to accept a variable number of arguments.</p>
+        <ul>
+            <li><strong>`*args` (Arbitrary Positional Arguments):</strong> Collects a variable number of non-keyword arguments into a tuple.
+                <pre><code class="language-python">def sum_all(*numbers):
+    total = 0
+    for num in numbers:
+        total += num
+    return total
+
+print(sum_all(1, 2, 3))       # 6
+print(sum_all(10, 20, 30, 40)) # 100</code></pre>
+            </li>
+            <li><strong>`**kwargs` (Arbitrary Keyword Arguments):</strong> Collects a variable number of keyword arguments (named arguments) into a dictionary.
+                <pre><code class="language-python">def print_info(**kwargs):
+    for key, value in kwargs.items():
+        print(f"{key}: {value}")
+
+print_info(name="Alice", age=30, city="New York")
+# Output:
+# name: Alice
+# age: 30
+# city: New York</code></pre>
+            </li>
+            <li><strong>Combined:</strong> You can use both in a function signature (`def func(*args, **kwargs):`). `*args` must come before `**kwargs`.</li>
+            <pre><code class="language-python">def configure_settings(param1, *options, **custom_settings):
+    print(f"Param1: {param1}")
+    print(f"Options (tuple): {options}")
+    print(f"Custom Settings (dict): {custom_settings}")
+
+configure_settings("basic_mode", "verbose", "debug", color="blue", theme="dark")
+# Output:
+# Param1: basic_mode
+# Options (tuple): ('verbose', 'debug')
+# Custom Settings (dict): {'color': 'blue', 'theme': 'dark'}</code></pre>
+        </ul>
+
+        <h2 id="regular-expressions">20. Regular Expressions</h2>
+        <p>Regular expressions (regex) are sequences of characters that define a search pattern. Python's `re` module provides full support for regular expressions.</p>
+        <pre><code class="language-python">import re
+
+text = "The quick brown fox jumps over the lazy dog."
+
+# Search for a pattern
+match = re.search(r"fox", text)
+if match:
+    print(f"Found 'fox' at index {match.start()} to {match.end()}")
+
+# Find all occurrences of a pattern
+all_words = re.findall(r"\b\w+\b", text) # \b word boundary, \w+ one or more word characters
+print(f"All words: {all_words}")
+
+# Replace patterns
+new_text = re.sub(r"lazy", "active", text)
+print(f"Replaced text: {new_text}")
+
+# Check for email pattern
+email_pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+email1 = "test@example.com"
+email2 = "invalid-email"
+print(f"'{email1}' is valid: {bool(re.match(email_pattern, email1))}")
+print(f"'{email2}' is valid: {bool(re.match(email_pattern, email2))}")</code></pre>
+
+        <h2 id="working-with-json">21. Working with JSON</h2>
+        <p>JSON (JavaScript Object Notation) is a lightweight data-interchange format. Python has built-in support for JSON via the `json` module.</p>
+        <pre><code class="language-python">import json
+
+# Python dictionary
+data = {
+    "name": "Alice",
+    "age": 28,
+    "is_student": True,
+    "courses": ["History", "Math", "Science"],
+    "address": None
+}
+
+# Convert Python dict to JSON string (Serialization)
+json_string = json.dumps(data, indent=4) # indent for pretty printing
+print("Python dict converted to JSON:\n", json_string)
+
+# Convert JSON string to Python dict (Deserialization)
+json_data = '{"product": "Laptop", "price": 1200, "in_stock": true}'
+python_dict = json.loads(json_data)
+print("JSON string converted to Python dict:", python_dict)
+print(f"Product: {python_dict['product']}, Price: {python_dict['price']}")
+
+# Write JSON to a file
+with open("data.json", "w") as f:
+    json.dump(data, f, indent=4)
+print("\nData written to data.json")
+
+# Read JSON from a file
+with open("data.json", "r") as f:
+    loaded_data = json.load(f)
+print("Data loaded from data.json:", loaded_data)</code></pre>
+
+        <h2 id="web-development-frameworks">22. Web Development Frameworks (Flask, Django)</h2>
+        <p>Python has robust frameworks for building web applications.</p>
+        <h3>A. Flask:</h3>
+        <p>A micro web framework. Lightweight and flexible, good for smaller APIs and web apps.</p>
+        <pre><code class="language-python"># Install Flask: pip install Flask
+
+# app.py
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello, Flask Web App!"
+
+@app.route('/greet/&lt;name&gt;')
+def greet(name):
+    return f"Hello, {name}!"
+
+@app.route('/api/data', methods=['POST'])
+def process_data():
+    if request.is_json:
+        data = request.get_json()
+        return jsonify({"received": data, "status": "success"}), 200
+    return jsonify({"error": "Request must be JSON"}), 400
+
+if __name__ == '__main__':
+    # For local development:
+    # Set FLASK_APP=app.py
+    # flask run
+    # OR
+    app.run(debug=True, port=5000)</code></pre>
+        <p><strong>To run:</strong> Save as `app.py`. Open terminal in directory, `python3 app.py`. Then open `http://127.0.0.1:5000/` in browser.</p>
+        <h3>B. Django:</h3>
+        <p>A high-level web framework that encourages rapid development and clean, pragmatic design. Full-featured, good for complex applications.</p>
+        <pre><code class="language-python"># Install Django: pip install Django
+
+# Basic steps to create a Django project (CLI):
+# django-admin startproject myproject
+# cd myproject
+# python manage.py startapp myapp
+# (Edit myproject/settings.py, myapp/views.py, myapp/urls.py, etc.)
+# python manage.py migrate
+# python manage.py runserver</code></pre>
+
+        <h2 id="data-science-and-ml-libraries">23. Data Science & ML Libraries (NumPy, Pandas, Scikit-learn)</h2>
+        <p>Python is a dominant language in data science due to its powerful libraries.</p>
+        <h3>A. NumPy:</h3>
+        <p>Fundamental package for numerical computing, providing support for large, multi-dimensional arrays and matrices, along with mathematical functions to operate on these arrays.</p>
+        <pre><code class="language-python"># Install: pip install numpy
+
+import numpy as np
+
+# Create NumPy array
+arr = np.array([1, 2, 3, 4, 5])
+print("Array:", arr) # [1 2 3 4 5]
+print("Type:", type(arr)) # &lt;class 'numpy.ndarray'&gt;
+
+# Array operations (vectorized)
+arr_squared = arr ** 2
+print("Squared:", arr_squared) # [ 1  4  9 16 25]
+print("Sum:", np.sum(arr)) # 15
+
+# Multi-dimensional array (matrix)
+matrix = np.array([[1, 2], [3, 4]])
+print("Matrix:\n", matrix)
+print("Shape:", matrix.shape) # (2, 2)</code></pre>
+        <h3>B. Pandas:</h3>
+        <p>A powerful data manipulation and analysis library, built on NumPy. Provides DataFrames (like spreadsheets or SQL tables).</p>
+        <pre><code class="language-python"># Install: pip install pandas
+
+import pandas as pd
+
+# Create a DataFrame
+data = {
+    'Name': ['Alice', 'Bob', 'Charlie'],
+    'Age': [25, 30, 35],
+    'City': ['NY', 'LA', 'SF']
+}
+df = pd.DataFrame(data)
+print("DataFrame:\n", df)
+
+# Access columns
+print("\nNames:", df['Name'])
+
+# Filter data
+filtered_df = df[df['Age'] &gt; 28]
+print("\nFiltered by Age &gt; 28:\n", filtered_df)
+
+# Read from CSV/Excel
+# df_csv = pd.read_csv('data.csv')
+# df_excel = pd.read_excel('data.xlsx')</code></pre>
+        <h3>C. Scikit-learn:</h3>
+        <p>A comprehensive machine learning library, offering various classification, regression, clustering, and dimensionality reduction algorithms.</p>
+        <pre><code class="language-python"># Install: pip install scikit-learn
+
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+import numpy as np
+
+# Sample data
+X = np.array([[1], [2], [3], [4], [5]]) # Features
+y = np.array([2, 4, 5, 4, 5])           # Target
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Create a Linear Regression model
+model = LinearRegression()
+
+# Train the model
+model.fit(X_train, y_train)
+
+# Make predictions
+y_pred = model.predict(X_test)
+print(f"Predictions: {y_pred}")
+
+# Evaluate the model
+mse = mean_squared_error(y_test, y_pred)
+print(f"Mean Squared Error: {mse}")</code></pre>
+
+        <h2 id="best-practices">24. Best Practices</h2>
+        <ul>
+            <li><strong>Follow PEP 8:</strong> Adhere to Python's official style guide for consistent and readable code.</li>
+            <li><strong>Use Virtual Environments:</strong> Always create and activate a virtual environment for each project to manage dependencies.</li>
+            <li><strong>Write Docstrings:</strong> Document your functions, classes, and modules using docstrings (triple quotes) to explain their purpose.</li>
+            <li><strong>Comments:</strong> Use comments for complex logic, but prioritize clear, self-documenting code.</li>
+            <li><strong>Meaningful Names:</strong> Use descriptive variable, function, and class names.</li>
+            <li><strong>Avoid Global Variables:</strong> Minimize the use of global variables to prevent side effects and improve modularity.</li>
+            <li><strong>Handle Exceptions Gracefully:</strong> Use `try-except-finally` blocks to handle errors and prevent crashes.</li>
+            <li><strong>Write Unit Tests:</strong> Use frameworks like `unittest` or `pytest` to write automated tests for your code.</li>
+            <li><strong>Use Context Managers (`with` statement):</strong> For resources like files, network connections, ensure they are properly managed and closed.</li>
+            <li><strong>Prefer List Comprehensions:</strong> For creating new lists (and dict/set comprehensions) in a concise and efficient way.</li>
+            <li><strong>Understand Mutability:</strong> Be aware of mutable (lists, dicts, sets) vs. immutable (strings, tuples, numbers) types and their implications.</li>
+            <li><strong>Use `if __name__ == "__main__":`:</strong> To guard code that should only run when the script is executed directly, not when imported as a module.</li>
+            <li><strong>Stay Updated:</strong> Keep up with new Python versions and features (e.g., f-strings, structural pattern matching).</li>
+            <li><strong>Utilize the Standard Library:</strong> Before importing external libraries, check if Python's extensive standard library offers a solution.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Python: Your Versatile Programming Companion!</strong>
+            <p>Python's simplicity, extensive libraries, and vast community make it an ideal language for beginners and experienced developers alike. From web development and data science to automation and AI, Python's versatility is unparalleled. Continuous learning, hands-on practice, and adherence to best practices will empower you to build powerful and elegant solutions with Python.</p>
+        </div>
+    </div>
+</body>
+</html>
