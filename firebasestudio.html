@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Firebase Studio Tutorial with Example Projects (Full-Stack GUI)</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Complete Firebase Studio Tutorial with Example Projects (Full-Stack GUI)</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-firebase-studio">1. What is Firebase Studio?</a></li>
+                <li><a href="#key-features-and-modes">2. Key Features & Development Modes</a></li>
+                <li><a href="#getting-started-create-workspace">3. Getting Started: Create a Workspace</a></li>
+                <li><a href="#app-prototyping-agent-no-code-ai">4. App Prototyping Agent (No-Code AI)</a></li>
+                <li><a href="#coding-workspace-ai-enhanced-ide">5. Coding Workspace (AI-Enhanced IDE)</a></li>
+                <li><a href="#firebase-backend-services">6. Firebase Backend Services Integration</a></li>
+                <li><a href="#full-stack-example-project-overview">7. Full-Stack Example Project Overview</a></li>
+                <li><a href="#testing-and-debugging">8. Testing & Debugging</a></li>
+                <li><a href="#deployment-firebase-app-hosting">9. Deployment (Firebase App Hosting)</a></li>
+                <li><a href="#collaboration-and-sharing">10. Collaboration & Sharing</a></li>
+                <li><a href="#gemini-in-firebase-deep-dive">11. Gemini in Firebase (AI Assistance Deep Dive)</a></li>
+                <li><a href="#cost-management-and-pricing">12. Cost Management & Pricing</a></li>
+                <li><a href="#best-practices">13. Best Practices</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-firebase-studio">1. What is Firebase Studio?</h2>
+        <p><strong>Firebase Studio</strong> is an AI-powered, cloud-based development environment that helps you build and ship production-quality full-stack AI applications. It unifies various tools and services, including a Code OSS-based IDE (similar to VS Code), AI assistance from Gemini, and deep integration with Firebase and Google Cloud, all accessible directly from your browser.</p>
+        <p>It aims to accelerate the entire development lifecycle by streamlining prototyping, coding, testing, and deployment for web, mobile, and backend services.</p>
+        <h3>Key Advantages of Firebase Studio:</h3>
+        <ul>
+            <li><strong>AI-Powered:</strong> Integrates Gemini in Firebase for code generation, debugging, testing, and documentation.</li>
+            <li><strong>Full-Stack Focus:</strong> Supports frontend (web, mobile) and backend development in one place.</li>
+            <li><strong>Cloud-Based IDE:</strong> Develop from anywhere with a browser, no local setup required.</li>
+            <li><strong>Rapid Prototyping:</strong> Use natural language, mockups, or drawings to quickly generate app prototypes.</li>
+            <li><strong>Deep Firebase & GCP Integration:</strong> Seamlessly connect to Firebase services (Authentication, Firestore, Functions, App Hosting) and Google Cloud.</li>
+            <li><strong>Collaboration:</strong> Share workspaces and previews with team members and testers.</li>
+            <li><strong>Templates & Samples:</strong> Large library of templates for popular languages (Go, Java, Node.js, Python Flask) and frameworks (Next.js, React, Angular, Flutter, Android).</li>
+        </ul>
+
+        <h2 id="key-features-and-modes">2. Key Features & Development Modes</h2>
+        <p>Firebase Studio offers two primary modes of development, allowing flexibility based on your preference and task:</p>
+        <ul>
+            <li><strong>App Prototyping Agent (Prototyper Mode):</strong>
+                <ul>
+                    <li>Focus: Rapid natural language prototyping and iteration with minimal coding.</li>
+                    <li>Input: Natural language prompts, multimodal input (images, drawings), stock images from Unsplash.</li>
+                    <li>Output: Generates app structure, UI, basic features, and initial AI flows.</li>
+                    <li>Ideal for: Quickly getting a functional prototype or scaffolding an app structure.</li>
+                </ul>
+            </li>
+            <li><strong>Coding Workspace (Code Mode):</strong>
+                <ul>
+                    <li>Focus: Full control over your codebase in a familiar IDE environment.</li>
+                    <li>Built on: Code OSS (open-source VS Code).</li>
+                    <li>Features: Syntax highlighting, integrated terminal, source control (Git), debugging tools, Open VSX Registry extensions, customizable environment with Nix.</li>
+                    <li>AI Assistance: Gemini in Firebase provides context-aware help (code completion, generation, bug fixing, unit testing, refactoring, documentation).</li>
+                    <li>Ideal for: Implementing custom logic, refining features, debugging deeply, or importing existing repositories.</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="tip">
+            <strong>Getting Started:</strong> Access Firebase Studio at <a href="https://firebase.studio/" target="_blank">firebase.studio</a>. You'll need a Google account. The free tier typically allows 3 workspaces per user.
+        </div>
+
+        <h2 id="getting-started-create-workspace">3. Getting Started: Create a Workspace</h2>
+        <p>A workspace in Firebase Studio is your isolated development environment for a project.</p>
+        <ol>
+            <li><strong>Access Firebase Studio:</strong> Go to <a href="https://firebase.studio/" target="_blank">firebase.studio</a> and sign in.</li>
+            <li><strong>Create a New Workspace:</strong>
+                <ul>
+                    <li>You'll likely see an option to "Create new project" or "Get started". Click on it.</li>
+                    <li>You'll be presented with options:
+                        <ul>
+                            <li><strong>Start from a template:</strong> Choose from a gallery of predefined full-stack templates (e.g., Next.js, React, Node.js Flask, Flutter, Android). This is a great starting point.</li>
+                            <li><strong>Import an existing repository:</strong> Connect to GitHub, GitLab, Bitbucket, or upload a local archive.</li>
+                            <li><strong>Generate an app with AI:</strong> Use the App Prototyping agent (covered next).</li>
+                        </ul>
+                    </li>
+                    <li>For this tutorial, let's select **"Generate an app with AI"** or choose a simple template like a **Next.js Blank project** to get a coding workspace directly.</li>
+                    <li>Give your workspace a **name** (e.g., `MyFullStackApp`).</li>
+                    <li>Click **Create**.</li>
+                </ul>
+            </li>
+            <li><strong>Workspace Loading:</strong> Firebase Studio will provision a virtual machine in the cloud, set up your development environment, and load your project. This might take a few moments.</li>
+            <li><strong>Accessing Modes:</strong> Once loaded, you'll be in either the **Prototyper** mode (if you chose AI generation) or the **Code** mode (if you chose a template or imported). You can switch between them using the buttons/icons usually located in the bottom toolbar or left sidebar.</li>
+        </ol>
+
+        <h2 id="app-prototyping-agent-no-code-ai">4. App Prototyping Agent (No-Code AI)</h2>
+        <p>This mode is designed for rapid iteration and prototyping using natural language and visual cues, often without writing a single line of code initially.</p>
+        <p><strong>Access:</strong> If you're in Code mode, look for a "Prototyper" or "Agent" icon/button to switch.</p>
+        <h3>Usage Example: Generate a Simple To-Do List Web App:</h3>
+        <ol>
+            <li><strong>Start with a Prompt:</strong> In the Prototyper chat window, type a detailed natural language prompt.
+                <pre><code class="language-text">"Create a full-stack web app for managing a to-do list. The frontend should be a single page with an input field to add new tasks, a list to display current tasks, and a checkbox next to each task to mark it as complete. Store the tasks in Firebase Firestore. Add basic user authentication using Firebase Authentication (Google Sign-in). Deploy using Firebase App Hosting."</code></pre>
+            </li>
+            <li><strong>Review & Iterate with Gemini:</strong>
+                <ul>
+                    <li>Gemini will process your prompt and provide a summary of its plan, including potential UI elements, backend services, and a blueprint.</li>
+                    <li>You can **ask for clarifications**, **request changes** (e.g., "Make the tasks draggable," "Add a due date field"), or **provide visual input** (click "Annotate" to draw directly on the preview, or "Select" an element to give specific instructions).</li>
+                    <li>Gemini can suggest improvements, add features, or refine the UI based on your chat.</li>
+                </ul>
+            </li>
+            <li><strong>Generate Prototype:</strong> Once satisfied, click **Prototype this App** (or a similar button). Gemini will generate the initial codebase for your app (frontend code, backend Cloud Functions, Firestore rules, etc.).</li>
+            <li><strong>Instant Preview:</strong> A live preview of your generated web app will appear directly within Firebase Studio. You can interact with it instantly.</li>
+            <li><strong>Test & Refine:</strong> Interact with the preview. If you find issues or want changes, go back to the chat with Gemini and describe the problem or desired modification. Gemini can fix errors or make updates based on your natural language instructions.</li>
+        </ol>
+
+        <h2 id="coding-workspace-ai-enhanced-ide">5. Coding Workspace (AI-Enhanced IDE)</h2>
+        <p>This is where you get full control over your code, within a powerful Code OSS-based IDE, supercharged with Gemini AI assistance.</p>
+        <p><strong>Access:</strong> From Prototyper mode, click **Switch to Code** (often in the bottom bar or left sidebar). From a template-based workspace, you start here directly.</p>
+        <h3>Key Elements of the Coding Workspace:</h3>
+        <ul>
+            <li><strong>File Explorer:</strong> (Left sidebar) Browse your project's file structure. Create, delete, rename files and folders.</li>
+            <li><strong>Editor Pane:</strong> Write and edit your code with syntax highlighting, auto-completion, and inline Gemini AI suggestions.</li>
+            <li><strong>Integrated Terminal:</strong> (Bottom panel) Access a full Linux terminal. Run commands (`npm install`, `firebase emulators:start`, `git commands`).</li>
+            <li><strong>Source Control (Git):</strong> (Left sidebar) Integrated Git client to manage commits, branches, and push/pull from your repository.</li>
+            <li><strong>Debugging Tools:</strong> (Left sidebar) Set breakpoints, step through code, inspect variables.</li>
+            <li><strong>Extensions:</strong> (Left sidebar) Access and install extensions from the Open VSX Registry to enhance functionality.</li>
+            <li><strong>Gemini in Firebase Chat:</strong> (Bottom right spark icon) An interactive chat interface for Gemini AI.</li>
+        </ul>
+        <h3>Usage Example: Adding a New Backend Feature (Code Mode):</h3>
+        <ol>
+            <li><strong>Navigate to your codebase:</strong> In the File Explorer, open a relevant file (e.g., `functions/src/index.js` for Cloud Functions).</li>
+            <li><strong>Request AI assistance (Inline):</strong> Start typing code, and Gemini will provide inline code completions or suggestions.</li>
+            <li><strong>Request AI assistance (Chat):</strong>
+                <ul>
+                    <li>Click the Gemini spark icon at the bottom of the workspace to open the chat window.</li>
+                    <li>Prompt Gemini for a new function.
+                        <pre><code class="language-text">"I need a new Cloud Function called 'getTaskDetails' that takes a taskId as a query parameter, fetches the task from Firestore, and returns it as JSON. Make sure to handle cases where the task is not found."</code></pre>
+                    </li>
+                    <li>Gemini will generate the code. You can ask it to explain its plan first ("Explain your plan before you write the code").</li>
+                    <li>Review the generated code. Accept it (often a click/button), or refine it with more prompts.</li>
+                </ul>
+            </li>
+            <li><strong>Modify & Test Locally:</strong>
+                <ul>
+                    <li>Modify the generated code as needed.</li>
+                    <li>Open the Integrated Terminal.</li>
+                    <li>Run Firebase Emulators to test your Cloud Function and Firestore locally:
+                        <pre><code class="language-bash">firebase emulators:start</code></pre>
+                    </li>
+                    <li>Access the emulator UI (`http://localhost:4000`) or test your function endpoint directly.</li>
+                </ul>
+            </li>
+            <li><strong>Version Control:</strong> Use the Source Control sidebar to commit your changes (e.g., `git add .`, `git commit -m "Added getTaskDetails function"`).</li>
+        </ol>
+
+        <h2 id="firebase-backend-services">6. Firebase Backend Services Integration</h2>
+        <p>Firebase Studio is deeply integrated with key Firebase backend services, which form the backbone of many full-stack applications.</p>
+        <ul>
+            <li><strong>Firebase Authentication:</strong>
+                <ul>
+                    <li>Provides backend services, easy-to-use SDKs, and ready-made UI libraries to authenticate users. Supports email/password, phone numbers, Google, Facebook, GitHub, etc.</li>
+                    <li><strong>Usage:</strong> Gemini can help scaffold authentication flows. The Firebase Local Emulator Suite allows testing authentication locally.</li>
+                </ul>
+            </li>
+            <li><strong>Cloud Firestore:</strong>
+                <ul>
+                    <li>A flexible, scalable NoSQL document database for mobile, web, and server development. Offers real-time data synchronization.</li>
+                    <li><strong>Usage:</strong> Gemini can help define schema and generate CRUD (Create, Read, Update, Delete) operations. The Firestore Emulator allows local testing.</li>
+                </ul>
+            </li>
+            <li><strong>Firebase Realtime Database:</strong>
+                <ul>
+                    <li>Another NoSQL database that stores data as one large JSON tree. Primarily for real-time synchronization.</li>
+                    <li><strong>Usage:</strong> Similar to Firestore, for real-time data needs.</li>
+                </ul>
+            </li>
+            <li><strong>Cloud Functions for Firebase:</strong>
+                <ul>
+                    <li>Serverless functions that run in response to events triggered by Firebase features (e.g., Firestore writes, Auth events, HTTP requests).</li>
+                    <li><strong>Usage:</strong> Build your backend API logic. Firebase Studio allows writing, deploying, and debugging Cloud Functions. The Cloud Functions Emulator enables local testing.</li>
+                </ul>
+            </li>
+            <li><strong>Cloud Storage for Firebase:</strong>
+                <ul>
+                    <li>Stores user-generated content like photos and videos. Backed by Google Cloud Storage.</li>
+                    <li><strong>Usage:</strong> Manage file uploads and downloads.</li>
+                </ul>
+            </li>
+            <li><strong>Firebase Data Connect (New, for Cloud SQL / PostgreSQL):</strong>
+                <ul>
+                    <li>A relational database service for mobile and web apps that lets you build and scale using a fully-managed PostgreSQL database powered by Cloud SQL.</li>
+                    <li>Provides secure schema, query, and mutation management using GraphQL technology.</li>
+                    <li><strong>Usage:</strong> Define your data model, and Data Connect automatically generates PostgreSQL schema, secure server endpoints, and type-safe SDKs. Great for relational data needs in Firebase apps. Firebase Studio includes a VS Code extension and emulator for Data Connect.</li>
+                    <pre><code class="language-graphql"># Example Data Connect GraphQL Schema (concept)
+type Task {
+  id: ID!
+  title: String!
+  description: String
+  completed: Boolean!
+  dueDate: Date
+  createdAt: DateTime!
+  user: User @relation(name: "TaskOwner")
+}
+
+type User {
+  id: ID!
+  email: String!
+  tasks: [Task!]! @relation(name: "TaskOwner")
+}</code></pre>
+                </ul>
+            </li>
+            <li><strong>Firebase AI Logic:</strong>
+                <ul>
+                    <li>Provides client SDKs and a proxy service to securely call Google's generative AI models (Gemini API, Imagen API) directly from your mobile or web app.</li>
+                    <li><strong>Usage:</strong> Build AI chat experiences, generate images, leverage multimodal input/output. Gemini in Firebase helps with this integration.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="full-stack-example-project-overview">7. Full-Stack Example Project Overview</h2>
+        <p>Let's outline a hypothetical full-stack to-do list application built with Firebase Studio, integrating key services.</p>
+        <p><strong>Project Name:</strong> `MyTodoApp`</p>
+        <p><strong>Technologies:</strong></p>
+        <ul>
+            <li><strong>Frontend (Web):</strong> Next.js (generated by App Prototyping Agent)</li>
+            <li><strong>Authentication:</strong> Firebase Authentication (Google Sign-in)</li>
+            <li><strong>Database:</strong> Cloud Firestore</li>
+            <li><strong>Backend Logic:</strong> Cloud Functions for Firebase (e.g., for task cleanup, notifications)</li>
+            <li><strong>Deployment:</strong> Firebase App Hosting</li>
+            <li><strong>AI Feature:</strong> Gemini in Firebase for task summary generation.</li>
+        </ul>
+        <h3>Project Structure (Simplified):</h3>
+        <pre><code>my-todo-app/
+├── nextjs-app/              # Frontend Next.js application
+│   ├── public/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── index.js     # Main page with todo list UI
+│   │   │   └── _app.js      # Firebase initialization
+│   │   └── components/
+│   │       ├── AuthProvider.js # Context for Firebase Auth
+│   │       └── TodoList.js    # React component for todo display
+│   ├── firebase.json        # Firebase hosting configuration
+│   └── package.json         # Frontend dependencies
+├── functions/               # Cloud Functions for Firebase
+│   ├── src/
+│   │   ├── index.ts/js      # Cloud Functions code
+│   │   └── gemini.ts/js     # AI Logic for Gemini integration
+│   ├── package.json         # Functions dependencies
+│   └── tsconfig.json        # TypeScript config (if using TS)
+├── .firebaserc              # Firebase project configuration
+├── firestore.rules          # Firestore security rules
+├── firestore.indexes.json   # Firestore indexes
+├── .vscode/                 # VS Code specific settings (from Code OSS)
+├── .nix/                    # Nix configuration for environment (advanced customization)
+└── README.md</code></pre>
+        <h3>Core Full-Stack Flow:</h3>
+        <ol>
+            <li><strong>User Interface (Next.js):</strong> Displays tasks fetched from Firestore, provides input to add new tasks. Handles user login/logout via Firebase Auth SDK.</li>
+            <li><strong>Firebase Authentication:</strong>
+                <ul>
+                    <li>Frontend: Uses `firebase/auth` SDK to implement Google Sign-in.
+                        <pre><code class="language-javascript">// Frontend (Next.js) - example login
+import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { app } from '../_app'; // Your Firebase app instance
+
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+const signInWithGoogle = async () => {
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (error) {
+    console.error("Google Sign-in error:", error);
+  }
+};</code></pre>
+                    </li>
+                    <li>Backend (Firestore Rules): Secure Firestore data based on authenticated user IDs.</li>
+                </ul>
+            </li>
+            <li><strong>Cloud Firestore (Database):</strong>
+                <ul>
+                    <li>Frontend: Uses `firebase/firestore` SDK to add, retrieve, update, and delete tasks. Real-time listeners can update the UI automatically.
+                        <pre><code class="language-javascript">// Frontend (Next.js) - example add task to Firestore
+import { getFirestore, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { app } from '../_app'; 
+
+const db = getFirestore(app);
+
+const addTask = async (userId, taskTitle) => {
+  try {
+    await addDoc(collection(db, "users", userId, "tasks"), {
+      title: taskTitle,
+      completed: false,
+      createdAt: serverTimestamp()
+    });
+  } catch (e) {
+    console.error("Error adding document: ", e);
+  }
+};</code></pre>
+                    </li>
+                    <li>Firestore Rules: Define who can read/write which documents (e.g., `allow read, write: if request.auth.uid == userId;`).</li>
+                </ul>
+            </li>
+            <li><strong>Cloud Functions (Backend Logic):</strong>
+                <ul>
+                    <li>Example: A function triggered when a user completes all tasks, sending a notification or summarizing tasks.
+                        <pre><code class="language-typescript">// functions/src/index.ts (example Cloud Function)
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+admin.initializeApp();
+
+// HTTP-triggered function to summarize tasks (hypothetical AI use)
+export const summarizeTasks = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+  }
+  const userId = context.auth.uid;
+  // Fetch tasks from Firestore
+  const tasksSnapshot = await admin.firestore().collection('users').doc(userId).collection('tasks').get();
+  const tasks = tasksSnapshot.docs.map(doc => doc.data().title);
+
+  // Call Gemini API (via Firebase AI Logic/Genkit) to summarize tasks
+  // This part would involve Genkit or Firebase AI Logic SDK
+  // const summary = await gemini.generateText({ prompt: `Summarize these tasks: ${tasks.join(', ')}` });
+  
+  return { summary: "Summary of your tasks generated by AI." };
+});</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>AI Integration (Gemini in Firebase AI Logic):</strong>
+                <ul>
+                    <li>Frontend: Calls the `summarizeTasks` Cloud Function.</li>
+                    <li>Backend (Cloud Function): Integrates with Firebase AI Logic (or Genkit locally) to send prompts to the Gemini API and get summaries.</li>
+                </ul>
+            </li>
+            <li><strong>Firebase App Hosting (Deployment):</strong> Hosts the Next.js frontend and serves content rapidly.</li>
+        </ol>
+
+        <h2 id="testing-and-debugging">8. Testing & Debugging</h2>
+        <p>Firebase Studio provides integrated tools to test and debug your full-stack application.</p>
+        <ul>
+            <li><strong>Web Previews:</strong>
+                <ul>
+                    <li>When in Code mode, a web preview of your frontend app is usually visible (or can be launched) in a dedicated pane.</li>
+                    <li>You can **generate a public URL** to share your app temporarily with testers for feedback.</li>
+                </ul>
+            </li>
+            <li><strong>Android Emulators (for Flutter/Android Native projects):</strong>
+                <ul>
+                    <li>Firebase Studio supports built-in Android emulators to preview mobile apps directly in the browser.</li>
+                    <li>You can also generate a QR code to quickly load and test a preview on your physical mobile device.</li>
+                </ul>
+            </li>
+            <li><strong>Firebase Local Emulator Suite:</strong>
+                <ul>
+                    <li><strong>Access:</strong> In the Coding Workspace, open the Integrated Terminal. Run `firebase emulators:start`.</li>
+                    <li>You can open the Emulator UI (typically `http://localhost:4000`) in a new browser tab within Firebase Studio to view database (Firestore/RTDB) and authentication data locally.</li>
+                    <li>This allows you to test your Cloud Functions and database interactions without deploying to the cloud.</li>
+                </ul>
+            </li>
+            <li><strong>Integrated Debugging:</strong>
+                <ul>
+                    <li>The Code OSS environment has full debugging capabilities. Set breakpoints in your frontend or Cloud Functions code.</li>
+                    <li>Use the debugger controls (play, step over, step into, variables inspection) to trace execution flow.</li>
+                </ul>
+            </li>
+            <li><strong>Gemini AI for Debugging & Testing:</strong>
+                <ul>
+                    <li>In the Gemini chat window, describe your error message or unexpected behavior. Gemini can **diagnose issues**, **suggest fixes**, and even **write unit tests** for your code.</li>
+                    <li>You can explicitly ask Gemini to "Fix this error in `functions/src/index.ts`" or "Write a unit test for the `addTask` function in `nextjs-app/src/utils/firestore.js`".</li>
+                    <li>Gemini can also help you **refactor** or **explain** existing code.</li>
+                </ul>
+            </li>
+            <li><strong>Genkit Developer UI (for AI flows):</strong> If you're building AI flows with Genkit, Firebase Studio allows you to run `npm run genkit:watch` in the terminal to access the Genkit Developer UI locally. This UI helps you test, debug, and refine your AI prompts and flows.</li>
+        </ul>
+
+        <h2 id="deployment-firebase-app-hosting">9. Deployment (Firebase App Hosting)</h2>
+        <p>Firebase Studio streamlines deployment, especially to Firebase App Hosting, a fully managed platform designed for dynamic web apps (like Next.js and Angular) with GitHub integration.</p>
+        <div class="warning">
+            **Important:** Firebase App Hosting, along with other Firebase/Google Cloud services, typically requires a **Cloud Billing account** (Blaze plan) linked to your Firebase project. Usage of these services will incur charges beyond any free quotas.
+        </div>
+        <h3>Usage Example: Publishing a Web App with Firebase App Hosting (GUI):</h3>
+        <ol>
+            <li><strong>Prepare your App:</strong> Ensure your app is running correctly in the preview and your code is committed to a Git repository (e.g., GitHub).</li>
+            <li><strong>Publish from Firebase Studio:</strong>
+                <ul>
+                    <li>In Firebase Studio (often in Prototyper mode, or look for a "Publish" button/icon), click **Publish**.</li>
+                    <li><strong>Firebase project:</strong> Firebase Studio will either link to an existing Firebase project associated with your workspace or provision a new one for you. Click **Next**.</li>
+                    <li><strong>Link Cloud Billing account:</strong> You'll be guided to select an existing Cloud Billing account or create a new one in the Google Cloud Console. This is required for App Hosting. Click **Next**.</li>
+                    <li><strong>Set up services:</strong> Firebase Studio will provision necessary Firebase services (e.g., Firebase App Hosting backend, potentially Cloud Build and Artifact Registry behind the scenes). Click **Next**.</li>
+                    <li><strong>Publish now:</strong> Click **Publish now**.</li>
+                </ul>
+            </li>
+            <li><strong>Monitor Rollout:</strong> Firebase Studio will initiate the build and deployment process. You can monitor the progress in the Firebase Studio UI or in the Firebase console under **App Hosting**.</li>
+            <li><strong>Access Live App:</strong> Once the rollout is complete, your app will be available on a free Firebase App Hosting subdomain. You can access it via the provided URL.</li>
+            <li><strong>Continuous Deployment (after initial setup):</strong> Firebase App Hosting integrates with GitHub. Once linked, every time you push to the configured live branch (e.g., `main`), App Hosting can automatically deploy a new version of your app.</li>
+        </ol>
+        <h3>Other Deployment Options from Firebase Studio:</h3>
+        <ul>
+            <li><strong>Firebase Hosting:</strong> For static web content and single-page apps (HTML, CSS, JS). Excellent global CDN.</li>
+            <li><strong>Cloud Run:</strong> For deploying containerized applications. Provides flexible scaling.</li>
+            <li><strong>Custom Infrastructure:</strong> You retain full control to deploy to any other hosting solution.</li>
+        </ul>
+
+        <h2 id="collaboration-and-sharing">10. Collaboration & Sharing</h2>
+        <p>Firebase Studio is designed for collaborative development.</p>
+        <ul>
+            <li><strong>Share Preview Link:</strong>
+                <ul>
+                    <li>You can generate a temporary, public URL for your app's preview. This is ideal for getting early feedback from non-technical stakeholders or testers.</li>
+                    <li>Look for a "Share preview link" option in the preview pane or bottom toolbar.</li>
+                </ul>
+            </li>
+            <li><strong>Share Workspaces:</strong>
+                <ul>
+                    <li>You can share your Firebase Studio workspace with other team members, allowing multiple developers to contribute to the same project concurrently in the same cloud IDE.</li>
+                    <li>Look for sharing options in the top right or within workspace settings.</li>
+                </ul>
+            </li>
+            <li><strong>Custom Templates:</strong> Create your own custom project templates to share standardized development environments and project structures with your team or the community.</li>
+        </ul>
+
+        <h2 id="gemini-in-firebase-deep-dive">11. Gemini in Firebase (AI Assistance Deep Dive)</h2>
+        <p>Gemini in Firebase is your AI co-pilot, seamlessly integrated throughout Firebase Studio.</p>
+        <ul>
+            <li><strong>Context-Aware Code Assistance:</strong> Gemini provides intelligent suggestions for code completion, generation, and bug fixing directly within the Code OSS editor.</li>
+            <li><strong>Interactive Chat:</strong> The Gemini chat interface (spark icon) allows you to:
+                <ul>
+                    <li>**Generate Code:** "Write a Python Cloud Function to resize an image uploaded to Storage."</li>
+                    <li>**Explain Code:** Select a code snippet and ask, "Explain this code."</li>
+                    <li>**Refactor Code:** Ask to "Refactor this function for better readability."</li>
+                    <li>**Debug Errors:** Paste an error message and relevant code; Gemini can diagnose and suggest fixes.</li>
+                    <li>**Write Unit Tests:** "Write unit tests for this class."</li>
+                    <li>**Generate Documentation:** "Generate Javadoc comments for this method."</li>
+                    <li>**Ask for best practices:** "What's the best way to handle user sessions in Next.js with Firebase Auth?"</li>
+                </ul>
+            </li>
+            <li><strong>Multimodal Prompts:</strong> Gemini can interpret not just text, but also images, drawings, and mockups in Prototyper mode to generate apps.</li>
+            <li><strong>Specialized AI Agents:</strong> Beyond general assistance, specialized agents (some in early access) can perform complex tasks:
+                <ul>
+                    <li><strong>Migration Agent:</strong> Help modernize codebases (e.g., upgrading Java versions).</li>
+                    <li><strong>AI Testing Agent:</strong> Run adversarial tests against your AI models.</li>
+                    <li><strong>Code Documentation Agent:</strong> Chat with a knowledge base about your codebase.</li>
+                </ul>
+            </li>
+            <li><strong>Gemini CLI:</strong> Pre-installed in Firebase Studio's terminal, offering direct command-line AI assistance.
+                <pre><code class="language-bash">gemini -p "Explain the architecture of this Next.js app."
+gemini explain functions/src/index.ts</code></pre>
+            </li>
+            <li><strong>Contextual Awareness:</strong> Gemini understands your entire codebase and the context of your workspace, leading to more accurate and relevant suggestions.</li>
+            <li><strong>Iterative Development:</strong> You can seamlessly switch between prompting (Prototyper) and coding (Code mode) to leverage the strengths of each, accelerating iteration.</li>
+            <li><strong>Customizing AI Behavior:</strong> Use a `GEMINI.md` file (or `.idx/airules.md`) in your project root to provide project-specific instructions, coding style guides, or background information to Gemini.</li>
+        </ul>
+
+        <h2 id="cost-management-and-pricing">12. Cost Management & Pricing</h2>
+        <p>Firebase Studio's pricing is tiered, and linking a Cloud Billing account is often required for certain integrations.</p>
+        <ul>
+            <li><strong>Workspaces:</strong>
+                <ul>
+                    <li>**No Cost Preview:** Typically provides 3 workspaces per user.</li>
+                    <li>**Google Developer Program:** Members can get up to 10 workspaces.</li>
+                    <li>**Google Developer Premium Plan:** Up to 30 workspaces with increased Gemini quota for the App Prototyping agent.</li>
+                </ul>
+            </li>
+            <li><strong>Gemini in Firebase (AI Assistance):</strong>
+                <ul>
+                    <li>The AI assistance within the IDE (code completion, generation) might have generous free tiers.</li>
+                    <li>The App Prototyping agent and direct Gemini API calls (e.g., via Firebase AI Logic) will have specific pricing. Check <a href="https://firebase.google.com/pricing" target="_blank">Firebase pricing</a> and <a href="https://cloud.google.com/vertex-ai/generative-ai/pricing" target="_blank">Gemini Developer API pricing</a>.</li>
+                </ul>
+            </li>
+            <li><strong>Firebase & Google Cloud Service Usage:</strong>
+                <ul>
+                    <li>Using services like Firebase App Hosting, Cloud Functions, Cloud Firestore, Cloud SQL (via Data Connect) incurs costs based on their respective pricing models.</li>
+                    <li>Linking a Cloud Billing account to your Firebase project upgrades it to the Blaze plan (pay-as-you-go).</li>
+                    <li>Monitor your usage and costs in the <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a> and <a href="https://console.cloud.google.com/billing" target="_blank">Google Cloud Billing reports</a>.</li>
+                </ul>
+            </li>
+            <li><strong>Cost Optimization:</strong>
+                <ul>
+                    <li>Understand the pricing for each Firebase/GCP service your app uses.</li>
+                    <li>Optimize Cloud Functions execution time and memory.</li>
+                    <li>Design Firestore queries efficiently to minimize reads/writes.</li>
+                    <li>Monitor storage usage in Cloud Storage.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="best-practices">13. Best Practices</h2>
+        <ul>
+            <li><strong>Start with AI Prototyping:</strong> Use the App Prototyping agent to quickly validate ideas and set up basic app structure, then switch to Code mode for detailed implementation.</li>
+            <li><strong>Leverage Gemini AI:</strong> Integrate AI into your workflow for coding, testing, debugging, and documentation. Don't just copy-paste; understand the generated code.</li>
+            <li><strong>Understand Firebase Services:</strong> Deeply learn the capabilities of Firebase services (Auth, Firestore, Functions, App Hosting, Data Connect) and how they fit into your full-stack architecture.</li>
+            <li><strong>Modular Code:</strong> Keep your frontend and backend code organized and modular.</li>
+            <li><strong>Security Rules:</strong> Write robust Firebase Security Rules (Firestore, Realtime Database, Storage) to control data access.</li>
+            <li><strong>Use Firebase Local Emulator Suite:</strong> Develop and test locally as much as possible to save costs and speed up iteration.</li>
+            <li><strong>Version Control:</strong> Always connect your workspace to a Git repository and commit changes regularly.</li>
+            <li><strong>Monitor Your App:</strong> Use App Hosting's built-in observability and Firebase Performance Monitoring/Crashlytics to monitor your live application.</li>
+            <li><strong>Cost Awareness:</strong> Keep an eye on your Cloud Billing account and optimize usage.</li>
+            <li><strong>Explore Templates & Extensions:</strong> Leverage the rich set of templates and the Open VSX Registry extensions to boost productivity.</li>
+            <li><strong>Test Your AI Features:</strong> If building generative AI into your app, use tools like Genkit's Developer UI to test and refine your AI flows and prompts.</li>
+            <li><strong>Clean Up Workspaces:</strong> Delete workspaces you no longer need to manage resources.</li>
+        </ul>
+
+        <div class="tip">
+            <strong>Firebase Studio: Revolutionizing Full-Stack AI App Development!</strong>
+            <p>Firebase Studio is a groundbreaking platform that redefines how full-stack and AI-powered applications are built. By unifying development stages, integrating powerful AI assistance, and providing deep ties to Firebase and Google Cloud, it empowers developers to prototype, build, test, and deploy faster than ever before. Embrace its unique features, continuously learn, and leverage its capabilities to bring your innovative app ideas to life.</p>
+        </div>
+    </div>
+</body>
+</html>
