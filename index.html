@@ -364,7 +364,11 @@
    }
   </style>
  </head>
+
  <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-500">
+  
+  
+  
   <!-- Navbar -->
   <nav class="bg-white dark:bg-gray-800 shadow-md fixed w-full z-30">
    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
@@ -426,6 +430,125 @@
     </a>
    </div>
   </nav>
+
+
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+
+
+<!--THIS IS SEARCH BAR-->
+<!-- ✅ Add this to your <head> or your global CSS -->
+<style>
+  .search-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    color:#0a0a0a;
+    height: 50px;
+  }
+
+  .search-container {
+    display: flex;
+    max-width: 500px;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .search-input {
+    flex: 1;
+    padding: 10px 14px;
+    font-size: 16px;
+    color: black;
+    border: 2px solid #ccc;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .search-input:focus {
+    border-color: #007BFF;
+  }
+
+  .search-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007BFF;
+    color: white;
+    border: 2px solid #007BFF;
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+<!-- ✅ Add this inside your <body> -->
+<div class="search-wrapper">
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="Search courses..."
+    style="padding: 10px; font-size: 16px; width: 100%; max-width: 500px; border: 2px solid #0a0a0a; border-radius: 8px;"
+    
+    />
+</div>
+
+
+
+
+
+<!--SCRIPT FOR SEARCH BAR-->
+
+<script>
+  document.getElementById('searchInput').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const query = this.value.trim().toLowerCase();
+
+      // Get all elements that might contain course titles
+      const elements = document.querySelectorAll('h3');
+
+      let found = false;
+      for (const el of elements) {
+        if (el.textContent.toLowerCase().includes(query)) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.style.backgroundColor = 'chartreuse'; // highlight briefly
+          setTimeout(() => el.style.backgroundColor = '', 5000);
+          found = true;
+          break;
+        }
+      }
+
+      if (!found) {
+        alert('Course not found');
+      }
+    }
+  });
+</script>
+
+<!--SEARCH BAR END-->
+
+
+
+
+
+
+
+
   <!-- Hero Section -->
   <header class="pt-24 bg-gradient-to-r from-indigo-600 via-purple-700 to-pink-600 text-white">
    <div class="max-w-7xl mx-auto px-6 flex flex-col-reverse md:flex-row items-center md:space-x-12 py-20">
@@ -497,6 +620,16 @@
     </a>
    </div>
   </section>
+
+
+
+
+
+
+
+
+
+
   <!-- Featured Courses Section -->
   <section class="bg-indigo-50 dark:bg-gray-800 py-20" id="courses">
    <div class="max-w-7xl mx-auto px-6">
