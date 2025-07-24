@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Install Jenkins on Linux, Windows, and macOS</title>
+    <style>
+        /* General Styles for the Tutorial Page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.7;
+            color: #1a202c;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 50px 0 25px 0;
+            position: relative;
+            padding-left: 25px;
+            z-index: 1;
+        }
+        
+        h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 40px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 3px;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+        
+        h3 {
+            color: #4a5568;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 30px 0 15px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h4 {
+            color: #667eea;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 25px 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        
+        p {
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: #4a5568;
+            position: relative;
+            z-index: 1;
+        }
+        
+        code {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        pre {
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: #e2e8f0;
+            padding: 30px;
+            border-radius: 16px;
+            overflow-x: auto;
+            margin: 25px 0;
+            border: 1px solid #4a5568;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 16px 16px 0 0;
+        }
+        
+        pre code {
+            background: none;
+            color: inherit;
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            font-size: 0.95em;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 35px;
+            border-radius: 16px;
+            margin-bottom: 50px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .toc h2 {
+            margin-top: 0;
+            color: #667eea;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .toc li {
+            margin: 0;
+            transition: transform 0.3s ease;
+        }
+        
+        .toc li:hover {
+            transform: translateX(5px);
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 12px 16px;
+            border-radius: 8px;
+            display: block;
+            background: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .toc a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #ffc107;
+            box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #28a745;
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .tip {
+            padding-left: 50px;
+        }
+        
+        .warning {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #dc3545;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .warning::before {
+            content: '⚠️';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .warning {
+            padding-left: 50px;
+        }
+        
+        ol, ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        ol li, ul li {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+            color: #4a5568;
+        }
+        
+        /* Syntax highlighting for code blocks */
+        pre code .comment { color: #8b949e; }
+        pre code .keyword { color: #ff7b72; }
+        pre code .string { color: #a5d6ff; }
+        pre code .number { color: #79c0ff; }
+        pre code .operator { color: #ff7b72; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .toc ul {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Loading animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .container {
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        /* Interactive elements */
+        .interactive-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .interactive-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        @media print {
+            body { 
+                background: white; 
+                color: black;
+            }
+            .container { 
+                box-shadow: none; 
+                background: white;
+            }
+            pre { 
+                background-color: #f4f4f4; 
+                color: #333; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>How to Install Jenkins on Linux, Windows, and macOS</h1>
+        
+        <div class="toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#what-is-jenkins">1. What is Jenkins?</a></li>
+                <li><a href="#prerequisites">2. Prerequisites (Java)</a></li>
+                <li><a href="#installation-methods-overview">3. Installation Methods Overview</a></li>
+                <li><a href="#install-on-linux">4. Install on Linux (Ubuntu/Debian)</a></li>
+                <li><a href="#install-on-linux-redhat">5. Install on Linux (Red Hat/CentOS/Fedora)</a></li>
+                <li><a href="#install-on-windows">6. Install on Windows</a></li>
+                <li><a href="#install-on-macos">7. Install on macOS</a></li>
+                <li><a href="#initial-jenkins-setup-wizard">8. Initial Jenkins Setup Wizard (All OS)</a></li>
+                <li><a href="#post-installation-steps">9. Post-Installation Steps</a></li>
+                <li><a href="#troubleshooting-common-issues">10. Troubleshooting Common Issues</a></li>
+            </ul>
+        </div>
+
+        <h2 id="what-is-jenkins">1. What is Jenkins?</h2>
+        <p><strong>Jenkins</strong> is an open-source automation server that facilitates the automation of various stages in the software development lifecycle, including building, testing, and deploying applications. It is widely recognized as a leading tool for implementing Continuous Integration (CI) and Continuous Delivery (CD) pipelines.</p>
+        <p>Jenkins helps development teams to integrate code changes frequently, automatically test them, and rapidly deliver high-quality software, thereby reducing integration issues and accelerating the release process.</p>
+        <h3>Key Benefits:</h3>
+        <ul>
+            <li><strong>Continuous Integration:</strong> Automates the merging and testing of code changes.</li>
+            <li><strong>Continuous Delivery/Deployment:</strong> Automates the release process to different environments.</li>
+            <li><strong>Extensibility:</strong> Offers over a thousand plugins for integration with virtually any tool or service.</li>
+            <li><strong>Open Source:</strong> Free to use and supported by a large, active community.</li>
+            <li><strong>Distributed Builds:</strong> Can distribute build workloads across multiple machines (agents).</li>
+        </ul>
+
+        <h2 id="prerequisites">2. Prerequisites (Java)</h2>
+        <p>Jenkins is a Java-based application, so a compatible Java Development Kit (JDK) is required. As of recent Jenkins versions, **OpenJDK 11 or OpenJDK 17** are recommended.</p>
+        <h3>A. Check for Java Installation:</h3>
+        <p>Open your terminal or command prompt and run:</p>
+        <pre><code class="language-bash">java -version</code></pre>
+        <p>If Java is installed, you'll see version information. If not, or if it's an incompatible version (e.g., Java 8), you need to install or update it.</p>
+        <h3>B. Install Java (OpenJDK 17 Recommended):</h3>
+        <ul>
+            <li><strong>Ubuntu/Debian:</strong>
+                <pre><code class="language-bash">sudo apt update
+sudo apt install -y openjdk-17-jdk</code></pre>
+            </li>
+            <li><strong>Red Hat/CentOS/Fedora:</strong>
+                <pre><code class="language-bash">sudo dnf install -y java-17-openjdk-devel</code></pre>
+            </li>
+            <li><strong>Windows:</strong>
+                <ul>
+                    <li>Download the JDK installer (e.g., from <a href="https://adoptium.net/temurin/releases/" target="_blank">Adoptium (Temurin)</a> or Oracle).</li>
+                    <li>Run the installer and follow the wizard.</li>
+                    <li>Ensure `JAVA_HOME` environment variable is set and `%JAVA_HOME%\bin` is added to your system `Path`.</li>
+                </ul>
+            </li>
+            <li><strong>macOS:</strong>
+                <ul>
+                    <li>Use Homebrew: `brew install openjdk@17`</li>
+                    <li>Or download installer from Adoptium.</li>
+                    <li>Ensure `JAVA_HOME` is set in your shell profile (e.g., `~/.zshrc` or `~/.bash_profile`).
+                        <pre><code class="language-bash"># Example for macOS with Homebrew, add to ~/.zshrc or ~/.bash_profile
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+export PATH=$JAVA_HOME/bin:$PATH
+# Then: source ~/.zshrc (or .bash_profile)</code></pre>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 id="installation-methods-overview">3. Installation Methods Overview</h2>
+        <p>Jenkins can be installed in several ways. We'll cover direct OS installation and a popular containerized method.</p>
+        <ul>
+            <li><strong>Operating System Specific Packages:</strong> (Recommended for production servers) Uses native package managers (APT for Debian/Ubuntu, DNF for Red Hat/CentOS/Fedora, Homebrew for macOS, MSI installer for Windows).</li>
+            <li><strong>Docker Container:</strong> (Recommended for quick setup, development, or testing) Runs Jenkins isolated within a Docker container.</li>
+            <li><strong>Generic Java WAR file:</strong> Can be run on any Servlet container (like Tomcat). More manual setup.</li>
+        </ul>
+
+        <h2 id="install-on-linux">4. Install on Linux (Ubuntu/Debian)</h2>
+        <p>This method uses the `apt` package manager for a system-wide installation.</p>
+        <h3>A. Add Jenkins Repository Key:</h3>
+        <pre><code class="language-bash">sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins-keyring.asc</code></pre>
+        <h3>B. Add Jenkins Repository to Sources:</h3>
+        <pre><code class="language-bash">echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/" | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null</code></pre>
+        <h3>C. Update Package Cache & Install Jenkins:</h3>
+        <pre><code class="language-bash">sudo apt update
+sudo apt install -y jenkins</code></pre>
+        <h3>D. Start and Check Jenkins Service:</h3>
+        <p>Jenkins should start automatically after installation.</p>
+        <pre><code class="language-bash">sudo systemctl start jenkins
+sudo systemctl status jenkins
+# Expected output will show 'active (running)'</code></pre>
+        <h3>E. Adjust Firewall (if UFW is active):</h3>
+        <pre><code class="language-bash">sudo ufw allow 8080 # Jenkins default port
+sudo ufw enable     # Enable firewall if it's not already
+sudo ufw status     # Verify the rule is active</code></pre>
+        <p>Jenkins will be accessible at `http://<your_server_ip_or_hostname>:8080`.</p>
+
+        <h2 id="install-on-linux-redhat">5. Install on Linux (Red Hat/CentOS/Fedora)</h2>
+        <p>This method uses the `dnf` package manager (or `yum` for older CentOS/RHEL versions).</p>
+        <h3>A. Add Jenkins Repository:</h3>
+        <pre><code class="language-bash">sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key</code></pre>
+        <h3>B. Install Jenkins:</h3>
+        <pre><code class="language-bash">sudo dnf install -y jenkins # Use 'sudo yum install -y jenkins' for older systems</code></pre>
+        <h3>C. Start and Enable Jenkins Service:</h3>
+        <pre><code class="language-bash">sudo systemctl start jenkins
+sudo systemctl enable jenkins
+sudo systemctl status jenkins
+# Expected output will show 'active (running)'</code></pre>
+        <h3>D. Adjust Firewall (if Firewalld is active):</h3>
+        <pre><code class="language-bash">sudo firewall-cmd --permanent --zone=public --add-port=8080/tcp # Allow HTTP access
+sudo firewall-cmd --reload # Apply changes</code></pre>
+        <p>Jenkins will be accessible at `http://<your_server_ip_or_hostname>:8080`.</p>
+
+        <h2 id="install-on-windows">6. Install on Windows</h2>
+        <p>Jenkins provides a native Windows installer (MSI).</p>
+        <h3>A. Download Jenkins MSI Installer:</h3>
+        <p>Go to the official Jenkins website: <a href="https://www.jenkins.io/download/lts/windows/" target="_blank">jenkins.io/download/lts/windows/</a> and download the LTS installer.</p>
+        <h3>B. Run the Installer:</h3>
+        <ol>
+            <li>Double-click the downloaded `.msi` file.</li>
+            <li>The Jenkins Setup Wizard will appear. Click **Next**.</li>
+            <li>Choose the **Destination Folder** for Jenkins (default is usually fine). Click **Next**.</li>
+            <li><strong>Service Logon Type:</strong>
+                <ul>
+                    <li>`Run service as LocalSystem (less secure)`: Easiest, but gives Jenkins broad system privileges.</li>
+                    <li>`Run service as a local or domain user (recommended)`: More secure. You'll need to create a dedicated local Windows user (e.g., `jenkins`) and grant it necessary permissions (e.g., "Log on as a service" right in Local Security Policy). This is recommended for production.</li>
+                </ul>
+                Choose the option that suits your needs for now (LocalSystem for quick testing). Click **Next**.
+            </li>
+            <li><strong>Port Selection:</strong> Default is `8080`. You can test it. If it conflicts, change it. Click **Test Port** to check availability. Click **Next**.</li>
+            <li><strong>Java Home Directory:</strong> The installer should auto-detect your JDK. If not, click **Browse** and point it to your JDK 11/17 root directory (e.g., `C:\Program Files\Java\jdk-17`). Click **Next**.</li>
+            <li>Click **Install**.</li>
+            <li>Click **Finish**.</li>
+        </ol>
+        <p>Jenkins should start automatically after installation. You can access it at `http://localhost:8080` (or your chosen port).</p>
+        <p>You can also manage the Jenkins service via `services.msc` (search in Windows Start Menu).</p>
+
+        <h2 id="install-on-macos">7. Install on macOS</h2>
+        <p>The recommended way to install Jenkins on macOS is using Homebrew.</p>
+        <h3>A. Install Homebrew (if not already installed):</h3>
+        <p>Open Terminal.app (Finder &gt; Applications &gt; Utilities &gt; Terminal) and run:</p>
+        <pre><code class="language-bash">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
+        <p>Follow the on-screen instructions to complete the Homebrew installation.</p>
+        <h3>B. Install Jenkins via Homebrew:</h3>
+        <pre><code class="language-bash">brew install jenkins-lts</code></pre>
+        <h3>C. Start Jenkins Service:</h3>
+        <pre><code class="language-bash"># Start Jenkins (will launch automatically on login)
+brew services start jenkins-lts
+
+# Check status
+brew services list # Look for jenkins-lts status</code></pre>
+        <p>Jenkins will be accessible at `http://localhost:8080`.</p>
+        <p><strong>Note:</strong> macOS Gatekeeper might initially block Jenkins. If prompted, go to System Settings &gt; Privacy & Security &gt; General and click "Open Anyway" for Jenkins.</p>
+
+        <h2 id="initial-jenkins-setup-wizard">8. Initial Jenkins Setup Wizard (All OS)</h2>
+        <p>After Jenkins starts for the first time, you'll be redirected to a web-based setup wizard in your browser (at `http://<your_ip_or_hostname>:8080`).</p>
+        <h3>A. Unlock Jenkins:</h3>
+        <p>The first screen will ask for an administrator password. Retrieve it from your server's initial admin password file:</p>
+        <ul>
+            <li><strong>Linux:</strong>
+                <pre><code class="language-bash">sudo cat /var/lib/jenkins/secrets/initialAdminPassword</code></pre>
+            </li>
+            <li><strong>Windows:</strong>
+                <pre><code class="language-bash">type "C:\Program Files\Jenkins\secrets\initialAdminPassword"</code></pre>
+            </li>
+            <li><strong>macOS (Homebrew):</strong>
+                <pre><code class="language-bash">cat /Users/Shared/Jenkins/Home/secrets/initialAdminPassword</code></pre>
+            </li>
+            <li><strong>Docker Container:</strong>
+                <pre><code class="language-bash">docker logs &lt;jenkins_container_id_or_name&gt; # Look for the password in the logs</code></pre>
+            </li>
+        </ul>
+        <p>Paste the password into the browser field and click **Continue**.</p>
+        <h3>B. Install Plugins:</h3>
+        <ul>
+            <li>Choose **Install suggested plugins**. This is the easiest way to get started, installing common plugins for Git, Pipelines, build tools, etc.</li>
+            <li>Alternatively, you can select specific plugins, but it's not recommended for a first-time setup.</li>
+        </ul>
+        <p>Jenkins will proceed to download and install the selected plugins. This might take several minutes.</p>
+        <h3>C. Create First Admin User:</h3>
+        <p>Once plugins are installed, you'll be prompted to create your first administrator user. Fill in all the fields (Username, Password, Full Name, Email Address). **Remember these credentials!**</p>
+        <h3>D. Instance Configuration:</h3>
+        <p>Confirm your Jenkins URL. The default (`http://localhost:8080`) is usually fine for local setups. For servers, ensure it's your server's public IP or hostname. Click **Save and Finish**.</p>
+        <h3>E. Jenkins Dashboard:</h3>
+        <p>You'll now be redirected to the Jenkins dashboard. Your Jenkins instance is ready!</p>
+
+        <h2 id="post-installation-steps">9. Post-Installation Steps</h2>
+        <h3>A. Install Recommended Tools:</h3>
+        <p>Depending on your projects, you'll need build tools (Maven, Gradle, npm), SCM clients (Git), etc., on your Jenkins server or agents.</p>
+        <ul>
+            <li><strong>Install Git:</strong>
+                <pre><code class="language-bash"># Ubuntu/Debian
+sudo apt install -y git
+# Red Hat/CentOS/Fedora
+sudo dnf install -y git</code></pre>
+            </li>
+            <li><strong>Configure Tools (GUI):</strong>
+                <pre><code>Jenkins Dashboard &gt; Manage Jenkins &gt; Tools</code></pre>
+                <ul>
+                    <li>**JDK Installations:** Add paths to other Java versions if needed.</li>
+                    <li>**Maven Installations:** Add Maven versions.</li>
+                    <li>**Gradle Installations:** Add Gradle versions.</li>
+                    <li>**Git installations:** Add Git.</li>
+                </ul>
+            </li>
+        </ul>
+        <h3>B. Explore Plugins:</h3>
+        <p>Jenkins' power comes from its plugins. Explore the marketplace for plugins relevant to your workflow.</p>
+        <pre><code>Jenkins Dashboard &gt; Manage Jenkins &gt; Plugins</code></pre>
+        <h3>C. Configure Security (Advanced):</h3>
+        <p>For production environments, enhance security beyond the initial setup:</p>
+        <ul>
+            <li><strong>Integrate with LDAP/Active Directory:</strong> For centralized user management.</li>
+            <li><strong>Enable HTTPS:</strong> Configure Jenkins behind a reverse proxy (Nginx, Apache) with SSL.</li>
+            <li><strong>Role-Based Access Control (RBAC):</strong> Use plugins like "Role-based Authorization Strategy" for fine-grained permissions.</li>
+            <li><strong>Set up Agents:</strong> For distributed builds, move workload off the controller.</li>
+        </ul>
+
+        <h2 id="troubleshooting-common-issues">10. Troubleshooting Common Issues</h2>
+        <ul>
+            <li><strong>Jenkins not starting / Port conflict:</strong>
+                <ul>
+                    <li>Check if port 8080 (or your chosen port) is already in use by another application.</li>
+                    <li>Check Jenkins service logs for errors:
+                        <pre><code class="language-bash"># Linux:
+sudo journalctl -u jenkins.service
+sudo cat /var/log/jenkins/jenkins.log
+# Windows:
+Check Event Viewer &gt; Windows Logs &gt; Application. Also check Jenkins installation folder for logs.</code></pre>
+                    </li>
+                </ul>
+            </li>
+            <li><strong>Firewall blocking access:</strong>
+                <ul>
+                    <li>Ensure port 8080 (and 50000 for agents) is open in your OS firewall. (See firewall commands in relevant OS sections).</li>
+                    <li>If on a cloud VM, ensure the cloud provider's security groups/network ACLs allow traffic on these ports.</li>
+                </ul>
+            </li>
+            <li><strong>Java issues:</strong>
+                <ul>
+                    <li>Ensure a compatible Java JDK (11 or 17) is installed and configured correctly (especially `JAVA_HOME` and `PATH`).</li>
+                    <li>Jenkins might default to an older Java if multiple are present.</li>
+                </ul>
+            </li>
+            <li><strong>"Offline" agents/nodes:</strong>
+                <ul>
+                    <li>Check network connectivity between controller and agent.</li>
+                    <li>Verify Java installation on the agent.</li>
+                    <li>Check SSH/JNLP connection settings in the agent configuration in Jenkins.</li>
+                    <li>Look at the agent's launch log in Jenkins (Manage Jenkins &gt; Nodes &gt; Agent Name &gt; Log).</li>
+                </ul>
+            </li>
+            <li><strong>Plugin failures:</strong>
+                <ul>
+                    <li>Go to **Manage Jenkins** &gt; **Plugins** &gt; **Installed plugins**. Look for plugins with errors or available updates.</li>
+                    <li>Restart Jenkins after installing/updating plugins.</li>
+                </ul>
+            </li>
+            <li><strong>Disk space issues:</strong>
+                <ul>
+                    <li>Jenkins can consume a lot of disk space. Regularly clean up old build artifacts and workspaces.</li>
+                    <li>Configure "Discard old builds" in job configurations.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <div class="tip">
+            <strong>Your CI/CD Automation Journey Begins!</strong>
+            <p>Installing Jenkins is the first step towards automating your software delivery pipelines. While the initial setup might seem daunting, mastering Jenkins will significantly improve your team's efficiency and ability to deliver high-quality software faster. Keep experimenting with different job types, plugins, and integrations to unlock its full potential!</p>
+        </div>
+    </div>
+</body>
+</html>
