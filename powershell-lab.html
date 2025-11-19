@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>PowerShell Emulator — CloudTechAcademy (Full Simulation)</title>
+<style>
+  :root{
+    --bg:#071027; --panel:#081429; --text:#dfe7ff; --accent:#7dd3fc; --muted:#9fb3d7;
+    --success:#86efac; --warning:#ffd580;
+  }
+  html,body{height:100%; margin:0; font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; background:linear-gradient(180deg,#02101a 0%, #041629 100%); color:var(--text)}
+  .app{max-width:1100px; margin:20px auto; padding:16px; border-radius:10px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); box-shadow:0 6px 40px rgba(2,6,23,0.6);}
+  h1{margin:0 0 8px 0; font-size:20px; color:var(--accent)}
+  p.desc{margin:0 0 12px 0; color:var(--muted); font-size:13px}
+  .terminal{background:#000814; border-radius:8px; padding:12px; min-height:480px; max-height:74vh; overflow:auto; box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);}
+  .line{white-space:pre-wrap; font-size:13px; line-height:1.45}
+  .prompt{display:flex; gap:8px; align-items:flex-start; margin:8px 0}
+  .prompt .label{color:var(--accent); min-width:300px}
+  .input{flex:1; outline:none; border:none; background:transparent; color:var(--text); font-size:13px; padding:2px; caret-color:var(--accent)}
+  .output{color:var(--muted); margin-left:10px}
+  .mono{font-family:inherit}
+  .controls{display:flex; gap:8px; margin-top:12px; align-items:center}
+  .btn{background:transparent; border:1px solid rgba(255,255,255,0.06); padding:6px 10px; color:var(--muted); border-radius:6px; cursor:pointer; font-size:13px}
+  .btn:hover{border-color:rgba(125,211,252,0.18); color:var(--text)}
+  .helpbox{margin-top:12px; color:var(--muted); font-size:13px}
+  .success{color:var(--success)}
+  .warning{color:var(--warning)}
+  .info{color:var(--muted)}
+  .small{font-size:12px}
+  .kbd{background:#071226;padding:2px 6px;border-radius:4px;border:1px solid rgba(255,255,255,0.03);color:var(--muted);font-size:12px}
+  .footer{margin-top:10px;color:var(--muted);font-size:12px}
+  table.sim{border-collapse:collapse;font-size:13px;margin:6px 0}
+  table.sim th, table.sim td{padding:6px 8px;border:1px solid rgba(255,255,255,0.03)}
+  .notice{color:var(--warning)}
+  .ok{color:var(--success)}
+  .muted{color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="app" role="application" aria-label="PowerShell Emulator">
+  <h1>CloudTechAcademy — PowerShell Lab (Full Simulation)</h1>
+  <p class="desc">Full browser-based PowerShell emulator (stateful). Create users, files, modify ACLs, manage services, simulate network, packages, updates, events, disks. Type <span class="kbd">Get-Help</span>. Simulation only — does not touch the host machine.</p>
+
+  <div class="terminal" id="terminal" tabindex="0" aria-live="polite"></div>
+
+  <div class="controls">
+    <button id="clearBtn" class="btn">cls</button>
+    <button id="resetBtn" class="btn">Reset State</button>
+    <button id="dumpBtn" class="btn">Dump State (console)</button>
+    <div style="flex:1"></div>
+    <div class="small info">History: <span class="kbd">↑</span>/<span class="kbd">↓</span> &nbsp; Run: <span class="kbd">Enter</span></div>
+  </div>
+
+  <div class="helpbox">
+    <strong>Quick examples:</strong>
+    <span class="info">New-LocalUser -Name "ajith" -Password (ConvertTo-SecureString "Password123" -AsPlainText -Force)</span>
+    &nbsp;|&nbsp; <span class="info">Get-LocalUser</span>
+    &nbsp;|&nbsp; <span class="info">Get-ChildItem -Force -Recurse</span>
+  </div>
+  <div class="footer">Built for CloudTechAcademy — Full simulated PowerShell lab.</div>
+</div>
+
+<script>
+/*
+  Full PowerShell Emulator (Simulated) — UPDATED
+  - Added: pwd, improved Remove-Item (wildcards, -Recurse, -Force), rmdir/rd aliases
+  - Author: ChatGPT for Ajith / CloudTechAcademy
+*/
+
+/* -------------------------
+   Utilities
+   ------------------------- */
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function pad(s, n){ return String(s).padEnd(n); }
+function nowIso(){ return new Date().toISOString(); }
+function nowLocale(){ return new Date().toLocaleString(); }
+
+/* Argument parser with quoting and switches */
+function tokenize(input){
+  const tokens = [];
+  let cur='', inQ=false, qChar='';
+  for(let i=0;i<input.length;i++){
+    const c = input[i];
+    if((c==="'"||c==='"') && !inQ){ inQ=true; qChar=c; continue; }
+    if(inQ && c===qChar){ inQ=false; tokens.push(cur); cur=''; continue; }
+    if(!inQ && /\s/.test(c)){ if(cur!==''){ tokens.push(cur); cur=''; } continue; }
+    cur+=c;
+  }
+  if(cur!=='') tokens.push(cur);
+  return tokens;
+}
+
+/* Wildcard match (simple * and ?) */
+function wildMatch(pattern, text){
+  pattern = pattern.replace(/\*/g, '.*').replace(/\?/g, '.');
+  const re = new RegExp('^'+pattern+'$','i');
+  return re.test(text);
+}
+
+/* -------------------------
+   State (full simulation)
+   ------------------------- */
+const state = {
+  hostname: 'CloudTechLab',
+  os: 'Windows 10 Pro',
+  osVersion: '10.0.19044',
+  manufacturer: 'CloudTechCorp',
+  model: 'CloudLabVM',
+  domain: 'WORKGROUP',
+  users: [
+    {Name: 'Administrator', Enabled:true, Description:'Built-in admin', Sid:'S-1-5-21-1000'},
+    {Name: 'Guest', Enabled:false, Description:'Guest account', Sid:'S-1-5-21-1001'},
+  ],
+  groups: {
+    Administrators: ['Administrator'],
+    Users: ['Guest', 'Administrator']
+  },
+  services: [
+    {Name: 'wuauserv', DisplayName:'Windows Update', Status:'Running'},
+    {Name: 'Spooler', DisplayName:'Print Spooler', Status:'Stopped'},
+    {Name: 'WinRM', DisplayName:'Windows Remote Management', Status:'Stopped'},
+    {Name: 'docker', DisplayName:'Docker Engine', Status:'Stopped'}
+  ],
+  processes: [
+    {Id: 100, ProcessName:'powershell.exe', CPU:'0.3', Memory:'12MB'},
+    {Id: 200, ProcessName:'explorer.exe', CPU:'0.6', Memory:'35MB'},
+  ],
+  filesystem: {
+    'C:': { type:'dir', children: {
+      'Windows': {type:'dir', children: {
+        'System32': {type:'dir', children:{}}
+      }},
+      'Users': {type:'dir', children: {
+        'Administrator': {type:'dir', children:{'Documents':{type:'dir',children:{}}}, acl: [ {Identity:'Administrator', Rights:'F'} ]},
+        'Guest': {type:'dir', children:{}}
+      }},
+      'Program Files': {type:'dir', children:{}},
+      'Backup': {type:'dir', children:{}},
+      'NewLocation': {type:'dir', children:{}},
+      'testfolder': {type:'dir', children: {
+         'file1.txt': {type:'file', content:'hello', size:'5B'},
+         'notes.txt': {type:'file', content:'notes', size:'5B', hidden:true}
+      }},
+      'sample.txt': {type:'file', content:'sample', size:'6B'}
+    }, acl: [ {Identity:'Administrators', Rights:'F'}, {Identity:'Users', Rights:'R'} ] }
+  },
+  cwd: 'C:\\Users\\Administrator',
+  env: {PATH:'C:\\Windows\\System32', PSExecutionPolicy:'Restricted'},
+  execCount: 0,
+  vars: {},
+  packages: [ {Name:'PowerShell', Version:'7.3.0'} ],
+  updates: [ {Title:'KB5000001', Installed:false, Size:'12MB'}, {Title:'KB5000002', Installed:false, Size:'5MB'} ],
+  events: generateEvents(),
+  disks: [
+    {Number:0, FriendlyName:'Local Disk', Size:'500GB', Partitions:[ {PartitionNumber:1, Size:'100GB'} ]}
+  ],
+  remoting: false,
+  network: {
+    interfaces: [
+      {InterfaceAlias:'Ethernet0', IPv4Address:'192.168.1.50', IPv6Address:'fe80::1', MacAddress:'00:11:22:33:44:55'}
+    ],
+    tcpConnections: [
+      {LocalAddress:'192.168.1.50', LocalPort:5000, RemoteAddress:'142.250.190.78', RemotePort:443, State:'Established'}
+    ],
+    firewallRules: [
+      {Name:'AllowHTTP', DisplayName:'Allow HTTP', Enabled:true, Direction:'Inbound'},
+      {Name:'AllowSSH', DisplayName:'Allow SSH', Enabled:false, Direction:'Inbound'}
+    ]
+  }
+};
+
+let nextProcId = 1000;
+function newProcId(){ return nextProcId++; }
+
+function generateEvents(){
+  const arr=[];
+  for(let i=0;i<40;i++){
+    arr.push({Index:i+1, Time: new Date(Date.now() - i*60000).toLocaleString(), Source: i%2? 'System':'Application', EventID:100+i, Message:`Simulated event ${i+1}`});
+  }
+  return arr;
+}
+
+/* -------------------------
+   Terminal DOM helpers
+   ------------------------- */
+const terminal = document.getElementById('terminal');
+function appendLine(html, cls='line'){ const div=document.createElement('div'); div.className=cls; div.innerHTML=html; terminal.appendChild(div); terminal.scrollTop = terminal.scrollHeight; }
+function clearTerminal(){ terminal.innerHTML=''; renderHeader(); }
+
+/* Render prompt */
+function renderPrompt(){
+  const lbl = document.createElement('div');
+  lbl.className = 'prompt';
+  const lab = document.createElement('div'); lab.className='label mono'; lab.innerHTML = `<span style="color:var(--accent)">${escapeHtml(state.hostname)}\\PS</span> <span style="color:var(--muted)">${escapeHtml(state.cwd)}</span>`;
+  const inp = document.createElement('div'); inp.contentEditable=true; inp.spellcheck=false; inp.className='input'; inp.setAttribute('role','textbox'); inp.setAttribute('aria-label','PowerShell input');
+  lbl.appendChild(lab); lbl.appendChild(inp);
+  terminal.appendChild(lbl);
+  inp.focus();
+  document.execCommand('selectAll', false, null);
+  document.getSelection().collapseToEnd();
+  inp.addEventListener('keydown', handleKeyDown);
+}
+
+/* History */
+const history = []; let historyIndex = -1;
+function handleKeyDown(e){
+  const el = e.target;
+  if(e.key==='Enter' && !e.shiftKey){
+    e.preventDefault();
+    const raw = el.innerText.replace(/\u00A0/g,' ').trim();
+    if(raw) history.unshift(raw);
+    historyIndex = -1;
+    el.contentEditable='false';
+    el.removeEventListener('keydown', handleKeyDown);
+    executeLine(raw);
+    setTimeout(renderPrompt, 10);
+    return;
+  }
+  if(e.key==='ArrowUp' || e.key==='ArrowDown'){
+    e.preventDefault();
+    if(history.length===0) return;
+    if(e.key==='ArrowUp'){ historyIndex = Math.min(historyIndex+1, history.length-1); }
+    else { historyIndex = Math.max(historyIndex-1, -1); }
+    el.innerText = historyIndex>=0? history[historyIndex] : '';
+    document.execCommand('selectAll', false, null);
+    document.getSelection().collapseToEnd();
+  }
+}
+
+/* -------------------------
+   Filesystem helpers
+   ------------------------- */
+function normPath(p){
+  if(!p) return state.cwd;
+  p = p.replace(/\\/g, '/');
+  if(p.match(/^[A-Za-z]:/)) { p = p.replace(':',''); if(!p.startsWith('/')) p = '/'+p; return p; }
+  // relative to cwd
+  let base = state.cwd.replace(/\\/g, '/');
+  if(base.indexOf(':')===-1) base = '/'+base;
+  if(!base.endsWith('/')) base += '/';
+  if(p.startsWith('/')) return p;
+  return base + p;
+}
+function getNodeByPath(path){
+  // path like /C/Users/Administrator or /C/Windows
+  if(!path) return null;
+  path = path.replace(/^([A-Za-z]):/,'/$1'); // C:\ -> /C
+  path = path.replace(/\\/g,'/');
+  const parts = path.split('/').filter(Boolean);
+  let node = null;
+  if(parts.length===0) return null;
+  const drive = parts.shift() + ':';
+  node = state.filesystem[drive];
+  if(!node) return null;
+  for(const p of parts){
+    if(!node.children || !node.children[p]) return null;
+    node = node.children[p];
+  }
+  return node;
+}
+function ensureDir(path){
+  const pathNorm = path.replace(/^([A-Za-z]):/,'/$1').replace(/\\/g,'/');
+  const parts = pathNorm.split('/').filter(Boolean);
+  const drive = parts.shift()+':';
+  if(!state.filesystem[drive]) state.filesystem[drive] = {type:'dir', children:{}};
+  let node = state.filesystem[drive];
+  for(const p of parts){
+    if(!node.children[p]) node.children[p] = {type:'dir', children:{}, acl:[{Identity:'Administrators', Rights:'F'}]};
+    node = node.children[p];
+  }
+  return node;
+}
+
+/* Helper to create a file */
+function createFile(path, content=''){
+  const norm = path.replace(/^([A-Za-z]):/,'/$1').replace(/\\/g,'/');
+  const parts = norm.split('/').filter(Boolean);
+  const drive = parts.shift()+':';
+  const name = parts.pop();
+  ensureDir(drive + '/' + parts.join('/'));
+  const parent = getNodeByPath(drive + '/' + parts.join('/'));
+  parent.children[name] = {type:'file', content: content, size: (content.length||0)+'B', acl:[{Identity:'Administrators', Rights:'F'}]};
+}
+
+/* -------------------------
+   Command registry
+   ------------------------- */
+const commands = {};
+
+/* Basic help */
+commands['Get-Help'] = function(args){
+  if(args.length===0) return ["Get-Help <command> [-Online]","See simulated help. Example: Get-Help Get-Service -Online"];
+  const cmd = args[0];
+  const online = args.includes('-Online');
+  const lines = [`NAME`, `    ${cmd} - Simulated help` , `SYNOPSIS`, `    ${cmd} (simulated)`];
+  if(online) lines.push(`For full help, visit https://learn.microsoft.com simulated link`);
+  return lines;
+};
+
+/* cls */
+commands['cls'] = commands['Clear-Host'] = function(){ clearTerminal(); return ''; };
+
+/* $PSVersionTable */
+commands['$PSVersionTable'] = function(){ return {PSVersion:'7.3.0', PSEdition:'Core', OS: state.os}; };
+
+/* pwd */
+commands['pwd'] = function(){ return state.cwd; };
+
+/* Get-Command (list available commands) */
+commands['Get-Command'] = function(args){
+  const pat = args[0] || '*';
+  const keys = Object.keys(commands).sort();
+  const matched = keys.filter(k => wildMatch(pat, k) || wildMatch(pat, k.replace(/Get-/,'')));
+  return matched.map(k => ({Name:k, Module:'Simulated', Definition: k + ' (simulated)'}));
+};
+
+/* Get-ChildItem (ls) with recurse and force */
+commands['Get-ChildItem'] = commands['gci'] = function(args){
+  let path = null; let force=false, recurse=false;
+  for(let i=0;i<args.length;i++){
+    const a=args[i];
+    if(a.toLowerCase()==='-force') force=true;
+    else if(a.toLowerCase()==='-recurse') recurse=true;
+    else path = a;
+  }
+  const start = path ? normPath(path) : normPath(state.cwd);
+  const node = getNodeByPath(start.replace(/^\/([A-Za-z])/, '$1:').replace(/\//g,'\\'));
+  if(!node) return `Get-ChildItem : Cannot find path '${start}'`;
+  const out = [];
+  function walk(n, prefix){
+    if(n.type==='dir'){
+      for(const name in n.children){
+        const child = n.children[name];
+        // skip hidden unless -Force
+        if(child.hidden && !force) continue;
+        out.push({Mode: child.type==='dir' ? 'd' : '-', LastWriteTime: nowLocale(), Length: child.size||'', Name: prefix + name});
+        if(recurse && child.type==='dir'){
+          walk(child, prefix + name + '/');
+        }
+      }
+    }
+  }
+  walk(node, '');
+  return out;
+};
+
+/* aliases: dir and ls */
+commands['dir'] = commands['ls'] = commands['Get-ChildItem'];
+
+/* Set-Location (cd) */
+commands['Set-Location'] = commands['cd'] = function(args){
+  if(args.length===0) return '';
+  const target = args[0];
+  // support simple C:\Windows and relative paths
+  // Use normPath to resolve; convert back to Windows path for state.cwd
+  const resolved = normPath(target);
+  // convert '/C/Users' -> 'C:\Users'
+  const win = resolved.replace(/^\/([A-Za-z])/, '$1:').replace(/\//g,'\\');
+  state.cwd = win;
+  return '';
+};
+
+/* New-Item */
+commands['New-Item'] = function(args){
+  const tokens = args;
+  let type='File', name=null, path=null;
+  for(let i=0;i<tokens.length;i++){
+    const t = tokens[i];
+    if(t.toLowerCase()==='-itemtype'){ type = tokens[i+1]; i++; }
+    else if(t.toLowerCase()==='-name'){ name = tokens[i+1].replace(/^"|"$/g,''); i++; }
+    else if(t.toLowerCase()==='-path'){ path = tokens[i+1]; i++; }
+  }
+  if(!name) return 'New-Item : Missing -Name';
+  if(!path) path = state.cwd;
+  const target = normPath(path);
+  if(type.toLowerCase().startsWith('dir')) {
+    const full = (target + '/' + name).replace(/\/+/g,'/');
+    ensureDir(full);
+    return `Directory: ${full} created`;
+  } else {
+    const full = (target + '/' + name).replace(/\/+/g,'/');
+    createFile(full, '');
+    return `File: ${full} created`;
+  }
+};
+
+/* Copy-Item */
+commands['Copy-Item'] = function(args){
+  if(args.length<2) return 'Copy-Item : requires source and destination';
+  const src = normPath(args[0]);
+  const dest = normPath(args[1]);
+  const sNode = getNodeByPath(src.replace(/^\/([A-Za-z])/, '$1:'));
+  if(!sNode) return `Copy-Item : Cannot find path '${src}'`;
+  if(sNode.type==='file'){
+    let destNode = getNodeByPath(dest.replace(/^\/([A-Za-z])/, '$1:'));
+    if(destNode && destNode.type==='dir'){
+      const name = src.split('/').pop();
+      createFile(dest + '/' + name, sNode.content||'');
+      return `Copied file to ${dest}/${name}`;
+    } else {
+      createFile(dest, sNode.content||'');
+      return `Copied file to ${dest}`;
+    }
+  } else return 'Copy-Item : only file copy simulated';
+};
+
+/* Move-Item */
+commands['Move-Item'] = function(args){
+  if(args.length<2) return 'Move-Item : requires source and destination';
+  const src = normPath(args[0]);
+  const dest = normPath(args[1]);
+  const sNode = getNodeByPath(src.replace(/^\/([A-Za-z])/, '$1:'));
+  if(!sNode) return `Move-Item : Cannot find path '${src}'`;
+  const r = commands['Copy-Item'](args);
+  const norm = src.replace(/^\/([A-Za-z])/, '$1:').replace(/\\/g,'/');
+  const parts = norm.split('/').filter(Boolean);
+  const drive = parts.shift() + ':';
+  const name = parts.pop();
+  const parentPath = drive + '/' + parts.join('/');
+  const parent = getNodeByPath(parentPath);
+  if(parent && parent.children && parent.children[name]) delete parent.children[name];
+  return `Moved ${src} -> ${dest}`;
+};
+
+/* Remove-Item (enhanced): supports relative paths, wildcards, directories with -Recurse, and basic -Force */
+commands['Remove-Item'] = function(args){
+  if(!args || args.length===0) return 'Remove-Item : missing path';
+  let recurse = false, force = false;
+  let pathArg = null;
+  for(let i=0;i<args.length;i++){
+    const a = args[i];
+    if(a.toLowerCase()==='-recurse') { recurse = true; continue; }
+    if(a.toLowerCase()==='-force') { force = true; continue; }
+    if(!pathArg) pathArg = a;
+  }
+  if(!pathArg) return 'Remove-Item : missing path';
+
+  // resolve to normalized path like '/C/Users/...'
+  const norm = normPath(pathArg); // '/C/...'
+  // parent / target parts
+  const parts = norm.split('/').filter(Boolean); // ['C','Users','file.txt']
+  const driveLetter = parts[0];
+  const driveKey = driveLetter + ':';
+  if(!state.filesystem[driveKey]) return `Remove-Item : Cannot find path '${pathArg}'`;
+
+  const last = parts[parts.length-1] || '';
+  const containsWildcard = /[\*\?]/.test(last);
+
+  // Build parent path for getNodeByPath (like '/C/Users')
+  const parentParts = parts.slice(0, parts.length - (containsWildcard ? 1 : 1));
+  const parentPath = '/' + parentParts.join('/'); // e.g. '/C/Users' (if only drive+name then '/C')
+  const parentNode = getNodeByPath(parentPath);
+
+  // If wildcard applied to parent (e.g. '/C/*'), parentParts may be ['/C'], handle parentNode accordingly
+  if(!parentNode){
+    // try top-level drive node
+    const driveNode = state.filesystem[driveKey];
+    if(!driveNode) return `Remove-Item : Cannot find path '${pathArg}'`;
+  }
+
+  // If wildcard in last segment: delete matching entries inside parent
+  if(containsWildcard){
+    const pattern = last;
+    const targetParentPath = '/' + parts.slice(0, parts.length-1).join('/');
+    const targetParentNode = getNodeByPath(targetParentPath);
+    if(!targetParentNode) return `Remove-Item : Cannot find path '${pathArg}'`;
+    const names = Object.keys(targetParentNode.children || {});
+    const matches = names.filter(name => wildMatch(pattern, name));
+    if(matches.length===0) return `Remove-Item : Cannot find path '${pathArg}' because it does not exist.`;
+    const removed = [];
+    for(const name of matches){
+      const node = targetParentNode.children[name];
+      if(node.type==='dir' && !recurse){
+        return `Remove-Item : The item at path '${targetParentPath}/${name}' is a directory. Specify -Recurse to remove directories.`;
+      }
+      delete targetParentNode.children[name];
+      removed.push(targetParentPath + '/' + name);
+    }
+    return removed.join('\n');
+  }
+
+  // Non-wildcard target
+  const targetParentParts = parts.slice(0, parts.length-1);
+  const targetName = parts[parts.length-1];
+  const targetParentPath = '/' + targetParentParts.join('/');
+  const targetParentNode = getNodeByPath(targetParentPath);
+  if(!targetParentNode || !targetParentNode.children || !targetParentNode.children[targetName]) return `Remove-Item : Cannot find path '${pathArg}'`;
+  const targetNode = targetParentNode.children[targetName];
+  if(targetNode.type === 'dir' && Object.keys(targetNode.children || {}).length>0 && !recurse){
+    return `Remove-Item : The directory '${pathArg}' is not empty. Use -Recurse to remove it.`;
+  }
+  // Allow remove
+  delete targetParentNode.children[targetName];
+  return `${pathArg} removed`;
+};
+
+/* rmdir / rd aliases */
+commands['rmdir'] = commands['rd'] = commands['Remove-Item'];
+
+/* Get-Service / Start/Stop/Restart */
+commands['Get-Service'] = function(args){
+  const pat = args[0] || '*';
+  return state.services.filter(s => wildMatch(pat, s.Name) || wildMatch(pat, s.DisplayName)).map(s => ({Name:s.Name, DisplayName:s.DisplayName, Status:s.Status}));
+};
+commands['Start-Service'] = function(args){
+  const name = args[0] || args[1] || '';
+  const svc = state.services.find(s=>s.Name.toLowerCase()===name.toLowerCase() || s.DisplayName.toLowerCase()===name.toLowerCase());
+  if(!svc) return `Start-Service : Cannot find service '${name}'`;
+  svc.Status='Running'; return `${svc.DisplayName} started.`;
+};
+commands['Stop-Service'] = function(args){
+  const name = args[0] || args[1] || '';
+  const svc = state.services.find(s=>s.Name.toLowerCase()===name.toLowerCase() || s.DisplayName.toLowerCase()===name.toLowerCase());
+  if(!svc) return `Stop-Service : Cannot find service '${name}'`;
+  svc.Status='Stopped'; return `${svc.DisplayName} stopped.`;
+};
+commands['Restart-Service'] = function(args){
+  const name = args[0] || args[1] || '';
+  const svc = state.services.find(s=>s.Name.toLowerCase()===name.toLowerCase() || s.DisplayName.toLowerCase()===name.toLowerCase());
+  if(!svc) return `Restart-Service : Cannot find service '${name}'`;
+  svc.Status='Running'; return `${svc.DisplayName} restarted.`;
+};
+
+/* Processes */
+commands['Get-Process'] = function(args){
+  if(args.length>0 && args[0].toLowerCase()==='-name') {
+    const nm = args[1];
+    return state.processes.filter(p=>wildMatch(nm, p.ProcessName)).map(p=>({Id:p.Id, ProcessName:p.ProcessName, CPU:p.CPU, Memory:p.Memory}));
+  }
+  const idx = args.findIndex(a=>a.toLowerCase()==='-name');
+  if(idx>=0){ const nm = args[idx+1]; return state.processes.filter(p=>wildMatch(nm,p.ProcessName)).map(p=>({Id:p.Id, ProcessName:p.ProcessName, CPU:p.CPU, Memory:p.Memory})); }
+  if(args.length===1 && !args[0].startsWith('-')) {
+    const nm = args[0];
+    return state.processes.filter(p=>wildMatch(nm,p.ProcessName)).map(p=>({Id:p.Id, ProcessName:p.ProcessName, CPU:p.CPU, Memory:p.Memory}));
+  }
+  return state.processes.map(p=>({Id:p.Id, ProcessName:p.ProcessName, CPU:p.CPU, Memory:p.Memory}));
+};
+commands['Start-Process'] = function(args){
+  const name = args[0] || 'unknown.exe';
+  const p = {Id:newProcId(), ProcessName: name, CPU:'0.0', Memory:'2MB'};
+  state.processes.push(p);
+  return `Started ${name} (Id: ${p.Id})`;
+};
+commands['Stop-Process'] = function(args){
+  const idIdx = args.findIndex(a=>a.toLowerCase()==='-id');
+  if(idIdx>=0){ const id = Number(args[idIdx+1]); const idx = state.processes.findIndex(pp => pp.Id===id); if(idx<0) return `Stop-Process : Cannot find process ${id}`; const nm=state.processes[idx].ProcessName; state.processes.splice(idx,1); return `Stopped process ${nm}`; }
+  const nameIdx = args.findIndex(a=>a.toLowerCase()==='-name');
+  if(nameIdx>=0){ const nm = args[nameIdx+1]; const idx = state.processes.findIndex(pp => pp.ProcessName.toLowerCase()===nm.toLowerCase()); if(idx<0) return `Stop-Process : Cannot find process ${nm}`; const nm2=state.processes[idx].ProcessName; state.processes.splice(idx,1); return `Stopped process ${nm2}`; }
+  if(args.length>0 && !isNaN(Number(args[0]))){
+    const id = Number(args[0]); const idx = state.processes.findIndex(pp => pp.Id===id); if(idx<0) return `Stop-Process : Cannot find process ${id}`; const nm=state.processes[idx].ProcessName; state.processes.splice(idx,1); return `Stopped process ${nm}`;
+  } else if(args.length>0){
+    const nm = args[0]; const idx = state.processes.findIndex(pp => pp.ProcessName.toLowerCase()===nm.toLowerCase()); if(idx<0) return `Stop-Process : Cannot find process ${nm}`; const nm2=state.processes[idx].ProcessName; state.processes.splice(idx,1); return `Stopped process ${nm2}`;
+  }
+  return 'Stop-Process : missing arguments';
+};
+
+/* Computer info/systeminfo */
+commands['Get-ComputerInfo'] = function(){ return {CsName:state.hostname, WindowsVersion:state.os, OsBuild: state.osVersion, Manufacturer: state.manufacturer, Model: state.model, Domain: state.domain, Users: state.users.map(u=>u.Name).join(', '), LastBootUpTime: new Date(Date.now()-3600*1000*5).toString()}; };
+commands['systeminfo'] = function(){
+  const lines = [
+    `Host Name:                 ${state.hostname}`,
+    `OS Name:                   ${state.os}`,
+    `OS Version:                ${state.osVersion}`,
+    `System Manufacturer:       ${state.manufacturer}`,
+    `System Model:              ${state.model}`,
+    `System Type:               x64-based PC`,
+    `Registered Owner:          CloudTechAcademy`,
+    `Original Install Date:     ${new Date(Date.now()-1000*60*60*24*400).toLocaleDateString()}`,
+    `System Boot Time:          ${new Date(Date.now()-1000*60*60*24).toLocaleString()}`,
+    `Users:                     ${state.users.map(u=>u.Name).join(', ')}`,
+    `Hotfix(s):                 N/A`
+  ];
+  return lines;
+};
+
+/* Networking: Get-NetIPAddress, Test-Connection, Get-NetTCPConnection, Get-NetFirewallRule, Resolve-DnsName */
+commands['Get-NetIPAddress'] = function(){ return state.network.interfaces.map(i=>({InterfaceAlias:i.InterfaceAlias, IPAddress:i.IPv4Address})); };
+commands['Test-Connection'] = function(args){
+  const target = args[0] || '127.0.0.1';
+  return [`Pinging ${target} with 32 bytes of data:`, `Reply from ${target}: bytes=32 time=20ms TTL=118`, `Ping statistics for ${target}:`, `    Packets: Sent = 1, Received = 1, Lost = 0 (0% loss)`];
+};
+commands['Get-NetTCPConnection'] = function(){ return state.network.tcpConnections; };
+commands['Get-NetFirewallRule'] = function(){ return state.network.firewallRules; };
+commands['Resolve-DnsName'] = function(args){ const name = args[0] || 'localhost'; return [{Name:name, IPAddress:'142.250.190.78', Type:'A'}]; };
+
+/* Local users: Get-LocalUser, New-LocalUser, Remove-LocalUser, Add-LocalGroupMember */
+commands['Get-LocalUser'] = function(){ return state.users.map(u=>({Name:u.Name, Enabled:u.Enabled, Description:u.Description})); };
+commands['New-LocalUser'] = function(args){
+  let name=null;
+  for(let i=0;i<args.length;i++){
+    if(args[i].toLowerCase()==='-name'){ name = args[i+1].replace(/^"|"$/g,''); i++; }
+  }
+  if(!name && args.length>0) name = args[0].replace(/^"|"$/g,'');
+  if(!name) return 'New-LocalUser : Missing -Name';
+  if(state.users.find(u=>u.Name.toLowerCase()===name.toLowerCase())) return `New-LocalUser : User '${name}' already exists.`;
+  const sid = 'S-1-5-21-' + Math.floor(Math.random()*10000);
+  state.users.push({Name:name, Enabled:true, Description:'Local user', Sid:sid});
+  ensureDir('C:/Users/' + name);
+  if(!state.groups.Users.includes(name)) state.groups.Users.push(name);
+  return `User '${name}' created successfully.`;
+};
+commands['Remove-LocalUser'] = function(args){
+  let name=null;
+  for(let i=0;i<args.length;i++){
+    if(args[i].toLowerCase()==='-name'){ name = args[i+1].replace(/^"|"$/g,''); i++; }
+  }
+  if(!name && args.length>0) name = args[0].replace(/^"|"$/g,'');
+  if(!name) return 'Remove-LocalUser : Missing -Name';
+  const idx = state.users.findIndex(u=>u.Name.toLowerCase()===name.toLowerCase());
+  if(idx<0) return `Remove-LocalUser : User '${name}' does not exist.`;
+  state.users.splice(idx,1);
+  for(const g in state.groups){ state.groups[g] = state.groups[g].filter(m=>m.toLowerCase()!==name.toLowerCase()); }
+  const node = getNodeByPath(('C:/' + 'Users/' + name).replace(/\\/g,'/'));
+  if(node){
+    const parent = getNodeByPath('C:/Users');
+    if(parent && parent.children[name]) delete parent.children[name];
+  }
+  return `User '${name}' removed.`;
+};
+commands['Add-LocalGroupMember'] = function(args){
+  let group=null, member=null;
+  for(let i=0;i<args.length;i++){
+    if(args[i].toLowerCase()==='-group'){ group = args[i+1].replace(/^"|"$/g,''); i++; }
+    if(args[i].toLowerCase()==='-member'){ member = args[i+1].replace(/^"|"$/g,''); i++; }
+  }
+  if(!group || !member) return 'Add-LocalGroupMember : Missing parameters';
+  if(!state.groups[group]) state.groups[group] = [];
+  if(!state.groups[group].includes(member)) state.groups[group].push(member);
+  return `Added ${member} to ${group}`;
+};
+
+/* Variables: $name = "Ajith" */
+function assignVariable(line){
+  const m = line.match(/^\s*\$([A-Za-z0-9_]+)\s*=\s*(.+)$/);
+  if(!m) return false;
+  const key = m[1];
+  let val = m[2].trim();
+  if((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) val = val.slice(1,-1);
+  state.vars[key] = val;
+  return `Name                           Value
+----                           ----
+${key}                           ${val}`;
+}
+
+/* Packages and winget */
+commands['Get-Package'] = function(){ return state.packages; };
+commands['winget'] = function(args){
+  if(args[0]==='install'){ const pkg = args[1]; state.packages.push({Name:pkg, Version:'latest'}); return `Successfully installed ${pkg}`; }
+  if(args[0]==='upgrade' && args[1]==='--all'){ state.packages.forEach(p=>p.Version='latest'); return 'Upgraded all packages'; }
+  return 'winget : unsupported simulated parameters';
+};
+
+/* Windows Update */
+commands['Get-WindowsUpdate'] = function(){ return state.updates.filter(u=>!u.Installed).map(u=>({Title:u.Title, Size:u.Size})); };
+commands['Install-WindowsUpdate'] = function(args){
+  state.updates.forEach(u=>u.Installed=true);
+  return 'Installed updates. System will reboot (simulated).';
+};
+
+/* Events */
+commands['Get-EventLog'] = function(args){
+  let logName='System', newest=20;
+  for(let i=0;i<args.length;i++){
+    if(args[i].toLowerCase()==='-logname') logName=args[i+1], i++;
+    if(args[i].toLowerCase()==='-newest') newest=Number(args[i+1]), i++;
+  }
+  const filtered = state.events.filter(e=>e.Source.toLowerCase()===(logName.toLowerCase())).slice(0, newest);
+  return filtered;
+};
+
+/* Disks/Volumes/Partitions */
+commands['Get-Disk'] = function(){ return state.disks.map(d=>({Number:d.Number, FriendlyName:d.FriendlyName, Size:d.Size})); };
+commands['Get-Volume'] = function(){ return state.disks.map(d=>({FriendlyName:d.FriendlyName, Size:d.Size})); };
+commands['Get-Partition'] = function(){ return state.disks.flatMap(d=>d.Partitions.map(p=>({Disk:d.Number, PartitionNumber:p.PartitionNumber, Size:p.Size}))); };
+
+/* Remoting */
+commands['Enable-PSRemoting'] = function(args){ state.remoting=true; return 'WinRM has been enabled (simulated).'; };
+commands['Enter-PSSession'] = function(args){ const hostArgIndex = args.findIndex(a=>a.toLowerCase()==='-computername'); const host = hostArgIndex>=0?args[hostArgIndex+1]: args[0] || 'SERVER01'; return `Entering PSSession to ${host} (simulated). Type 'Exit-PSSession' to return.`; };
+commands['Exit-PSSession'] = function(){ return 'Exiting PSSession (simulated).'; };
+
+/* Get-Acl / Set-Acl / icacls */
+commands['Get-Acl'] = function(args){
+  const path = args[0] || state.cwd;
+  const node = getNodeByPath(normPath(path).replace(/^\/([A-Za-z])/, '$1:'));
+  if(!node) return `Get-Acl : Cannot find path '${path}'`;
+  return node.acl || [];
+};
+commands['Set-Acl'] = function(args){
+  if(args.length<2) return 'Set-Acl : missing parameters';
+  const path = args[0]; const aclStr = args[1];
+  const node = getNodeByPath(normPath(path).replace(/^\/([A-Za-z])/, '$1:'));
+  if(!node) return `Set-Acl : Cannot find path '${path}'`;
+  const parts = aclStr.split(':');
+  node.acl = [{Identity: parts[0], Rights: parts[1]}];
+  return `Set-Acl : Applied ACL to ${path}`;
+};
+commands['icacls'] = function(args){
+  if(args.length===0) return 'icacls : missing path';
+  const path = args[0];
+  const node = getNodeByPath(normPath(path).replace(/^\/([A-Za-z])/, '$1:'));
+  if(!node) return `icacls ${path} : The system cannot find the file specified`;
+  const acl = node.acl || [];
+  const lines = acl.map(a=> `${path} ${a.Identity}:${a.Rights}`);
+  const grantIdx = args.findIndex(a=>a.toLowerCase()==='/grant');
+  if(grantIdx>=0){ const who = args[grantIdx+1]; const [id, perm] = who.split(':'); node.acl = node.acl || []; node.acl.push({Identity:id, Rights:perm}); lines.push(`Successfully processed ${path}`); }
+  return lines;
+};
+
+/* Generic echo / Write-Output */
+commands['Write-Output'] = commands['echo'] = function(args){ return args.join(' '); };
+
+/* ConvertTo-SecureString simulation */
+commands['ConvertTo-SecureString'] = function(args){ return '<SecureString simulated>'; };
+
+/* $variable access like $name */
+function resolveVariable(token){
+  if(token.startsWith('$')) {
+    const key = token.slice(1);
+    return state.vars[key] || '';
+  }
+  return token;
+}
+
+/* Pipeline support (very basic) */
+function runPipeline(raw){
+  raw = raw.trim();
+  if(raw.match(/^\s*\$[A-Za-z0-9_]+\s*=/)) {
+    const res = assignVariable(raw);
+    return res;
+  }
+  const propMatch = raw.match(/^\s*\((.+)\)\.([A-Za-z0-9_]+)\s*$/);
+  if(propMatch){
+    const inner = propMatch[1];
+    const prop = propMatch[2];
+    const r = runPipeline(inner);
+    if(Array.isArray(r) && r.length>0 && typeof r[0] === 'object') return r[0][prop] || '';
+    if(typeof r === 'object') return r[prop] || '';
+    return '';
+  }
+
+  const parts = raw.split('|').map(p=>p.trim());
+  let result = null;
+  for(const part of parts){
+    const tokens = tokenize(part);
+    if(tokens.length===0) continue;
+    const cmd = tokens[0];
+    const args = tokens.slice(1).map(t=> resolveVariable(t));
+    if(cmd.toLowerCase()==='where' || cmd.toLowerCase()==='where-object'){
+      if(!result) continue;
+      const cond = args.join(' ');
+      const eq = cond.match(/([A-Za-z0-9_]+)\s*(=|-eq|-like)\s*(.+)/i);
+      if(!eq) continue;
+      const field = eq[1]; const op = eq[2]; const val = eq[3].replace(/^"|"$/g,'').replace(/^'|'$/g,'');
+      result = result.filter(it => {
+        const v = String(it[field]||'');
+        if(op==='='||op==='-eq') return v.toLowerCase()===val.toLowerCase();
+        if(op==='-like') return v.toLowerCase().includes(val.toLowerCase());
+        return false;
+      });
+      continue;
+    }
+    let fn = commands[cmd];
+    if(!fn){
+      const alt = Object.keys(commands).find(k=>k.toLowerCase()===cmd.toLowerCase());
+      if(alt) fn = commands[alt];
+    }
+    if(!fn){
+      return `Unknown command: ${cmd}`;
+    }
+    const out = fn(args);
+    if(out===undefined || out===null) result = [];
+    else result = out;
+  }
+  return result;
+}
+
+/* Pretty printing */
+function prettyPrint(result){
+  if(result === '' || result === undefined) return;
+  if(Array.isArray(result)){
+    if(result.length===0) return;
+    if(typeof result[0] === 'object'){
+      const keys = Object.keys(result[0]);
+      appendLine('<div style="margin-top:6px"><table class="sim"><thead><tr><th>' + keys.join('</th><th>') + '</th></tr></thead><tbody>');
+      for(const r of result){
+        appendLine('<tr><td>' + keys.map(k=>escapeHtml(String(r[k]||''))).join('</td><td>') + '</td></tr>');
+      }
+      appendLine('</tbody></table></div>');
+    } else {
+      for(const r of result) appendLine(escapeHtml(String(r)));
+    }
+  } else if(typeof result === 'object'){
+    for(const k in result) appendLine(escapeHtml(k + ': ' + String(result[k])));
+  } else {
+    appendLine(escapeHtml(String(result)));
+  }
+}
+
+/* Execute single line */
+function executeLine(line){
+  if(!line || line.trim()==='') { appendLine(''); return; }
+  appendLine(`<span class="label mono">${escapeHtml(state.hostname)}\\PS</span> ${escapeHtml(line)}`);
+  try{
+    const res = runPipeline(line);
+    prettyPrint(res);
+  } catch(err){
+    appendLine('Error: ' + escapeHtml(err.message || String(err)));
+  }
+}
+
+/* Initial header */
+function renderHeader(){
+  appendLine('<div style="color:var(--accent)"><strong>CloudTechAcademy PowerShell Emulator — Full Simulation</strong></div>');
+  appendLine('<div class="small muted">Started at: ' + escapeHtml(nowLocale()) + '</div>');
+  appendLine('<div class="small muted">Type Get-Help for help. This is a simulation — no real changes to your OS.</div>');
+}
+
+/* Buttons behavior */
+document.getElementById('clearBtn').addEventListener('click', ()=>{ clearTerminal(); renderPrompt(); });
+document.getElementById('resetBtn').addEventListener('click', ()=>{ if(!confirm('Reset emulator state?')) return; location.reload(); });
+document.getElementById('dumpBtn').addEventListener('click', ()=>{ console.log(state); alert('State dumped to console'); });
+
+/* terminal click focus */
+terminal.addEventListener('click', ()=>{ const inputs = terminal.querySelectorAll('.input[contenteditable="true"]'); if(inputs.length) inputs[inputs.length-1].focus(); });
+
+/* paste handling */
+terminal.addEventListener('paste', (e)=>{
+  const sel = document.getSelection(); if(!sel.rangeCount) return;
+  const node = sel.anchorNode;
+  const input = node && node.parentElement && node.parentElement.closest && node.parentElement.closest('.input');
+  if(input){ e.preventDefault(); const text = (e.clipboardData || window.clipboardData).getData('text'); document.execCommand('insertText', false, text); }
+});
+
+/* render initial prompt */
+renderHeader();
+renderPrompt();
+</script>
+</body>
+</html>
+
